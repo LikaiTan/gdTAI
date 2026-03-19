@@ -72,7 +72,7 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - [ ] Review the 20 Category C raw-source audit with the user and approve dataset-by-dataset rescue scope
 - [ ] Define Phase 4 scoring workflow
 - [ ] Define required evaluation figures
-- [ ] Commit and push milestone changes to GitHub
+- [x] Commit and push milestone changes to GitHub
 
 ---
 
@@ -171,7 +171,8 @@ Examples:
 ---
 
 ## Git status
-- No milestone commit recorded yet
+- Milestone documentation and workflow scripts committed as `4e64f02`
+- `master` pushed to `origin/master`
 
 ---
 
