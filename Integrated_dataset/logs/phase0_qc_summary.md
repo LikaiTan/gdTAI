@@ -8,26 +8,25 @@
 
 ## Audit Scope
 
-- Registry rows audited: 33
-- Files readable without recorded errors: 33
+- Registry rows audited: 29
+- Files readable without recorded errors: 29
 - Files with read issues: 0
 
 ## Category Counts
 
-- Category A: 13
+- Category A: 29
 - Category B: 0
-- Category C: 20
+- Category C: 0
 
 ## Matrix State Counts
 
-- normalized_or_noninteger_X: 20
-- raw_like_X: 13
+- raw_like_X: 29
 
 ## Metadata Coverage
 
-- Datasets with candidate donor fields: 31
-- Datasets with candidate sample fields: 32
-- Datasets with candidate library fields: 30
+- Datasets with candidate donor fields: 27
+- Datasets with candidate sample fields: 28
+- Datasets with candidate library fields: 26
 
 ## Category B Datasets
 
@@ -35,26 +34,7 @@
 
 ## Category C Datasets
 
-- GSE139555: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE145926: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE161918: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE162498: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE171037: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE178882: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE188620: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE190870: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE211504: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE212217: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE227709: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE243572: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE243905: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE252762: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE254176: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE254249: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE267645: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE301528: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE308075: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
-- GSE311112: normalized_or_noninteger_X | adata.X is non-integer without a recoverable raw-count source
+- None
 
 ## QC Conclusion
 

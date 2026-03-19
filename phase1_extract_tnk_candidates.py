@@ -429,6 +429,9 @@ def validate_merged_candidates(summary_df: pd.DataFrame) -> None:
 
         observed = adata.obs["source_gse_id"].value_counts().sort_index()
         expected = summary_df.set_index("gse_id")["candidate_n_obs"].sort_index()
+        aligned_index = expected.index.union(observed.index)
+        observed = observed.reindex(aligned_index, fill_value=0).astype(int)
+        expected = expected.reindex(aligned_index, fill_value=0).astype(int)
         if not observed.equals(expected):
             raise ValueError(
                 "Per-dataset candidate counts in TNK_candidates.h5ad do not match the Phase 1 summary"
