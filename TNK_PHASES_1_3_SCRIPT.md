@@ -39,10 +39,13 @@ Required packages confirmed in `rapids_sc_py310`:
 - `repair_h5ad_from_raw.py`
 - `phase1_extract_tnk_candidates.py`
 - `phase1_finalize_from_temp.py`
+- `watch_h5ad_v2_and_resume.py`
 - This helper is the concrete implementation of the Phase 0 audit logic described below.
+- `phase0_dataset_audit.py` accepts `--registry <csv>` when the canonical audit must be rerun against a repaired registry such as `h5ad_v2.csv`.
 - `repair_h5ad_from_raw.py` is the concrete repair helper for Category B datasets where `adata.raw` contains recoverable integer-like counts for the current feature space.
 - `phase1_extract_tnk_candidates.py` performs the Category A high-recall coarse T/NK extraction and writes one temp candidate H5AD per dataset.
 - `phase1_finalize_from_temp.py` resumes from those temp candidate H5ADs, normalizes any dense `X` matrices to CSR, performs the on-disk concat into `TNK_candidates.h5ad`, validates the merged object, writes the Phase 1 QC tables and figures, and removes the temp directory after success.
+- `watch_h5ad_v2_and_resume.py` polls every 120 seconds for `h5ad_v2.csv`; once the repaired registry appears, it reruns Phase 0 against that registry and then rebuilds `TNK_candidates.h5ad` from the updated Category A set.
 - The markdown file remains the canonical human-readable workflow; the helper exists to execute the Phase 0 audit reproducibly.
 
 ## Canonical Inputs And Outputs

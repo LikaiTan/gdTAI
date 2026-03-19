@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import concurrent.futures
 import math
 import os
@@ -46,6 +47,19 @@ METADATA_HINTS = {
     "library": ["library", "library_id", "batch", "lane", "channel"],
 }
 COUNTS_LAYER_PRIORITY = ["counts", "raw_counts", "count", "umi_counts"]
+
+
+def parse_args() -> argparse.Namespace:
+    """Parse CLI arguments for the Phase 0 audit runner."""
+    parser = argparse.ArgumentParser(
+        description="Audit one H5AD registry and write canonical Phase 0 outputs."
+    )
+    parser.add_argument(
+        "--registry",
+        default=str(REGISTRY_CSV),
+        help="Path to the registry CSV to audit. Defaults to h5ad.csv.",
+    )
+    return parser.parse_args()
 
 
 def normalize_attr(value):
@@ -551,19 +565,19 @@ def ensure_output_dirs() -> None:
     LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def load_registry() -> pd.DataFrame:
+def load_registry(registry_path: Path) -> pd.DataFrame:
     """Load and validate the H5AD registry."""
-    registry = pd.read_csv(REGISTRY_CSV)
+    registry = pd.read_csv(registry_path)
     required_cols = {"h5ad_path", "gse_id", "source_root"}
     missing = required_cols - set(registry.columns)
     if missing:
-        raise ValueError(f"Missing required columns in h5ad.csv: {sorted(missing)}")
+        raise ValueError(f"Missing required columns in {registry_path.name}: {sorted(missing)}")
     return registry
 
 
-def run_phase0_audit() -> pd.DataFrame:
+def run_phase0_audit(registry_path: Path) -> pd.DataFrame:
     """Run the dataset audit over every registry row."""
-    registry = load_registry()
+    registry = load_registry(registry_path)
     workers = min(8, len(registry), max(1, os.cpu_count() or 1))
     records = []
     with concurrent.futures.ProcessPoolExecutor(max_workers=workers) as pool:
@@ -598,12 +612,15 @@ def run_phase0_audit() -> pd.DataFrame:
 
 def main() -> None:
     """Entrypoint for the Phase 0 audit bootstrap."""
+    args = parse_args()
+    registry_path = Path(args.registry).resolve()
     ensure_output_dirs()
-    audit = run_phase0_audit()
+    audit = run_phase0_audit(registry_path)
     print("\nWrote:")
     print(PHASE0_AUDIT_CSV)
     print(PHASE0_CATEGORY_CSV)
     print(PHASE0_QC_MD)
+    print(f"Registry audited: {registry_path}")
     for fig_name in [
         "phase0_category_distribution.png",
         "phase0_matrix_state_overview.png",

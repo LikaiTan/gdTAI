@@ -13,6 +13,7 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - Decide whether to proceed to Phase 1b conservative cleanup on `TNK_candidates.h5ad`
 - Confirm whether any Phase 1 threshold adjustments are needed before Phase 1b
 - Confirm environment naming policy: continue with `rapids_sc_py310` or create/alias `Scanpy_gdTmodel`
+- Poll for `h5ad_v2.csv` every 2 minutes; if it appears, rerun Phase 0 on the repaired registry and rebuild Phase 1 candidates without waiting for another approval
 
 ---
 
@@ -107,6 +108,7 @@ Examples:
 - `repair_h5ad_from_selected_inputs.py`
 - `phase1_extract_tnk_candidates.py`
 - `phase1_finalize_from_temp.py`
+- `watch_h5ad_v2_and_resume.py`
 
 ---
 
@@ -180,6 +182,7 @@ Examples:
 - Present the Phase 1 QC summary, tables, figures, and `TNK_candidates.h5ad` to the user
 - Wait for explicit user approval before any Phase 1b cleanup
 - If approved, run conservative first-pass cleanup in place on `TNK_candidates.h5ad`
+- In parallel, keep the `h5ad_v2.csv` watcher armed; if the file appears, rerun Phase 0 and Phase 1 automatically for the repaired remaining datasets
 
 ---
 
