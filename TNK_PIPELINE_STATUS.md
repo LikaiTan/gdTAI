@@ -6,14 +6,14 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 ---
 
 ## Current milestone
-- Phase 1 QC review pending
+- Phase 1b QC review pending
 
 ## Current objective
-- Review Phase 1 coarse extraction outputs for the repaired 29-dataset registry
-- Decide whether to proceed to Phase 1b conservative cleanup on `TNK_candidates.h5ad`
-- Confirm whether any Phase 1 threshold adjustments are needed before Phase 1b
-- Confirm environment naming policy: continue with `rapids_sc_py310` or create/alias `Scanpy_gdTmodel`
-- `h5ad_v2.csv` has been detected and applied; Phase 1 has been rebuilt against the repaired registry
+- Review the completed Phase 1b QC outputs for the current `TNK_candidates.h5ad`
+- Confirm that the conservative cleanup is acceptable as the Phase 1b milestone
+- Confirm the user-requested `<500 cells` gene filter outcome
+- Wait for explicit user approval before Phase 1c metadata replacement
+- Do not proceed to Phase 2 until Phase 1c is completed and validated
 
 ---
 
@@ -25,10 +25,12 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - Backed up all 20 Phase 0 Category C H5ADs before external raw-source rescue review
 - Completed external raw-source audit for the 20 Category C H5ADs
 - Phase 1 coarse extraction completed for the 13 current Category A datasets
-- Phase 0 selected-input rescue completed for 16 of the 20 original Category C datasets
-- `h5ad_v2.csv` created with 29 retained datasets after removing 4 currently unfixable raw-count cases
+- Phase 0 selected-input rescue completed for all 20 of the 20 original Category C datasets
+- `h5ad_v2.csv` restored to all 33 datasets after resolving the last two raw-count rescue cases
 - Phase 0 rerun completed on `h5ad_v2.csv`
 - Phase 1 coarse extraction rebuilt successfully for the repaired 29-dataset registry
+- User approved advancement into Phase 1b conservative cleanup
+- Phase 1b conservative cleanup completed on the current merged candidate milestone
 
 ---
 
@@ -56,6 +58,7 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - `GSE228597` is now raw-count eligible after replacing normalized `X` with integer-like counts restored from `adata.raw` on the current 17,050-gene feature space
 - The approved Phase 1 input set for the current run is the 13 Category A datasets
 - `TNK_candidates.h5ad` is now the merged Phase 1 milestone object for the approved Category A inputs
+- Phase 1b uses a conservative cell-level removal rule plus a user-requested gene filter of `>=500` expressing cells
 
 ---
 
@@ -72,8 +75,12 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - [x] Define the approved Phase 1 dataset list
 - [x] Run Phase 1 coarse T/NK extraction on the approved Category A datasets
 - [ ] Review Phase 1 QC outputs with the user
-- [ ] Decide whether to proceed to Phase 1b conservative cleanup
-- [ ] Define or adjust Phase 1b cleanup rules if needed
+- [x] Decide whether to proceed to Phase 1b conservative cleanup
+- [x] Define or adjust Phase 1b cleanup rules if needed
+- [x] Run Phase 1b conservative cleanup on `TNK_candidates.h5ad`
+- [x] Apply the `<500 cells` gene filter during Phase 1b
+- [ ] Review Phase 1b QC outputs with the user
+- [ ] Complete Phase 1c merged metadata backup/replacement after Phase 1b approval
 - [ ] Review the 20 Category C raw-source audit with the user and approve dataset-by-dataset rescue scope
 - [ ] Define Phase 4 scoring workflow
 - [ ] Define required evaluation figures
@@ -112,6 +119,7 @@ Examples:
 - `repair_h5ad_from_selected_inputs.py`
 - `phase1_extract_tnk_candidates.py`
 - `phase1_finalize_from_temp.py`
+- `phase1b_conservative_cleanup.py`
 - `watch_h5ad_v2_and_resume.py`
 
 ---
@@ -132,12 +140,19 @@ Examples:
 - `Integrated_dataset/tables/GSE252762_selected_inputs_rescue_dryrun_20260320.md`
 - `Integrated_dataset/tables/h5ad_rescue_status_20260320.csv`
 - `Integrated_dataset/tables/h5ad_selected_inputs_final_validation_20260320.csv`
+- `Integrated_dataset/tables/h5ad_drop_current_only_write_results_20260320.csv`
+- `Integrated_dataset/tables/remaining_gene_mismatches_after_drop_20260320.csv`
 - `h5ad_backup_before_v2_20260320.csv`
 - `h5ad_v2.csv`
 - `Integrated_dataset/tables/phase1_categoryA_selection_summary.csv`
 - `Integrated_dataset/tables/phase1_categoryA_marker_availability.csv`
 - `Integrated_dataset/logs/phase1_qc_summary.md`
 - `Integrated_dataset/TNK_candidates.h5ad`
+- `Integrated_dataset/tables/phase1b_cleanup_summary.csv`
+- `Integrated_dataset/tables/phase1b_gse_before_after.csv`
+- `Integrated_dataset/tables/phase1b_removed_cells.csv`
+- `Integrated_dataset/tables/phase1b_gene_detection_summary.csv`
+- `Integrated_dataset/logs/phase1b_qc_summary.md`
 - `Integrated_dataset/figures/phase0_category_distribution.png`
 - `Integrated_dataset/figures/phase0_matrix_state_overview.png`
 - `Integrated_dataset/figures/phase0_dataset_size_overview.png`
@@ -145,6 +160,9 @@ Examples:
 - `Integrated_dataset/figures/phase1_categoryA_candidate_yield.png`
 - `Integrated_dataset/figures/phase1_categoryA_candidate_fraction.png`
 - `Integrated_dataset/figures/phase1_categoryA_marker_support.png`
+- `Integrated_dataset/figures/phase1b_gse_cell_retention.png`
+- `Integrated_dataset/figures/phase1b_cell_removal_reasons.png`
+- `Integrated_dataset/figures/phase1b_gene_detection_distribution.png`
 
 ---
 
@@ -159,31 +177,34 @@ Examples:
 - All 20 entries in `Integrated_dataset/tables/h5ad_without_raw_count.csv` were re-checked and confirmed to lack internal raw/count layers in the current H5ADs
 - All 20 entries were backed up under `Integrated_dataset/backups/h5ad_without_raw_count_20260320_032651`
 - All 20 entries have matching `selected_inputs.csv` and `per_sample_load_stats.csv` under `analysis_26GSE_V4/scanpy_projects/<GSE>/`
-- Supplementary raw tarballs were found for 18 of the 20 entries; the remaining 2 still have direct matrix sources in `downloads/GSE*/suppl`
+- Supplementary raw tarballs were found for 18 of the 20 entries; the remaining 2 were rescued from direct matrix sources in `downloads/GSE*/suppl`
 - Dry-run rescue on `GSE252762` showed `obs_equal=True` and `var_current_subset_of_rebuilt=True`, which is sufficient for a controlled count-space repair
 - Dry-run rescue on `GSE190870` showed `obs_equal=True` but `var_current_subset_of_rebuilt=False`, indicating a remaining gene-space reconciliation problem before safe repair
-- Final selected-input rescue validation confirms 16 repaired H5ADs with integer-like sampled `X`, `has_raw=False`, `obsm=[]`, and `varm=[]`
-- `h5ad_v2.csv` retains 29 datasets: 13 unchanged plus 16 repaired
-- The 4 temporarily removed datasets are `GSE190870`, `GSE254249`, `GSE267645`, and `GSE301528`
+- Final selected-input rescue validation confirms all 20 repaired H5ADs with integer-like sampled `X`, `has_raw=False`, `obsm=[]`, and `varm=[]`
+- `GSE190870` was rescued after dropping 41 current-only unmatched genes before count restoration
+- `GSE267645` was rescued after dropping 354 current-only unmatched genes before count restoration
+- `GSE254249` was revalidated as integer-like count-space and restored to the registry
+- `GSE301528` was repaired by rebuilding counts from the 16 valid selected inputs and skipping the 2 dimension-mismatched source matrices
+- `h5ad_v2.csv` now retains all 33 datasets from the canonical registry
 - `phase1_extract_tnk_candidates.py` compiled successfully in `rapids_sc_py310`
 - `phase1_finalize_from_temp.py` compiled successfully in `rapids_sc_py310`
+- `phase1b_conservative_cleanup.py` compiled successfully in `rapids_sc_py310`
 - Phase 0 rerun on `h5ad_v2.csv` classified all 29 retained datasets as Category A
 - Phase 1 candidate object rebuilt and validated with `n_obs=5322388` and `n_vars=57093`
 - Phase 1 retained fraction across the repaired 29-dataset registry: `0.8608`
 - Per-dataset candidate counts in `TNK_candidates.h5ad` match `phase1_categoryA_selection_summary.csv`, including `GSE227709=0`
 - Temporary Phase 1 subset directory was removed after successful validation
+- Phase 1b validated the rewritten `TNK_candidates.h5ad` at `n_obs=5950935` and `n_vars=23536`
+- Phase 1b removed `261` obvious non-T/NK cells and `0` high-confidence doublets
+- The Phase 1b `<500 cells` gene filter retained all `11` tracked key T/NK genes
 
 ---
 
 ## Open issues
 - Several project manifests point to stale extracted directories; rescue tooling must resolve the real files under `downloads/GSE*/suppl` rather than trusting manifest paths blindly
 - Some datasets will likely be directly repairable by rebuilding counts from selected inputs, while others will need gene-space reconciliation first
-- `GSE190870` and `GSE267645` still need gene-space reconciliation before safe write-back
-- `GSE301528` still has a supplementary source matrix dimension mismatch
-- `GSE254249` still fails safe write-back and remains normalized in the current H5AD
-- Whether the current high-recall Phase 1 thresholds are acceptable as input to Phase 1b
 - Whether `rapids_sc_py310` should remain the working env or be cloned/aliased to `Scanpy_gdTmodel`
-- Whether all TCR-related genes are preserved across datasets
+- Phase 1c merged metadata backup/replacement has not been run yet and must be completed after approval
 - Exact Phase 4 scoring inputs/outputs for `gdt_tcr_module_sharing_package_full`
 
 ---
@@ -196,9 +217,9 @@ Examples:
 ---
 
 ## Next action
-- Present the updated 29-dataset Phase 1 QC summary, tables, figures, and `TNK_candidates.h5ad` to the user
-- Wait for explicit user approval before any Phase 1b cleanup
-- If approved, run conservative first-pass cleanup in place on `TNK_candidates.h5ad`
+- Present the Phase 1b QC summary, tables, figures, and updated `TNK_candidates.h5ad` to the user
+- Wait for explicit user approval before Phase 1c metadata backup/replacement
+- After approval, run Phase 1c and validate the metadata replacement before any Phase 2 cleanup
 
 ---
 

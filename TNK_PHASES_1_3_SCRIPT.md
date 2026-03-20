@@ -7,6 +7,7 @@ This file is the single human-readable canonical workflow for:
 - Phase 0: dataset audit and eligibility triage
 - Phase 1: coarse T/NK extraction
 - Phase 1b: conservative first cleanup
+- Phase 1c: merged metadata backup and replacement
 - Phase 2: merged cleanup
 - Phase 3: scVI integration
 
@@ -39,12 +40,14 @@ Required packages confirmed in `rapids_sc_py310`:
 - `repair_h5ad_from_raw.py`
 - `phase1_extract_tnk_candidates.py`
 - `phase1_finalize_from_temp.py`
+- `phase1b_conservative_cleanup.py`
 - `watch_h5ad_v2_and_resume.py`
 - This helper is the concrete implementation of the Phase 0 audit logic described below.
 - `phase0_dataset_audit.py` accepts `--registry <csv>` when the canonical audit must be rerun against a repaired registry such as `h5ad_v2.csv`.
 - `repair_h5ad_from_raw.py` is the concrete repair helper for Category B datasets where `adata.raw` contains recoverable integer-like counts for the current feature space.
 - `phase1_extract_tnk_candidates.py` performs the Category A high-recall coarse T/NK extraction and writes one temp candidate H5AD per dataset.
 - `phase1_finalize_from_temp.py` resumes from those temp candidate H5ADs, normalizes any dense `X` matrices to CSR, performs the on-disk concat into `TNK_candidates.h5ad`, validates the merged object, writes the Phase 1 QC tables and figures, and removes the temp directory after success.
+- `phase1b_conservative_cleanup.py` performs the conservative first-pass cleanup, removes only obvious non-T/NK contaminants, applies the user-requested `<500 cells` gene filter, rewrites `TNK_candidates.h5ad` in place, and writes the Phase 1b QC package.
 - `watch_h5ad_v2_and_resume.py` polls every 120 seconds for `h5ad_v2.csv`; once the repaired registry appears, it reruns Phase 0 against that registry and then rebuilds `TNK_candidates.h5ad` from the updated Category A set.
 - The markdown file remains the canonical human-readable workflow; the helper exists to execute the Phase 0 audit reproducibly.
 
@@ -223,19 +226,45 @@ Stop after candidate merge and first-pass summaries for user QC.
 ### Behavior
 
 - remove only obvious non-T/NK contaminants and high-confidence doublets
+- after conservative cell cleanup, remove genes expressed in fewer than 500 cells
 - preserve rare or atypical γδT-like populations
 - update `Integrated_dataset/TNK_candidates.h5ad` in place after validation
 - generate cleanup summary tables and before/after figures
 
 ### Stop condition
 
-Stop for user QC before Phase 2.
+Stop for user QC before Phase 1c.
+
+## Phase 1c: Merged Metadata Backup And Replacement
+
+### Entry criteria
+
+- Phase 1 and 1b QC approved by the user
+
+### Behavior
+
+- export merged `adata.obs` from the current unified candidate object
+- save a backup copy as `metadata.csv.bk`
+- replace `analysis_26GSE_V4/outputs/harmonized_metadata_v4.csv`
+- use the join key:
+  - `project name`
+  - `sampleid`
+  - `barcodes`
+- fail loudly if any join-key column is missing
+- fail loudly if the combined join key is not unique
+- fail loudly if replacement row counts do not match expectations or if rows are dropped/duplicated
+- log the replacement result before any Phase 2 work
+
+### Stop condition
+
+Stop if metadata replacement validation fails. Do not proceed to Phase 2 until this step is completed and validated.
 
 ## Phase 2: Merged Cleanup
 
 ### Entry criteria
 
 - Phase 1 and 1b QC approved by the user
+- Phase 1c metadata backup/replacement completed and validated
 
 ### Behavior
 
@@ -280,6 +309,7 @@ def main() -> None:
     run_phase1_extraction()
     run_phase1b_cleanup()
     stop_for_user_qc("Phase 1/1b")
+    run_phase1c_metadata_backup()
     run_phase2_cleanup()
     stop_for_user_qc("Phase 2")
     run_phase3_scvi()
