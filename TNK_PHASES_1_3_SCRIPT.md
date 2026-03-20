@@ -41,6 +41,7 @@ Required packages confirmed in `rapids_sc_py310`:
 - `phase1_extract_tnk_candidates.py`
 - `phase1_finalize_from_temp.py`
 - `phase1b_conservative_cleanup.py`
+- `phase1c_replace_harmonized_metadata.py`
 - `watch_h5ad_v2_and_resume.py`
 - This helper is the concrete implementation of the Phase 0 audit logic described below.
 - `phase0_dataset_audit.py` accepts `--registry <csv>` when the canonical audit must be rerun against a repaired registry such as `h5ad_v2.csv`.
@@ -48,6 +49,7 @@ Required packages confirmed in `rapids_sc_py310`:
 - `phase1_extract_tnk_candidates.py` performs the Category A high-recall coarse T/NK extraction and writes one temp candidate H5AD per dataset.
 - `phase1_finalize_from_temp.py` resumes from those temp candidate H5ADs, normalizes any dense `X` matrices to CSR, performs the on-disk concat into `TNK_candidates.h5ad`, validates the merged object, writes the Phase 1 QC tables and figures, and removes the temp directory after success.
 - `phase1b_conservative_cleanup.py` performs the conservative first-pass cleanup, removes only obvious non-T/NK contaminants, applies the user-requested `<500 cells` gene filter, rewrites `TNK_candidates.h5ad` in place, and writes the Phase 1b QC package.
+- `phase1c_replace_harmonized_metadata.py` exports the merged `adata.obs`, backs up the previous harmonized metadata CSV, joins the filtered candidate cells to the harmonized metadata by explicit string-typed `GSE + barcode`, writes the required `project name`, `sampleid`, and `barcodes` columns, validates uniqueness and row counts, and replaces the canonical metadata target atomically.
 - `watch_h5ad_v2_and_resume.py` polls every 120 seconds for `h5ad_v2.csv`; once the repaired registry appears, it reruns Phase 0 against that registry and then rebuilds `TNK_candidates.h5ad` from the updated Category A set.
 - The markdown file remains the canonical human-readable workflow; the helper exists to execute the Phase 0 audit reproducibly.
 
@@ -246,10 +248,12 @@ Stop for user QC before Phase 1c.
 - export merged `adata.obs` from the current unified candidate object
 - save a backup copy as `metadata.csv.bk`
 - replace `analysis_26GSE_V4/outputs/harmonized_metadata_v4.csv`
+- join the filtered merged object to the previous harmonized metadata by string-typed `GSE + barcode`
 - use the join key:
   - `project name`
   - `sampleid`
   - `barcodes`
+- prefer `sample_id` from the previous harmonized metadata for `sampleid`, and fall back to the merged Phase 1 sample label only when the previous metadata field is blank
 - fail loudly if any join-key column is missing
 - fail loudly if the combined join key is not unique
 - fail loudly if replacement row counts do not match expectations or if rows are dropped/duplicated

@@ -6,14 +6,14 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 ---
 
 ## Current milestone
-- Phase 1b QC review pending
+- Phase 2 start pending approval
 
 ## Current objective
-- Review the completed Phase 1b QC outputs for the current `TNK_candidates.h5ad`
-- Confirm that the conservative cleanup is acceptable as the Phase 1b milestone
-- Confirm the user-requested `<500 cells` gene filter outcome
-- Wait for explicit user approval before Phase 1c metadata replacement
-- Do not proceed to Phase 2 until Phase 1c is completed and validated
+- Review the completed Phase 1c metadata replacement outputs
+- Confirm that the harmonized metadata replacement is acceptable for downstream work
+- Note that the required join-key columns are present and unique after replacement
+- Decide whether the remaining blank `sampleid` rows require manual curation before Phase 2
+- Wait for explicit user approval before any Phase 2 cleanup
 
 ---
 
@@ -31,6 +31,8 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - Phase 1 coarse extraction rebuilt successfully for the repaired 29-dataset registry
 - User approved advancement into Phase 1b conservative cleanup
 - Phase 1b conservative cleanup completed on the current merged candidate milestone
+- User approved advancement into Phase 1c metadata backup/replacement
+- Phase 1c merged metadata backup/replacement completed successfully
 
 ---
 
@@ -59,6 +61,7 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - The approved Phase 1 input set for the current run is the 13 Category A datasets
 - `TNK_candidates.h5ad` is now the merged Phase 1 milestone object for the approved Category A inputs
 - Phase 1b uses a conservative cell-level removal rule plus a user-requested gene filter of `>=500` expressing cells
+- Phase 1c replacement must join by string-typed `GSE + barcode` and must emit `project name`, `sampleid`, and `barcodes`
 
 ---
 
@@ -74,13 +77,15 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - [x] Rescue `GSE228597` from `adata.raw`
 - [x] Define the approved Phase 1 dataset list
 - [x] Run Phase 1 coarse T/NK extraction on the approved Category A datasets
-- [ ] Review Phase 1 QC outputs with the user
+- [x] Review Phase 1 QC outputs with the user
 - [x] Decide whether to proceed to Phase 1b conservative cleanup
 - [x] Define or adjust Phase 1b cleanup rules if needed
 - [x] Run Phase 1b conservative cleanup on `TNK_candidates.h5ad`
 - [x] Apply the `<500 cells` gene filter during Phase 1b
-- [ ] Review Phase 1b QC outputs with the user
-- [ ] Complete Phase 1c merged metadata backup/replacement after Phase 1b approval
+- [x] Review Phase 1b QC outputs with the user
+- [x] Complete Phase 1c merged metadata backup/replacement after Phase 1b approval
+- [ ] Review Phase 1c metadata replacement outputs with the user
+- [ ] Start Phase 2 after explicit user approval
 - [ ] Review the 20 Category C raw-source audit with the user and approve dataset-by-dataset rescue scope
 - [ ] Define Phase 4 scoring workflow
 - [ ] Define required evaluation figures
@@ -120,6 +125,7 @@ Examples:
 - `phase1_extract_tnk_candidates.py`
 - `phase1_finalize_from_temp.py`
 - `phase1b_conservative_cleanup.py`
+- `phase1c_replace_harmonized_metadata.py`
 - `watch_h5ad_v2_and_resume.py`
 
 ---
@@ -153,6 +159,11 @@ Examples:
 - `Integrated_dataset/tables/phase1b_removed_cells.csv`
 - `Integrated_dataset/tables/phase1b_gene_detection_summary.csv`
 - `Integrated_dataset/logs/phase1b_qc_summary.md`
+- `Integrated_dataset/tables/phase1c_merged_obs_export.csv.gz`
+- `Integrated_dataset/tables/phase1c_metadata_replacement_summary.csv`
+- `Integrated_dataset/tables/phase1c_metadata_join_by_gse.csv`
+- `Integrated_dataset/logs/phase1c_metadata_replacement.md`
+- `analysis_26GSE_V4/outputs/metadata.csv.bk`
 - `Integrated_dataset/figures/phase0_category_distribution.png`
 - `Integrated_dataset/figures/phase0_matrix_state_overview.png`
 - `Integrated_dataset/figures/phase0_dataset_size_overview.png`
@@ -189,6 +200,7 @@ Examples:
 - `phase1_extract_tnk_candidates.py` compiled successfully in `rapids_sc_py310`
 - `phase1_finalize_from_temp.py` compiled successfully in `rapids_sc_py310`
 - `phase1b_conservative_cleanup.py` compiled successfully in `rapids_sc_py310`
+- `phase1c_replace_harmonized_metadata.py` compiled successfully in `rapids_sc_py310`
 - Phase 0 rerun on `h5ad_v2.csv` classified all 29 retained datasets as Category A
 - Phase 1 candidate object rebuilt and validated with `n_obs=5322388` and `n_vars=57093`
 - Phase 1 retained fraction across the repaired 29-dataset registry: `0.8608`
@@ -197,6 +209,10 @@ Examples:
 - Phase 1b validated the rewritten `TNK_candidates.h5ad` at `n_obs=5950935` and `n_vars=23536`
 - Phase 1b removed `261` obvious non-T/NK cells and `0` high-confidence doublets
 - The Phase 1b `<500 cells` gene filter retained all `11` tracked key T/NK genes
+- Phase 1c joined the filtered candidate obs to harmonized metadata with a complete string-typed `GSE + barcode` match
+- Phase 1c backed up the previous metadata target to `analysis_26GSE_V4/outputs/metadata.csv.bk`
+- Phase 1c replaced `analysis_26GSE_V4/outputs/harmonized_metadata_v4.csv` with `5950935` rows and `0` duplicated `project name + sampleid + barcodes` keys
+- Phase 1c post-write validation found `0` blank `project name`, `0` blank `barcodes`, and `58678` blank `sampleid`
 
 ---
 
@@ -204,7 +220,7 @@ Examples:
 - Several project manifests point to stale extracted directories; rescue tooling must resolve the real files under `downloads/GSE*/suppl` rather than trusting manifest paths blindly
 - Some datasets will likely be directly repairable by rebuilding counts from selected inputs, while others will need gene-space reconciliation first
 - Whether `rapids_sc_py310` should remain the working env or be cloned/aliased to `Scanpy_gdTmodel`
-- Phase 1c merged metadata backup/replacement has not been run yet and must be completed after approval
+- `sampleid` remains blank for `58678` rows after trusted fill from prior metadata and Phase 1 labels; decide whether Phase 2 needs manual curation first
 - Exact Phase 4 scoring inputs/outputs for `gdt_tcr_module_sharing_package_full`
 
 ---
@@ -217,9 +233,9 @@ Examples:
 ---
 
 ## Next action
-- Present the Phase 1b QC summary, tables, figures, and updated `TNK_candidates.h5ad` to the user
-- Wait for explicit user approval before Phase 1c metadata backup/replacement
-- After approval, run Phase 1c and validate the metadata replacement before any Phase 2 cleanup
+- Present the Phase 1c replacement summary and updated metadata outputs to the user
+- Wait for explicit user approval before Phase 2 cleanup
+- If approved, begin Phase 2 merged cleanup on the current milestone set
 
 ---
 
