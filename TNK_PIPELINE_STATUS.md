@@ -6,22 +6,20 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 ---
 
 ## Current milestone
-- Supplementary 10x 5' Phase 0-1 build and QC review pending
+- Supplementary 10x 5' Phase 0 completed; user QC review pending
 
 ## Current objective
-- Process the six approved supplementary 10x 5' datasets:
+- Present the supplementary Phase 0 QC package for the six approved 10x 5' datasets:
   - `GSE179994`
   - `GSE235863`
   - `GSE240865`
   - `GSE287301`
   - `GSE234069`
   - `GSE287541`
-- Build per-GSE H5AD files under `downloads/per_gse_h5ad_with_metadata/`
-- Exclude all 10x 3' inputs, especially the isolated `GSE234069` 3' files
-- Standardize supplementary metadata and TCR outputs to the current `harmonized_metadata_v4.csv` layout
-- Generate `Integrated_dataset/TNK_candidates_supp.h5ad`
-- Stop for user QC before any merge into `Integrated_dataset/TNK_candidates.h5ad`
-- Do not enter Phase 2 until the supplementary merge is explicitly approved
+- Keep all 10x 3' inputs excluded, especially the isolated `GSE234069` 3' lane
+- Hold at the QC gate until the user explicitly approves supplementary Phase 1
+- After approval, generate `Integrated_dataset/TNK_candidates_supp.h5ad`
+- Do not merge into `Integrated_dataset/TNK_candidates.h5ad` or enter Phase 2 without explicit approval
 
 ---
 
@@ -43,6 +41,9 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - Phase 1c merged metadata backup/replacement completed successfully
 - Supplementary 10x 5' candidate discovery completed for six non-registry GSEs
 - `GSE234069` supplementary files were separated into `10x_3` and `10x_5` lanes to prevent accidental 3' intake
+- Built all six supplementary per-GSE H5AD files under `downloads/per_gse_h5ad_with_metadata/`
+- Completed supplementary Phase 0 audit on the six approved 10x 5' datasets
+- Fixed duplicate `obs_names` in supplementary `GSE240865` by rewriting cell IDs as `library_id:barcode`
 
 ---
 
@@ -101,8 +102,8 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - [x] Review Phase 1b QC outputs with the user
 - [x] Complete Phase 1c merged metadata backup/replacement after Phase 1b approval
 - [ ] Review Phase 1c metadata replacement outputs with the user
-- [ ] Build the six supplementary 10x 5' per-GSE H5AD files
-- [ ] Run supplementary Phase 0 audit on the six supplementary GSEs
+- [x] Build the six supplementary 10x 5' per-GSE H5AD files
+- [x] Run supplementary Phase 0 audit on the six supplementary GSEs
 - [ ] Review supplementary Phase 0 QC outputs with the user
 - [ ] Run supplementary Phase 1 extraction and generate `TNK_candidates_supp.h5ad`
 - [ ] Review supplementary Phase 1 QC outputs with the user
@@ -196,6 +197,22 @@ Examples:
 - `Integrated_dataset/figures/phase1b_gse_cell_retention.png`
 - `Integrated_dataset/figures/phase1b_cell_removal_reasons.png`
 - `Integrated_dataset/figures/phase1b_gene_detection_distribution.png`
+- `downloads/per_gse_h5ad_with_metadata/GSE179994_with_tcr.h5ad`
+- `downloads/per_gse_h5ad_with_metadata/GSE234069_with_tcr.h5ad`
+- `downloads/per_gse_h5ad_with_metadata/GSE235863_with_tcr.h5ad`
+- `downloads/per_gse_h5ad_with_metadata/GSE240865_with_tcr.h5ad`
+- `downloads/per_gse_h5ad_with_metadata/GSE287301_with_tcr.h5ad`
+- `downloads/per_gse_h5ad_with_metadata/GSE287541_with_tcr.h5ad`
+- `Integrated_dataset/tables/supplementary_10x5/h5ad_supplementary_10x5.csv`
+- `Integrated_dataset/tables/supplementary_10x5/supplementary_h5ad_build_summary.csv`
+- `Integrated_dataset/tables/supplementary_10x5/supplementary_metadata_all_cells.csv.gz`
+- `Integrated_dataset/tables/supplementary_10x5/phase0_dataset_audit.csv`
+- `Integrated_dataset/tables/supplementary_10x5/phase0_category_summary.csv`
+- `Integrated_dataset/logs/supplementary_10x5/phase0_qc_summary.md`
+- `Integrated_dataset/figures/supplementary_10x5/phase0_category_distribution.png`
+- `Integrated_dataset/figures/supplementary_10x5/phase0_dataset_size_overview.png`
+- `Integrated_dataset/figures/supplementary_10x5/phase0_matrix_state_overview.png`
+- `Integrated_dataset/figures/supplementary_10x5/phase0_metadata_completeness.png`
 
 ---
 
@@ -218,6 +235,7 @@ Examples:
 - `GSE267645` was rescued after dropping 354 current-only unmatched genes before count restoration
 - `GSE254249` was revalidated as integer-like count-space and restored to the registry
 - `GSE301528` was repaired by rebuilding counts from the 16 valid selected inputs and skipping the 2 dimension-mismatched source matrices
+- Supplementary Phase 0 on the six approved 10x 5' datasets completed with 6/6 readable files, 6/6 Category A, 0 read errors, and no remaining duplicate `obs_names` in the final per-GSE H5AD outputs
 - `h5ad_v2.csv` now retains all 33 datasets from the canonical registry
 - `phase1_extract_tnk_candidates.py` compiled successfully in `rapids_sc_py310`
 - `phase1_finalize_from_temp.py` compiled successfully in `rapids_sc_py310`
