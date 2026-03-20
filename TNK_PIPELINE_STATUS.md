@@ -6,10 +6,10 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 ---
 
 ## Current milestone
-- Supplementary 10x 5' Phase 1 completed; user QC review pending
+- Supplementary candidate cells merged into main TNK milestone; pre-Phase-2 QC review pending
 
 ## Current objective
-- Present the supplementary Phase 1 QC package for the six approved 10x 5' datasets:
+- Present the merged candidate milestone after supplementary intake:
   - `GSE179994`
   - `GSE235863`
   - `GSE240865`
@@ -17,10 +17,12 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
   - `GSE234069`
   - `GSE287541`
 - Keep all 10x 3' inputs excluded, especially the isolated `GSE234069` 3' lane
-- Hold at the QC gate until the user explicitly approves any supplementary merge or cleanup step
-- Keep the supplementary candidate milestone separate at `Integrated_dataset/TNK_candidates_supp.h5ad`
+- Hold at the QC gate until the user explicitly approves Phase 2
+- The main candidate milestone `Integrated_dataset/TNK_candidates.h5ad` now includes the supplementary candidate cells
+- Keep the standalone supplementary candidate milestone `Integrated_dataset/TNK_candidates_supp.h5ad` for traceability
 - Keep supplementary harmonized metadata separate at `analysis_26GSE_V4/outputs/harmonized_metadata_supp.csv`
-- Do not merge into `Integrated_dataset/TNK_candidates.h5ad` or enter Phase 2 without explicit approval
+- Before Phase 2, the remaining merged metadata backup/replacement step still needs to be addressed if we want the canonical candidate metadata file to include the supplementary cells
+- Do not enter Phase 2 without explicit approval
 
 ---
 
@@ -47,6 +49,8 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - Fixed duplicate `obs_names` in supplementary `GSE240865` by rewriting cell IDs as `library_id:barcode`
 - Completed supplementary Phase 1 coarse extraction and wrote `Integrated_dataset/TNK_candidates_supp.h5ad`
 - Wrote supplementary harmonized candidate metadata to `analysis_26GSE_V4/outputs/harmonized_metadata_supp.csv`
+- Merged the 897,621 supplementary Phase 1 candidate cells into the main `Integrated_dataset/TNK_candidates.h5ad`
+- Verified supplementary candidate metadata carries `technology_simple = 10x 5'` for all supplementary candidate rows
 
 ---
 
@@ -110,7 +114,7 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - [ ] Review supplementary Phase 0 QC outputs with the user
 - [x] Run supplementary Phase 1 extraction and generate `TNK_candidates_supp.h5ad`
 - [ ] Review supplementary Phase 1 QC outputs with the user
-- [ ] Merge `TNK_candidates_supp.h5ad` into `TNK_candidates.h5ad` only after explicit user approval
+- [x] Merge `TNK_candidates_supp.h5ad` into `TNK_candidates.h5ad` after user approval and merge QC
 - [ ] Start Phase 2 after explicit user approval of the supplementary merge
 - [ ] Review the 20 Category C raw-source audit with the user and approve dataset-by-dataset rescue scope
 - [ ] Define Phase 4 scoring workflow
@@ -224,6 +228,8 @@ Examples:
 - `Integrated_dataset/figures/supplementary_10x5/phase1_categoryA_candidate_fraction.png`
 - `Integrated_dataset/figures/supplementary_10x5/phase1_categoryA_marker_support.png`
 - `analysis_26GSE_V4/outputs/harmonized_metadata_supp.csv`
+- `Integrated_dataset/tables/merged_tnk_candidates_with_supp_counts.csv`
+- `Integrated_dataset/logs/merged_tnk_candidates_with_supp.md`
 
 ---
 
@@ -248,6 +254,7 @@ Examples:
 - `GSE301528` was repaired by rebuilding counts from the 16 valid selected inputs and skipping the 2 dimension-mismatched source matrices
 - Supplementary Phase 0 on the six approved 10x 5' datasets completed with 6/6 readable files, 6/6 Category A, 0 read errors, and no remaining duplicate `obs_names` in the final per-GSE H5AD outputs
 - Supplementary Phase 1 on the six approved 10x 5' datasets retained 897,621 / 1,032,943 cells (86.90%) into the separate milestone `TNK_candidates_supp.h5ad`
+- Main `TNK_candidates.h5ad` now contains 6,848,556 cells and 55,455 genes after outer-join merge of the supplementary candidate object
 - `h5ad_v2.csv` now retains all 33 datasets from the canonical registry
 - `phase1_extract_tnk_candidates.py` compiled successfully in `rapids_sc_py310`
 - `phase1_finalize_from_temp.py` compiled successfully in `rapids_sc_py310`
