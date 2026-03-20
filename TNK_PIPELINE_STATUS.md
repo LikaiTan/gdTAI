@@ -6,10 +6,10 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 ---
 
 ## Current milestone
-- Supplementary 10x 5' Phase 0 completed; user QC review pending
+- Supplementary 10x 5' Phase 1 completed; user QC review pending
 
 ## Current objective
-- Present the supplementary Phase 0 QC package for the six approved 10x 5' datasets:
+- Present the supplementary Phase 1 QC package for the six approved 10x 5' datasets:
   - `GSE179994`
   - `GSE235863`
   - `GSE240865`
@@ -17,8 +17,9 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
   - `GSE234069`
   - `GSE287541`
 - Keep all 10x 3' inputs excluded, especially the isolated `GSE234069` 3' lane
-- Hold at the QC gate until the user explicitly approves supplementary Phase 1
-- After approval, generate `Integrated_dataset/TNK_candidates_supp.h5ad`
+- Hold at the QC gate until the user explicitly approves any supplementary merge or cleanup step
+- Keep the supplementary candidate milestone separate at `Integrated_dataset/TNK_candidates_supp.h5ad`
+- Keep supplementary harmonized metadata separate at `analysis_26GSE_V4/outputs/harmonized_metadata_supp.csv`
 - Do not merge into `Integrated_dataset/TNK_candidates.h5ad` or enter Phase 2 without explicit approval
 
 ---
@@ -44,6 +45,8 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - Built all six supplementary per-GSE H5AD files under `downloads/per_gse_h5ad_with_metadata/`
 - Completed supplementary Phase 0 audit on the six approved 10x 5' datasets
 - Fixed duplicate `obs_names` in supplementary `GSE240865` by rewriting cell IDs as `library_id:barcode`
+- Completed supplementary Phase 1 coarse extraction and wrote `Integrated_dataset/TNK_candidates_supp.h5ad`
+- Wrote supplementary harmonized candidate metadata to `analysis_26GSE_V4/outputs/harmonized_metadata_supp.csv`
 
 ---
 
@@ -105,7 +108,7 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - [x] Build the six supplementary 10x 5' per-GSE H5AD files
 - [x] Run supplementary Phase 0 audit on the six supplementary GSEs
 - [ ] Review supplementary Phase 0 QC outputs with the user
-- [ ] Run supplementary Phase 1 extraction and generate `TNK_candidates_supp.h5ad`
+- [x] Run supplementary Phase 1 extraction and generate `TNK_candidates_supp.h5ad`
 - [ ] Review supplementary Phase 1 QC outputs with the user
 - [ ] Merge `TNK_candidates_supp.h5ad` into `TNK_candidates.h5ad` only after explicit user approval
 - [ ] Start Phase 2 after explicit user approval of the supplementary merge
@@ -213,6 +216,14 @@ Examples:
 - `Integrated_dataset/figures/supplementary_10x5/phase0_dataset_size_overview.png`
 - `Integrated_dataset/figures/supplementary_10x5/phase0_matrix_state_overview.png`
 - `Integrated_dataset/figures/supplementary_10x5/phase0_metadata_completeness.png`
+- `Integrated_dataset/TNK_candidates_supp.h5ad`
+- `Integrated_dataset/tables/supplementary_10x5/phase1_categoryA_selection_summary.csv`
+- `Integrated_dataset/tables/supplementary_10x5/phase1_categoryA_marker_availability.csv`
+- `Integrated_dataset/logs/supplementary_10x5/phase1_qc_summary.md`
+- `Integrated_dataset/figures/supplementary_10x5/phase1_categoryA_candidate_yield.png`
+- `Integrated_dataset/figures/supplementary_10x5/phase1_categoryA_candidate_fraction.png`
+- `Integrated_dataset/figures/supplementary_10x5/phase1_categoryA_marker_support.png`
+- `analysis_26GSE_V4/outputs/harmonized_metadata_supp.csv`
 
 ---
 
@@ -236,6 +247,7 @@ Examples:
 - `GSE254249` was revalidated as integer-like count-space and restored to the registry
 - `GSE301528` was repaired by rebuilding counts from the 16 valid selected inputs and skipping the 2 dimension-mismatched source matrices
 - Supplementary Phase 0 on the six approved 10x 5' datasets completed with 6/6 readable files, 6/6 Category A, 0 read errors, and no remaining duplicate `obs_names` in the final per-GSE H5AD outputs
+- Supplementary Phase 1 on the six approved 10x 5' datasets retained 897,621 / 1,032,943 cells (86.90%) into the separate milestone `TNK_candidates_supp.h5ad`
 - `h5ad_v2.csv` now retains all 33 datasets from the canonical registry
 - `phase1_extract_tnk_candidates.py` compiled successfully in `rapids_sc_py310`
 - `phase1_finalize_from_temp.py` compiled successfully in `rapids_sc_py310`
