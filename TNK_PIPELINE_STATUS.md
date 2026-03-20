@@ -6,14 +6,22 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 ---
 
 ## Current milestone
-- Phase 2 start pending approval
+- Supplementary 10x 5' Phase 0-1 build and QC review pending
 
 ## Current objective
-- Review the completed Phase 1c metadata replacement outputs
-- Confirm that the harmonized metadata replacement is acceptable for downstream work
-- Note that the required join-key columns are present and unique after replacement
-- Decide whether the remaining blank `sampleid` rows require manual curation before Phase 2
-- Wait for explicit user approval before any Phase 2 cleanup
+- Process the six approved supplementary 10x 5' datasets:
+  - `GSE179994`
+  - `GSE235863`
+  - `GSE240865`
+  - `GSE287301`
+  - `GSE234069`
+  - `GSE287541`
+- Build per-GSE H5AD files under `downloads/per_gse_h5ad_with_metadata/`
+- Exclude all 10x 3' inputs, especially the isolated `GSE234069` 3' files
+- Standardize supplementary metadata and TCR outputs to the current `harmonized_metadata_v4.csv` layout
+- Generate `Integrated_dataset/TNK_candidates_supp.h5ad`
+- Stop for user QC before any merge into `Integrated_dataset/TNK_candidates.h5ad`
+- Do not enter Phase 2 until the supplementary merge is explicitly approved
 
 ---
 
@@ -33,6 +41,8 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - Phase 1b conservative cleanup completed on the current merged candidate milestone
 - User approved advancement into Phase 1c metadata backup/replacement
 - Phase 1c merged metadata backup/replacement completed successfully
+- Supplementary 10x 5' candidate discovery completed for six non-registry GSEs
+- `GSE234069` supplementary files were separated into `10x_3` and `10x_5` lanes to prevent accidental 3' intake
 
 ---
 
@@ -62,6 +72,12 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - `TNK_candidates.h5ad` is now the merged Phase 1 milestone object for the approved Category A inputs
 - Phase 1b uses a conservative cell-level removal rule plus a user-requested gene filter of `>=500` expressing cells
 - Phase 1c replacement must join by string-typed `GSE + barcode` and must emit `project name`, `sampleid`, and `barcodes`
+- The user explicitly directed this supplementary run to use the `rapids_sc_py310` conda environment
+- Phase 3 will no longer stop at scVI alone; it must include post-scVI scANVI annotation for coarse T and NK labeling
+- Candidate Phase 3 reference model path for scANVI:
+  - `/home/tanlikai/databank/owndata/fasting/raw/report_from_niuxian/models/census_scanvi_ref_v1`
+- The companion reference H5AD exposes `cell_type` as the label field and `batch` as the batch field
+- The Phase 3 scANVI reference must be treated as a coarse annotation prior, not as final tissue-state or γδT-subtype truth
 
 ---
 
@@ -85,7 +101,13 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - [x] Review Phase 1b QC outputs with the user
 - [x] Complete Phase 1c merged metadata backup/replacement after Phase 1b approval
 - [ ] Review Phase 1c metadata replacement outputs with the user
-- [ ] Start Phase 2 after explicit user approval
+- [ ] Build the six supplementary 10x 5' per-GSE H5AD files
+- [ ] Run supplementary Phase 0 audit on the six supplementary GSEs
+- [ ] Review supplementary Phase 0 QC outputs with the user
+- [ ] Run supplementary Phase 1 extraction and generate `TNK_candidates_supp.h5ad`
+- [ ] Review supplementary Phase 1 QC outputs with the user
+- [ ] Merge `TNK_candidates_supp.h5ad` into `TNK_candidates.h5ad` only after explicit user approval
+- [ ] Start Phase 2 after explicit user approval of the supplementary merge
 - [ ] Review the 20 Category C raw-source audit with the user and approve dataset-by-dataset rescue scope
 - [ ] Define Phase 4 scoring workflow
 - [ ] Define required evaluation figures
@@ -221,6 +243,7 @@ Examples:
 - Some datasets will likely be directly repairable by rebuilding counts from selected inputs, while others will need gene-space reconciliation first
 - Whether `rapids_sc_py310` should remain the working env or be cloned/aliased to `Scanpy_gdTmodel`
 - `sampleid` remains blank for `58678` rows after trusted fill from prior metadata and Phase 1 labels; decide whether Phase 2 needs manual curation first
+- The Phase 3 reference model should be revalidated at execution time for query compatibility and label-space suitability before scANVI mapping
 - Exact Phase 4 scoring inputs/outputs for `gdt_tcr_module_sharing_package_full`
 
 ---

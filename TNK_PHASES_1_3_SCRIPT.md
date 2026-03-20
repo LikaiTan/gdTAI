@@ -9,7 +9,7 @@ This file is the single human-readable canonical workflow for:
 - Phase 1b: conservative first cleanup
 - Phase 1c: merged metadata backup and replacement
 - Phase 2: merged cleanup
-- Phase 3: scVI integration
+- Phase 3: scVI integration and scANVI T/NK annotation
 
 The workflow is QC-gated. No phase transition is allowed without user review and explicit approval.
 
@@ -19,7 +19,7 @@ Run the workflow with:
 
 - Python: `/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python`
 - Intended long-term env name from the runbook: `Scanpy_gdTmodel`
-- Current practical resolution: `rapids_sc_py310` is the working single-cell environment and should be used until `Scanpy_gdTmodel` exists or is aliased to the same package set
+- Current practical resolution for this run: `rapids_sc_py310` is the working single-cell environment and should be used until `Scanpy_gdTmodel` is aligned to the same package set
 
 Required packages confirmed in `rapids_sc_py310`:
 
@@ -64,9 +64,34 @@ Required packages confirmed in `rapids_sc_py310`:
 
 - `Integrated_dataset/`
 
+## Supplementary 10x 5' Intake Lane
+
+The user approved one separate supplementary Phase 0-1 lane for six non-registry
+10x 5' datasets:
+
+- `GSE179994`
+- `GSE235863`
+- `GSE240865`
+- `GSE287301`
+- `GSE234069`
+- `GSE287541`
+
+Rules for this supplementary lane:
+
+- process these six GSEs with the same Phase 0-1 logic used for the existing registry inputs
+- store the per-GSE H5AD files in `downloads/per_gse_h5ad_with_metadata/`
+- do not include any 10x 3' data
+- for `GSE234069`, only use `downloads/GSE234069/suppl/10x_5/`
+- when TCR is provided as a separate matrix or contig annotation rather than already embedded in metadata, process it according to `tcr_integration_workflow.json`
+- standardize supplementary metadata and TCR outputs to the current `analysis_26GSE_V4/outputs/harmonized_metadata_v4.csv` column layout
+- write the supplementary candidate milestone to `Integrated_dataset/TNK_candidates_supp.h5ad`
+- do not merge `TNK_candidates_supp.h5ad` into `Integrated_dataset/TNK_candidates.h5ad` until the user reviews the supplementary Phase 0 and Phase 1 QC outputs and explicitly approves the merge
+- do not advance to Phase 2 until that supplementary merge approval is granted
+
 ### Milestone H5AD files
 
 - `Integrated_dataset/TNK_candidates.h5ad`
+- `Integrated_dataset/TNK_candidates_supp.h5ad`
 - `Integrated_dataset/TNK_cleaned.h5ad`
 - `Integrated_dataset/integrated.h5ad`
 
@@ -282,7 +307,7 @@ Stop if metadata replacement validation fails. Do not proceed to Phase 2 until t
 
 Stop for user QC before Phase 3.
 
-## Phase 3: scVI Integration
+## Phase 3: scVI Integration And scANVI T/NK Annotation
 
 ### Entry criteria
 
@@ -294,8 +319,18 @@ Stop for user QC before Phase 3.
 - prepare batch-aware inputs from `TNK_cleaned.h5ad`
 - run scVI with GPU enabled when available and useful
 - avoid assumptions that require more than 400 GB RAM
+- after scVI integration, run scANVI-based reference annotation for coarse T and NK labeling
+- primary reference model path:
+  - `/home/tanlikai/databank/owndata/fasting/raw/report_from_niuxian/models/census_scanvi_ref_v1`
+- reference companion H5AD currently exposes:
+  - label column `cell_type`
+  - batch column `batch`
+- validate query/reference compatibility before mapping
+- treat this reference as a coarse annotation prior, not as final tissue-state truth or γδT subtype truth
+- write both detailed transferred labels and collapsed T/NK superclass labels into `integrated.h5ad`
+- if transferred labels fall outside T/NK space, flag them for review instead of auto-dropping them
 - save validated output to `Integrated_dataset/integrated.h5ad`
-- generate batch-mixing, marker-retention, and donor/sample mixing figures
+- generate batch-mixing, marker-retention, donor/sample mixing, scANVI label, and label-confidence figures
 
 ### Stop condition
 
@@ -316,7 +351,7 @@ def main() -> None:
     run_phase1c_metadata_backup()
     run_phase2_cleanup()
     stop_for_user_qc("Phase 2")
-    run_phase3_scvi()
+    run_phase3_scvi_and_scanvi()
     stop_for_user_qc("Phase 3")
 ```
 

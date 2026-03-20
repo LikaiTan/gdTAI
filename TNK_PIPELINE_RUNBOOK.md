@@ -117,14 +117,14 @@ Rules:
 ## 5. Environment and package policy
 
 Use the conda environment:
-- `Scanpy_gdTmodel`
+- `rapids_sc_py310`
 
 Rules:
 - prefer conda installation
 - use pip only if the package is unavailable via conda channels
 - if pip is used, record why
 - do not use base environment
-- install all needed packages into `Scanpy_gdTmodel`
+- install all needed packages into `rapids_sc_py310`
 
 This environment should contain all packages needed for:
 - scanpy
@@ -195,7 +195,6 @@ Markdown code blocks should be organized so a human can quickly locate:
 At the start of every session:
 1. read this file
 2. read `TNK_PIPELINE_STATUS.md`
-3. read `TNK_PHASES_1_3_SCRIPT.md`
 4. restate the current milestone and next action
 
 Re-read these files whenever:
@@ -217,7 +216,7 @@ The project should be executed in these phases:
 ### Phase 1: Per-dataset coarse T/NK candidate extraction
 ### Phase 1b: Conservative first-pass doublet / obvious contaminant removal
 ### Phase 2: Merged candidate cleanup and second-pass purification
-### Phase 3: scVI integration
+### Phase 3: scVI integration and post-integration scANVI annotation
 ### Phase 4: TRAB/TRB scoring using `gdt_tcr_module_sharing_package_full`
 
 Do not work on Phase 5 now.
@@ -333,10 +332,38 @@ Only high-confidence cases such as:
 
 ### Principle
 Remove obvious junk, not all suspicious cells.
+## 13. Phase 1c: Merged metadata backup and replacement
 
+### Objective
+Immediately after all samples are merged together into the unified object, export and update the integrated harmonized metadata before moving to the next phase.
+
+### Required outputs
+- backup file: `metadata.csv.bk`
+- integrated metadata target: `analysis_26GSE_V4/outputs/harmonized_metadata_v4.csv`
+
+### Required join key
+Use the following columns together as the unique join key:
+- `project name`
+- `sampleid`
+- `barcodes`
+
+### Mandatory procedure
+1. export merged `adata.obs`
+2. save a backup copy as `metadata.csv.bk`
+3. validate that the join-key columns exist
+4. validate that the combined join key is unique per row
+5. replace `analysis_26GSE_V4/outputs/harmonized_metadata_v4.csv`
+6. validate that row counts match expectations and that no rows were silently dropped or duplicated
+7. log the replacement result
+
+### Rules
+- do not guess missing join-key columns
+- do not continue if the join key is not unique
+- do not continue if row counts are inconsistent
+- do not proceed to Phase 2 until this step is completed and validated
 ---
 
-## 13. Phase 2: Merged candidate cleanup and second-pass purification
+## 14. Phase 2: Merged candidate cleanup and second-pass purification
 
 ### Objective
 After candidate pooling, do a stricter cleanup using more context.
@@ -405,6 +432,10 @@ Save result as:
 
 ## 14. Phase 3: scVI integration
 
+### Objective
+Build a stable integrated latent space with scVI, then perform cautious scANVI-based
+reference annotation for coarse T and NK labeling.
+
 ### Eligibility
 Only use datasets appropriate for unified count-based integration.
 
@@ -460,6 +491,56 @@ Do not blindly force all variable-region genes into the scVI integration feature
 ### Output
 Save integrated object as:
 - `Integrated_dataset/integrated.h5ad`
+
+### Post-scVI scANVI annotation
+
+After the scVI latent space is validated, perform a reference-guided scANVI
+annotation step focused on T/NK interpretation.
+
+#### Reference source
+Primary candidate reference path:
+- `/home/tanlikai/databank/owndata/fasting/raw/report_from_niuxian/models/census_scanvi_ref_v1`
+
+Available reference artifacts:
+- `model.pt`
+- `census_reference_subset.h5ad`
+
+Reference fields observed in the companion reference H5AD:
+- label column: `cell_type`
+- batch column: `batch`
+
+#### Critical caution
+Do not treat this reference as authoritative for tissue-state biology or for fine
+γδT subtyping.
+
+Rules:
+- use the reference primarily for coarse T-versus-NK annotation support
+- treat transferred non-T/NK labels as contamination-review flags, not as automatic truth
+- do not let blood-biased or broad census labels overwrite tissue-specific biology
+- do not use scANVI output alone as the final γδT identity call
+
+#### Recommended execution plan
+1. train scVI on the approved Phase 2-cleaned object
+2. save the integrated latent representation to `Integrated_dataset/integrated.h5ad`
+3. validate the reference model and query compatibility before scANVI mapping
+4. run scANVI label transfer using the reference model if compatibility checks pass
+5. store detailed transferred labels plus a collapsed T/NK superclass label
+6. compare scANVI labels against marker expression and cluster structure
+7. flag off-target labels for manual review rather than auto-dropping them
+
+#### Required annotation outputs
+Write annotation results into `Integrated_dataset/integrated.h5ad`, for example:
+- detailed transferred label
+- transferred label confidence / probability
+- collapsed superclass label such as `T_cell`, `NK_cell`, or `reference_other`
+- annotation source / method tag
+
+#### Required Phase 3 QC figures
+In addition to batch-mixing and marker plots, include:
+- UMAP colored by scANVI detailed label
+- UMAP colored by collapsed T/NK label
+- confidence distribution for transferred labels
+- marker-versus-scANVI agreement plots for core T and NK markers
 
 Then generate high-quality PNG figures summarizing:
 - UMAP
