@@ -6,18 +6,18 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 ---
 
 ## Current milestone
-- Phase 3 QC reviewed; keep the mirrored SSD-side integrated milestone as-is, use simple scVI-based annotation downstream, and treat scANVI outputs as reference-only until Phase 4 is explicitly approved
+- Phase 4 scoring completed on the mirrored SSD-side integrated milestone; final Phase 4 QC package is ready for review
 
 ## Current objective
-- Keep the validated Phase 3 integrated milestone on SSD without rollback
+- Keep the validated integrated milestone on SSD without rollback
 - Use scVI latent space, Leiden clusters, UMAP, and simple scVI-based annotation as the canonical downstream interpretation
 - Keep scANVI label fields and PNG/QC outputs for reference only; do not use them as the primary downstream annotation layer unless a later user decision changes that
-- Wait for explicit user approval before entering Phase 4
+- Review the completed Phase 4 continuous score outputs and decide what downstream biological interpretation or migration step should happen next
 - Keep the validated Phase 3 H5AD in the mirrored SSD tree for now; do not migrate it back to NFS until the user explicitly requests migration
 - Keep tables, PNG figures, logs, scripts, and model artifacts on NFS; use SSD only for large H5AD inputs/outputs
 - Keep all 10x 3' inputs excluded, especially the isolated `GSE234069` 3' lane
 - Keep supplementary harmonized metadata separate at `analysis_26GSE_V4/outputs/harmonized_metadata_supp.csv`
-- Record the Phase 3 QC conclusion and all Phase 4 decisions clearly in markdown and git history
+- Record the Phase 4 QC conclusion and any post-Phase 4 decisions clearly in markdown and git history
 
 ---
 
@@ -50,6 +50,8 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - Phase 2 QC passed internal review and Phase 3 execution was started under the approved automatic continuation rule
 - Phase 3 scVI integration, RAPIDS embedding, and scANVI coarse T/NK annotation completed successfully on the mirrored SSD-side integrated milestone
 - User reviewed the Phase 3 QC package and decided that scANVI labels are too messy for primary downstream use; keep the current integrated milestone without rollback and use simple scVI-based annotation downstream instead
+- User explicitly approved Phase 4 execution
+- Phase 4 completed successfully with exact package-faithful TRA/TRB/TRD module scoring on the mirrored SSD-side integrated milestone and wrote continuous score columns back into `integrated.h5ad`
 
 ---
 
@@ -100,6 +102,9 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - On 2026-03-21, the user further clarified that only large H5AD files should live on SSD; tables, PNG figures, logs, scripts, and model artifacts must remain on NFS
 - On 2026-03-21, the resumed scANVI-only pass completed successfully after fixing centroid-transfer index alignment and H5AD serialization of scANVI label fields
 - On 2026-03-21, the user decided that the scANVI output is too messy for primary downstream interpretation; keep the scANVI fields in `integrated.h5ad` for reference only, do not roll back Phase 3, and use simple scVI-based annotation for downstream work
+- On 2026-03-22, the user explicitly approved Phase 4 implementation
+- On 2026-03-22, Phase 4 was implemented as exact package-faithful TRA/TRB/TRD module scoring with temporary normalize+log1p on count-space `X`, continuous score outputs only, and in-place metadata updates to the mirrored SSD-side `integrated.h5ad`
+- On 2026-03-22, Phase 4 kept scANVI outputs untouched as reference-only and did not use them to define Phase 4 calls
 
 ---
 
@@ -135,9 +140,11 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - [x] Complete the resumed Phase 3 scVI integration and post-scVI scANVI annotation run, then write `integrated.h5ad` and the full PNG QC package
 - [x] Review the completed Phase 3 QC package with the user and record whether scANVI is accepted for downstream use
 - [ ] Review the 20 Category C raw-source audit with the user and approve dataset-by-dataset rescue scope
-- [ ] Define Phase 4 scoring workflow
-- [ ] Define required evaluation figures
-- [ ] Obtain explicit user approval before entering Phase 4
+- [x] Define Phase 4 scoring workflow
+- [x] Define required evaluation figures
+- [x] Obtain explicit user approval before entering Phase 4
+- [x] Run Phase 4 and write continuous score columns back into `integrated.h5ad`
+- [ ] Review the completed Phase 4 QC package with the user
 - [x] Commit and push milestone changes to GitHub
 
 ---
@@ -175,6 +182,9 @@ Examples:
 - `phase1_finalize_from_temp.py`
 - `phase1b_conservative_cleanup.py`
 - `phase1c_replace_harmonized_metadata.py`
+- `phase2_merged_cleanup.py`
+- `phase3_scvi_scanvi.py`
+- `phase4_gdt_module_scoring.py`
 - `watch_h5ad_v2_and_resume.py`
 
 ---
@@ -249,6 +259,17 @@ Examples:
 - `analysis_26GSE_V4/outputs/harmonized_metadata_supp.csv`
 - `Integrated_dataset/tables/merged_tnk_candidates_with_supp_counts.csv`
 - `Integrated_dataset/logs/merged_tnk_candidates_with_supp.md`
+- `Integrated_dataset/tables/phase4_score_summary.csv`
+- `Integrated_dataset/tables/phase4_module_gene_membership.csv`
+- `Integrated_dataset/tables/phase4_leiden_score_summary.csv`
+- `Integrated_dataset/tables/phase4_gse_score_summary.csv`
+- `Integrated_dataset/tables/phase4_top_cells_by_trd_minus_trab.csv`
+- `Integrated_dataset/logs/phase4_qc_summary.md`
+- `Integrated_dataset/figures/phase4_score_distributions.png`
+- `Integrated_dataset/figures/phase4_umap_score_overlays.png`
+- `Integrated_dataset/figures/phase4_leiden_score_summary.png`
+- `Integrated_dataset/figures/phase4_gse_score_summary.png`
+- `Integrated_dataset/figures/phase4_marker_score_comparison.png`
 
 ---
 

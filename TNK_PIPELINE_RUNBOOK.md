@@ -583,7 +583,7 @@ Figure format rule:
 ## 15. Phase 4: scoring
 
 ### Objective
-Perform TRAB/TRB scoring using:
+Perform gdT-module scoring using:
 - `gdt_tcr_module_sharing_package_full`
 
 ### Rules
@@ -591,6 +591,11 @@ Perform TRAB/TRB scoring using:
 - write Phase 4 score results back into the same integrated object when appropriate
 - do not create many extra H5AD outputs unless explicitly needed
 - generate high-quality PNG figures for Phase 4 scoring summaries
+- use the package-faithful TRA/TRB/TRD module definitions as the canonical Phase 4 method
+- score all cells in the integrated object
+- compute scores from a temporary normalize+log1p view of count-space `X`; do not persist a normalized layer unless explicitly requested later
+- write continuous score columns only by default; do not force a hard gdT/abT call during Phase 4 unless the user explicitly requests one
+- keep scANVI outputs untouched as reference-only context; do not use them to define Phase 4 calls
 
 Examples of outputs:
 - score distribution plots
@@ -601,7 +606,15 @@ Examples of outputs:
 Use the package:
 - `gdt_tcr_module_sharing_package_full`
 
+Canonical outputs written back into `integrated.h5ad` should include:
+- `phase4_tra_score`
+- `phase4_trb_score`
+- `phase4_trab_score`
+- `phase4_trd_score`
+- `phase4_trd_minus_trab`
 
+Store method provenance and gene memberships in:
+- `uns['phase4_gdt_module']`
 
 Do not create many extra H5AD outputs unless explicitly necessary.
 
