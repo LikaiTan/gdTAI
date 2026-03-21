@@ -1,0 +1,230 @@
+scanvi_detailed_label,scanvi_tnk_superclass,cells,mean_confidence
+"effector memory CD8-positive, alpha-beta T cell",T_cell,263114,0.122485645
+"CD16-positive, CD56-dim natural killer cell, human",NK_cell,241688,0.0902016
+"naive thymus-derived CD4-positive, alpha-beta T cell",T_cell,208760,0.10675753
+"CD8-positive, alpha-beta cytotoxic T cell",T_cell,206003,0.122618504
+"naive thymus-derived CD8-positive, alpha-beta T cell",T_cell,179860,0.2029616
+CD4-positive helper T cell,T_cell,177922,0.08184795
+natural killer cell,NK_cell,143202,0.1483102
+T-helper 1 cell,reference_other,139797,0.086199455
+"effector memory CD4-positive, alpha-beta T cell",T_cell,132245,0.07780385
+"CD8-positive, alpha-beta T cell",T_cell,129593,0.1660267
+regulatory T cell,T_cell,128993,0.093012325
+T follicular regulatory cell,reference_other,126533,0.07176153
+"activated CD8-positive, alpha-beta T cell",T_cell,113234,0.06968577
+"activated CD4-positive, alpha-beta T cell, human",T_cell,111196,0.07541977
+"central memory CD4-positive, alpha-beta T cell",T_cell,106180,0.05668724
+"CD4-positive, alpha-beta thymocyte",T_cell,105901,0.08031076
+"CD4-positive, alpha-beta cytotoxic T cell",T_cell,104286,0.09090109
+"lung resident memory CD8-positive, alpha-beta T cell",T_cell,97794,0.086154155
+"activated CD4-positive, alpha-beta T cell",T_cell,95929,0.07808238
+"CD4-positive, alpha-beta memory T cell",T_cell,94158,0.117769465
+"CD4-positive, alpha-beta T cell",T_cell,93486,0.2653762
+monocyte,reference_other,91655,0.108043954
+alpha-beta T cell,T_cell,91514,0.066166796
+exhausted T cell,T_cell,90479,0.08898154
+"CD4-negative, CD8-negative, alpha-beta intraepithelial T cell",T_cell,87580,0.0811491
+"effector CD4-positive, alpha-beta T cell",T_cell,86581,0.14612862
+paneth cell of colon,reference_other,86069,0.08818665
+naive T cell,T_cell,83761,0.08097617
+T follicular helper cell,reference_other,82297,0.051137358
+double negative thymocyte,reference_other,78577,0.056930505
+memory T cell,T_cell,77017,0.05291499
+Tc1 cell,reference_other,71705,0.10690193
+enterocyte of colon,reference_other,69649,0.085286304
+type II NK T cell,T_cell,68454,0.074556
+T-helper 17 cell,reference_other,68324,0.056644402
+group 2 innate lymphoid cell,reference_other,68104,0.09119044
+"effector CD8-positive, alpha-beta T cell",T_cell,67350,0.07991798
+"lung resident memory CD4-positive, alpha-beta T cell",T_cell,65612,0.10111481
+intermediate cell of urothelium,reference_other,64430,0.067742646
+"central memory CD8-positive, alpha-beta T cell",T_cell,64100,0.07814806
+leukocyte,reference_other,62384,0.06391621
+"effector memory CD8-positive, alpha-beta T cell, terminally differentiated",T_cell,61467,0.07929354
+intermediate monocyte,reference_other,59011,0.07182678
+"CD8-positive, alpha-beta memory T cell",T_cell,58074,0.14221436
+promyelocyte,reference_other,53189,0.070187464
+"CD8-positive, alpha-beta thymocyte",T_cell,51960,0.08219349
+mucosal invariant T cell,T_cell,48983,0.07666623
+hepatic pit cell,T_cell,48230,0.06378336
+erythroblast,reference_other,48119,0.09820702
+myeloid dendritic cell,reference_other,47517,0.063579954
+mature alpha-beta T cell,T_cell,44869,0.07057689
+natural T-regulatory cell,reference_other,44848,0.049466904
+mature NK T cell,T_cell,42492,0.047222584
+lymphocyte,reference_other,42349,0.05459274
+CD38-negative naive B cell,reference_other,40671,0.18562463
+classical monocyte,reference_other,40503,0.14513938
+midzonal region hepatocyte,reference_other,37135,0.07470115
+"CD8-alpha-beta-positive, alpha-beta intraepithelial T cell",T_cell,36872,0.055721436
+gamma-delta T cell,T_cell,36314,0.12499158
+colon goblet cell,T_cell,36002,0.0690546
+naive B cell,reference_other,33152,0.1559545
+keratinocyte,reference_other,32486,0.0950409
+unswitched memory B cell,reference_other,30732,0.13706811
+adipocyte,reference_other,30499,0.08964968
+T cell,T_cell,28606,0.36520648
+"double-positive, alpha-beta thymocyte",T_cell,27349,0.06595305
+innate lymphoid cell,reference_other,27207,0.061117325
+memory B cell,reference_other,26554,0.13213658
+non-classical monocyte,reference_other,26399,0.22634889
+"CD16-negative, CD56-bright natural killer cell, human",NK_cell,26054,0.06591354
+thymocyte,reference_other,25910,0.05763803
+type I NK T cell,T_cell,24152,0.082396775
+unknown,reference_other,23539,0.043411233
+paneth cell of epithelium of small intestine,reference_other,22901,0.073087014
+CD14-positive monocyte,reference_other,22842,0.08888468
+glutamatergic neuron,reference_other,21660,0.087993786
+kidney epithelial cell,reference_other,20766,0.06559407
+"CD56-positive, CD161-positive immature natural killer cell, human",NK_cell,20727,0.29005453
+immature alpha-beta T cell,T_cell,20484,0.10223576
+mature astrocyte,reference_other,19127,0.09995136
+male germ cell,reference_other,18583,0.13393928
+mature B cell,reference_other,18542,0.07165733
+B-2 B cell,reference_other,18489,0.16133587
+nasal mucosa goblet cell,T_cell,17579,0.08186766
+microglial cell,reference_other,17045,0.074361116
+group 3 innate lymphoid cell,reference_other,16487,0.20051879
+myelocyte,reference_other,15774,0.097267896
+epicardial adipocyte,reference_other,14880,0.13846885
+blood cell,reference_other,14870,0.052007187
+"CD14-positive, CD16-positive monocyte",reference_other,14718,0.11242984
+seromucus secreting cell,reference_other,13978,0.116745904
+mature microglial cell,reference_other,13770,0.11500677
+platelet,reference_other,12025,0.31449062
+myeloid cell,reference_other,11379,0.1163123
+enteroendocrine cell of colon,reference_other,11206,0.12872942
+transitional stage B cell,reference_other,10972,0.1352395
+intestine goblet cell,T_cell,10945,0.07866583
+glomerular endothelial cell,reference_other,10904,0.13227524
+lymphocyte of B lineage,reference_other,10355,0.07910591
+"CD14-positive, CD16-low monocyte",reference_other,10131,0.07346471
+inflammatory macrophage,reference_other,9933,0.07539503
+lymphoid lineage restricted progenitor cell,reference_other,9871,0.1626949
+GABAergic neuron,reference_other,9820,0.10871092
+class switched memory B cell,reference_other,9510,0.09888149
+choroid plexus epithelial cell,reference_other,9179,0.08397649
+epithelial cell of urethra,reference_other,8948,0.15322195
+macrophage,reference_other,8579,0.2097977
+mononuclear phagocyte,reference_other,7705,0.13192146
+dendritic cell,reference_other,7517,0.1727505
+umbrella cell of urothelium,reference_other,7280,0.16076775
+plasmablast,reference_other,7216,0.2730998
+neutrophil,reference_other,6707,0.1988355
+late promyelocyte,reference_other,6650,0.07407848
+type A enteroendocrine cell,reference_other,6614,0.08178112
+erythrocyte,reference_other,6240,0.52849007
+intestinal tuft cell,T_cell,6122,0.06379968
+respiratory epithelial cell,reference_other,5628,0.1031496
+intestinal crypt stem cell,reference_other,4746,0.07183776
+plasmacytoid dendritic cell,reference_other,4625,0.6416926
+immature B cell,reference_other,4555,0.10497787
+centroblast,reference_other,4523,0.16515955
+Kupffer cell,reference_other,4512,0.15816998
+enteroendocrine cell,reference_other,4425,0.064182594
+plasma cell,reference_other,4283,0.18663509
+oogonial cell,reference_other,4206,0.09625659
+IgA plasma cell,reference_other,3923,0.2129205
+liver dendritic cell,reference_other,3536,0.1318415
+promonocyte,reference_other,3494,0.11074712
+acinar cell of salivary gland,reference_other,2943,0.1684472
+B cell,reference_other,2907,0.11125652
+medullary thymic epithelial cell,reference_other,2837,0.31630975
+precursor B cell,reference_other,2789,0.11332606
+IgG plasma cell,reference_other,2615,0.2638304
+granulosa cell,reference_other,2458,0.090160035
+"dendritic cell, human",reference_other,2169,0.14266942
+IgG plasmablast,reference_other,2096,0.15198137
+astrocyte,reference_other,1971,0.06370202
+IgG-negative class switched memory B cell,reference_other,1968,0.12719704
+oligodendrocyte precursor cell,reference_other,1962,0.1488023
+IgA plasmablast,reference_other,1960,0.11113903
+squamous epithelial cell,reference_other,1955,0.3941985
+colon macrophage,reference_other,1921,0.16638081
+type B pancreatic cell,reference_other,1701,0.09272228
+transit amplifying cell of colon,reference_other,1699,0.0746443
+neuron,reference_other,1672,0.16668078
+sebum secreting cell,reference_other,1490,0.109026924
+ciliated cell,reference_other,1472,0.17806382
+conventional dendritic cell,reference_other,1406,0.13206786
+mast cell,T_cell,1047,0.35570326
+alternatively activated macrophage,reference_other,1011,0.14341363
+tracheal goblet cell,T_cell,991,0.118721806
+early promyelocyte,reference_other,983,0.1304407
+neoplastic cell,reference_other,802,0.227931
+medullary thymic epithelial cell type 1,reference_other,711,0.12790544
+sst GABAergic cortical interneuron,reference_other,711,0.13221177
+multi-ciliated epithelial cell,reference_other,667,0.17744893
+abnormal cell,reference_other,662,0.11627459
+tonsil germinal center B cell,reference_other,650,0.15531467
+stem cell,reference_other,649,0.078826435
+endothelial cell,reference_other,617,0.093947604
+bone marrow cell,reference_other,590,0.4521059
+"CD34-positive, CD56-positive, CD117-positive common innate lymphoid precursor, human",reference_other,587,0.15974899
+common myeloid progenitor,reference_other,584,0.15175967
+medullary thymic epithelial cell type 2,reference_other,584,0.15614569
+lung secretory cell,reference_other,583,0.19079012
+fibroblast of breast,reference_other,492,0.2850539
+primordial germ cell,reference_other,404,0.06322396
+basal-myoepithelial cell of mammary gland,reference_other,398,0.20264395
+pulmonary artery endothelial cell,reference_other,383,0.083638795
+myeloid leukocyte,reference_other,371,0.13050555
+hair follicular keratinocyte,reference_other,361,0.21191408
+secretory cell,reference_other,361,0.19239925
+hematopoietic multipotent progenitor cell,reference_other,351,0.23003107
+progenitor cell,reference_other,351,0.07598005
+adventitial cell,reference_other,341,0.22214596
+corticomedullary thymic epithelial cell,reference_other,327,0.09436149
+CD1c-positive myeloid dendritic cell,reference_other,308,0.21307324
+melanocyte,reference_other,300,0.111742936
+club cell,reference_other,290,0.12830763
+pericyte,reference_other,290,0.25656366
+fibroblast,reference_other,275,0.2501231
+enterocyte,reference_other,267,0.18501535
+mesenchymal cell,reference_other,257,0.1444582
+basal cell of prostate epithelium,reference_other,256,0.21815866
+primitive red blood cell,reference_other,236,0.27352664
+vascular leptomeningeal cell,reference_other,236,0.36662698
+neuroendocrine cell,reference_other,221,0.14024681
+lung ciliated cell,reference_other,216,0.21359874
+basal cell,reference_other,205,0.2712869
+pulmonary alveolar type 1 cell,reference_other,205,0.07509226
+renal beta-intercalated cell,reference_other,188,0.16936769
+pro-B cell,reference_other,187,0.11189691
+retinal ganglion cell,reference_other,182,0.09388036
+germ cell,reference_other,181,0.14132817
+megakaryocyte,reference_other,166,0.34732002
+erythroid progenitor cell,reference_other,164,0.24570468
+epithelial cell,reference_other,160,0.07115094
+myofibroblast cell,T_cell,154,0.2921432
+granulocyte,reference_other,142,0.13385999
+large pre-B-II cell,reference_other,135,0.09859418
+granulocyte monocyte progenitor cell,reference_other,134,0.17688304
+stromal cell,reference_other,127,0.17599097
+epithelial cell of alveolus of lung,reference_other,122,0.12963176
+mural cell,reference_other,110,0.28020602
+pulmonary alveolar type 2 cell,reference_other,100,0.16034776
+glial cell,reference_other,92,0.114007525
+IgG memory B cell,reference_other,91,0.05057702
+blood vessel endothelial cell,reference_other,90,0.29784206
+vasa recta descending limb cell,reference_other,88,0.08591132
+megakaryocyte-erythroid progenitor cell,reference_other,77,0.20799637
+perivascular cell,reference_other,75,0.20295386
+basal cell of urothelium,reference_other,67,0.1413595
+cortical thymic epithelial cell,reference_other,67,0.15110509
+oral mucosa squamous cell,reference_other,67,0.2144316
+stromal cell of ovary,reference_other,62,0.1297312
+muscle cell,reference_other,58,0.091473274
+transit amplifying cell,reference_other,56,0.15275618
+endothelial cell of artery,reference_other,47,0.29174674
+oocyte,reference_other,43,0.22197007
+smooth muscle cell of the pulmonary artery,reference_other,42,0.08159051
+myoblast,reference_other,41,0.097479135
+centrocyte,reference_other,35,0.41481277
+Schwann cell precursor,reference_other,28,0.20605476
+caudal ganglionic eminence derived interneuron,reference_other,28,0.2596024
+vein endothelial cell,reference_other,28,0.24126549
+malignant cell,T_cell,26,0.17434575
+fibroblast of lung,reference_other,23,0.15237321
+capillary endothelial cell,reference_other,15,0.22091404
+bronchial goblet cell,T_cell,13,0.12225972

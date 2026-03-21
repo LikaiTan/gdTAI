@@ -6,8 +6,11 @@ Allowed resources:
 - GPU: allowed
 - RAM: up to 400 GB
 
+Run-specific override:
+- On 2026-03-20, the user raised the active-run RAM ceiling to `800 GB`
+
 Execution policy:
-- optimize for robustness within 80 CPU / GPU / 400 GB RAM limits
+- optimize for robustness within 80 CPU / GPU / 400 GB RAM limits unless a user-approved run-specific override is recorded
 - preserve sparse matrices whenever possible
 - avoid accidental densification of large matrices
 - do not design pipeline steps that assume 2 TB RAM
@@ -106,6 +109,11 @@ Rules:
 - do not create many extra milestone H5ADs
 - update milestone files rather than creating many alternatives
 - temporary H5ADs are allowed during execution but should be removed after successful validation
+- when large H5AD I/O becomes a bottleneck, stage only the large H5AD files under a mirrored local temp tree such as `/ssd/tnk_phase3/Integrated_dataset/`
+- keep the mirrored local tree structurally aligned with `Integrated_dataset/` so validated H5AD outputs can be migrated back to NFS with minimal path rewriting
+- expose the mirrored local tree from the NFS project root via a stable symlink such as `high_speed_temp/Integrated_dataset -> /ssd/tnk_phase3/Integrated_dataset`
+- keep tables, PNG figures, logs, scripts, and model artifacts on NFS; use SSD only for the large H5AD inputs/outputs
+- when running from the mirrored high-speed tree, do not automatically migrate validated outputs back to NFS; keep the validated H5AD in the mirrored tree and migrate only on explicit user instruction
 
 ### Phase-specific interpretation
 - `TNK_candidates.h5ad`: merged candidate pool after Phase 1 / 1b
@@ -428,6 +436,18 @@ These may occur in real NK-like γδT or cytotoxic T/NK-compatible states.
 Save result as:
 - `Integrated_dataset/TNK_cleaned.h5ad`
 
+### QC gate
+Default rule:
+- stop after the Phase 2 QC package and wait for explicit user approval before Phase 3
+
+Run-specific exception:
+- if the user explicitly authorizes internal Phase 2 QC and direct continuation, record that exception in `TNK_PIPELINE_STATUS.md` and `TNK_PHASES_1_3_SCRIPT.md`
+- under that exception, proceed to Phase 3 only if the Phase 2 QC package passes internal review without unresolved blocking issues
+
+### Figure output rule
+- generate Phase 2 QC figures in PNG format only
+- do not emit PDF, SVG, or alternate figure formats unless the user explicitly requests them
+
 ---
 
 ## 14. Phase 3: scVI integration
@@ -487,6 +507,7 @@ Do not blindly force all variable-region genes into the scVI integration feature
 - do not design steps that assume more than 400 GB RAM
 - GPU may be used where beneficial
 - CPU parallelism may use up to 80 cores
+- if Phase 3 uses `rapids_sc_py310` and `rapids_singlecell`, import `torch` before `rapids_singlecell` to avoid the observed CUDA symbol-resolution failure in that env
 
 ### Output
 Save integrated object as:
@@ -508,6 +529,7 @@ Available reference artifacts:
 Reference fields observed in the companion reference H5AD:
 - label column: `cell_type`
 - batch column: `batch`
+- note: the saved model was trained on the `var_names` stored in `model.pt`; do not assume the full companion H5AD gene space matches the model gene space
 
 #### Critical caution
 Do not treat this reference as authoritative for tissue-state biology or for fine
@@ -551,6 +573,10 @@ Then generate high-quality PNG figures summarizing:
 
 Save figures to:
 - `Integrated_dataset/figures/`
+
+Figure format rule:
+- generate Phase 3 QC figures in PNG format only
+- do not emit PDF, SVG, or alternate figure formats unless the user explicitly requests them
 
 ---
 

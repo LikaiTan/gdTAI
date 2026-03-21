@@ -6,23 +6,18 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 ---
 
 ## Current milestone
-- Supplementary candidate cells merged into main TNK milestone; pre-Phase-2 QC review pending
+- Phase 3 QC reviewed; keep the mirrored SSD-side integrated milestone as-is, use simple scVI-based annotation downstream, and treat scANVI outputs as reference-only until Phase 4 is explicitly approved
 
 ## Current objective
-- Present the merged candidate milestone after supplementary intake:
-  - `GSE179994`
-  - `GSE235863`
-  - `GSE240865`
-  - `GSE287301`
-  - `GSE234069`
-  - `GSE287541`
+- Keep the validated Phase 3 integrated milestone on SSD without rollback
+- Use scVI latent space, Leiden clusters, UMAP, and simple scVI-based annotation as the canonical downstream interpretation
+- Keep scANVI label fields and PNG/QC outputs for reference only; do not use them as the primary downstream annotation layer unless a later user decision changes that
+- Wait for explicit user approval before entering Phase 4
+- Keep the validated Phase 3 H5AD in the mirrored SSD tree for now; do not migrate it back to NFS until the user explicitly requests migration
+- Keep tables, PNG figures, logs, scripts, and model artifacts on NFS; use SSD only for large H5AD inputs/outputs
 - Keep all 10x 3' inputs excluded, especially the isolated `GSE234069` 3' lane
-- Hold at the QC gate until the user explicitly approves Phase 2
-- The main candidate milestone `Integrated_dataset/TNK_candidates.h5ad` now includes the supplementary candidate cells
-- Keep the standalone supplementary candidate milestone `Integrated_dataset/TNK_candidates_supp.h5ad` for traceability
 - Keep supplementary harmonized metadata separate at `analysis_26GSE_V4/outputs/harmonized_metadata_supp.csv`
-- Before Phase 2, the remaining merged metadata backup/replacement step still needs to be addressed if we want the canonical candidate metadata file to include the supplementary cells
-- Do not enter Phase 2 without explicit approval
+- Record the Phase 3 QC conclusion and all Phase 4 decisions clearly in markdown and git history
 
 ---
 
@@ -51,6 +46,10 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - Wrote supplementary harmonized candidate metadata to `analysis_26GSE_V4/outputs/harmonized_metadata_supp.csv`
 - Merged the 897,621 supplementary Phase 1 candidate cells into the main `Integrated_dataset/TNK_candidates.h5ad`
 - Verified supplementary candidate metadata carries `technology_simple = 10x 5'` for all supplementary candidate rows
+- Phase 2 merged cleanup completed successfully and wrote `Integrated_dataset/TNK_cleaned.h5ad`
+- Phase 2 QC passed internal review and Phase 3 execution was started under the approved automatic continuation rule
+- Phase 3 scVI integration, RAPIDS embedding, and scANVI coarse T/NK annotation completed successfully on the mirrored SSD-side integrated milestone
+- User reviewed the Phase 3 QC package and decided that scANVI labels are too messy for primary downstream use; keep the current integrated milestone without rollback and use simple scVI-based annotation downstream instead
 
 ---
 
@@ -86,6 +85,21 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
   - `/home/tanlikai/databank/owndata/fasting/raw/report_from_niuxian/models/census_scanvi_ref_v1`
 - The companion reference H5AD exposes `cell_type` as the label field and `batch` as the batch field
 - The Phase 3 scANVI reference must be treated as a coarse annotation prior, not as final tissue-state or γδT-subtype truth
+- On 2026-03-20, the user explicitly approved Phase 2 execution on the current merged `TNK_candidates.h5ad`, allowed self-QC for Phase 2, and approved direct continuation into Phase 3 without another user checkpoint if Phase 2 QC passes
+- On 2026-03-20, the user explicitly required figure generation to remain PNG-only for this workflow
+- On 2026-03-20, the `rapids_sc_py310` CUDA import issue was traced to import order; `torch` must be imported before `rapids_singlecell` in this env
+- On 2026-03-20, the saved scANVI reference model was confirmed to use the `17,129` genes stored in `model.pt`, not the full `61,888` genes in the companion H5AD
+- On 2026-03-20, the user raised the working RAM ceiling for this run from `400 GB` to `800 GB`
+- On 2026-03-20, the first Phase 3 recovery run saved the scVI checkpoint but stopped before final writeout; the resumed run must log to file and keep lower-memory guardrails around RAPIDS and scANVI stages
+- On 2026-03-21, the Phase 3 implementation was revised to use scANVI on a stratified subset plus latent-space centroid transfer because full-query scANVI adaptation did not scale reliably on the merged milestone
+- On 2026-03-21, the user required mitochondrial, ribosomal, and noncoding RNA genes to be excluded from the HVG set used for clustering and UMAP
+- On 2026-03-21, the user explicitly paused scANVI and directed the workflow to finish the Leiden clustering / UMAP milestone first
+- On 2026-03-21, the Phase 3 heavy H5AD workload was redirected to a mirrored local temp tree rooted at `/ssd/tnk_phase3/Integrated_dataset/` so the final migration back to NFS remains path-stable
+- On 2026-03-21, the mirrored SSD tree was also exposed at `high_speed_temp/Integrated_dataset` from the NFS working directory for easier inspection and migration
+- On 2026-03-21, the user clarified that validated outputs should remain in the mirrored SSD tree until an explicit migration request is given; automatic move-back to NFS is disabled
+- On 2026-03-21, the user further clarified that only large H5AD files should live on SSD; tables, PNG figures, logs, scripts, and model artifacts must remain on NFS
+- On 2026-03-21, the resumed scANVI-only pass completed successfully after fixing centroid-transfer index alignment and H5AD serialization of scANVI label fields
+- On 2026-03-21, the user decided that the scANVI output is too messy for primary downstream interpretation; keep the scANVI fields in `integrated.h5ad` for reference only, do not roll back Phase 3, and use simple scVI-based annotation for downstream work
 
 ---
 
@@ -115,10 +129,15 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - [x] Run supplementary Phase 1 extraction and generate `TNK_candidates_supp.h5ad`
 - [ ] Review supplementary Phase 1 QC outputs with the user
 - [x] Merge `TNK_candidates_supp.h5ad` into `TNK_candidates.h5ad` after user approval and merge QC
-- [ ] Start Phase 2 after explicit user approval of the supplementary merge
+- [x] Start Phase 2 after explicit user approval of the supplementary merge
+- [x] Run Phase 2 merged cleanup on the current `TNK_candidates.h5ad`
+- [x] Self-review the Phase 2 QC package and decide whether the result is clean enough to enter Phase 3
+- [x] Complete the resumed Phase 3 scVI integration and post-scVI scANVI annotation run, then write `integrated.h5ad` and the full PNG QC package
+- [x] Review the completed Phase 3 QC package with the user and record whether scANVI is accepted for downstream use
 - [ ] Review the 20 Category C raw-source audit with the user and approve dataset-by-dataset rescue scope
 - [ ] Define Phase 4 scoring workflow
 - [ ] Define required evaluation figures
+- [ ] Obtain explicit user approval before entering Phase 4
 - [x] Commit and push milestone changes to GitHub
 
 ---

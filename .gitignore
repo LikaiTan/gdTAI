@@ -1,0 +1,7 @@
+Integrated_dataset/figures/
+Integrated_dataset/*.h5ad
+Integrated_dataset/**/*.h5ad
+high_speed_temp/
+/__pycache__/
+**/__pycache__/
+*.pyc

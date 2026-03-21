@@ -1,0 +1,30 @@
+leiden,dominant_scanvi_detailed_label,dominant_scanvi_tnk_superclass,dominant_label_cells,cluster_cells,dominant_label_fraction
+0,monocyte,reference_other,73890,268499,0.275196555666874
+1,mucosal invariant T cell,T_cell,40205,268255,0.14987605077258578
+10,"CD8-positive, alpha-beta cytotoxic T cell",T_cell,60116,394015,0.15257287159118307
+11,"CD8-positive, alpha-beta T cell",T_cell,26474,163815,0.1616091322528462
+12,"activated CD8-positive, alpha-beta T cell",T_cell,31133,83247,0.3739834468509376
+13,"lung resident memory CD4-positive, alpha-beta T cell",T_cell,50488,278784,0.1811007805325987
+14,"naive thymus-derived CD8-positive, alpha-beta T cell",T_cell,141172,182990,0.7714738510301109
+15,plasmablast,reference_other,6594,19563,0.3370648673516332
+16,naive T cell,T_cell,15578,136766,0.11390257812614246
+17,CD38-negative naive B cell,reference_other,39814,184304,0.21602352634777325
+18,platelet,reference_other,10704,20716,0.5167020660359143
+19,memory T cell,T_cell,10565,116080,0.09101481736733287
+2,CD4-positive helper T cell,T_cell,140809,747908,0.1882704824657578
+20,"CD8-positive, alpha-beta cytotoxic T cell",T_cell,40574,266176,0.15243297667708583
+21,regulatory T cell,T_cell,100337,277611,0.3614302026936973
+22,T follicular regulatory cell,reference_other,40861,134405,0.30401398757486703
+23,group 2 innate lymphoid cell,reference_other,39757,175055,0.22711147924937877
+24,"CD4-negative, CD8-negative, alpha-beta intraepithelial T cell",T_cell,12745,27234,0.46798119997062493
+25,enterocyte of colon,reference_other,8897,45265,0.19655362863139292
+26,"effector memory CD8-positive, alpha-beta T cell",T_cell,209722,498116,0.42103044270812423
+27,plasmacytoid dendritic cell,reference_other,4498,7815,0.5755598208573257
+3,classical monocyte,reference_other,35783,204645,0.17485401549023918
+31,fibroblast of breast,reference_other,472,1782,0.2648709315375982
+4,"effector memory CD4-positive, alpha-beta T cell",T_cell,34719,223774,0.15515207307372617
+5,T-helper 1 cell,reference_other,56867,212968,0.2670213365388227
+6,"CD56-positive, CD161-positive immature natural killer cell, human",NK_cell,19874,87536,0.227038018643758
+7,"activated CD4-positive, alpha-beta T cell",T_cell,81666,265681,0.3073836668787004
+8,"CD16-positive, CD56-dim natural killer cell, human",NK_cell,214748,532243,0.40347735902585846
+9,"naive thymus-derived CD4-positive, alpha-beta T cell",T_cell,196992,618631,0.31843215099146344

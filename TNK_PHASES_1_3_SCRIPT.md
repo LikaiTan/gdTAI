@@ -11,7 +11,11 @@ This file is the single human-readable canonical workflow for:
 - Phase 2: merged cleanup
 - Phase 3: scVI integration and scANVI T/NK annotation
 
-The workflow is QC-gated. No phase transition is allowed without user review and explicit approval.
+The workflow is QC-gated. No phase transition is allowed without user review and explicit approval unless a later user instruction explicitly grants a run-specific exception.
+
+Run-specific resource note:
+
+- On 2026-03-20, the user raised the working RAM ceiling for the active run to `800 GB`
 
 ## Resolved Environment
 
@@ -42,6 +46,8 @@ Required packages confirmed in `rapids_sc_py310`:
 - `phase1_finalize_from_temp.py`
 - `phase1b_conservative_cleanup.py`
 - `phase1c_replace_harmonized_metadata.py`
+- `phase2_merged_cleanup.py`
+- `phase3_scvi_scanvi.py`
 - `watch_h5ad_v2_and_resume.py`
 - This helper is the concrete implementation of the Phase 0 audit logic described below.
 - `phase0_dataset_audit.py` accepts `--registry <csv>` when the canonical audit must be rerun against a repaired registry such as `h5ad_v2.csv`.
@@ -50,8 +56,22 @@ Required packages confirmed in `rapids_sc_py310`:
 - `phase1_finalize_from_temp.py` resumes from those temp candidate H5ADs, normalizes any dense `X` matrices to CSR, performs the on-disk concat into `TNK_candidates.h5ad`, validates the merged object, writes the Phase 1 QC tables and figures, and removes the temp directory after success.
 - `phase1b_conservative_cleanup.py` performs the conservative first-pass cleanup, removes only obvious non-T/NK contaminants, applies the user-requested `<500 cells` gene filter, rewrites `TNK_candidates.h5ad` in place, and writes the Phase 1b QC package.
 - `phase1c_replace_harmonized_metadata.py` exports the merged `adata.obs`, backs up the previous harmonized metadata CSV, joins the filtered candidate cells to the harmonized metadata by explicit string-typed `GSE + barcode`, writes the required `project name`, `sampleid`, and `barcodes` columns, validates uniqueness and row counts, and replaces the canonical metadata target atomically.
+- `phase2_merged_cleanup.py` performs the merged-context second-pass cleanup, removes only high-confidence off-target or low-quality cells, reapplies the `>=500 cells` gene filter, writes `TNK_cleaned.h5ad`, and emits the Phase 2 QC package.
+- `phase3_scvi_scanvi.py` attaches harmonized metadata, trains scVI, computes the integrated latent space and RAPIDS neighborhood/UMAP outputs, runs scANVI on a stratified subset of the cleaned milestone, transfers labels back to all cells in latent space by nearest-centroid assignment, and writes `integrated.h5ad` plus the Phase 3 QC package.
+- `phase3_scvi_scanvi.py` writes a persistent recovery log to `Integrated_dataset/logs/phase3_run.log`, reuses the saved scVI checkpoint only when its HVG set matches the current exclusion-aware policy, excludes mitochondrial/ribosomal/noncoding-like genes from the HVG set used for clustering and UMAP, and releases CPU/GPU memory explicitly after the scVI latent and RAPIDS stages to reduce restart risk on the large merged milestone.
+- `phase3_scvi_scanvi.py` now stages only the large H5AD workload under a mirrored local temp tree rooted at `/ssd/tnk_phase3/Integrated_dataset/` when that path is writable; tables, PNG figures, logs, scripts, and model artifacts remain on NFS.
+- `phase3_scvi_scanvi.py` also maintains a stable NFS-side symlink view at `high_speed_temp/Integrated_dataset`, pointing to the mirrored SSD tree, so the fast working set remains visible from the project root.
+- `phase3_scvi_scanvi.py` keeps the validated `integrated.h5ad` in the mirrored SSD tree and does not auto-migrate it back to NFS; later migration is a separate explicit step.
 - `watch_h5ad_v2_and_resume.py` polls every 120 seconds for `h5ad_v2.csv`; once the repaired registry appears, it reruns Phase 0 against that registry and then rebuilds `TNK_candidates.h5ad` from the updated Category A set.
 - The markdown file remains the canonical human-readable workflow; the helper exists to execute the Phase 0 audit reproducibly.
+
+### CUDA runtime note for `rapids_sc_py310`
+
+- In this env, `rapids_singlecell` must be imported only after `torch`
+- Required import order for RAPIDS-backed plotting/integration helpers:
+  1. `import torch`
+  2. `import rapids_singlecell as rsc`
+- This avoids the observed `libc10_cuda.so` / `cudaGetDriverEntryPointByVersion` symbol-resolution failure
 
 ## Canonical Inputs And Outputs
 
@@ -302,16 +322,25 @@ Stop if metadata replacement validation fails. Do not proceed to Phase 2 until t
 - recluster and perform stricter second-pass contaminant removal
 - save validated output to `Integrated_dataset/TNK_cleaned.h5ad`
 - generate contamination review, marker overlay, and cluster decision figures
+- write QC figures in PNG format only
+
+### Run-specific execution override
+
+- On 2026-03-20, the user explicitly approved Phase 2 execution on the current merged `TNK_candidates.h5ad`
+- For this run only, the Phase 2 QC package may be reviewed internally; if the QC result is satisfactory, execution may continue directly to Phase 3 without another user checkpoint
+- The default policy still applies to later runs unless the user grants the same exception again
 
 ### Stop condition
 
-Stop for user QC before Phase 3.
+Default: stop for user QC before Phase 3.
 
-## Phase 3: scVI Integration And scANVI T/NK Annotation
+Exception for the current run: proceed directly if the internal Phase 2 QC review passes.
+
+## Phase 3: scVI Integration With Optional Reference scANVI Annotation
 
 ### Entry criteria
 
-- Phase 2 QC approved by the user
+- Phase 2 QC approved by the user, or an explicit run-specific user instruction authorizes internal Phase 2 QC and direct continuation
 - `rapids_sc_py310` remains the active execution env unless replaced by a validated `Scanpy_gdTmodel`
 
 ### Behavior
@@ -319,7 +348,10 @@ Stop for user QC before Phase 3.
 - prepare batch-aware inputs from `TNK_cleaned.h5ad`
 - run scVI with GPU enabled when available and useful
 - avoid assumptions that require more than 400 GB RAM
-- after scVI integration, run scANVI-based reference annotation for coarse T and NK labeling
+- exclude mitochondrial genes, ribosomal genes, and noncoding-like RNA symbols from the HVG set used for clustering and UMAP
+- if the user pauses scANVI, finish and save the scVI latent space, Leiden clustering, UMAP, and clustering-first QC package before resuming annotation
+- after scVI integration, run scANVI-based reference annotation on a stratified subset for coarse T and NK labeling
+- transfer the resulting labels back to all cells in the scVI latent space with a scalable centroid-based rule
 - primary reference model path:
   - `/home/tanlikai/databank/owndata/fasting/raw/report_from_niuxian/models/census_scanvi_ref_v1`
 - reference companion H5AD currently exposes:
@@ -329,12 +361,21 @@ Stop for user QC before Phase 3.
 - treat this reference as a coarse annotation prior, not as final tissue-state truth or γδT subtype truth
 - write both detailed transferred labels and collapsed T/NK superclass labels into `integrated.h5ad`
 - if transferred labels fall outside T/NK space, flag them for review instead of auto-dropping them
+- if Phase 3 QC shows that the scANVI result is messy or low-confidence, keep the scANVI fields and PNG/QC outputs for reference only, do not roll back `integrated.h5ad`, and use the scVI latent space plus Leiden/simple scVI-based annotation as the canonical downstream interpretation
+- record the subset size, transfer method, and HVG exclusion summary in Phase 3 tables
 - save validated output to `Integrated_dataset/integrated.h5ad`
-- generate batch-mixing, marker-retention, donor/sample mixing, scANVI label, and label-confidence figures
+- generate batch-mixing, Leiden, and donor/sample mixing figures first; add scANVI label and label-confidence figures when annotation is enabled
+- write QC figures in PNG format only
 
 ### Stop condition
 
 Stop for user QC before Phase 4.
+
+Phase 3 QC may accept the integrated milestone while declining scANVI as the primary downstream annotation layer. In that case:
+
+- keep `integrated.h5ad` as written
+- keep scANVI labels in the object for reference only
+- use scVI/Leiden/simple annotation for downstream analyses unless the user later requests a different annotation strategy
 
 ## Main Entrypoint
 
@@ -350,9 +391,10 @@ def main() -> None:
     stop_for_user_qc("Phase 1/1b")
     run_phase1c_metadata_backup()
     run_phase2_cleanup()
-    stop_for_user_qc("Phase 2")
+    if phase2_requires_user_qc():
+        stop_for_user_qc("Phase 2")
     run_phase3_scvi_and_scanvi()
     stop_for_user_qc("Phase 3")
 ```
 
-The actual execution must respect QC gates. The control flow above is canonical, but each phase after Phase 0 should only be run after explicit approval.
+The actual execution must respect QC gates. The control flow above is canonical, but each phase after Phase 0 should only be run after explicit approval unless the user explicitly grants a documented exception for the current run.
