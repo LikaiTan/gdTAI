@@ -612,6 +612,9 @@ Canonical outputs written back into `integrated.h5ad` should include:
 - `phase4_trab_score`
 - `phase4_trd_score`
 - `phase4_trd_minus_trab`
+- `phase4_trd_score_scaled`
+- `phase4_trab_score_scaled`
+- `phase4_trd_minus_trab_scaled`
 
 Store method provenance and gene memberships in:
 - `uns['phase4_gdt_module']`
@@ -622,6 +625,7 @@ Generate high-quality PNG figures for:
 - score distributions
 - UMAP score overlays
 - cluster-level summaries
+- TRAB-vs-TRD scatter panels for raw and scaled score spaces when requested
 - any key comparison plots needed to evaluate scoring behavior
 
 Save updated object as:

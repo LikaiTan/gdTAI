@@ -54,6 +54,7 @@ N_BINS = 25
 CTRL_SIZE = 50
 RANDOM_STATE = 1
 PLOT_SAMPLE_SIZE = 200_000
+SCATTER_PLOT_SAMPLE_SIZE = 80_000
 TOP_CELL_N = 5_000
 FIGURE_DPI = 300
 
@@ -65,6 +66,12 @@ PHASE4_SCORE_COLUMNS = {
     "trd_minus_trab": "phase4_trd_minus_trab",
 }
 
+PHASE4_SCALED_SCORE_COLUMNS = {
+    "trd_scaled": "phase4_trd_score_scaled",
+    "trab_scaled": "phase4_trab_score_scaled",
+    "trd_minus_trab_scaled": "phase4_trd_minus_trab_scaled",
+}
+
 MODULE_PATTERNS = {
     "tra": re.compile(r"^TRAC$|^TRAV|^TRAJ"),
     "trb": re.compile(r"^TRBC|^TRBV|^TRBJ"),
@@ -72,6 +79,7 @@ MODULE_PATTERNS = {
 }
 
 MARKER_GENES = ["TRDC", "TRGC1", "TRGC2", "TRAC", "TRBC1", "TRBC2"]
+SCATTER_COLOR_GENES = ["TRDC", "TRDV1", "TRDV2", "NCAM1", "FOXP3", "CD4", "CD8A", "CD8B"]
 
 
 def parse_args() -> argparse.Namespace:
@@ -228,6 +236,27 @@ def score_chunk(chunk: sparse.csr_matrix, gene_idx: np.ndarray, ctrl_idx: np.nda
     return (gene_mean - ctrl_mean).astype(np.float32, copy=False)
 
 
+def minmax_scale(values: np.ndarray) -> tuple[np.ndarray, dict[str, float]]:
+    """Scale one score vector to the 0-1 range with global min-max scaling."""
+    value_min = float(np.min(values))
+    value_max = float(np.max(values))
+    if math.isclose(value_min, value_max):
+        scaled = np.zeros_like(values, dtype=np.float32)
+    else:
+        scaled = ((values - value_min) / (value_max - value_min)).astype(np.float32, copy=False)
+    return scaled, {"min": value_min, "max": value_max}
+
+
+def add_scaled_scores(scores: dict[str, np.ndarray]) -> tuple[dict[str, np.ndarray], dict[str, dict[str, float]]]:
+    """Add scaled TRD/TRAB scores and scaled TRD-TRAB difference."""
+    trd_scaled, trd_stats = minmax_scale(scores["trd"])
+    trab_scaled, trab_stats = minmax_scale(scores["trab"])
+    scores["trd_scaled"] = trd_scaled
+    scores["trab_scaled"] = trab_scaled
+    scores["trd_minus_trab_scaled"] = (trd_scaled - trab_scaled).astype(np.float32, copy=False)
+    return scores, {"trd_scaled": trd_stats, "trab_scaled": trab_stats}
+
+
 def update_marker_detection(
     raw_chunk: sparse.csr_matrix,
     marker_idx: np.ndarray,
@@ -357,6 +386,49 @@ def load_selected_strings(dataset: h5py.Dataset, indices: np.ndarray) -> np.ndar
     return np.asarray([sorted_vals[position_map[idx]] for idx in indices.tolist()], dtype=object)
 
 
+def downsample_indices(indices: np.ndarray, target_size: int, random_state: int) -> np.ndarray:
+    """Downsample a sorted index array without replacement."""
+    if indices.size <= target_size:
+        return indices
+    rng = np.random.default_rng(random_state)
+    sampled = rng.choice(indices, size=target_size, replace=False)
+    return np.sort(sampled.astype(np.int64, copy=False))
+
+
+def extract_log1p_gene_expression_for_sample(
+    integrated_h5ad: Path,
+    sample_idx: np.ndarray,
+    gene_names: list[str],
+    chunk_size: int,
+) -> pd.DataFrame:
+    """Extract temporary normalize+log1p expression values for selected genes on sampled cells."""
+    sample_idx = np.asarray(sample_idx, dtype=np.int64)
+    with h5py.File(integrated_h5ad, "r") as handle:
+        var_names = pd.Index(read_string_dataset(handle["var"]["_index"]), dtype="string")
+        gene_idx = var_names.get_indexer(pd.Index(gene_names, dtype="string"))
+        if np.any(gene_idx < 0):
+            missing = [gene for gene, idx in zip(gene_names, gene_idx.tolist()) if idx < 0]
+            raise ValueError(f"Missing genes for scatter panel: {missing}")
+
+        x_group = handle["X"]
+        n_obs = int(x_group["indptr"].shape[0] - 1)
+        n_vars = int(handle["var"]["_index"].shape[0])
+        expr_values = np.zeros((sample_idx.size, len(gene_names)), dtype=np.float32)
+
+        for start, end, raw_chunk in iter_csr_chunks(x_group, n_obs, n_vars, chunk_size):
+            lo = int(np.searchsorted(sample_idx, start, side="left"))
+            hi = int(np.searchsorted(sample_idx, end, side="left"))
+            if lo == hi:
+                continue
+            local_idx = sample_idx[lo:hi] - start
+            selected_chunk = raw_chunk[local_idx].copy()
+            selected_chunk = normalize_log1p_chunk(selected_chunk, TARGET_SUM)
+            expr_values[lo:hi, :] = selected_chunk[:, gene_idx].toarray().astype(np.float32, copy=False)
+
+    expr_df = pd.DataFrame(expr_values, columns=gene_names)
+    return expr_df
+
+
 def write_tables(
     integrated_h5ad: Path,
     scores: dict[str, np.ndarray],
@@ -373,7 +445,8 @@ def write_tables(
     logging.info("Writing Phase 4 tables")
 
     overall_rows = []
-    for module_name, column_name in PHASE4_SCORE_COLUMNS.items():
+    score_column_map = {**PHASE4_SCORE_COLUMNS, **PHASE4_SCALED_SCORE_COLUMNS}
+    for module_name, column_name in score_column_map.items():
         values = scores[module_name]
         overall_rows.append(
             {
@@ -404,7 +477,7 @@ def write_tables(
         {
             "leiden": pd.Categorical(leiden_labels),
             "source_gse_id": pd.Categorical(source_gse_id),
-            **{column_name: scores[module_name] for module_name, column_name in PHASE4_SCORE_COLUMNS.items()},
+            **{column_name: scores[module_name] for module_name, column_name in score_column_map.items()},
         }
     )
 
@@ -416,6 +489,10 @@ def write_tables(
         phase4_trd_score_mean=("phase4_trd_score", "mean"),
         phase4_trd_minus_trab_mean=("phase4_trd_minus_trab", "mean"),
         phase4_trd_minus_trab_median=("phase4_trd_minus_trab", "median"),
+        phase4_trd_score_scaled_mean=("phase4_trd_score_scaled", "mean"),
+        phase4_trab_score_scaled_mean=("phase4_trab_score_scaled", "mean"),
+        phase4_trd_minus_trab_scaled_mean=("phase4_trd_minus_trab_scaled", "mean"),
+        phase4_trd_minus_trab_scaled_median=("phase4_trd_minus_trab_scaled", "median"),
     ).reset_index()
     marker_fraction_df = pd.DataFrame({"leiden": leiden_categories.astype(object)})
     for marker_idx, marker_gene in enumerate(marker_genes):
@@ -434,6 +511,10 @@ def write_tables(
         phase4_trd_score_mean=("phase4_trd_score", "mean"),
         phase4_trd_minus_trab_mean=("phase4_trd_minus_trab", "mean"),
         phase4_trd_minus_trab_median=("phase4_trd_minus_trab", "median"),
+        phase4_trd_score_scaled_mean=("phase4_trd_score_scaled", "mean"),
+        phase4_trab_score_scaled_mean=("phase4_trab_score_scaled", "mean"),
+        phase4_trd_minus_trab_scaled_mean=("phase4_trd_minus_trab_scaled", "mean"),
+        phase4_trd_minus_trab_scaled_median=("phase4_trd_minus_trab_scaled", "median"),
     ).reset_index()
     gse_summary = gse_summary.sort_values("n_cells", ascending=False)
     gse_summary.to_csv(TABLE_DIR / "phase4_gse_score_summary.csv", index=False)
@@ -455,6 +536,9 @@ def write_tables(
                 "phase4_trab_score": scores["trab"][top_idx],
                 "phase4_trd_score": scores["trd"][top_idx],
                 "phase4_trd_minus_trab": scores["trd_minus_trab"][top_idx],
+                "phase4_trab_score_scaled": scores["trab_scaled"][top_idx],
+                "phase4_trd_score_scaled": scores["trd_scaled"][top_idx],
+                "phase4_trd_minus_trab_scaled": scores["trd_minus_trab_scaled"][top_idx],
             }
         )
     top_df.to_csv(TABLE_DIR / "phase4_top_cells_by_trd_minus_trab.csv", index=False)
@@ -471,21 +555,24 @@ def write_figures(
     logging.info("Writing Phase 4 PNG figures")
     sns.set_theme(style="whitegrid", context="talk")
 
-    dist_fig, dist_axes = plt.subplots(1, 3, figsize=(18, 5), constrained_layout=True)
+    dist_fig, dist_axes = plt.subplots(2, 3, figsize=(18, 10), constrained_layout=True)
     dist_specs = [
         ("phase4_trd_score", "TRD score"),
         ("phase4_trab_score", "TRAB score"),
         ("phase4_trd_minus_trab", "TRD - TRAB"),
+        ("phase4_trd_score_scaled", "TRD score scaled 0-1"),
+        ("phase4_trab_score_scaled", "TRAB score scaled 0-1"),
+        ("phase4_trd_minus_trab_scaled", "Scaled TRD - TRAB"),
     ]
-    for ax, (column, title) in zip(dist_axes, dist_specs):
+    for ax, (column, title) in zip(dist_axes.flatten(), dist_specs):
         sns.histplot(sample_df[column], bins=100, ax=ax, color="#2F6690")
         ax.set_title(title)
         ax.set_xlabel(column)
     dist_fig.savefig(FIGURE_DIR / "phase4_score_distributions.png", dpi=FIGURE_DPI, bbox_inches="tight")
     plt.close(dist_fig)
 
-    umap_fig, umap_axes = plt.subplots(1, 3, figsize=(18, 6), constrained_layout=True)
-    for ax, (column, title) in zip(umap_axes, dist_specs):
+    umap_fig, umap_axes = plt.subplots(2, 3, figsize=(18, 10), constrained_layout=True)
+    for ax, (column, title) in zip(umap_axes.flatten(), dist_specs):
         scatter = ax.scatter(
             sample_df["umap1"],
             sample_df["umap2"],
@@ -508,6 +595,9 @@ def write_figures(
         "phase4_trab_score_mean",
         "phase4_trd_score_mean",
         "phase4_trd_minus_trab_median",
+        "phase4_trd_score_scaled_mean",
+        "phase4_trab_score_scaled_mean",
+        "phase4_trd_minus_trab_scaled_median",
     ]
     leiden_heatmap = leiden_summary.set_index("leiden")[heatmap_cols]
     heatmap_fig, heatmap_ax = plt.subplots(figsize=(10, 10), constrained_layout=True)
@@ -550,6 +640,55 @@ def write_figures(
     plt.close(marker_fig)
 
 
+def write_trab_trd_scatter_panel(sample_df: pd.DataFrame) -> None:
+    """Write one figure containing raw-score and scaled-score TRAB-vs-TRD scatter panels."""
+    logging.info("Writing Phase 4 TRAB-vs-TRD scatter panel")
+    raw_color_specs = [("phase4_trab_minus_trd", "TRAB - TRD")] + [(gene, gene) for gene in SCATTER_COLOR_GENES]
+    scaled_color_specs = [("phase4_trab_minus_trd_scaled", "Scaled TRAB - TRD")] + [
+        (gene, gene) for gene in SCATTER_COLOR_GENES
+    ]
+
+    fig, axes = plt.subplots(2, len(raw_color_specs), figsize=(4 * len(raw_color_specs), 8), constrained_layout=True)
+
+    def draw_row(row_axes: np.ndarray, x_col: str, y_col: str, color_specs: list[tuple[str, str]], row_title: str) -> None:
+        for ax, (color_col, title) in zip(row_axes, color_specs):
+            cmap = "coolwarm" if "TRAB - TRD" in title else "viridis"
+            scatter = ax.scatter(
+                sample_df[x_col],
+                sample_df[y_col],
+                c=sample_df[color_col],
+                cmap=cmap,
+                s=3,
+                linewidths=0,
+                rasterized=True,
+            )
+            ax.set_title(title)
+            ax.set_xlabel(x_col)
+            ax.set_ylabel(y_col)
+            fig.colorbar(scatter, ax=ax, fraction=0.046, pad=0.04)
+        row_axes[0].annotate(
+            row_title,
+            xy=(-0.38, 0.5),
+            xycoords="axes fraction",
+            rotation=90,
+            va="center",
+            ha="center",
+            fontsize=16,
+            fontweight="bold",
+        )
+
+    draw_row(axes[0], "phase4_trab_score", "phase4_trd_score", raw_color_specs, "Raw scores")
+    draw_row(
+        axes[1],
+        "phase4_trab_score_scaled",
+        "phase4_trd_score_scaled",
+        scaled_color_specs,
+        "Scaled scores",
+    )
+    fig.savefig(FIGURE_DIR / "phase4_trab_vs_trd_scatter_panel.png", dpi=FIGURE_DPI, bbox_inches="tight")
+    plt.close(fig)
+
+
 def write_qc_summary(
     integrated_h5ad: Path,
     *,
@@ -560,9 +699,11 @@ def write_qc_summary(
     gse_summary: pd.DataFrame,
 ) -> None:
     """Write the Phase 4 QC summary markdown."""
-    top_leiden = leiden_summary.head(5)[["leiden", "phase4_trd_minus_trab_median", "n_cells"]]
+    top_leiden = leiden_summary.head(5)[
+        ["leiden", "phase4_trd_minus_trab_median", "phase4_trd_minus_trab_scaled_median", "n_cells"]
+    ]
     top_gse = gse_summary.sort_values("phase4_trd_minus_trab_median", ascending=False).head(5)[
-        ["source_gse_id", "phase4_trd_minus_trab_median", "n_cells"]
+        ["source_gse_id", "phase4_trd_minus_trab_median", "phase4_trd_minus_trab_scaled_median", "n_cells"]
     ]
     lines = [
         "# Phase 4 QC Summary",
@@ -572,6 +713,7 @@ def write_qc_summary(
         f"- Package source: `{PACKAGE_ZIP}`",
         "- Scoring mode: exact package TRA/TRB/TRD modules on a temporary normalized/log1p copy of count-space `X`",
         "- Canonical result type: continuous scores only; no hard gdT/abT call was written in Phase 4",
+        "- Derived scaled outputs: min-max scaled `phase4_trd_score_scaled` and `phase4_trab_score_scaled` in the 0-1 range, plus `phase4_trd_minus_trab_scaled` as their difference",
         "- scANVI labels remain reference-only and were not used to define Phase 4 outputs",
         "",
         "## Module sizes",
@@ -593,22 +735,23 @@ def write_qc_summary(
     lines.extend(["", "## Top Leiden clusters by median TRD - TRAB"])
     for _, row in top_leiden.iterrows():
         lines.append(
-            f"- Leiden `{row['leiden']}`: median={row['phase4_trd_minus_trab_median']:.4f}, n_cells={int(row['n_cells'])}"
+            f"- Leiden `{row['leiden']}`: raw_median={row['phase4_trd_minus_trab_median']:.4f}, scaled_median={row['phase4_trd_minus_trab_scaled_median']:.4f}, n_cells={int(row['n_cells'])}"
         )
     lines.extend(["", "## Top GSEs by median TRD - TRAB"])
     for _, row in top_gse.iterrows():
         lines.append(
-            f"- `{row['source_gse_id']}`: median={row['phase4_trd_minus_trab_median']:.4f}, n_cells={int(row['n_cells'])}"
+            f"- `{row['source_gse_id']}`: raw_median={row['phase4_trd_minus_trab_median']:.4f}, scaled_median={row['phase4_trd_minus_trab_scaled_median']:.4f}, n_cells={int(row['n_cells'])}"
         )
     lines.extend(
         [
             "",
             "## Outputs",
             "- Tables: `phase4_score_summary.csv`, `phase4_module_gene_membership.csv`, `phase4_leiden_score_summary.csv`, `phase4_gse_score_summary.csv`, `phase4_top_cells_by_trd_minus_trab.csv`",
-            "- Figures: `phase4_score_distributions.png`, `phase4_umap_score_overlays.png`, `phase4_leiden_score_summary.png`, `phase4_gse_score_summary.png`, `phase4_marker_score_comparison.png`",
+            "- Figures: `phase4_score_distributions.png`, `phase4_umap_score_overlays.png`, `phase4_leiden_score_summary.png`, `phase4_gse_score_summary.png`, `phase4_marker_score_comparison.png`, `phase4_trab_vs_trd_scatter_panel.png`",
             "",
             "## QC conclusion",
             "- Phase 4 wrote continuous TRA/TRB/TRAB/TRD module scores and `TRD - TRAB` back into the canonical integrated milestone.",
+            "- Phase 4 also wrote min-max scaled `TRD` and `TRAB` scores in the 0-1 range plus the scaled `TRD - TRAB` difference.",
             "- The shared package was used as the method source of truth for module definitions, but its ground-truth evaluation branch was intentionally not used here.",
             "- Phase 4 results should be interpreted jointly with Leiden structure, marker genes, and the scVI embedding.",
         ]
@@ -673,6 +816,7 @@ def main() -> None:
         leiden_codes=leiden_codes.astype(np.int32, copy=False),
         marker_idx=marker_idx.astype(np.int32, copy=False),
     )
+    scores, scaling_stats = add_scaled_scores(scores)
 
     uns_payload = {
         "package_source": str(PACKAGE_ZIP),
@@ -685,12 +829,17 @@ def main() -> None:
         "n_bins": N_BINS,
         "module_genes": {name: [str(gene) for gene in genes] for name, genes in modules.items()},
         "control_genes": {name: [str(gene) for gene in genes] for name, genes in module_controls.items()},
-        "score_columns": PHASE4_SCORE_COLUMNS,
+        "score_columns": {**PHASE4_SCORE_COLUMNS, **PHASE4_SCALED_SCORE_COLUMNS},
+        "scaled_score_columns": PHASE4_SCALED_SCORE_COLUMNS,
+        "scaled_score_ranges": scaling_stats,
         "scANVI_usage": "reference_only_not_used_for_phase4_calls",
     }
     append_obs_columns_in_place(
         integrated_h5ad,
-        {column_name: scores[module_name] for module_name, column_name in PHASE4_SCORE_COLUMNS.items()},
+        {
+            **{column_name: scores[module_name] for module_name, column_name in PHASE4_SCORE_COLUMNS.items()},
+            **{column_name: scores[module_name] for module_name, column_name in PHASE4_SCALED_SCORE_COLUMNS.items()},
+        },
         uns_payload,
     )
 
@@ -719,9 +868,32 @@ def main() -> None:
             "phase4_trd_score": scores["trd"][sample_idx],
             "phase4_trab_score": scores["trab"][sample_idx],
             "phase4_trd_minus_trab": scores["trd_minus_trab"][sample_idx],
+            "phase4_trd_score_scaled": scores["trd_scaled"][sample_idx],
+            "phase4_trab_score_scaled": scores["trab_scaled"][sample_idx],
+            "phase4_trd_minus_trab_scaled": scores["trd_minus_trab_scaled"][sample_idx],
         }
     )
+    sample_df["phase4_trab_minus_trd"] = sample_df["phase4_trab_score"] - sample_df["phase4_trd_score"]
+    sample_df["phase4_trab_minus_trd_scaled"] = (
+        sample_df["phase4_trab_score_scaled"] - sample_df["phase4_trd_score_scaled"]
+    )
+    scatter_idx = downsample_indices(sample_idx, SCATTER_PLOT_SAMPLE_SIZE, RANDOM_STATE)
+    scatter_selector = np.searchsorted(sample_idx, scatter_idx)
+    scatter_df = sample_df.iloc[scatter_selector].reset_index(drop=True)
+    scatter_df = pd.concat(
+        [
+            scatter_df,
+            extract_log1p_gene_expression_for_sample(
+                integrated_h5ad,
+                scatter_idx,
+                SCATTER_COLOR_GENES,
+                args.chunk_size,
+            ),
+        ],
+        axis=1,
+    )
     write_figures(sample_df=sample_df, leiden_summary=leiden_summary, gse_summary=gse_summary)
+    write_trab_trd_scatter_panel(scatter_df)
 
     overall_score_summary = pd.read_csv(TABLE_DIR / "phase4_score_summary.csv")
     write_qc_summary(

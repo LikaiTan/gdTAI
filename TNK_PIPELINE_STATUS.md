@@ -52,6 +52,7 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - User reviewed the Phase 3 QC package and decided that scANVI labels are too messy for primary downstream use; keep the current integrated milestone without rollback and use simple scVI-based annotation downstream instead
 - User explicitly approved Phase 4 execution
 - Phase 4 completed successfully with exact package-faithful TRA/TRB/TRD module scoring on the mirrored SSD-side integrated milestone and wrote continuous score columns back into `integrated.h5ad`
+- Phase 4 was extended with scaled `TRD`/`TRAB` score columns, scaled `TRD - TRAB`, and a combined raw-vs-scaled TRAB-vs-TRD scatter-panel figure
 
 ---
 
@@ -105,6 +106,7 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - On 2026-03-22, the user explicitly approved Phase 4 implementation
 - On 2026-03-22, Phase 4 was implemented as exact package-faithful TRA/TRB/TRD module scoring with temporary normalize+log1p on count-space `X`, continuous score outputs only, and in-place metadata updates to the mirrored SSD-side `integrated.h5ad`
 - On 2026-03-22, Phase 4 kept scANVI outputs untouched as reference-only and did not use them to define Phase 4 calls
+- On 2026-03-22, Phase 4 was extended to add min-max scaled `phase4_trd_score_scaled` and `phase4_trab_score_scaled` in the 0-1 range plus `phase4_trd_minus_trab_scaled`
 
 ---
 
@@ -270,6 +272,7 @@ Examples:
 - `Integrated_dataset/figures/phase4_leiden_score_summary.png`
 - `Integrated_dataset/figures/phase4_gse_score_summary.png`
 - `Integrated_dataset/figures/phase4_marker_score_comparison.png`
+- `Integrated_dataset/figures/phase4_trab_vs_trd_scatter_panel.png`
 
 ---
 
