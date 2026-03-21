@@ -45,6 +45,8 @@ LOG_DIR = OUTPUT_ROOT / "logs"
 HIGH_SPEED_LINK = PROJECT_ROOT / "high_speed_temp" / "Integrated_dataset" / "integrated.h5ad"
 SSD_INTEGRATED = Path("/ssd/tnk_phase3/Integrated_dataset/integrated.h5ad")
 PACKAGE_ZIP = PROJECT_ROOT / "gdt_tcr_module_sharing_package_full.zip"
+HARMONIZED_METADATA_MAIN = PROJECT_ROOT / "analysis_26GSE_V4" / "outputs" / "harmonized_metadata_v4.csv"
+HARMONIZED_METADATA_SUPP = PROJECT_ROOT / "analysis_26GSE_V4" / "outputs" / "harmonized_metadata_supp.csv"
 PHASE4_LOG = LOG_DIR / "phase4_gdt_module_scoring.log"
 PHASE4_QC_MD = LOG_DIR / "phase4_qc_summary.md"
 
@@ -686,6 +688,77 @@ def write_trab_trd_scatter_panel(sample_df: pd.DataFrame) -> None:
         "Scaled scores",
     )
     fig.savefig(FIGURE_DIR / "phase4_trab_vs_trd_scatter_panel.png", dpi=FIGURE_DPI, bbox_inches="tight")
+    plt.close(fig)
+
+
+def build_tcr_presence_lookup() -> pd.DataFrame:
+    """Build a metadata lookup for TRA/TRB CDR3 sequence presence."""
+    frames: list[pd.DataFrame] = []
+    for metadata_path in [HARMONIZED_METADATA_MAIN, HARMONIZED_METADATA_SUPP]:
+        if not metadata_path.exists():
+            continue
+        usecols = ["project name", "sampleid", "barcodes", "TRA_cdr3", "TRB_cdr3"]
+        frame = pd.read_csv(metadata_path, usecols=usecols, dtype=str, low_memory=False)
+        for col in usecols:
+            frame[col] = frame[col].fillna("").astype(str)
+        frame["has_tra_or_trb_cdr3"] = (
+            frame["TRA_cdr3"].str.strip().ne("") | frame["TRB_cdr3"].str.strip().ne("")
+        )
+        frames.append(frame[["project name", "sampleid", "barcodes", "has_tra_or_trb_cdr3"]])
+    if not frames:
+        raise FileNotFoundError("No harmonized metadata CSVs were found for TCR sequence lookup.")
+    combined = pd.concat(frames, ignore_index=True)
+    combined = combined.drop_duplicates(subset=["project name", "sampleid", "barcodes"], keep="first")
+    return combined
+
+
+def load_obs_join_fields_for_sample(
+    integrated_h5ad: Path,
+    sample_idx: np.ndarray,
+    columns: list[str],
+) -> pd.DataFrame:
+    """Load selected obs join fields for a sampled cell set."""
+    with h5py.File(integrated_h5ad, "r") as handle:
+        return pd.DataFrame(
+            {
+                column: load_selected_strings(handle["obs"][column], sample_idx)
+                for column in columns
+            }
+        )
+
+
+def write_tcr_presence_scatter_panel(sample_df: pd.DataFrame) -> None:
+    """Write a raw-vs-scaled TRAB-vs-TRD panel colored by TRA/TRB CDR3 presence."""
+    logging.info("Writing Phase 4 TRAB-vs-TRD TCR-presence scatter panel")
+    palette = {False: "#D1495B", True: "#0077B6"}
+    fig, axes = plt.subplots(1, 2, figsize=(12, 6), constrained_layout=True)
+    specs = [
+        ("phase4_trab_score", "phase4_trd_score", "Raw scores"),
+        ("phase4_trab_score_scaled", "phase4_trd_score_scaled", "Scaled scores"),
+    ]
+    for ax, (x_col, y_col, title) in zip(axes, specs):
+        sns.scatterplot(
+            data=sample_df,
+            x=x_col,
+            y=y_col,
+            hue="has_tra_or_trb_cdr3",
+            palette=palette,
+            s=6,
+            linewidth=0,
+            alpha=0.8,
+            ax=ax,
+        )
+        ax.set_title(title)
+        ax.set_xlabel(x_col)
+        ax.set_ylabel(y_col)
+        legend = ax.get_legend()
+        if legend is not None:
+            legend.set_title("TRA/TRB CDR3")
+            texts = legend.get_texts()
+            if len(texts) >= 2:
+                texts[0].set_text("Absent")
+                texts[1].set_text("Present")
+    fig.savefig(FIGURE_DIR / "phase4_trab_vs_trd_tcr_presence.png", dpi=FIGURE_DPI, bbox_inches="tight")
     plt.close(fig)
 
 

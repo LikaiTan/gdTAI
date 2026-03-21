@@ -40,7 +40,14 @@
 
 ## Outputs
 - Tables: `phase4_score_summary.csv`, `phase4_module_gene_membership.csv`, `phase4_leiden_score_summary.csv`, `phase4_gse_score_summary.csv`, `phase4_top_cells_by_trd_minus_trab.csv`
-- Figures: `phase4_score_distributions.png`, `phase4_umap_score_overlays.png`, `phase4_leiden_score_summary.png`, `phase4_gse_score_summary.png`, `phase4_marker_score_comparison.png`, `phase4_trab_vs_trd_scatter_panel.png`
+- Figures: `phase4_score_distributions.png`, `phase4_umap_score_overlays.png`, `phase4_leiden_score_summary.png`, `phase4_gse_score_summary.png`, `phase4_marker_score_comparison.png`, `phase4_trab_vs_trd_scatter_panel.png`, `phase4_trab_vs_trd_tcr_presence.png`
+
+## TRA/TRB CDR3-presence overlay
+- Additional scatter panel: `phase4_trab_vs_trd_tcr_presence.png`
+- Axes: raw `TRAB` vs `TRD` on the left, scaled `TRAB` vs `TRD` on the right
+- Coloring rule: cells with any `TRA_cdr3` or `TRB_cdr3` sequence are blue; cells without either are red
+- Join source: harmonized metadata tables joined by `project name`, `sampleid`, and `barcodes`
+- Sampled-cell counts in the rendered panel: `31,160` blue and `8,840` red
 
 ## QC conclusion
 - Phase 4 wrote continuous TRA/TRB/TRAB/TRD module scores and `TRD - TRAB` back into the canonical integrated milestone.
