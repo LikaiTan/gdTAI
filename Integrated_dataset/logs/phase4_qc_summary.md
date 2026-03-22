@@ -49,6 +49,27 @@
 - Join source: harmonized metadata tables joined by `project name`, `sampleid`, and `barcodes`
 - Sampled-cell counts in the rendered panel: `31,160` blue and `8,840` red
 
+## Additional Phase 4 extension outputs
+- Additional figures: `phase4_trab_vs_trd_paired_tratrb_vs_no_tcr.png`, `phase4_trab_vs_trd_trgc_trgv9_expression.png`
+- Additional tables: `phase4_paired_tratrb_vs_no_tcr_sample_counts.csv`, `phase4_threshold_tcr_summary.csv`, `phase4_trab_minus_trd_lt_neg0p6_by_gse.csv`, `phase4_trd_gt_0p1_by_gse.csv`, `phase4_paired_tratrb_by_gse.csv`
+- Additional analysis note: `phase4_threshold_tcr_analysis.md`
+
+## Paired TRA/TRB vs no-TCR sampled scatter
+- Scatter sample size: `20,000`
+- `Paired TRA/TRB`: `14,321`
+- `No TCR`: `4,263`
+- `Other TCR state` (single-chain or mixed non-paired state): `1,416`
+
+## Threshold summary
+- `TRAB - TRD < -0.6 (raw)`: `36,161` cells total, mean `977.32` per GSE across `37` GSEs, detected in `25` GSEs
+- `TRD > 0.1 (raw)`: `370,527` cells total, mean `10,014.24` per GSE across `37` GSEs, detected in `25` GSEs
+- `Paired TRA/TRB CDR3 present`: `4,573,710` cells total, mean `123,613.78` per GSE across `37` GSEs, detected in `28` GSEs
+
+## Largest GSE contributions
+- `TRAB - TRD < -0.6 (raw)`: `GSE254249` contributes `8,933` cells (`24.70%` of all positives)
+- `TRD > 0.1 (raw)`: `GSE254249` contributes `95,291` cells (`25.72%` of all positives)
+- `Paired TRA/TRB CDR3 present`: `GSE161918` contributes `807,365` cells (`17.65%` of all positives)
+
 ## QC conclusion
 - Phase 4 wrote continuous TRA/TRB/TRAB/TRD module scores and `TRD - TRAB` back into the canonical integrated milestone.
 - Phase 4 also wrote min-max scaled `TRD` and `TRAB` scores in the 0-1 range plus the scaled `TRD - TRAB` difference.

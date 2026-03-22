@@ -53,6 +53,7 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - User explicitly approved Phase 4 execution
 - Phase 4 completed successfully with exact package-faithful TRA/TRB/TRD module scoring on the mirrored SSD-side integrated milestone and wrote continuous score columns back into `integrated.h5ad`
 - Phase 4 was extended with scaled `TRD`/`TRAB` score columns, scaled `TRD - TRAB`, a combined raw-vs-scaled TRAB-vs-TRD scatter-panel figure, and a TRA/TRB CDR3-presence overlay in the same score space
+- Phase 4 was further extended with a paired-TRA/TRB versus no-TCR scatter panel, TRGC1/TRGC2/TRGV9 expression overlays in TRAB-vs-TRD space, and full-cell per-GSE threshold summaries for `TRAB - TRD < -0.6`, `TRD > 0.1`, and paired TRA/TRB CDR3 presence
 
 ---
 
@@ -108,6 +109,7 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - On 2026-03-22, Phase 4 kept scANVI outputs untouched as reference-only and did not use them to define Phase 4 calls
 - On 2026-03-22, Phase 4 was extended to add min-max scaled `phase4_trd_score_scaled` and `phase4_trab_score_scaled` in the 0-1 range plus `phase4_trd_minus_trab_scaled`
 - On 2026-03-22, Phase 4 was further extended with `phase4_trab_vs_trd_tcr_presence.png`, which colors the raw and scaled TRAB-vs-TRD scatter space by whether each cell has any TRA or TRB CDR3 sequence in the harmonized metadata
+- On 2026-03-22, Phase 4 was further extended with `phase4_trab_vs_trd_paired_tratrb_vs_no_tcr.png`, `phase4_trab_vs_trd_trgc_trgv9_expression.png`, and the threshold summary package `phase4_threshold_tcr_summary.csv` / `phase4_threshold_tcr_analysis.md`
 
 ---
 

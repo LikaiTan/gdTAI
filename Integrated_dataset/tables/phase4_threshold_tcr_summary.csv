@@ -1,0 +1,4 @@
+metric_name,threshold_description,total_positive_cells,n_gse_total,n_gse_with_positive_cells,mean_positive_cells_per_gse,median_positive_cells_per_gse,max_positive_cells_in_one_gse
+trab_minus_trd_lt_neg0p6,TRAB - TRD < -0.6 (raw),36161,37,25,977.3243243243244,155.0,8933
+trd_gt_0p1,TRD > 0.1 (raw),370527,37,25,10014.243243243243,3506.0,95291
+paired_tra_trb,Paired TRA/TRB CDR3 present,4573710,37,28,123613.78378378379,55480.0,807365

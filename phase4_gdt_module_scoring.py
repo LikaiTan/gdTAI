@@ -82,6 +82,7 @@ MODULE_PATTERNS = {
 
 MARKER_GENES = ["TRDC", "TRGC1", "TRGC2", "TRAC", "TRBC1", "TRBC2"]
 SCATTER_COLOR_GENES = ["TRDC", "TRDV1", "TRDV2", "NCAM1", "FOXP3", "CD4", "CD8A", "CD8B"]
+TRG_SCATTER_GENES = ["TRGC1", "TRGC2", "TRGV9"]
 
 
 def parse_args() -> argparse.Namespace:
@@ -386,6 +387,15 @@ def load_selected_strings(dataset: h5py.Dataset, indices: np.ndarray) -> np.ndar
     )
     position_map = {idx: pos for pos, idx in enumerate(sorted_idx.tolist())}
     return np.asarray([sorted_vals[position_map[idx]] for idx in indices.tolist()], dtype=object)
+
+
+def load_string_slice(dataset: h5py.Dataset, start: int, end: int) -> np.ndarray:
+    """Load one contiguous slice from a string dataset."""
+    values = dataset[start:end]
+    return np.asarray(
+        [value.decode("utf-8") if isinstance(value, bytes) else str(value) for value in values],
+        dtype=object,
+    )
 
 
 def downsample_indices(indices: np.ndarray, target_size: int, random_state: int) -> np.ndarray:
@@ -701,14 +711,36 @@ def build_tcr_presence_lookup() -> pd.DataFrame:
         frame = pd.read_csv(metadata_path, usecols=usecols, dtype=str, low_memory=False)
         for col in usecols:
             frame[col] = frame[col].fillna("").astype(str)
-        frame["has_tra_or_trb_cdr3"] = (
-            frame["TRA_cdr3"].str.strip().ne("") | frame["TRB_cdr3"].str.strip().ne("")
+        frame["has_tra_cdr3"] = frame["TRA_cdr3"].str.strip().ne("")
+        frame["has_trb_cdr3"] = frame["TRB_cdr3"].str.strip().ne("")
+        frame["has_tra_or_trb_cdr3"] = frame["has_tra_cdr3"] | frame["has_trb_cdr3"]
+        frame["has_paired_tra_trb_cdr3"] = frame["has_tra_cdr3"] & frame["has_trb_cdr3"]
+        frame["has_no_tra_trb_cdr3"] = ~frame["has_tra_or_trb_cdr3"]
+        frames.append(
+            frame[
+                [
+                    "project name",
+                    "sampleid",
+                    "barcodes",
+                    "has_tra_cdr3",
+                    "has_trb_cdr3",
+                    "has_tra_or_trb_cdr3",
+                    "has_paired_tra_trb_cdr3",
+                    "has_no_tra_trb_cdr3",
+                ]
+            ]
         )
-        frames.append(frame[["project name", "sampleid", "barcodes", "has_tra_or_trb_cdr3"]])
     if not frames:
         raise FileNotFoundError("No harmonized metadata CSVs were found for TCR sequence lookup.")
     combined = pd.concat(frames, ignore_index=True)
     combined = combined.drop_duplicates(subset=["project name", "sampleid", "barcodes"], keep="first")
+    combined["join_key"] = (
+        combined["project name"].astype(str)
+        + "||"
+        + combined["sampleid"].astype(str)
+        + "||"
+        + combined["barcodes"].astype(str)
+    )
     return combined
 
 
@@ -725,6 +757,42 @@ def load_obs_join_fields_for_sample(
                 for column in columns
             }
         )
+
+
+def attach_tcr_presence_flags(sample_join_df: pd.DataFrame, lookup_df: pd.DataFrame) -> pd.DataFrame:
+    """Attach TRA/TRB CDR3 presence flags to a sampled obs table."""
+    join_df = sample_join_df.copy()
+    join_df["join_key"] = (
+        join_df["project name"].astype(str)
+        + "||"
+        + join_df["sampleid"].astype(str)
+        + "||"
+        + join_df["barcodes"].astype(str)
+    )
+    merged = join_df.merge(
+        lookup_df[
+            [
+                "join_key",
+                "has_tra_cdr3",
+                "has_trb_cdr3",
+                "has_tra_or_trb_cdr3",
+                "has_paired_tra_trb_cdr3",
+                "has_no_tra_trb_cdr3",
+            ]
+        ],
+        on="join_key",
+        how="left",
+        validate="many_to_one",
+    )
+    for column in [
+        "has_tra_cdr3",
+        "has_trb_cdr3",
+        "has_tra_or_trb_cdr3",
+        "has_paired_tra_trb_cdr3",
+        "has_no_tra_trb_cdr3",
+    ]:
+        merged[column] = merged[column].fillna(False).astype(bool)
+    return merged.drop(columns=["join_key"])
 
 
 def write_tcr_presence_scatter_panel(sample_df: pd.DataFrame) -> None:
@@ -760,6 +828,125 @@ def write_tcr_presence_scatter_panel(sample_df: pd.DataFrame) -> None:
                 texts[1].set_text("Present")
     fig.savefig(FIGURE_DIR / "phase4_trab_vs_trd_tcr_presence.png", dpi=FIGURE_DPI, bbox_inches="tight")
     plt.close(fig)
+
+
+def write_paired_tcr_scatter_panel(sample_df: pd.DataFrame) -> None:
+    """Write a raw-vs-scaled TRAB-vs-TRD panel for paired TRA/TRB versus no TCR."""
+    logging.info("Writing Phase 4 TRAB-vs-TRD paired-TRA/TRB versus no-TCR panel")
+    paired_df = sample_df.loc[
+        sample_df["has_paired_tra_trb_cdr3"] | sample_df["has_no_tra_trb_cdr3"]
+    ].copy()
+    paired_df["tcr_pairing_group"] = np.where(
+        paired_df["has_paired_tra_trb_cdr3"],
+        "Paired TRA/TRB",
+        "No TCR",
+    )
+    palette = {"No TCR": "#D1495B", "Paired TRA/TRB": "#0077B6"}
+    fig, axes = plt.subplots(1, 2, figsize=(12, 6), constrained_layout=True)
+    specs = [
+        ("phase4_trab_score", "phase4_trd_score", "Raw scores"),
+        ("phase4_trab_score_scaled", "phase4_trd_score_scaled", "Scaled scores"),
+    ]
+    for ax, (x_col, y_col, title) in zip(axes, specs):
+        sns.scatterplot(
+            data=paired_df,
+            x=x_col,
+            y=y_col,
+            hue="tcr_pairing_group",
+            hue_order=["No TCR", "Paired TRA/TRB"],
+            palette=palette,
+            s=6,
+            linewidth=0,
+            alpha=0.8,
+            ax=ax,
+        )
+        ax.set_title(title)
+        ax.set_xlabel(x_col)
+        ax.set_ylabel(y_col)
+        legend = ax.get_legend()
+        if legend is not None:
+            legend.set_title("TRA/TRB CDR3")
+    fig.savefig(FIGURE_DIR / "phase4_trab_vs_trd_paired_tratrb_vs_no_tcr.png", dpi=FIGURE_DPI, bbox_inches="tight")
+    plt.close(fig)
+
+
+def write_trg_expression_scatter_panel(sample_df: pd.DataFrame) -> None:
+    """Write raw-vs-scaled TRAB-vs-TRD scatter panels colored by TRGC1/2/TRGV9."""
+    logging.info("Writing Phase 4 TRGC1/TRGC2/TRGV9 scatter panel")
+    fig, axes = plt.subplots(2, len(TRG_SCATTER_GENES), figsize=(4 * len(TRG_SCATTER_GENES), 8), constrained_layout=True)
+    row_specs = [
+        ("phase4_trab_score", "phase4_trd_score", "Raw scores"),
+        ("phase4_trab_score_scaled", "phase4_trd_score_scaled", "Scaled scores"),
+    ]
+    for row_idx, (x_col, y_col, row_title) in enumerate(row_specs):
+        for col_idx, gene_name in enumerate(TRG_SCATTER_GENES):
+            ax = axes[row_idx, col_idx]
+            scatter = ax.scatter(
+                sample_df[x_col],
+                sample_df[y_col],
+                c=sample_df[gene_name],
+                cmap="viridis",
+                s=3,
+                linewidths=0,
+                rasterized=True,
+            )
+            ax.set_title(gene_name)
+            ax.set_xlabel(x_col)
+            ax.set_ylabel(y_col)
+            fig.colorbar(scatter, ax=ax, fraction=0.046, pad=0.04)
+        axes[row_idx, 0].annotate(
+            row_title,
+            xy=(-0.42, 0.5),
+            xycoords="axes fraction",
+            rotation=90,
+            va="center",
+            ha="center",
+            fontsize=16,
+            fontweight="bold",
+        )
+    fig.savefig(FIGURE_DIR / "phase4_trab_vs_trd_trgc_trgv9_expression.png", dpi=FIGURE_DPI, bbox_inches="tight")
+    plt.close(fig)
+
+
+def summarize_positive_cells_by_gse(
+    total_cells_by_gse: pd.Series,
+    positive_cells_by_gse: pd.Series,
+    metric_name: str,
+    threshold_description: str,
+) -> tuple[pd.DataFrame, dict[str, float]]:
+    """Summarize one boolean selection by GSE and globally."""
+    summary_df = pd.DataFrame(
+        {
+            "source_gse_id": total_cells_by_gse.index.astype(str),
+            "total_cells": total_cells_by_gse.to_numpy(dtype=np.int64),
+            "positive_cells": positive_cells_by_gse.reindex(total_cells_by_gse.index, fill_value=0).to_numpy(dtype=np.int64),
+        }
+    )
+    total_positive = int(summary_df["positive_cells"].sum())
+    summary_df["positive_fraction_within_gse"] = np.where(
+        summary_df["total_cells"] > 0,
+        summary_df["positive_cells"] / summary_df["total_cells"],
+        0.0,
+    )
+    summary_df["share_of_all_positive_cells"] = np.where(
+        total_positive > 0,
+        summary_df["positive_cells"] / total_positive,
+        0.0,
+    )
+    summary_df["metric_name"] = metric_name
+    summary_df["threshold_description"] = threshold_description
+    summary_df = summary_df.sort_values(["positive_cells", "source_gse_id"], ascending=[False, True]).reset_index(drop=True)
+    overall = {
+        "metric_name": metric_name,
+        "threshold_description": threshold_description,
+        "total_positive_cells": total_positive,
+        "n_gse_total": int(summary_df.shape[0]),
+        "n_gse_with_positive_cells": int((summary_df["positive_cells"] > 0).sum()),
+        "mean_positive_cells_per_gse": float(summary_df["positive_cells"].mean()),
+        "median_positive_cells_per_gse": float(summary_df["positive_cells"].median()),
+        "max_positive_cells_in_one_gse": int(summary_df["positive_cells"].max()),
+    }
+    return summary_df, overall
 
 
 def write_qc_summary(
