@@ -6,18 +6,26 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 ---
 
 ## Current milestone
-- Phase 4 scoring completed on the mirrored SSD-side integrated milestone; final Phase 4 QC package is ready for review
+- Phase 4 scoring completed on the mirrored SSD-side integrated milestone, and `tissue_corrected` has now been written back into the integrated H5AD; final Phase 4 plus tissue-correction QC package is ready for review
 
 ## Current objective
 - Keep the validated integrated milestone on SSD without rollback
 - Use scVI latent space, Leiden clusters, UMAP, and simple scVI-based annotation as the canonical downstream interpretation
 - Keep scANVI label fields and PNG/QC outputs for reference only; do not use them as the primary downstream annotation layer unless a later user decision changes that
-- Review the completed Phase 4 continuous score outputs and decide what downstream biological interpretation or migration step should happen next
-- Keep the validated Phase 3 H5AD in the mirrored SSD tree for now; do not migrate it back to NFS until the user explicitly requests migration
+- Treat `obs["tissue_corrected"]` on the mirrored SSD-side `integrated.h5ad` as the canonical harmonized tissue field
+- Treat the completed tissue-correction outputs as the canonical validation package:
+  - `Integrated_dataset/tables/tissue_correction/tissue_corrected_column_export.csv.gz`
+  - `Integrated_dataset/tables/tissue_correction/tissue_corrected_value_counts.csv`
+  - `Integrated_dataset/tables/tissue_correction/tissue_corrected_by_gse.csv`
+  - `Integrated_dataset/tables/tissue_correction/tissue_correction_apply.md`
+- Treat the current tissue-correction workflow markdown as the canonical procedure:
+  - `TISSUE_CORRECTION_WORKFLOW.md`
+- Review the completed Phase 4 continuous score outputs and the completed tissue-correction result, then decide what downstream biological interpretation or migration step should happen next
+- Keep the validated Phase 3/4 H5AD in the mirrored SSD tree for now; do not migrate it back to NFS until the user explicitly requests migration
 - Keep tables, PNG figures, logs, scripts, and model artifacts on NFS; use SSD only for large H5AD inputs/outputs
 - Keep all 10x 3' inputs excluded, especially the isolated `GSE234069` 3' lane
 - Keep supplementary harmonized metadata separate at `analysis_26GSE_V4/outputs/harmonized_metadata_supp.csv`
-- Record the Phase 4 QC conclusion and any post-Phase 4 decisions clearly in markdown and git history
+- Record the Phase 4 QC conclusion, tissue-correction write-back, and any post-Phase 4 decisions clearly in markdown and git history
 
 ---
 
@@ -53,7 +61,13 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - User explicitly approved Phase 4 execution
 - Phase 4 completed successfully with exact package-faithful TRA/TRB/TRD module scoring on the mirrored SSD-side integrated milestone and wrote continuous score columns back into `integrated.h5ad`
 - Phase 4 was extended with scaled `TRD`/`TRAB` score columns, scaled `TRD - TRAB`, a combined raw-vs-scaled TRAB-vs-TRD scatter-panel figure, and a TRA/TRB CDR3-presence overlay in the same score space
+- Tissue harmonization workflow completed in export-first mode on the latest mirrored SSD-side integrated milestone
+- The standalone tissue review export was written to `Integrated_dataset/tables/tissue_correction/tissue_corrected_column_export.csv.gz`
+- The current tissue policy now collapses `PBMC` into `blood`
+- The latest tissue review found `0` unknown cells in the standalone export and produced the updated count figure `Integrated_dataset/figures/tissue_corrected_cell_counts_log10.png`
 - Phase 4 was further extended with a paired-TRA/TRB versus no-TCR scatter panel, TRGC1/TRGC2/TRGV9 expression overlays in TRAB-vs-TRD space, and full-cell per-GSE threshold summaries for `TRAB - TRD < -0.6`, `TRD > 0.1`, and paired TRA/TRB CDR3 presence
+- User explicitly approved in-place tissue correction write-back, and `obs["tissue_corrected"]` was written into the mirrored SSD-side `integrated.h5ad`
+- The finalized tissue-correction apply summary reports `6,443,879` cells processed, `15` distinct corrected tissues, and `0` unknown cells after write-back
 
 ---
 
@@ -109,7 +123,16 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - On 2026-03-22, Phase 4 kept scANVI outputs untouched as reference-only and did not use them to define Phase 4 calls
 - On 2026-03-22, Phase 4 was extended to add min-max scaled `phase4_trd_score_scaled` and `phase4_trab_score_scaled` in the 0-1 range plus `phase4_trd_minus_trab_scaled`
 - On 2026-03-22, Phase 4 was further extended with `phase4_trab_vs_trd_tcr_presence.png`, which colors the raw and scaled TRAB-vs-TRD scatter space by whether each cell has any TRA or TRB CDR3 sequence in the harmonized metadata
+- On 2026-03-22, tissue correction was implemented as an export-first workflow driven by `tissue_correction_workflow.py` and `tissue_correction_rules.json`
+- On 2026-03-22, the user required the full-column tissue result to be exported for review first and explicitly deferred writing `tissue_corrected` back into `integrated.h5ad`
+- On 2026-03-22, the tissue policy was updated to collapse `PBMC` into `blood`
+- On 2026-03-22, the canonical tissue review artifacts became:
+  - `Integrated_dataset/tables/tissue_correction/tissue_corrected_column_export.csv.gz`
+  - `Integrated_dataset/tables/tissue_correction/tissue_corrected_value_counts.csv`
+  - `Integrated_dataset/tables/tissue_correction/tissue_corrected_by_gse.csv`
+  - `Integrated_dataset/figures/tissue_corrected_cell_counts_log10.png`
 - On 2026-03-22, Phase 4 was further extended with `phase4_trab_vs_trd_paired_tratrb_vs_no_tcr.png`, `phase4_trab_vs_trd_trgc_trgv9_expression.png`, and the threshold summary package `phase4_threshold_tcr_summary.csv` / `phase4_threshold_tcr_analysis.md`
+- On 2026-03-23, the user explicitly approved the in-place tissue write-back; `tissue_correction_workflow.py apply --write-h5ad` completed successfully and the SSD-side integrated milestone now contains `obs["tissue_corrected"]`
 
 ---
 
@@ -140,6 +163,9 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - [ ] Review supplementary Phase 1 QC outputs with the user
 - [x] Merge `TNK_candidates_supp.h5ad` into `TNK_candidates.h5ad` after user approval and merge QC
 - [x] Start Phase 2 after explicit user approval of the supplementary merge
+- [x] Build and validate the standalone tissue-correction export on the current integrated milestone
+- [x] Review the standalone tissue-correction export with the user before any in-place H5AD write-back
+- [x] Write `tissue_corrected` back into the mirrored SSD-side `integrated.h5ad` after explicit user approval
 - [x] Run Phase 2 merged cleanup on the current `TNK_candidates.h5ad`
 - [x] Self-review the Phase 2 QC package and decide whether the result is clean enough to enter Phase 3
 - [x] Complete the resumed Phase 3 scVI integration and post-scVI scANVI annotation run, then write `integrated.h5ad` and the full PNG QC package
