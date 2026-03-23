@@ -1,4 +1,4 @@
-# TNK Phase 0-3 Canonical Workflow
+# TNK Phase 0-4 Canonical Workflow
 
 ## Purpose
 
@@ -10,6 +10,7 @@ This file is the single human-readable canonical workflow for:
 - Phase 1c: merged metadata backup and replacement
 - Phase 2: merged cleanup
 - Phase 3: scVI integration and scANVI T/NK annotation
+- Phase 4: TRAB/TRB/TRD scoring and downstream threshold summaries
 
 The workflow is QC-gated. No phase transition is allowed without user review and explicit approval unless a later user instruction explicitly grants a run-specific exception.
 
@@ -48,7 +49,10 @@ Required packages confirmed in `rapids_sc_py310`:
 - `phase1c_replace_harmonized_metadata.py`
 - `phase2_merged_cleanup.py`
 - `phase3_scvi_scanvi.py`
+- `phase4_gdt_module_scoring.py`
+- `plot_phase4_threshold_barplots.py`
 - `watch_h5ad_v2_and_resume.py`
+- `tissue_correction_workflow.py`
 - This helper is the concrete implementation of the Phase 0 audit logic described below.
 - `phase0_dataset_audit.py` accepts `--registry <csv>` when the canonical audit must be rerun against a repaired registry such as `h5ad_v2.csv`.
 - `repair_h5ad_from_raw.py` is the concrete repair helper for Category B datasets where `adata.raw` contains recoverable integer-like counts for the current feature space.
@@ -62,7 +66,10 @@ Required packages confirmed in `rapids_sc_py310`:
 - `phase3_scvi_scanvi.py` now stages only the large H5AD workload under a mirrored local temp tree rooted at `/ssd/tnk_phase3/Integrated_dataset/` when that path is writable; tables, PNG figures, logs, scripts, and model artifacts remain on NFS.
 - `phase3_scvi_scanvi.py` also maintains a stable NFS-side symlink view at `high_speed_temp/Integrated_dataset`, pointing to the mirrored SSD tree, so the fast working set remains visible from the project root.
 - `phase3_scvi_scanvi.py` keeps the validated `integrated.h5ad` in the mirrored SSD tree and does not auto-migrate it back to NFS; later migration is a separate explicit step.
+- `phase4_gdt_module_scoring.py` uses the package-faithful TRA/TRB/TRD module definitions, computes continuous scores from a temporary normalize-plus-log1p copy of count-space `X`, writes the score columns back into `integrated.h5ad`, and emits the Phase 4 QC package on NFS.
+- `plot_phase4_threshold_barplots.py` renders descending PNG barplots from the exported Phase 4 threshold summary CSVs without re-reading the full integrated H5AD.
 - `watch_h5ad_v2_and_resume.py` polls every 120 seconds for `h5ad_v2.csv`; once the repaired registry appears, it reruns Phase 0 against that registry and then rebuilds `TNK_candidates.h5ad` from the updated Category A set.
+- `tissue_correction_workflow.py` is a post-integration metadata helper that samples tissue-related metadata, applies the committed rule set in `tissue_correction_rules.json`, exports a standalone `tissue_corrected` review table, and only writes back into `integrated.h5ad` when explicitly asked with `--write-h5ad`.
 - The markdown file remains the canonical human-readable workflow; the helper exists to execute the Phase 0 audit reproducibly.
 
 ### CUDA runtime note for `rapids_sc_py310`
@@ -377,6 +384,34 @@ Phase 3 QC may accept the integrated milestone while declining scANVI as the pri
 - keep scANVI labels in the object for reference only
 - use scVI/Leiden/simple annotation for downstream analyses unless the user later requests a different annotation strategy
 
+## Phase 4: TRAB/TRB/TRD Scoring And Threshold Summaries
+
+### Entry criteria
+
+- Phase 3 QC approved by the user
+- `integrated.h5ad` exists and remains the canonical integrated milestone
+- scANVI may remain in the object for reference, but Phase 4 should not depend on scANVI being accepted as the primary annotation layer
+
+### Behavior
+
+- use `phase4_gdt_module_scoring.py` as the execution helper
+- keep the validated large H5AD on SSD and keep tables, logs, and PNG figures on NFS
+- use the package-faithful TRA/TRB/TRD module definitions from `gdt_tcr_module_sharing_package_full`
+- compute scores from a temporary normalize-plus-log1p view of count-space `X`
+- write continuous score columns back into `integrated.h5ad`:
+  - `phase4_tra_score`
+  - `phase4_trb_score`
+  - `phase4_trab_score`
+  - `phase4_trd_score`
+  - `phase4_trd_minus_trab`
+- when requested, extend Phase 4 with scaled score columns and threshold-specific summary tables and plots
+- keep Phase 4 figures in PNG format only
+- do not force a hard gdT or abT call unless the user explicitly requests one
+
+### Stop condition
+
+Stop for user QC after the Phase 4 score outputs, threshold summaries, and PNG figures are written.
+
 ## Main Entrypoint
 
 Use one obvious control flow:
@@ -395,6 +430,8 @@ def main() -> None:
         stop_for_user_qc("Phase 2")
     run_phase3_scvi_and_scanvi()
     stop_for_user_qc("Phase 3")
+    run_phase4_scoring()
+    stop_for_user_qc("Phase 4")
 ```
 
 The actual execution must respect QC gates. The control flow above is canonical, but each phase after Phase 0 should only be run after explicit approval unless the user explicitly grants a documented exception for the current run.

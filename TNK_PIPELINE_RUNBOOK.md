@@ -79,8 +79,10 @@ This markdown file must contain the human-readable canonical script for:
 - Phase 0 support logic if needed
 - Phase 1
 - Phase 1b
+- Phase 1c
 - Phase 2
 - Phase 3
+- Phase 4
 
 Do not fragment the main workflow into many parallel script versions.
 
@@ -223,6 +225,7 @@ The project should be executed in these phases:
 ### Phase 0: Data audit and eligibility triage
 ### Phase 1: Per-dataset coarse T/NK candidate extraction
 ### Phase 1b: Conservative first-pass doublet / obvious contaminant removal
+### Phase 1c: Merged metadata backup and replacement
 ### Phase 2: Merged candidate cleanup and second-pass purification
 ### Phase 3: scVI integration and post-integration scANVI annotation
 ### Phase 4: TRAB/TRB scoring using `gdt_tcr_module_sharing_package_full`
