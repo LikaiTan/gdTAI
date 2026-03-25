@@ -1,0 +1,260 @@
+{
+  "sample_per_gse": 500,
+  "random_seed": 42,
+  "healthy_label": "healthy",
+  "disease_label": "disease",
+  "unknown_label": "unknown",
+  "ignore_if_contains": [
+    ".tsv.gz",
+    ".csv.gz",
+    "matrix.mtx"
+  ],
+  "global_exact_map": {
+    "healthy": "healthy",
+    "control": "healthy",
+    "controls": "healthy",
+    "normal control": "healthy",
+    "normal": "healthy",
+    "covid19 negative": "healthy",
+    "covid19 negative donor": "healthy",
+    "covid 19 negative": "healthy",
+    "covid19": "disease",
+    "covid 19": "disease",
+    "covid 19 patient": "disease",
+    "covid 19 positive": "disease",
+    "disease": "disease",
+    "diseased": "disease",
+    "severe": "disease",
+    "pretreatment": "disease",
+    "pre treatment": "disease",
+    "on treatment": "disease",
+    "post treatment": "disease",
+    "filarial": "disease",
+    "myocarditis": "disease",
+    "rrlbcl": "disease",
+    "hnscc": "disease",
+    "chili": "disease",
+    "imcision": "disease",
+    "covid 19": "disease"
+  },
+  "global_regex_rules": [
+    {
+      "pattern": "\\bhealthy\\b|normal control|\\bcontrol\\b|\\bctrl\\b|covid ?19 negative|disease free|non disease|non diseased",
+      "value": "healthy",
+      "reason": "healthy or control wording"
+    },
+    {
+      "pattern": "\\bdiseased\\b|\\bdisease\\b|covid|colitis|myocarditis|filarial|glioma|medulloblastoma|ependymoma|craniopharyngioma|papilloma|meningioma|etmr|lbcl|lymphoma|hnscc|carcinoma|cancer|tumou?r|melanoma|nsclc|hcc|hepatocellular|chili|celiac|acd|pcd|gfd|rrlbcl|severe",
+      "value": "disease",
+      "reason": "disease wording"
+    },
+    {
+      "pattern": "pre.?treatment|on.?treatment|post.?treatment|checkpoint|imcision",
+      "value": "disease",
+      "reason": "treatment-state wording implies disease cohort"
+    }
+  ],
+  "gse_default_map": {
+    "GSE161918": "disease",
+    "GSE171037": "disease",
+    "GSE178882": "disease",
+    "GSE179994": "disease",
+    "GSE188620": "disease",
+    "GSE212217": "disease",
+    "GSE221776": "disease",
+    "GSE234069": "disease",
+    "GSE232240": "disease",
+    "GSE235863": "disease",
+    "GSE243013": "disease",
+    "GSE243572": "disease",
+    "GSE254249": "disease",
+    "GSE267645": "disease",
+    "GSE301528": "disease",
+    "GSE308075": "disease",
+    "GSE311112": "disease",
+    "GSE241783": "disease",
+    "GSE287301": "disease"
+  },
+  "gse_specific_rules": {
+    "GSE125527": [
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle"],
+        "pattern": "\\bhealthy\\b",
+        "value": "healthy",
+        "reason": "explicit healthy label"
+      },
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle"],
+        "pattern": "\\bdiseased\\b",
+        "value": "disease",
+        "reason": "explicit diseased label"
+      }
+    ],
+    "GSE144469": [
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle", "project_name"],
+        "pattern": "normal control|\\bcontrol\\b",
+        "value": "healthy",
+        "reason": "normal control wording"
+      },
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle", "project_name"],
+        "pattern": "colitis|cpi",
+        "value": "disease",
+        "reason": "CPI colitis wording"
+      }
+    ],
+    "GSE161918": [
+      {
+        "fields": ["sample_id", "sampleid", "library_id", "series_bundle"],
+        "pattern": "(?:^|[^a-z])hc(?:[^a-z]|$)|healthy control",
+        "value": "healthy",
+        "reason": "HC sample identifiers"
+      },
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle", "project_name"],
+        "pattern": "covid ?19 negative",
+        "value": "healthy",
+        "reason": "COVID-negative donors"
+      },
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle", "project_name"],
+        "pattern": "covid",
+        "value": "disease",
+        "reason": "COVID-positive cohort"
+      }
+    ],
+    "GSE168163": [
+      {
+        "fields": ["sample_id", "sampleid", "library_id", "series_bundle"],
+        "pattern": "(?:^|[^a-z])hd[0-9]+(?:[^a-z]|$)|subject: hd[0-9]+",
+        "value": "healthy",
+        "reason": "HD subject IDs in GEO"
+      },
+      {
+        "fields": ["sample_id", "sampleid", "library_id", "series_bundle"],
+        "pattern": "(?:^|[^a-z])pt[0-9]+(?:[^a-z]|$)|subject: pt[0-9]+",
+        "value": "disease",
+        "reason": "PT subject IDs in GEO"
+      }
+    ],
+    "GSE228597": [
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle", "project_name"],
+        "pattern": "\\bcontrol\\b",
+        "value": "healthy",
+        "reason": "control cohort"
+      },
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle", "project_name"],
+        "pattern": "myocarditis",
+        "value": "disease",
+        "reason": "myocarditis cohort"
+      }
+    ],
+    "GSE240865": [
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle", "project_name"],
+        "pattern": "\\bcontrol\\b",
+        "value": "healthy",
+        "reason": "control cohort"
+      },
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle", "project_name"],
+        "pattern": "filarial",
+        "value": "disease",
+        "reason": "filarial infection cohort"
+      }
+    ],
+    "GSE168859": [
+      {
+        "fields": ["donor_patient", "sample_id", "sampleid", "library_id"],
+        "pattern": "healthydonor|healthy donor",
+        "value": "healthy",
+        "reason": "healthy donor identifiers"
+      }
+    ],
+    "GSE243905": [
+      {
+        "fields": ["sample_id", "sampleid", "library_id", "series_bundle"],
+        "pattern": "(?:^|[^a-z])c[0-9]+_",
+        "value": "healthy",
+        "reason": "control-like sample IDs"
+      },
+      {
+        "fields": ["sample_id", "sampleid", "library_id", "series_bundle"],
+        "pattern": "(?:^|[^a-z])p[0-9]+_",
+        "value": "disease",
+        "reason": "patient-like sample IDs"
+      }
+    ],
+    "GSE243572": [
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle", "project_name", "sample_id", "sampleid", "donor_patient"],
+        "pattern": "progressor|responsiveness|spfs|lpfs",
+        "value": "disease",
+        "reason": "response-group wording from treated cohort"
+      }
+    ],
+    "GSE252762": [
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle", "project_name"],
+        "pattern": "\\bcontrol\\b",
+        "value": "healthy",
+        "reason": "explicit control"
+      },
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle", "project_name"],
+        "pattern": "\\bgfd\\b|\\bacd\\b|\\bpcd\\b|celiac",
+        "value": "disease",
+        "reason": "celiac disease subgroup"
+      }
+    ],
+    "GSE267645": [
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle", "project_name", "sample_id", "sampleid"],
+        "pattern": "moderate|critical",
+        "value": "disease",
+        "reason": "COVID severity labels"
+      }
+    ],
+    "GSE301528": [
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle", "project_name"],
+        "pattern": "remission|diagnosis|relapse|refractory",
+        "value": "disease",
+        "reason": "leukemia disease-state wording"
+      }
+    ],
+    "GSE308075": [
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle", "project_name"],
+        "pattern": "major depressive disorder|\\bmdd\\b",
+        "value": "disease",
+        "reason": "MDD cohort"
+      }
+    ],
+    "GSE311112": [
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle", "project_name"],
+        "pattern": "patient type: ibs|\\bibs\\b",
+        "value": "disease",
+        "reason": "IBS patient type in GEO"
+      }
+    ],
+    "GSE287541": [
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle", "project_name"],
+        "pattern": "\\bcontrol\\b",
+        "value": "healthy",
+        "reason": "explicit control"
+      },
+      {
+        "fields": ["condition_meta", "sample_type", "series_bundle", "project_name"],
+        "pattern": "chili",
+        "value": "disease",
+        "reason": "ChILI cohort"
+      }
+    ]
+  }
+}

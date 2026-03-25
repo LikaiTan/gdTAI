@@ -1,10 +1,11 @@
 # AGENTS.md
+- Only Speak English To me Please.
 - Allowed compute resources:
   - up to 80 CPU cores
   - GPU allowed
   - up to 400 GB RAM
 - Pipeline design should not assume 2 TB RAM
-- Confirm environment/package installation plan in `Scanpy_gdTmodel`
+- Confirm environment/package installation plan in `rapids_sc_py310`
 ## Phase-gate QC policy
 
 Every phase transition requires a user-reviewed QC gate.

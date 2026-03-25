@@ -53,6 +53,7 @@ Required packages confirmed in `rapids_sc_py310`:
 - `plot_phase4_threshold_barplots.py`
 - `watch_h5ad_v2_and_resume.py`
 - `tissue_correction_workflow.py`
+- `disease_status_correction_workflow.py`
 - This helper is the concrete implementation of the Phase 0 audit logic described below.
 - `phase0_dataset_audit.py` accepts `--registry <csv>` when the canonical audit must be rerun against a repaired registry such as `h5ad_v2.csv`.
 - `repair_h5ad_from_raw.py` is the concrete repair helper for Category B datasets where `adata.raw` contains recoverable integer-like counts for the current feature space.
@@ -70,6 +71,7 @@ Required packages confirmed in `rapids_sc_py310`:
 - `plot_phase4_threshold_barplots.py` renders descending PNG barplots from the exported Phase 4 threshold summary CSVs without re-reading the full integrated H5AD.
 - `watch_h5ad_v2_and_resume.py` polls every 120 seconds for `h5ad_v2.csv`; once the repaired registry appears, it reruns Phase 0 against that registry and then rebuilds `TNK_candidates.h5ad` from the updated Category A set.
 - `tissue_correction_workflow.py` is a post-integration metadata helper that samples tissue-related metadata, applies the committed rule set in `tissue_correction_rules.json`, exports a standalone `tissue_corrected` review table, and only writes back into `integrated.h5ad` when explicitly asked with `--write-h5ad`.
+- `disease_status_correction_workflow.py` is a post-integration metadata helper that samples condition-related metadata, applies the committed rule set in `disease_status_correction_rules.json`, exports a standalone `disease_status_corrected` review table, and only writes back into `integrated.h5ad` when explicitly asked with `--write-h5ad`.
 - The markdown file remains the canonical human-readable workflow; the helper exists to execute the Phase 0 audit reproducibly.
 
 ### CUDA runtime note for `rapids_sc_py310`

@@ -13,6 +13,7 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - Use scVI latent space, Leiden clusters, UMAP, and simple scVI-based annotation as the canonical downstream interpretation
 - Keep scANVI label fields and PNG/QC outputs for reference only; do not use them as the primary downstream annotation layer unless a later user decision changes that
 - Treat `obs["tissue_corrected"]` on the mirrored SSD-side `integrated.h5ad` as the canonical harmonized tissue field
+- Treat the standalone disease-status export as the current review artifact for healthy-vs-disease harmonization; do not write `disease_status_corrected` into the integrated H5AD until the user explicitly approves that mutation
 - Treat the completed tissue-correction outputs as the canonical validation package:
   - `Integrated_dataset/tables/tissue_correction/tissue_corrected_column_export.csv.gz`
   - `Integrated_dataset/tables/tissue_correction/tissue_corrected_value_counts.csv`
@@ -68,6 +69,9 @@ Large-scale T/NK integration and γδT-focused scoring workflow across public da
 - Phase 4 was further extended with a paired-TRA/TRB versus no-TCR scatter panel, TRGC1/TRGC2/TRGV9 expression overlays in TRAB-vs-TRD space, and full-cell per-GSE threshold summaries for `TRAB - TRD < -0.6`, `TRD > 0.1`, and paired TRA/TRB CDR3 presence
 - User explicitly approved in-place tissue correction write-back, and `obs["tissue_corrected"]` was written into the mirrored SSD-side `integrated.h5ad`
 - The finalized tissue-correction apply summary reports `6,443,879` cells processed, `15` distinct corrected tissues, and `0` unknown cells after write-back
+- Disease-status harmonization workflow completed in export-first mode on the latest mirrored SSD-side integrated milestone
+- The standalone disease-status review export was written to `Integrated_dataset/tables/disease_status_correction/disease_status_corrected_column_export.csv.gz`
+- The latest disease-status review export processed `6,443,879` cells, produced `5,901,025` `disease`, `461,892` `healthy`, and `80,962` `unknown` cells, and leaves the residual unknown set concentrated in `GSE168163` and a small subset of `GSE252762`
 
 ---
 

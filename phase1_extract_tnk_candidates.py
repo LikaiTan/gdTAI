@@ -116,6 +116,31 @@ CONTAM_MARKERS = [
 ]
 
 
+def canonical_gene_symbol(name: object) -> str:
+    """Normalize common prefixed feature names to a marker-matchable symbol.
+
+    Public datasets sometimes store genes as `GRCh38_TRAC`, `hg38_TRAC`, or
+    similar genome-prefixed names. Phase 1 marker matching should treat those as
+    `TRAC` rather than missing markers.
+    """
+    text = str(name).strip()
+    if not text:
+        return ""
+
+    upper = text.upper()
+    prefix_patterns = (
+        r"^GRCH\d+[_:-]+",
+        r"^HG\d+[_:-]+",
+        r"^MM\d+[_:-]+",
+        r"^GRCM\d+[_:-]+",
+    )
+    for pattern in prefix_patterns:
+        cleaned = re.sub(pattern, "", upper)
+        if cleaned != upper:
+            return cleaned
+    return upper
+
+
 def sanitize_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """Convert extension dtypes to portable pandas types before writing H5AD."""
     clean = df.copy()
@@ -192,11 +217,11 @@ def marker_positions_from_var_names(var_names: pd.Index, markers: list[str]) -> 
     """Return first-occurrence positions for requested markers, case-insensitively."""
     first_pos: dict[str, int] = {}
     for idx, name in enumerate(var_names.astype(str)):
-        upper = name.upper()
-        if upper not in first_pos:
-            first_pos[upper] = idx
+        canonical = canonical_gene_symbol(name)
+        if canonical and canonical not in first_pos:
+            first_pos[canonical] = idx
 
-    positions = [first_pos[gene.upper()] for gene in markers if gene.upper() in first_pos]
+    positions = [first_pos[canonical_gene_symbol(gene)] for gene in markers if canonical_gene_symbol(gene) in first_pos]
     return np.asarray(positions, dtype=int)
 
 

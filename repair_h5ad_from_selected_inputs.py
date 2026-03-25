@@ -50,6 +50,14 @@ def parse_args() -> argparse.Namespace:
         default="",
         help="Optional markdown path for a repair or dry-run summary.",
     )
+    parser.add_argument(
+        "--skip-failed-samples",
+        action="store_true",
+        help=(
+            "Skip sample keys listed in outputs/failed_samples.csv. "
+            "Use this when a processed H5AD already excludes known-bad source files."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -181,16 +189,71 @@ def remove_noncoding(adata: ad.AnnData) -> ad.AnnData:
 
 
 def sanitize_dataframe(frame: pd.DataFrame) -> pd.DataFrame:
-    """Convert extension dtypes into HDF5-safe pandas objects."""
+    """Convert non-numeric columns into HDF5-safe plain strings."""
     clean = frame.copy()
     for column in clean.columns:
         series = clean[column]
-        if isinstance(series.dtype, pd.CategoricalDtype) or isinstance(series.dtype, pd.StringDtype):
-            clean[column] = series.astype(object)
+        if pd.api.types.is_numeric_dtype(series.dtype) or pd.api.types.is_bool_dtype(series.dtype):
+            continue
+        as_object = series.astype(object)
+        clean[column] = pd.Series(
+            ["" if pd.isna(value) else str(value) for value in as_object],
+            index=series.index,
+            dtype=object,
+        )
     return clean
 
 
-def rebuild_counts(project_dir: Path) -> tuple[ad.AnnData, dict]:
+def canonical_barcode(value: object) -> str:
+    """Normalize a barcode-like token while removing concat-added numeric tails."""
+    text = str(value).strip()
+    if text == "" or text.lower() == "nan":
+        return ""
+    parts = text.split("_")
+    if len(parts) > 1:
+        text = parts[0]
+    if text.count("-") >= 2:
+        prefix, tail = text.rsplit("-", 1)
+        if tail.isdigit():
+            text = prefix
+    return text
+
+
+def build_obs_alignment_key(obs: pd.DataFrame, obs_names: pd.Index) -> pd.Index:
+    """Build a stable per-cell alignment key using sample plus barcode-like information.
+
+    This is used when current processed H5AD obs names differ from the rebuilt
+    count-space names but the underlying cells are the same.
+    """
+    sample_series = obs["sample"].astype(str) if "sample" in obs.columns else pd.Series([""] * len(obs), index=obs.index)
+
+    barcode_column = None
+    for candidate in ("barcode", "cell_barcode"):
+        if candidate in obs.columns:
+            barcode_column = candidate
+            break
+
+    if barcode_column is not None:
+        barcode_series = obs[barcode_column].astype(str).map(canonical_barcode)
+    else:
+        barcode_series = pd.Series(pd.Index(obs_names).astype(str), index=obs.index).map(canonical_barcode)
+
+    keys = barcode_series + "__" + sample_series
+    return pd.Index(keys.astype(str))
+
+
+def load_failed_sample_keys(project_dir: Path) -> set[str]:
+    """Load sample keys that should be skipped during rebuild."""
+    failed_path = project_dir / "outputs" / "failed_samples.csv"
+    if not failed_path.exists():
+        return set()
+    failed = pd.read_csv(failed_path)
+    if "sample" not in failed.columns:
+        return set()
+    return set(failed["sample"].astype(str))
+
+
+def rebuild_counts(project_dir: Path, skip_samples: Optional[set[str]] = None) -> tuple[ad.AnnData, dict]:
     """Rebuild the count-space AnnData from selected inputs and scaffold QC rules."""
     config_path = project_dir / "config" / "config.json"
     config = load_config(config_path)
@@ -198,12 +261,15 @@ def rebuild_counts(project_dir: Path) -> tuple[ad.AnnData, dict]:
     manifest = pd.read_csv(manifest_path)
     if manifest.empty:
         raise ValueError(f"No selected inputs in {manifest_path}")
+    skip_samples = skip_samples or set()
 
     adatas = []
     per_sample = []
     for row in manifest.itertuples(index=False):
         input_path = resolve_existing_input_path(project_dir, row.path)
         sample = str(getattr(row, "sample_key", input_path.stem))
+        if sample in skip_samples:
+            continue
         loaded = load_one(input_path)
         loaded.obs["sample"] = sample
         loaded.obs["GSE"] = config["project"]["gse"]
@@ -235,6 +301,7 @@ def rebuild_counts(project_dir: Path) -> tuple[ad.AnnData, dict]:
         "config_path": str(config_path),
         "manifest_path": str(manifest_path),
         "samples_loaded": len(per_sample),
+        "samples_skipped": sorted(skip_samples),
         "per_sample": per_sample,
     }
     return merged, metadata
@@ -246,12 +313,18 @@ def compare_axes(current: ad.AnnData, rebuilt: ad.AnnData) -> dict:
     current_var = pd.Index(current.var_names.astype(str))
     rebuilt_obs = pd.Index(rebuilt.obs_names.astype(str))
     rebuilt_var = pd.Index(rebuilt.var_names.astype(str))
+    current_obs_key = build_obs_alignment_key(current.obs, current_obs)
+    rebuilt_obs_key = build_obs_alignment_key(rebuilt.obs, rebuilt_obs)
 
     obs_equal = current_obs.equals(rebuilt_obs)
     var_equal = current_var.equals(rebuilt_var)
     current_vars_subset = current_var.isin(rebuilt_var).all()
+    obs_key_equal = current_obs_key.equals(rebuilt_obs_key)
+    obs_key_set_equal = current_obs_key.is_unique and rebuilt_obs_key.is_unique and set(current_obs_key) == set(rebuilt_obs_key)
     return {
         "obs_equal": bool(obs_equal),
+        "obs_key_equal": bool(obs_key_equal),
+        "obs_key_set_equal": bool(obs_key_set_equal),
         "var_equal": bool(var_equal),
         "var_current_subset_of_rebuilt": bool(current_vars_subset),
         "current_n_obs": int(current.n_obs),
@@ -269,7 +342,17 @@ def build_repaired(current: ad.AnnData, rebuilt_counts: ad.AnnData) -> ad.AnnDat
     """Create a repaired H5AD using rebuilt counts and current obs/var tables."""
     current_obs = pd.Index(current.obs_names.astype(str))
     current_var = pd.Index(current.var_names.astype(str))
-    counts = rebuilt_counts[current_obs, current_var].X
+    rebuilt_lookup = rebuilt_counts
+    if not current_obs.equals(pd.Index(rebuilt_counts.obs_names.astype(str))):
+        current_keys = build_obs_alignment_key(current.obs, current_obs)
+        rebuilt_keys = build_obs_alignment_key(rebuilt_counts.obs, pd.Index(rebuilt_counts.obs_names.astype(str)))
+        if not current_keys.is_unique or not rebuilt_keys.is_unique:
+            raise ValueError("Obs alignment keys are not unique; refusing repair")
+        rebuilt_lookup = rebuilt_counts.copy()
+        rebuilt_lookup.obs_names = rebuilt_keys
+        current_obs = current_keys
+
+    counts = rebuilt_lookup[current_obs, current_var].X
     counts = counts.tocsr() if sp.issparse(counts) else sp.csr_matrix(counts)
 
     repaired = ad.AnnData(
@@ -299,6 +382,8 @@ def write_summary(summary_path: Path, project_dir: Path, comparison: dict, mode:
         handle.write(f"- Project: `{project_dir}`\n")
         handle.write(f"- Mode: `{mode}`\n")
         handle.write(f"- Obs axes match exactly: {comparison['obs_equal']}\n")
+        handle.write(f"- Obs alignment keys match exactly: {comparison['obs_key_equal']}\n")
+        handle.write(f"- Obs alignment key sets match: {comparison['obs_key_set_equal']}\n")
         handle.write(f"- Var axes match exactly: {comparison['var_equal']}\n")
         handle.write(f"- Current vars subset of rebuilt vars: {comparison['var_current_subset_of_rebuilt']}\n")
         handle.write(f"- Current n_obs: {comparison['current_n_obs']}\n")
@@ -326,7 +411,8 @@ def main() -> None:
     if not current_h5ad.exists():
         raise FileNotFoundError(f"Processed H5AD not found under {project_dir / 'outputs'}")
 
-    rebuilt, _ = rebuild_counts(project_dir)
+    skip_samples = load_failed_sample_keys(project_dir) if args.skip_failed_samples else set()
+    rebuilt, _ = rebuild_counts(project_dir, skip_samples=skip_samples)
     current = ad.read_h5ad(current_h5ad)
     comparison = compare_axes(current, rebuilt)
 
@@ -340,7 +426,7 @@ def main() -> None:
     if not args.write:
         return
 
-    if not comparison["obs_equal"] or not comparison["var_current_subset_of_rebuilt"]:
+    if not (comparison["obs_equal"] or comparison["obs_key_set_equal"]) or not comparison["var_current_subset_of_rebuilt"]:
         raise ValueError("Axis validation failed; refusing to repair in write mode")
 
     repaired = build_repaired(current, rebuilt)

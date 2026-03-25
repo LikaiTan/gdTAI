@@ -3,16 +3,16 @@
 ## Scope
 
 - Input set: Category A datasets only
-- Datasets processed: 29
-- Total input cells: 6182881
-- Total retained candidate cells: 5322388
-- Overall retained fraction: 0.8608
+- Datasets processed: 33
+- Total input cells: 7035204
+- Total retained candidate cells: 5951196
+- Overall retained fraction: 0.8459
 
 ## Selection Signals
 
-- Cells retained by annotation support: 2014589
-- Cells retained by marker support: 5265923
-- Datasets with annotation columns used: 15
+- Cells retained by annotation support: 2467587
+- Cells retained by marker support: 6048372
+- Datasets with annotation columns used: 16
 
 ## Per-dataset yield
 
@@ -20,6 +20,7 @@
 - GSE243013: retained 766574 / 766574 (1.0000); annotation columns=`orig.ident;major_cell_type;sub_cell_type`
 - GSE241783: retained 618963 / 643762 (0.9615); annotation columns=`none`
 - GSE168859: retained 564270 / 564270 (1.0000); annotation columns=`cell_type`
+- GSE254249: retained 459556 / 601436 (0.7641); annotation columns=`Ident;subCluster`
 - GSE243905: retained 369428 / 413696 (0.8930); annotation columns=`orig.ident;predicted.celltype.l2.score;predicted.celltype.l2;consolidated_cell_type`
 - GSE212217: retained 220612 / 292271 (0.7548); annotation columns=`orig.ident;seurat_clusters;finalIdent`
 - GSE243572: retained 207017 / 268664 (0.7705); annotation columns=`none`
@@ -31,11 +32,13 @@
 - GSE311112: retained 114945 / 139112 (0.8263); annotation columns=`none`
 - GSE308075: retained 112645 / 113504 (0.9924); annotation columns=`none`
 - GSE254176: retained 102776 / 118332 (0.8685); annotation columns=`none`
+- GSE267645: retained 101374 / 130147 (0.7789); annotation columns=`none`
 - GSE162498: retained 82285 / 91658 (0.8977); annotation columns=`none`
 - GSE168163: retained 80998 / 80998 (1.0000); annotation columns=`cell_type`
 - GSE178882: retained 74242 / 109138 (0.6803); annotation columns=`none`
 - GSE229858: retained 65483 / 65757 (0.9958); annotation columns=`none`
 - GSE155223: retained 55694 / 80789 (0.6894); annotation columns=`cell_type`
+- GSE301528: retained 50031 / 102007 (0.4905); annotation columns=`none`
 - GSE125527: retained 47649 / 68627 (0.6943); annotation columns=`celltype;cell_type`
 - GSE252762: retained 45202 / 45209 (0.9998); annotation columns=`celltype;clusters;clusters_full`
 - GSE155222: retained 39138 / 52071 (0.7516); annotation columns=`cell_type`
@@ -43,6 +46,7 @@
 - GSE211504: retained 37432 / 37637 (0.9946); annotation columns=`none`
 - GSE145926: retained 33026 / 84069 (0.3928); annotation columns=`none`
 - GSE232240: retained 26707 / 32399 (0.8243); annotation columns=`cell_type`
+- GSE190870: retained 17847 / 18733 (0.9527); annotation columns=`none`
 - GSE240361: retained 5703 / 5737 (0.9941); annotation columns=`none`
 - GSE227709: retained 0 / 14712 (0.0000); annotation columns=`none`
 
