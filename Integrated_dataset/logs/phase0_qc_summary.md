@@ -8,25 +8,25 @@
 
 ## Audit Scope
 
-- Registry rows audited: 29
-- Files readable without recorded errors: 29
+- Registry rows audited: 33
+- Files readable without recorded errors: 33
 - Files with read issues: 0
 
 ## Category Counts
 
-- Category A: 29
+- Category A: 33
 - Category B: 0
 - Category C: 0
 
 ## Matrix State Counts
 
-- raw_like_X: 29
+- raw_like_X: 33
 
 ## Metadata Coverage
 
-- Datasets with candidate donor fields: 27
-- Datasets with candidate sample fields: 28
-- Datasets with candidate library fields: 26
+- Datasets with candidate donor fields: 31
+- Datasets with candidate sample fields: 32
+- Datasets with candidate library fields: 30
 
 ## Category B Datasets
 

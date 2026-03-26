@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Phase 3-4 Training Dataset Report</title>
+  <style>
+    :root {
+      --bg: #f4efe6;
+      --paper: #fffdf8;
+      --ink: #1f2430;
+      --muted: #596273;
+      --accent: #8c2f39;
+      --line: #d8cfc2;
+      --shadow: 0 18px 40px rgba(31, 36, 48, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(140, 47, 57, 0.10), transparent 28%),
+        radial-gradient(circle at top right, rgba(31, 92, 91, 0.12), transparent 26%),
+        var(--bg);
+      line-height: 1.6;
+    }
+    .page {
+      width: min(1220px, calc(100vw - 32px));
+      margin: 20px auto 40px;
+    }
+    .hero {
+      background: linear-gradient(135deg, rgba(140, 47, 57, 0.94), rgba(31, 92, 91, 0.96));
+      color: white;
+      border-radius: 24px;
+      padding: 36px 40px;
+      box-shadow: var(--shadow);
+    }
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: clamp(34px, 5vw, 54px);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+    }
+    .hero p {
+      margin: 0 0 10px;
+      max-width: 920px;
+      font-size: 18px;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin: 18px 0 0;
+    }
+    .metric {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 18px;
+      padding: 14px 16px;
+    }
+    .metric .value {
+      display: block;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+    .metric .label {
+      display: block;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.84;
+    }
+    .section {
+      margin-top: 28px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+    .section h2 {
+      margin: 0 0 10px;
+      font-size: 28px;
+      letter-spacing: -0.02em;
+    }
+    .section p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+    .section code {
+      background: rgba(31, 36, 48, 0.06);
+      padding: 0 5px;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+    .subsection {
+      margin-top: 18px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(216, 207, 194, 0.65);
+    }
+    .subsection h3 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+    .figure-card {
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      background: white;
+    }
+    .figure-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #faf7f2;
+      cursor: zoom-in;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .figure-card img:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(31, 36, 48, 0.12);
+    }
+    .figure-card p {
+      margin: 12px 0 0;
+      font-size: 15px;
+    }
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(15, 18, 24, 0.88);
+      z-index: 9999;
+    }
+    .lightbox.open {
+      display: flex;
+    }
+    .lightbox-inner {
+      width: min(96vw, 1500px);
+      max-height: 96vh;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+    .lightbox img {
+      max-width: 100%;
+      max-height: calc(96vh - 72px);
+      width: auto;
+      height: auto;
+      border-radius: 14px;
+      background: white;
+      box-shadow: 0 22px 50px rgba(0, 0, 0, 0.35);
+    }
+    .lightbox-caption {
+      color: white;
+      font-size: 15px;
+      text-align: center;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      border: 0;
+      border-radius: 999px;
+      width: 40px;
+      height: 40px;
+      font-size: 28px;
+      line-height: 1;
+      cursor: pointer;
+      color: white;
+      background: rgba(255, 255, 255, 0.14);
+    }
+    .footer {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <h1>Integrated T/NK Dataset for Gamma-Delta T Cell Model Training</h1>
+      <p>This integrated atlas is not presented as a finished biological truth set. Its practical purpose is to support the next step: training a model for gamma-delta T cell identification across many studies, tissues, and technical contexts. Phase 3 provides the integrated manifold. Phase 4 provides a prior scoring method that is useful but imperfect, so it is used as a weak-label generator for training-set construction.</p>
+      <div class="metrics">
+        <div class="metric"><span class="value">`6,443,879`</span><span class="label">Integrated cells</span></div><div class="metric"><span class="value">`10x genomics 5&#x27; sequencing`</span><span class="label">Technology</span></div><div class="metric"><span class="value">`37`</span><span class="label">Represented GSEs</span></div><div class="metric"><span class="value">`29`</span><span class="label">Leiden clusters</span></div><div class="metric"><span class="value">`15`</span><span class="label">Tissue groups</span></div><div class="metric"><span class="value">`36,161`</span><span class="label">`high confidence gdT`</span></div><div class="metric"><span class="value">`370,527`</span><span class="label">`γδT-like (TRDscore &gt; 0.1)`</span></div>
+      </div>
+    </section>
+
+    <section class="section"><h2>Interpretation Strategy</h2>
+<p>The key design choice is to separate integration from training-label generation. Phase 3 solves the first problem by aligning a very large multi-study T/NK dataset into one manifold while retaining interpretable lineage structure. Phase 4 solves the second problem by applying a previously developed TRA/TRB/TRD scoring method that captures useful gamma-delta signal, even though it is not perfect enough to be treated as final truth.</p>
+<p>The intended downstream use is weak supervision: high-confidence Phase 4 regions can seed positive and negative training examples, while ambiguous regions remain available for later model-based refinement.</p>
+</section>
+<section class="section"><h2>Phase 3: Integration Makes the Dataset Trainable</h2>
+<p>The Phase 3 plots show that cells from many studies and technical batches can be embedded in one stable latent space. This matters because the final model should generalize across studies rather than memorize one dataset or one tissue.</p>
+<div class="subsection"><h3>Phase 3 UMAP by GSE</h3>
+<p>The integrated manifold mixes cells from many studies into one shared latent space. This is the key prerequisite for building a cross-study training resource rather than a single-dataset classifier.</p>
+
+    <section class="figure-card">
+      <h3>Phase 3 UMAP by GSE</h3>
+      <img src="figures/phase3_umap_by_gse.png" alt="Phase 3 UMAP by GSE" class="zoomable-figure" data-title="Phase 3 UMAP by GSE">
+      <p>The integrated manifold mixes cells from many studies into one shared latent space. This is the key prerequisite for building a cross-study training resource rather than a single-dataset classifier.</p>
+    </section>
+    
+</div>
+<div class="subsection"><h3>Phase 3 UMAP by Tissue</h3>
+
+    <section class="figure-card">
+      <h3>Phase 3 UMAP by Tissue</h3>
+      <img src="figures/phase3_umap_by_tissue.png" alt="Phase 3 UMAP by Tissue" class="zoomable-figure" data-title="Phase 3 UMAP by Tissue">
+      <p>Cells are colored by the harmonized tissue field `tissue_corrected`, showing how blood and tissue compartments distribute across the integrated manifold.</p>
+    </section>
+    
+</div>
+<div class="subsection"><h3>Phase 3 UMAP by Leiden Cluster</h3>
+<p>Leiden clustering provides a structured view of the integrated manifold. These clusters help assess whether Phase 4 scores are coherently localized rather than randomly distributed.</p>
+
+    <section class="figure-card">
+      <h3>Phase 3 UMAP by Leiden Cluster</h3>
+      <img src="figures/phase3_umap_by_leiden.png" alt="Phase 3 UMAP by Leiden Cluster" class="zoomable-figure" data-title="Phase 3 UMAP by Leiden Cluster">
+      <p>Leiden clustering provides a structured view of the integrated manifold. These clusters help assess whether Phase 4 scores are coherently localized rather than randomly distributed.</p>
+    </section>
+    
+</div>
+<div class="subsection"><h3>Phase 3 T/NK Marker Panel</h3>
+<p>Core T-cell, gamma-delta-associated, and NK-associated markers remain interpretable after integration. This supports the use of the integrated object as a training substrate rather than an over-corrected latent space with erased lineage structure.</p>
+
+    <section class="figure-card">
+      <h3>Phase 3 T/NK Marker Panel</h3>
+      <img src="figures/phase3_tnk_marker_umap_panel.png" alt="Phase 3 T/NK Marker Panel" class="zoomable-figure" data-title="Phase 3 T/NK Marker Panel">
+      <p>Core T-cell, gamma-delta-associated, and NK-associated markers remain interpretable after integration. This supports the use of the integrated object as a training substrate rather than an over-corrected latent space with erased lineage structure.</p>
+    </section>
+    
+</div>
+</section>
+<section class="section"><h2>Phase 4: Imperfect but Useful Weak Labels</h2>
+<p>The Phase 4 method was created previously for the gamma-delta T cell identification problem. It works, but not perfectly. In this project it is therefore used in the correct role: not as final annotation, but as a weak-labeling layer for building a large and diverse training set. At the start of Phase 4, scores are calculated from the count-space integrated matrix using the package-faithful TRA, TRB, and TRD gene modules. For each cell, the workflow creates a temporary normalize-total plus log1p view, computes the mean expression of the module genes, computes the mean expression of matched control genes, and defines the module score as module mean minus control mean. The TRAB score uses the union of the TRA and TRB modules, while the TRD score uses the TRD module alone. The raw difference used downstream is therefore TRD score minus TRAB score.</p>
+<p>For this report, visualization stays in raw-score space. A strong cutoff such as <code>TRAB - TRD &lt; -0.6</code> gives a selective gamma-delta-like candidate subset that can seed high-confidence training labels, while the rest of the raw score landscape can be used for harder negatives or ambiguous examples.</p>
+<div class="subsection"><h3>Phase 4 Raw Score UMAP Overlays</h3>
+<p>The report uses raw Phase 4 scores for visualization. Raw TRAB, raw TRD, and raw TRD-minus-TRAB remain spatially structured on the integrated manifold, which is the key property needed for weak-label generation.</p>
+
+    <section class="figure-card">
+      <h3>Phase 4 Raw Score UMAP Overlays</h3>
+      <img src="figures/phase4_umap_raw_score_overlays.png" alt="Phase 4 Raw Score UMAP Overlays" class="zoomable-figure" data-title="Phase 4 Raw Score UMAP Overlays">
+      <p>The report uses raw Phase 4 scores for visualization. Raw TRAB, raw TRD, and raw TRD-minus-TRAB remain spatially structured on the integrated manifold, which is the key property needed for weak-label generation.</p>
+    </section>
+    
+</div>
+<div class="subsection"><h3>Raw TRAB-versus-TRD Score Space</h3>
+<p>The raw score space is sufficient to separate highly gamma-delta-like regions from alpha-beta-oriented or ambiguous regions. The scaled version is therefore not needed for the narrative in this report.</p>
+
+    <section class="figure-card">
+      <h3>Raw TRAB-versus-TRD Score Space</h3>
+      <img src="figures/phase4_trab_vs_trd_raw_only.png" alt="Raw TRAB-versus-TRD Score Space" class="zoomable-figure" data-title="Raw TRAB-versus-TRD Score Space">
+      <p>The raw score space is sufficient to separate highly gamma-delta-like regions from alpha-beta-oriented or ambiguous regions. The scaled version is therefore not needed for the narrative in this report.</p>
+    </section>
+    
+</div>
+<div class="subsection"><h3>Raw TRAB-versus-TRD Space with Paired TRA/TRB Context</h3>
+<p>Cells with paired alpha-beta TRA/TRB evidence occupy a recognizable portion of the raw score space. This provides an internal consistency check for negative or non-gamma-delta-oriented training examples.</p>
+
+    <section class="figure-card">
+      <h3>Raw TRAB-versus-TRD Space with Paired TRA/TRB Context</h3>
+      <img src="figures/phase4_trab_vs_trd_paired_tratrb_vs_no_tcr_raw_only.png" alt="Raw TRAB-versus-TRD Space with Paired TRA/TRB Context" class="zoomable-figure" data-title="Raw TRAB-versus-TRD Space with Paired TRA/TRB Context">
+      <p>Cells with paired alpha-beta TRA/TRB evidence occupy a recognizable portion of the raw score space. This provides an internal consistency check for negative or non-gamma-delta-oriented training examples.</p>
+    </section>
+    
+</div>
+<div class="subsection"><h3>Selected Marker Genes on Raw TRAB-versus-TRD Space</h3>
+<p>The raw score space can be inspected directly against a broader marker panel, including gamma-delta-associated, alpha-beta-associated, pan-T-cell, and cytotoxic-lineage genes. This makes the weak-label logic more transparent for downstream model training.</p>
+
+    <section class="figure-card">
+      <h3>Selected Marker Genes on Raw TRAB-versus-TRD Space</h3>
+      <img src="figures/phase4_trab_vs_trd_selected_marker_panel_raw_only.png" alt="Selected Marker Genes on Raw TRAB-versus-TRD Space" class="zoomable-figure" data-title="Selected Marker Genes on Raw TRAB-versus-TRD Space">
+      <p>The raw score space can be inspected directly against a broader marker panel, including gamma-delta-associated, alpha-beta-associated, pan-T-cell, and cytotoxic-lineage genes. This makes the weak-label logic more transparent for downstream model training.</p>
+    </section>
+    
+</div>
+<div class="subsection"><h3>High-Confidence TRD-over-TRAB Candidates by Tissue</h3>
+<p>Cells with very strong gamma-delta-like score contrast are concentrated in specific tissues rather than uniformly spread. This suggests that the eventual model should learn across tissue contexts rather than rely on one source alone.</p>
+
+    <section class="figure-card">
+      <h3>High-Confidence TRD-over-TRAB Candidates by Tissue</h3>
+      <img src="figures/phase4_trab_minus_trd_lt_neg0p6_by_tissue_barplot.png" alt="High-Confidence TRD-over-TRAB Candidates by Tissue" class="zoomable-figure" data-title="High-Confidence TRD-over-TRAB Candidates by Tissue">
+      <p>Cells with very strong gamma-delta-like score contrast are concentrated in specific tissues rather than uniformly spread. This suggests that the eventual model should learn across tissue contexts rather than rely on one source alone.</p>
+    </section>
+    
+</div>
+<div class="subsection"><h3>High-Confidence TRD-over-TRAB Candidates by GSE</h3>
+<p>The strongest raw-score gamma-delta-like candidates are distributed across multiple studies rather than coming from a single dataset, which is exactly the behavior needed for a cross-study training resource.</p>
+
+    <section class="figure-card">
+      <h3>High-Confidence TRD-over-TRAB Candidates by GSE</h3>
+      <img src="figures/phase4_trab_minus_trd_lt_neg0p6_by_gse_barplot.png" alt="High-Confidence TRD-over-TRAB Candidates by GSE" class="zoomable-figure" data-title="High-Confidence TRD-over-TRAB Candidates by GSE">
+      <p>The strongest raw-score gamma-delta-like candidates are distributed across multiple studies rather than coming from a single dataset, which is exactly the behavior needed for a cross-study training resource.</p>
+    </section>
+    
+</div>
+<div class="subsection"><h3>Broad TRD-Enriched Candidates by Tissue</h3>
+<p>The broader TRD-enriched candidate pool covers multiple tissue contexts. This wider pool can support less stringent, higher-recall training subsets or later rounds of iterative label refinement.</p>
+
+    <section class="figure-card">
+      <h3>Broad TRD-Enriched Candidates by Tissue</h3>
+      <img src="figures/phase4_trd_gt_0p1_by_tissue_barplot.png" alt="Broad TRD-Enriched Candidates by Tissue" class="zoomable-figure" data-title="Broad TRD-Enriched Candidates by Tissue">
+      <p>The broader TRD-enriched candidate pool covers multiple tissue contexts. This wider pool can support less stringent, higher-recall training subsets or later rounds of iterative label refinement.</p>
+    </section>
+    
+</div>
+<div class="subsection"><h3>Broad TRD-Enriched Candidates by GSE</h3>
+<p>The broader TRD-enriched pool also spans many studies, which is useful when training a model that must generalize beyond a narrow set of discovery datasets.</p>
+
+    <section class="figure-card">
+      <h3>Broad TRD-Enriched Candidates by GSE</h3>
+      <img src="figures/phase4_trd_gt_0p1_by_gse_barplot.png" alt="Broad TRD-Enriched Candidates by GSE" class="zoomable-figure" data-title="Broad TRD-Enriched Candidates by GSE">
+      <p>The broader TRD-enriched pool also spans many studies, which is useful when training a model that must generalize beyond a narrow set of discovery datasets.</p>
+    </section>
+    
+</div>
+</section>
+<section class="section"><h2>How This Dataset Should Be Used</h2>
+<p>The integrated object is large enough to support model training across multiple tissues, multiple GSEs, and multiple confidence levels. A practical training design is to use the strongest Phase 4 regions as seed labels, use clearly alpha-beta-oriented regions as negatives, and keep the middle score space as ambiguous data for later iterative improvement.</p>
+<p>This is the main value of the dataset: it turns a heterogeneous collection of public T/NK datasets into one training-ready resource where imperfect prior biology can be converted into scalable model supervision.</p>
+</section>
+
+    <div class="footer">
+      Report generated from the revised markdown narrative and the validated Phase 3/4 PNG outputs in <code>Integrated_dataset/figures/</code>.
+    </div>
+
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+      <button class="lightbox-close" id="lightbox-close" aria-label="Close figure">&times;</button>
+      <div class="lightbox-inner">
+        <img id="lightbox-image" alt="">
+        <div class="lightbox-caption" id="lightbox-caption"></div>
+      </div>
+    </div>
+  </main>
+  <script>
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImage = document.getElementById("lightbox-image");
+    const lightboxCaption = document.getElementById("lightbox-caption");
+    const lightboxClose = document.getElementById("lightbox-close");
+
+    function closeLightbox() {
+      lightbox.classList.remove("open");
+      lightbox.setAttribute("aria-hidden", "true");
+      lightboxImage.removeAttribute("src");
+      lightboxImage.removeAttribute("alt");
+      lightboxCaption.textContent = "";
+    }
+
+    document.querySelectorAll(".zoomable-figure").forEach((img) => {
+      img.addEventListener("click", () => {
+        lightboxImage.src = img.src;
+        lightboxImage.alt = img.alt;
+        lightboxCaption.textContent = img.dataset.title || img.alt;
+        lightbox.classList.add("open");
+        lightbox.setAttribute("aria-hidden", "false");
+      });
+    });
+
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) {
+        closeLightbox();
+      }
+    });
+
+    lightboxClose.addEventListener("click", closeLightbox);
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && lightbox.classList.contains("open")) {
+        closeLightbox();
+      }
+    });
+  </script>
+</body>
+</html>

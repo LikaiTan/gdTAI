@@ -1,260 +1,149 @@
 # AGENTS.md
-- Allowed compute resources:
+
+- Only speak English to the user.
+- Allowed compute resources by default:
   - up to 80 CPU cores
   - GPU allowed
   - up to 400 GB RAM
-- Pipeline design should not assume 2 TB RAM
-- Confirm environment/package installation plan in `Scanpy_gdTmodel`
+- Pipeline design must not assume 2 TB RAM.
+
+## Canonical execution environment
+
+Current canonical execution environment:
+
+- `rapids_sc_py310`
+
+`Scanpy_gdTmodel` is not the active environment for this run. Treat it only as a
+future alias plan until the project explicitly switches over.
+
+## Control-file truth hierarchy
+
+Use the markdown files with these exact roles:
+
+- `TNK_PIPELINE_RUNBOOK.md`
+  - canonical rules
+  - canonical exception policy
+  - active run-specific exceptions
+- `TNK_PHASES_0_4_SCRIPT.md`
+  - canonical executable workflow for Phases 0-4
+- `TNK_PIPELINE_STATUS.md`
+  - current milestone
+  - next action
+  - active blockers
+  - active exceptions already in force
+- `CHANGELOG.md`
+  - historical completed milestones
+- `DECISIONS.md`
+  - approved key decisions and historical exceptions
+- `OUTPUTS.md`
+  - canonical output inventory and review-artifact index
+
+`TNK_PIPELINE_RUNBOOK.md` is the source of truth for rules.
+`TNK_PIPELINE_STATUS.md` is the source of truth for the current state.
+`TNK_PHASES_0_4_SCRIPT.md` is the source of truth for the standard workflow.
+
+## Mandatory startup behavior
+
+Before doing work:
+
+1. Read `TNK_PIPELINE_RUNBOOK.md`
+2. Read `TNK_PIPELINE_STATUS.md`
+3. Read `TNK_PHASES_0_4_SCRIPT.md`
+4. Restate the current milestone and next action before editing code
+
+If there is uncertainty, context drift, or a long pause:
+
+1. Re-read `TNK_PIPELINE_RUNBOOK.md`
+2. Re-read `TNK_PIPELINE_STATUS.md`
+3. Re-read `TNK_PHASES_0_4_SCRIPT.md`
+
 ## Phase-gate QC policy
 
-Every phase transition requires a user-reviewed QC gate.
+Default rule:
 
-Before advancing from any phase to the next phase, you must:
+- every phase transition requires a user-reviewed QC gate
+- do not proceed to the next phase without explicit user approval
+
+This means:
+
 1. complete the planned QC checks for the current phase
 2. generate the required summary outputs, tables, and PNG figures
 3. summarize the main findings, issues, and uncertainties
 4. present the QC conclusion to the user
 5. wait for explicit user approval before proceeding
-6. do not read files and paths I did not tell you to read (you can apply for ) 
 
-Rules:
-- never proceed to the next phase without QC review
-- never assume silent approval
-- if QC is ambiguous or unsatisfactory, do not proceed
-- explain what failed, what is uncertain, and what should be adjusted
-- remain in the current phase until the user approves advancement
-- After full sample merging, complete the merged metadata backup/replacement step defined in `TNK_PIPELINE_RUNBOOK.md` before moving to the next phase.
+Exceptions:
 
+- only follow a no-stop or internal-continuation rule if that exception is
+  explicitly listed as active in `TNK_PIPELINE_RUNBOOK.md`
+- `TNK_PIPELINE_STATUS.md` may record that the active exception is currently in
+  use, but it must not define new exceptions on its own
 
-This applies to:
-- Phase 0 -> Phase 1
-- Phase 1 / 1b -> Phase 2
-- Phase 2 -> Phase 3
-- Phase 3 -> Phase 4
+After full sample merging, complete the merged metadata backup/replacement step
+defined in the runbook before moving to the next phase.
+
 ## Project scope
-This repository builds a large-scale single-cell T/NK integration workflow across  public datasets, with the downstream goal of identifying γδ T cells.
 
-Current scope ends at:
+This repository covers:
+
 - Phase 0: dataset audit
 - Phase 1: coarse T/NK extraction
 - Phase 1b: conservative first cleanup
+- Phase 1c: merged metadata backup and replacement
 - Phase 2: merged cleanup
 - Phase 3: scVI integration
-- Phase 4: TRAB/TRB scoring using `gdt_tcr_module_sharing_package_full`
+- Phase 4: TRAB/TRB/TRD scoring using `gdt_tcr_module_sharing_package_full`
 
-Do not work on model training/validation (former Phase 5) unless explicitly requested later.
-
----
-
-## Mandatory startup behavior
-Before doing any work:
-1. Read `TNK_PIPELINE_RUNBOOK.md`
-2. Read `TNK_PIPELINE_STATUS.md` if it exists
-3. Read `TNK_PHASES_1_3_SCRIPT.md`
-4. Restate the current milestone and next action before editing code
-
-If there is uncertainty, memory compression, or context drift:
-- Re-read `TNK_PIPELINE_RUNBOOK.md`
-- Re-read `TNK_PIPELINE_STATUS.md`
-- Then continue
-
-The runbook is the source of truth for execution rules.
-The status file is the source of truth for current progress.
-The phase script markdown is the source of truth for the canonical Phase 1–3 pipeline.
-
----
-
-## Model policy
-- Main working thread: `gpt-5.4`
-- Subagents: `gpt-5.4-mini`
-
-Use `gpt-5.4` for:
-- planning
-- pipeline architecture
-- biological interpretation
-- difficult debugging
-- final merge decisions
-- editing the canonical Phase 1–3 script
-- decisions about filtering, saving, and evaluation
-
-Use `gpt-5.4-mini` for:
-- bounded subagents
-- dataset-by-dataset audit
-- metadata inspection
-- QC summary review
-- log inspection
-- helper summaries
-- figure checklist review
-
-If a subagent finds ambiguity or conflict, escalate to the main `gpt-5.4` thread before changing core logic.
-
----
-
-## Subagent policy
-Do not use subagents by default.
-
-Use subagents only for bounded, parallelizable, mostly read-heavy tasks, such as:
-- auditing one dataset or one dataset family
-- checking whether an H5AD contains raw counts vs normalized/scaled data
-- reviewing metadata consistency
-- summarizing QC metrics
-- reviewing failed logs
-- reviewing candidate contaminant clusters
-
-Do not use subagents for:
-- editing the canonical Phase 1–3 script
-- final architecture decisions
-- final biological judgment
-- repeated micro-edits to one file
-
-Each subagent must:
-- answer one narrow question
-- return a concise conclusion
-- provide evidence
-- avoid editing core pipeline files unless explicitly requested
-
----
-
-## Code readability policy
-All scripts must be written for human readability first.
-
-Required style:
-- use clear function names
-- add docstrings to all major functions
-- keep a short config section at the top
-- group paths and parameters in one place
-- comment on why a step is done, not only what it does
-- avoid overly clever or compressed code
-- avoid deeply nested logic when a helper function is clearer
-- keep sections clearly labeled by phase
-- use one obvious `main()` entrypoint
-- use informative logging messages
-- fail loudly on invalid assumptions
-
-Do not create many script versions such as:
-- `phase1_v2.py`
-- `phase1_final.py`
-- `phase1_final_revised.py`
-
-Maintain one canonical Phase 1–3 markdown file and use git history instead of versioned filenames.
-
----
-
-## Script organization policy
-The script for Phases 1–3 must live in one canonical markdown file:
-
-- `TNK_PHASES_1_3_SCRIPT.md`
-
-This file should contain the human-readable, end-to-end pipeline for:
-- Phase 0 support functions if needed
-- Phase 1
-- Phase 1b
-_Phase 1c
-- Phase 2
-- Phase 3
-- figure generation relevant to these phases
-
-Do not split the core Phase 1–3 workflow across many script files unless explicitly necessary.
-
----
+Do not work on model training or validation unless the user explicitly asks.
 
 ## Output policy
-All generated outputs must be saved under:
+
+All generated outputs must live under:
 
 - `Integrated_dataset/`
 
-Use only these milestone H5AD files unless an exception is explicitly justified:
+Canonical milestone H5AD files:
+
 1. `Integrated_dataset/TNK_candidates.h5ad`
 2. `Integrated_dataset/TNK_cleaned.h5ad`
 3. `Integrated_dataset/integrated.h5ad`
 
-Rules:
-- do not generate many intermediate milestone H5AD files
-- update the canonical milestone files in place when appropriate
-- use git for script history, not filename proliferation
-- temporary files may be used during execution but should be deleted after successful validation
+Allowed exception class:
 
-Figures must be saved under:
-- `Integrated_dataset/figures/`
+- explicitly approved temporary or supplementary milestone H5AD files documented
+  in `TNK_PIPELINE_RUNBOOK.md`
 
-Tables/logs may be saved under:
+Figures:
+
+- save all evaluation figures as high-quality PNG to `Integrated_dataset/figures/`
+
+Tables and logs:
+
 - `Integrated_dataset/tables/`
 - `Integrated_dataset/logs/`
 
----
+## Path policy
 
-## Figure policy
-Evaluation figures must be high-quality PNG.
+Canonical NFS root:
 
-Requirements:
-- PNG format
-- minimum 300 dpi
-- publication-style labeling
-- readable font sizes
-- consistent naming
-- clear legends
-- no tiny default text
-- save all evaluation figures to `Integrated_dataset/figures/`
+- `Integrated_dataset/`
 
-Examples:
-- QC summaries
-- batch mixing summaries
-- UMAPs
-- marker overlays
-- contamination score plots
-- phase comparison figures
+Large-H5AD exception:
 
----
+- if the runbook and status files say the mirrored SSD tree is active, use it
+  only for large H5AD inputs and outputs
+- keep scripts, tables, PNG figures, logs, and model artifacts on NFS
 
-## Environment policy
-Use the conda environment:
+## Git policy
 
-- `Scanpy_gdTmodel`
-
-Install packages there.
-Prefer conda installation.
-Use pip only when a package is unavailable through conda channels, and record the reason.
-
-Do not install project dependencies into base or unrelated environments.
-
----
-
-## Git / GitHub policy
-Use git frequently, but do not create many file versions.
-
-Required behavior:
-- commit after each meaningful validated milestone
+- commit after meaningful validated milestones
 - commit before risky refactors
 - commit at the end of a session if code changed
-- push commits to GitHub regularly
-- use clear commit messages
-- rely on git history rather than versioned filenames
+- push regularly
+- use git history instead of versioned filename sprawl
 
-Do not create many duplicate scripts just to preserve history.
+## Code organization
 
----
-
-## Execution discipline
-For each milestone:
-1. Read runbook, status, and canonical phase script
-2. State the current milestone
-3. Decide whether subagents are justified
-4. Do the work
-5. Validate outputs
-6. Save outputs to `Integrated_dataset/`
-7. Generate/update required PNG figures
-8. Commit and push if the milestone is meaningful
-9. Update `TNK_PIPELINE_STATUS.md`
-
----
-
-## Memory drift protection
-After any of the following, re-read the runbook, status file, and phase script:
-- long pause
-- context summary/compression
-- milestone change
-- task switch
-- uncertainty about filters, outputs, figures, or environment
-- more than ~12 turns on the same task
-
-Do not trust compressed memory over the markdown files.
+- keep one canonical workflow markdown file: `TNK_PHASES_0_4_SCRIPT.md`
+- do not create drifting filenames such as `_v2`, `_final`, `_revised`
+- write scripts for human readability first
