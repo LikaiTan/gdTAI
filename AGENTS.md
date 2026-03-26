@@ -13,8 +13,6 @@ Current canonical execution environment:
 
 - `rapids_sc_py310`
 
-`Scanpy_gdTmodel` is not the active environment for this run. Treat it only as a
-future alias plan until the project explicitly switches over.
 
 ## Control-file truth hierarchy
 
@@ -147,3 +145,7 @@ Large-H5AD exception:
 - keep one canonical workflow markdown file: `TNK_PHASES_0_4_SCRIPT.md`
 - do not create drifting filenames such as `_v2`, `_final`, `_revised`
 - write scripts for human readability first
+- keep `TNK_PHASES_0_4_SCRIPT.md` updated with, for each major phase or task:
+  - phase or task name
+  - exact `.py` script used
+  - key outputs

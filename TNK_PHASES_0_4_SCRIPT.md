@@ -54,24 +54,31 @@ Allowed supplementary milestone exception:
 - disease-status harmonization:
   - `disease_status_correction_workflow.py`
 
-## Standard helper scripts
+## Script recording rule
 
-- `phase0_dataset_audit.py`
-- `repair_h5ad_from_raw.py`
-- `phase1_extract_tnk_candidates.py`
-- `phase1_finalize_from_temp.py`
-- `phase1b_conservative_cleanup.py`
-- `phase1c_replace_harmonized_metadata.py`
-- `phase2_merged_cleanup.py`
-- `phase3_scvi_scanvi.py`
-- `phase4_gdt_module_scoring.py`
-- `plot_phase4_threshold_barplots.py`
+For each major phase or task, this file should record:
+
+- phase or task name
+- exact `.py` script used
+- key outputs
 
 ## Phase 0: Dataset audit and eligibility triage
 
 Objective:
 
 - inspect every registry dataset before extraction
+
+Phase or task:
+
+- Phase 0 dataset audit
+
+Exact `.py` script:
+
+- `phase0_dataset_audit.py`
+
+Related helper when rescue is needed:
+
+- `repair_h5ad_from_raw.py`
 
 Core checks:
 
@@ -95,6 +102,15 @@ Objective:
 
 - build a high-recall merged T/NK candidate pool from approved Phase 0 inputs
 
+Phase or task:
+
+- Phase 1 coarse T/NK extraction
+
+Exact `.py` scripts:
+
+- `phase1_extract_tnk_candidates.py`
+- `phase1_finalize_from_temp.py`
+
 Core outputs:
 
 - `Integrated_dataset/TNK_candidates.h5ad`
@@ -106,6 +122,14 @@ Objective:
 
 - remove only obvious non-T/NK cells and apply the user-requested low-detection
   gene filter
+
+Phase or task:
+
+- Phase 1b conservative first cleanup
+
+Exact `.py` script:
+
+- `phase1b_conservative_cleanup.py`
 
 Core outputs:
 
@@ -119,6 +143,14 @@ Objective:
 - export merged `adata.obs`
 - back up the prior harmonized metadata file
 - replace the harmonized metadata target with validated merged metadata
+
+Phase or task:
+
+- Phase 1c merged metadata backup and replacement
+
+Exact `.py` script:
+
+- `phase1c_replace_harmonized_metadata.py`
 
 Required join key:
 
@@ -138,6 +170,14 @@ Objective:
 
 - perform merged-context cleanup on the candidate milestone
 
+Phase or task:
+
+- Phase 2 merged cleanup
+
+Exact `.py` script:
+
+- `phase2_merged_cleanup.py`
+
 Core outputs:
 
 - `Integrated_dataset/TNK_cleaned.h5ad`
@@ -150,6 +190,14 @@ Objective:
 - integrate the cleaned object with scVI
 - build latent representation, neighbors, Leiden, and UMAP
 - optionally keep scANVI outputs as reference-only when approved
+
+Phase or task:
+
+- Phase 3 scVI integration and optional scANVI reference annotation
+
+Exact `.py` script:
+
+- `phase3_scvi_scanvi.py`
 
 Standard behavior:
 
@@ -169,6 +217,15 @@ Objective:
 
 - compute package-faithful continuous TRA/TRB/TRD module scores on the
   integrated object
+
+Phase or task:
+
+- Phase 4 TRAB/TRB/TRD continuous scoring
+
+Exact `.py` scripts:
+
+- `phase4_gdt_module_scoring.py`
+- `plot_phase4_threshold_barplots.py`
 
 Standard behavior:
 
@@ -202,6 +259,21 @@ Rules:
 - write supplementary per-GSE H5ADs under `downloads/per_gse_h5ad_with_metadata/`
 - use `Integrated_dataset/TNK_candidates_supp.h5ad` only as the supplementary
   milestone before approved merge into the main candidate object
+
+Phase or task:
+
+- supplementary 10x 5' intake lane
+
+Exact `.py` scripts:
+
+- `supplementary_10x5_phase01.py`
+- `validate_supplementary_10x5_schema.py`
+
+Key outputs:
+
+- `downloads/per_gse_h5ad_with_metadata/`
+- `Integrated_dataset/TNK_candidates_supp.h5ad`
+- supplementary tables, logs, and PNG QC figures
 
 ## QC-gate note
 
