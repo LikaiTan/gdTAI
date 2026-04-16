@@ -1,0 +1,8 @@
+category,n_cells
+sorted_gdT_only,15840
+paired_TRG_TRD_not_doublet_only,2970
+TRD_minus_TRAB_gt_0p4_only,147301
+sorted_gdT_and_paired_TRG_TRD_only,4918
+sorted_gdT_and_TRD_minus_TRAB_gt_0p4_only,9396
+paired_TRG_TRD_and_TRD_minus_TRAB_gt_0p4_only,7374
+all_three_criteria,18725
