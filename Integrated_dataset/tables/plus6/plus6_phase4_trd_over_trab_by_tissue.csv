@@ -1,0 +1,45 @@
+tissue,n_cells
+blood,19018
+peripheral blood,9931
+tumor,7073
+cord blood,6167
+duodenum,5344
+jejunum,4713
+heart,3662
+"Descending, sigmoidal colon; rectum",3450
+stomach,2689
+Normal,2417
+sigmoid colon,1808
+Tumor,1635
+spleen,1574
+bone marrow,1548
+lung,1517
+muscle,1431
+esophagus,1286
+liver,1160
+bladder,1064
+rectum,1029
+pancreas,907
+ileum,782
+bone_marrow,738
+csf,713
+,682
+ascending colon,510
+skin,471
+"Ascending, Descending, sigmoidal colon; rectum",470
+mesenteric lymph node,415
+thymus,354
+"Sigmoidal colon, rectum",353
+transverse colon,343
+trachea,213
+mixed_duodenum_pbmc,180
+kidney,162
+liver_tumor,152
+"Ascending, transverse, descending, sigmoidal colon; rectum",149
+balf,149
+lymph node,77
+lesser gastric curvature lymph node,65
+Sigmoidal colon,21
+adjacent_normal_tissue,12
+adjacent_normal_liver,2
+lymph_node_metastasis,1

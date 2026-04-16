@@ -1,0 +1,42 @@
+tissue,gdt_cells,gdt_meeting_any_three,fraction_meeting_any_three_within_gdt
+cord blood,10397,10397,1.0
+peripheral blood,4772,4582,0.960184409052808
+blood,978,189,0.19325153374233128
+tumor,351,36,0.10256410256410256
+thymus,2127,31,0.01457451810061119
+duodenum,95,29,0.30526315789473685
+csf,307,28,0.09120521172638436
+heart,115,23,0.2
+bone marrow,36,16,0.4444444444444444
+spleen,89,15,0.16853932584269662
+pancreas,58,15,0.25862068965517243
+jejunum,40,13,0.325
+Tumor,65,7,0.1076923076923077
+esophagus,28,7,0.25
+bone_marrow,20,7,0.35
+Normal,30,6,0.2
+lung,22,6,0.2727272727272727
+stomach,29,5,0.1724137931034483
+skin,11,5,0.45454545454545453
+sigmoid colon,20,3,0.15
+kidney,15,3,0.2
+rectum,15,3,0.2
+liver,14,3,0.21428571428571427
+muscle,5,3,0.6
+bladder,3,3,1.0
+"Descending, sigmoidal colon; rectum",17,2,0.11764705882352941
+unknown,11,2,0.18181818181818182
+balf,4,2,0.5
+mixed_duodenum_pbmc,4,2,0.5
+lymph node,2,2,1.0
+liver_tumor,6,1,0.16666666666666666
+adjacent_normal_tissue,2,1,0.5
+ileum,1,1,1.0
+"Ascending, transverse, descending, sigmoidal colon; rectum",4,0,0.0
+"Sigmoidal colon, rectum",3,0,0.0
+mesenteric lymph node,3,0,0.0
+tracheal_aspirate,2,0,0.0
+"Ascending, Descending, sigmoidal colon; rectum",1,0,0.0
+Sigmoidal colon,1,0,0.0
+ascending colon,1,0,0.0
+lesser gastric curvature lymph node,1,0,0.0

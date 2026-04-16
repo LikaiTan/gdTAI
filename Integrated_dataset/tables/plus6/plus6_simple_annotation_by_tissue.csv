@@ -1,0 +1,263 @@
+tissue_corrected,simple_annotation_plus6,n_cells
+,CD8_T,20313
+,CD4_T,14908
+,Treg,1514
+,NK_cell,46
+,gdT_cell,11
+,other,8
+"Ascending, Descending, sigmoidal colon; rectum",CD4_T,2506
+"Ascending, Descending, sigmoidal colon; rectum",CD8_T,2006
+"Ascending, Descending, sigmoidal colon; rectum",other,269
+"Ascending, Descending, sigmoidal colon; rectum",Treg,169
+"Ascending, Descending, sigmoidal colon; rectum",NK_cell,26
+"Ascending, Descending, sigmoidal colon; rectum",gdT_cell,1
+"Ascending, transverse, descending, sigmoidal colon; rectum",CD8_T,5287
+"Ascending, transverse, descending, sigmoidal colon; rectum",CD4_T,2546
+"Ascending, transverse, descending, sigmoidal colon; rectum",Treg,672
+"Ascending, transverse, descending, sigmoidal colon; rectum",other,271
+"Ascending, transverse, descending, sigmoidal colon; rectum",NK_cell,36
+"Ascending, transverse, descending, sigmoidal colon; rectum",gdT_cell,4
+"Descending, sigmoidal colon; rectum",CD4_T,38021
+"Descending, sigmoidal colon; rectum",CD8_T,34975
+"Descending, sigmoidal colon; rectum",Treg,4199
+"Descending, sigmoidal colon; rectum",other,2648
+"Descending, sigmoidal colon; rectum",NK_cell,640
+"Descending, sigmoidal colon; rectum",gdT_cell,17
+Normal,CD8_T,165255
+Normal,CD4_T,57668
+Normal,Treg,3471
+Normal,NK_cell,858
+Normal,other,38
+Normal,gdT_cell,30
+Sigmoidal colon,CD4_T,1822
+Sigmoidal colon,CD8_T,946
+Sigmoidal colon,Treg,301
+Sigmoidal colon,other,6
+Sigmoidal colon,NK_cell,2
+Sigmoidal colon,gdT_cell,1
+"Sigmoidal colon, rectum",CD8_T,6179
+"Sigmoidal colon, rectum",CD4_T,2880
+"Sigmoidal colon, rectum",Treg,379
+"Sigmoidal colon, rectum",other,161
+"Sigmoidal colon, rectum",NK_cell,95
+"Sigmoidal colon, rectum",gdT_cell,3
+Tumor,CD8_T,140592
+Tumor,CD4_T,71139
+Tumor,Treg,23825
+Tumor,NK_cell,1097
+Tumor,other,174
+Tumor,gdT_cell,65
+adjacent_normal_liver,CD8_T,5509
+adjacent_normal_liver,CD4_T,763
+adjacent_normal_liver,Treg,9
+adjacent_normal_liver,NK_cell,6
+adjacent_normal_liver,other,1
+adjacent_normal_tissue,CD4_T,1684
+adjacent_normal_tissue,CD8_T,779
+adjacent_normal_tissue,NK_cell,332
+adjacent_normal_tissue,Treg,184
+adjacent_normal_tissue,other,27
+adjacent_normal_tissue,gdT_cell,2
+ascending colon,CD4_T,11172
+ascending colon,CD8_T,7289
+ascending colon,Treg,925
+ascending colon,other,60
+ascending colon,NK_cell,42
+ascending colon,gdT_cell,1
+balf,NK_cell,11052
+balf,CD8_T,8098
+balf,CD4_T,1010
+balf,other,651
+balf,Treg,224
+balf,gdT_cell,4
+bladder,CD4_T,10269
+bladder,CD8_T,9148
+bladder,Treg,745
+bladder,NK_cell,49
+bladder,gdT_cell,3
+blood,CD4_T,976237
+blood,CD8_T,649228
+blood,NK_cell,189941
+blood,Treg,103004
+blood,other,5087
+blood,gdT_cell,978
+bone marrow,CD8_T,6804
+bone marrow,CD4_T,6559
+bone marrow,Treg,266
+bone marrow,NK_cell,75
+bone marrow,gdT_cell,36
+bone marrow,other,1
+bone_marrow,CD4_T,19515
+bone_marrow,CD8_T,16185
+bone_marrow,NK_cell,7256
+bone_marrow,Treg,796
+bone_marrow,other,333
+bone_marrow,gdT_cell,20
+cord blood,gdT_cell,10397
+cord blood,CD4_T,1649
+cord blood,CD8_T,417
+cord blood,Treg,20
+cord blood,NK_cell,13
+cord blood,other,2
+csf,CD4_T,80686
+csf,CD8_T,40484
+csf,NK_cell,3539
+csf,Treg,3211
+csf,gdT_cell,307
+csf,other,113
+duodenum,CD4_T,53216
+duodenum,CD8_T,45497
+duodenum,Treg,3177
+duodenum,NK_cell,175
+duodenum,gdT_cell,95
+duodenum,other,47
+esophagus,CD4_T,35236
+esophagus,CD8_T,12789
+esophagus,Treg,4769
+esophagus,NK_cell,187
+esophagus,gdT_cell,28
+esophagus,other,3
+heart,CD8_T,99103
+heart,CD4_T,66369
+heart,Treg,3286
+heart,NK_cell,970
+heart,gdT_cell,115
+heart,other,8
+ileum,CD4_T,12736
+ileum,CD8_T,9264
+ileum,Treg,285
+ileum,NK_cell,39
+ileum,other,30
+ileum,gdT_cell,1
+jejunum,CD4_T,42254
+jejunum,CD8_T,28219
+jejunum,Treg,2049
+jejunum,NK_cell,160
+jejunum,gdT_cell,40
+jejunum,other,11
+kidney,CD4_T,5924
+kidney,CD8_T,1031
+kidney,Treg,517
+kidney,NK_cell,23
+kidney,gdT_cell,15
+kidney,other,4
+lesser gastric curvature lymph node,CD4_T,11525
+lesser gastric curvature lymph node,CD8_T,1430
+lesser gastric curvature lymph node,Treg,1131
+lesser gastric curvature lymph node,NK_cell,4
+lesser gastric curvature lymph node,gdT_cell,1
+lesser gastric curvature lymph node,other,1
+liver,CD4_T,15496
+liver,CD8_T,7887
+liver,Treg,268
+liver,NK_cell,39
+liver,gdT_cell,14
+liver,other,2
+liver_tumor,CD4_T,48800
+liver_tumor,CD8_T,42624
+liver_tumor,Treg,3416
+liver_tumor,NK_cell,817
+liver_tumor,other,39
+liver_tumor,gdT_cell,6
+lung,CD4_T,15575
+lung,CD8_T,15329
+lung,Treg,1643
+lung,NK_cell,119
+lung,gdT_cell,22
+lung,other,3
+lymph node,CD8_T,3349
+lymph node,CD4_T,1388
+lymph node,NK_cell,31
+lymph node,Treg,21
+lymph node,gdT_cell,2
+lymph_node_metastasis,NK_cell,16735
+lymph_node_metastasis,CD4_T,10
+lymph_node_metastasis,other,5
+lymph_node_metastasis,CD8_T,3
+mesenteric lymph node,CD4_T,15165
+mesenteric lymph node,CD8_T,4148
+mesenteric lymph node,Treg,1396
+mesenteric lymph node,NK_cell,20
+mesenteric lymph node,gdT_cell,3
+mesenteric lymph node,other,1
+mixed_duodenum_pbmc,CD8_T,2844
+mixed_duodenum_pbmc,CD4_T,261
+mixed_duodenum_pbmc,Treg,6
+mixed_duodenum_pbmc,NK_cell,5
+mixed_duodenum_pbmc,gdT_cell,4
+muscle,CD4_T,10872
+muscle,CD8_T,6262
+muscle,Treg,558
+muscle,NK_cell,39
+muscle,gdT_cell,5
+muscle,other,1
+pancreas,CD4_T,55064
+pancreas,CD8_T,8950
+pancreas,Treg,3246
+pancreas,NK_cell,163
+pancreas,gdT_cell,58
+pancreas,other,3
+peripheral blood,CD4_T,59111
+peripheral blood,CD8_T,17585
+peripheral blood,gdT_cell,4772
+peripheral blood,Treg,2058
+peripheral blood,NK_cell,141
+peripheral blood,other,2
+rectum,CD4_T,56531
+rectum,CD8_T,38319
+rectum,Treg,17432
+rectum,other,7132
+rectum,NK_cell,4975
+rectum,gdT_cell,15
+sigmoid colon,CD4_T,32542
+sigmoid colon,CD8_T,12529
+sigmoid colon,Treg,3323
+sigmoid colon,NK_cell,115
+sigmoid colon,other,28
+sigmoid colon,gdT_cell,20
+skin,CD4_T,11752
+skin,CD8_T,5763
+skin,Treg,1415
+skin,NK_cell,63
+skin,gdT_cell,11
+skin,other,3
+spleen,CD4_T,25080
+spleen,CD8_T,10150
+spleen,Treg,1930
+spleen,gdT_cell,89
+spleen,NK_cell,69
+spleen,other,12
+stomach,CD4_T,63661
+stomach,CD8_T,24013
+stomach,Treg,6009
+stomach,NK_cell,161
+stomach,gdT_cell,29
+stomach,other,12
+thymus,CD4_T,7356
+thymus,gdT_cell,2127
+thymus,CD8_T,1511
+thymus,Treg,1263
+thymus,NK_cell,19
+thymus,other,2
+trachea,CD4_T,10694
+trachea,CD8_T,9594
+trachea,Treg,608
+trachea,NK_cell,37
+trachea,other,3
+tracheal_aspirate,NK_cell,1358
+tracheal_aspirate,CD4_T,669
+tracheal_aspirate,CD8_T,660
+tracheal_aspirate,Treg,69
+tracheal_aspirate,other,31
+tracheal_aspirate,gdT_cell,2
+transverse colon,CD4_T,9599
+transverse colon,CD8_T,4896
+transverse colon,Treg,491
+transverse colon,NK_cell,86
+transverse colon,other,56
+tumor,CD8_T,527979
+tumor,CD4_T,483695
+tumor,Treg,115260
+tumor,NK_cell,15075
+tumor,other,2803
+tumor,gdT_cell,351

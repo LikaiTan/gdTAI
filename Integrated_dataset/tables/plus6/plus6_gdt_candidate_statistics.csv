@@ -1,0 +1,10 @@
+metric,value
+total_cells,5128904
+sorted_gdT_true,48879
+paired_TRG_TRD_not_doublet,33987
+TRD_minus_TRAB_gt_0p4_no_productive_TRA_TRB_not_NK,182796
+doublet_proxy_paired_ab_and_paired_gd,5683
+union_any_of_three_criteria,206524
+gdT_cell_annotation_total,19705
+gdT_cell_annotation_with_paired_TRG_TRD,8067
+gdT_cell_annotation_meeting_any_three,15448
