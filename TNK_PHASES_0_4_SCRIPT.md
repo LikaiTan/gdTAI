@@ -433,6 +433,32 @@ Key outputs:
 - `Integrated_dataset/TNK_candidates_supp.h5ad`
 - supplementary tables, logs, and PNG QC figures
 
+## Post-Phase-4 gdT classifier model usage
+
+Objective:
+
+- provide a reproducible protocol and runnable examples for applying the
+  selected gdT classifier to an external local H5AD
+- keep inference read-only with respect to the input H5AD
+- document the model feature scale, saved threshold, death-penalty rule, output
+  tables, and false-positive audit workflow
+
+Phase or task:
+
+- Selected gdT classifier use protocol and example code
+
+Exact scripts:
+
+- `predict_with_selected_gdt_model.py`
+- `Integrated_dataset/models/gdT_prediction_classifier/gse144469_holdout_tcrgene/examples/apply_model_to_h5ad.sh`
+- `Integrated_dataset/models/gdT_prediction_classifier/gse144469_holdout_tcrgene/examples/minimal_python_prediction.py`
+- `Integrated_dataset/models/gdT_prediction_classifier/gse144469_holdout_tcrgene/examples/audit_false_positive_predictions.py`
+
+Core outputs:
+
+- `Integrated_dataset/models/gdT_prediction_classifier/gse144469_holdout_tcrgene/USAGE_PROTOCOL.md`
+- `Integrated_dataset/models/gdT_prediction_classifier/gse144469_holdout_tcrgene/examples/`
+
 ## QC-gate note
 
 Default rule:
