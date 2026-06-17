@@ -11,6 +11,7 @@ gdTAI v2.0 is the NK-optimized gdT-cell prediction package for local H5AD testin
 - Manifest: `Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v2.0/model_manifest.json`
 - Mode metrics: `Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v2.0/mode_metrics.csv`
 - Feature genes: `Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v2.0/feature_genes.csv`
+- Methodology: `Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v2.0/METHODOLOGY.md`
 
 Model SHA256:
 
