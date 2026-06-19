@@ -1,0 +1,38 @@
+{
+  "model_name": "v3_round14_v2_score_trdc_gate_fixed_0p936",
+  "model_file": "gdTAI_v3_model.pkl",
+  "version": "gdTAI_v3.0",
+  "threshold": 0.936,
+  "accepted_for_promotion": true,
+  "requires_counts_layer_for_external_h5ad": true,
+  "normalization": "log1p(counts per 10000)",
+  "n_gene_features": 210,
+  "n_engineered_features": 16,
+  "n_total_features": 226,
+  "selected_for": {
+    "full_atlas_primary_gold_recall_min": 0.8,
+    "estimated_fp_fraction_max": 0.05
+  },
+  "full_atlas": {
+    "total_cells": 5128904,
+    "predicted_putative_gdT": 251356,
+    "primary_gold_recall": 0.8055940182774854,
+    "primary_gold_precision": 0.9752131916944288,
+    "estimated_total_abT_fp": 10211.867684114588,
+    "estimated_fp_fraction_of_predictions": 0.0406271092956388
+  },
+  "external_primary": {
+    "n_cells": 38995,
+    "predicted_positive": 856,
+    "precision": 0.9509345794392524,
+    "recall": 0.8586497890295358,
+    "f1": 0.902439024390244,
+    "fp_fraction_of_predictions": 0.0490654205607476
+  },
+  "caveat": "Candidate met the user recall/estimated-FP target but was not promoted under older strict promotion gates because external NK FP was higher than v2 high-purity.",
+  "promotion_decision": "user_approved",
+  "automated_gate_result_before_user_override": false,
+  "promotion_note": "Promoted by user decision after review. The prior automated gate failed only because external NK false positives were higher than v2 high-purity; this caveat remains documented.",
+  "promotion_date_local": "2026-06-20 Asia/Hong_Kong",
+  "promotion_date_utc": "2026-06-19"
+}

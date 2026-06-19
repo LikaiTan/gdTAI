@@ -1,0 +1,6 @@
+2026-06-20 00:39:46,174 | INFO | Removed 12 previous gdT atlas output paths
+2026-06-20 00:40:04,780 | INFO | Reading final subset into memory: 257,008 cells
+2026-06-20 00:43:18,555 | INFO | Writing final H5AD: /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/gdT_atlas/predicted_gdt_cell_atlas.h5ad
+2026-06-20 00:44:30,703 | INFO | Final predicted gdT atlas cells: 257,008
+2026-06-20 00:44:30,703 | INFO | Wrote /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/gdT_atlas/predicted_gdt_cell_atlas.h5ad
+2026-06-20 00:44:30,703 | INFO | Wrote /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/gdT_atlas/predicted_gdt_cell_atlas.md

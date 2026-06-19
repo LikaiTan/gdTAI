@@ -1,0 +1,6 @@
+strategy,recall_group,group_cells,true_positive_cells,recall
+v3_round14_v2_score_trdc_gate_fixed_0p936,all_real_gdt,948,814,0.8586497890295358
+v3_round14_v2_score_trdc_gate_fixed_0p936,TRDV_positive_gdT,847,790,0.9327036599763872
+v3_round14_v2_score_trdc_gate_fixed_0p936,TRDC_plus_TRDV_minus_gdT,48,22,0.4583333333333333
+v3_round14_v2_score_trdc_gate_fixed_0p936,cytotoxic_NK_marker_high_gdT,285,262,0.9192982456140352
+v3_round14_v2_score_trdc_gate_fixed_0p936,Vd2_gdT_cells,638,600,0.9404388714733544

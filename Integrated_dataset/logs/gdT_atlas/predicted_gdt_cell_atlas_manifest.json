@@ -1,0 +1,148 @@
+{
+  "output_h5ad": "Integrated_dataset/gdT_atlas/predicted_gdt_cell_atlas.h5ad",
+  "input_h5ad": "high_speed_temp/Integrated_dataset/integrated_plus6.h5ad",
+  "prediction_table": "Integrated_dataset/tables/gdT_prediction/gdtai_v3_trdc_nk_guard/full_atlas_selected_predicted_cells.csv.gz",
+  "selected_model": "v3_round14_v2_score_trdc_gate_fixed_0p936",
+  "selected_threshold": 0.936,
+  "metrics": {
+    "n_input_cells": 5128904,
+    "n_predicted_positive_raw": 251356,
+    "n_known_or_likely_fp_removed": 5580,
+    "n_fp_primary_abt_gold_removed": 1183,
+    "n_fp_paired_TCRAB_no_gdT_removed": 5580,
+    "n_gold_gdT_fn_added": 11232,
+    "n_final_atlas_cells": 257008,
+    "n_final_predicted_retained": 245776,
+    "n_final_gold_fn_added": 11232,
+    "n_final_primary_gdt_gold": 57776,
+    "n_final_gdt_silver": 2031,
+    "n_final_unlabeled_or_ambiguous": 197201,
+    "n_final_primary_abt_gold": 0
+  },
+  "removed_previous_outputs": [
+    {
+      "path": "Integrated_dataset/gdT_atlas",
+      "kind": "directory",
+      "size_bytes": 8166175300
+    },
+    {
+      "path": "Integrated_dataset/tables/gdT_atlas",
+      "kind": "directory",
+      "size_bytes": 2780289
+    },
+    {
+      "path": "Integrated_dataset/tables/gdT_atlas_curated_phenotypes",
+      "kind": "directory",
+      "size_bytes": 39699652
+    },
+    {
+      "path": "Integrated_dataset/tables/gdT_atlas_rigorous",
+      "kind": "directory",
+      "size_bytes": 42611093
+    },
+    {
+      "path": "Integrated_dataset/figures/gdT_atlas",
+      "kind": "directory",
+      "size_bytes": 2442713
+    },
+    {
+      "path": "Integrated_dataset/figures/gdT_atlas_curated_phenotypes",
+      "kind": "directory",
+      "size_bytes": 13097894
+    },
+    {
+      "path": "Integrated_dataset/figures/gdT_atlas_rigorous",
+      "kind": "directory",
+      "size_bytes": 25742999
+    },
+    {
+      "path": "Integrated_dataset/logs/gdT_atlas",
+      "kind": "directory",
+      "size_bytes": 3772
+    },
+    {
+      "path": "Integrated_dataset/logs/gdT_atlas_curated_phenotypes",
+      "kind": "directory",
+      "size_bytes": 5957
+    },
+    {
+      "path": "Integrated_dataset/logs/gdT_atlas_rigorous",
+      "kind": "directory",
+      "size_bytes": 3600
+    },
+    {
+      "path": "Integrated_dataset/models/gdT_atlas_rigorous",
+      "kind": "directory",
+      "size_bytes": 10794525
+    },
+    {
+      "path": "gdT_atlas",
+      "kind": "directory",
+      "size_bytes": 38702299
+    }
+  ],
+  "promoted_model": {
+    "promoted_dir": "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0",
+    "copied": [
+      "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/gdTAI_v3_model.pkl",
+      "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/README.md",
+      "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/METHODOLOGY.md",
+      "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/USAGE_PROTOCOL.md",
+      "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/feature_genes.csv",
+      "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/mode_metrics.csv",
+      "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/candidate_target_selection.csv",
+      "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/external_false_positive_groups.csv",
+      "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/external_recall_groups.csv",
+      "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/examples",
+      "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/model_manifest.json",
+      "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/PROMOTION_DECISION.md"
+    ],
+    "manifest": {
+      "model_name": "v3_round14_v2_score_trdc_gate_fixed_0p936",
+      "model_file": "gdTAI_v3_model.pkl",
+      "version": "gdTAI_v3.0",
+      "threshold": 0.936,
+      "accepted_for_promotion": true,
+      "requires_counts_layer_for_external_h5ad": true,
+      "normalization": "log1p(counts per 10000)",
+      "n_gene_features": 210,
+      "n_engineered_features": 16,
+      "n_total_features": 226,
+      "selected_for": {
+        "full_atlas_primary_gold_recall_min": 0.8,
+        "estimated_fp_fraction_max": 0.05
+      },
+      "full_atlas": {
+        "total_cells": 5128904,
+        "predicted_putative_gdT": 251356,
+        "primary_gold_recall": 0.8055940182774854,
+        "primary_gold_precision": 0.9752131916944288,
+        "estimated_total_abT_fp": 10211.867684114588,
+        "estimated_fp_fraction_of_predictions": 0.0406271092956388
+      },
+      "external_primary": {
+        "n_cells": 38995,
+        "predicted_positive": 856,
+        "precision": 0.9509345794392524,
+        "recall": 0.8586497890295358,
+        "f1": 0.902439024390244,
+        "fp_fraction_of_predictions": 0.0490654205607476
+      },
+      "caveat": "Candidate met the user recall/estimated-FP target but was not promoted under older strict promotion gates because external NK FP was higher than v2 high-purity.",
+      "promotion_decision": "user_approved",
+      "automated_gate_result_before_user_override": false,
+      "promotion_note": "Promoted by user decision after review. The prior automated gate failed only because external NK false positives were higher than v2 high-purity; this caveat remains documented.",
+      "promotion_date_local": "2026-06-20 Asia/Hong_Kong",
+      "promotion_date_utc": "2026-06-19"
+    }
+  },
+  "tables": {
+    "summary": "Integrated_dataset/tables/gdT_atlas/predicted_gdt_cell_atlas_summary.csv",
+    "metadata": "Integrated_dataset/tables/gdT_atlas/predicted_gdt_cell_atlas_metadata.csv.gz",
+    "removed_fp": "Integrated_dataset/tables/gdT_atlas/predicted_gdt_cell_atlas_removed_fp_cells.csv.gz",
+    "gold_fn_added": "Integrated_dataset/tables/gdT_atlas/predicted_gdt_cell_atlas_gold_fn_added_cells.csv.gz",
+    "by_source": "Integrated_dataset/tables/gdT_atlas/predicted_gdt_cell_atlas_by_source.csv",
+    "by_tissue": "Integrated_dataset/tables/gdT_atlas/predicted_gdt_cell_atlas_by_tissue.csv"
+  },
+  "created_utc": "2026-06-19T16:44:30.701243+00:00"
+}

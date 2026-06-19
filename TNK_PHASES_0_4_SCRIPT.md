@@ -463,3 +463,30 @@ Core outputs:
 - `gdT_prediction/gdtai_v3_trdc_nk_guard_report.html`
 - `gdT_prediction/gdtai_v3_trdc_nk_guard_report.pdf`
 - compact decision PNG figures under `gdT_prediction/assets/gdtai_v3_trdc_nk_guard/`
+
+## gdTAI v3.0 promotion and predicted gdT atlas handoff
+
+Objective:
+
+- promote the user-approved gdTAI v3.0 model package
+- remove previous gdT atlas H5AD/report output trees
+- create a handoff H5AD containing promoted gdTAI v3 predicted gdT cells,
+  primary-gold gdT FN add-back cells, and no known/likely paired-TCRAB FP cells
+
+Phase or task:
+
+- Post-Phase-4 gdTAI v3.0 promotion and predicted gdT-cell atlas handoff
+
+Exact `.py` script:
+
+- `promote_gdtai_v3_and_build_predicted_gdt_atlas.py`
+
+Core outputs:
+
+- `Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/gdTAI_v3_model.pkl`
+- `Integrated_dataset/gdT_atlas/predicted_gdt_cell_atlas.h5ad`
+- `Integrated_dataset/gdT_atlas/predicted_gdt_cell_atlas.md`
+- `Integrated_dataset/tables/gdT_atlas/predicted_gdt_cell_atlas_summary.csv`
+- `Integrated_dataset/tables/gdT_atlas/predicted_gdt_cell_atlas_metadata.csv.gz`
+- `Integrated_dataset/tables/gdT_atlas/predicted_gdt_cell_atlas_removed_fp_cells.csv.gz`
+- `Integrated_dataset/tables/gdT_atlas/predicted_gdt_cell_atlas_gold_fn_added_cells.csv.gz`

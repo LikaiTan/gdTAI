@@ -1,0 +1,60 @@
+tissue,gdtai_v3_atlas_inclusion_reason,n_cells
+"Ascending, Descending, sigmoidal colon; rectum",gdtai_v3_predicted_retained,681
+"Ascending, Descending, sigmoidal colon; rectum",gold_gdT_FN_added,48
+"Ascending, transverse, descending, sigmoidal colon; rectum",gdtai_v3_predicted_retained,211
+"Ascending, transverse, descending, sigmoidal colon; rectum",gold_gdT_FN_added,25
+"Descending, sigmoidal colon; rectum",gdtai_v3_predicted_retained,4517
+"Descending, sigmoidal colon; rectum",gold_gdT_FN_added,415
+Normal,gdtai_v3_predicted_retained,12856
+Sigmoidal colon,gdtai_v3_predicted_retained,16
+"Sigmoidal colon, rectum",gdtai_v3_predicted_retained,611
+"Sigmoidal colon, rectum",gold_gdT_FN_added,47
+Tumor,gdtai_v3_predicted_retained,5947
+adjacent_normal_liver,gdtai_v3_predicted_retained,96
+adjacent_normal_tissue,gdtai_v3_predicted_retained,83
+ascending colon,gdtai_v3_predicted_retained,1678
+balf,gdtai_v3_predicted_retained,330
+bladder,gdtai_v3_predicted_retained,1711
+blood,gdtai_v3_predicted_retained,59227
+bone marrow,gdtai_v3_predicted_retained,2160
+bone_marrow,gdtai_v3_predicted_retained,1764
+cord blood,gdtai_v3_predicted_retained,10661
+cord blood,gold_gdT_FN_added,1837
+csf,gdtai_v3_predicted_retained,1668
+duodenum,gdtai_v3_predicted_retained,15619
+duodenum,gold_gdT_FN_added,7
+esophagus,gdtai_v3_predicted_retained,2883
+heart,gdtai_v3_predicted_retained,9345
+ileum,gdtai_v3_predicted_retained,1819
+jejunum,gdtai_v3_predicted_retained,13200
+jejunum,gold_gdT_FN_added,130
+kidney,gdtai_v3_predicted_retained,434
+lesser gastric curvature lymph node,gdtai_v3_predicted_retained,229
+liver,gdtai_v3_predicted_retained,2774
+liver,gold_gdT_FN_added,21
+liver_tumor,gdtai_v3_predicted_retained,1806
+lung,gdtai_v3_predicted_retained,7867
+lung,gold_gdT_FN_added,5005
+lymph node,gdtai_v3_predicted_retained,1702
+lymph node,gold_gdT_FN_added,3089
+lymph_node_metastasis,gdtai_v3_predicted_retained,20
+mesenteric lymph node,gdtai_v3_predicted_retained,936
+mixed_duodenum_pbmc,gdtai_v3_predicted_retained,320
+muscle,gdtai_v3_predicted_retained,2131
+muscle,gold_gdT_FN_added,8
+pancreas,gdtai_v3_predicted_retained,1872
+pancreas,gold_gdT_FN_added,5
+peripheral blood,gdtai_v3_predicted_retained,23025
+peripheral blood,gold_gdT_FN_added,584
+rectum,gdtai_v3_predicted_retained,3890
+sigmoid colon,gdtai_v3_predicted_retained,3936
+skin,gdtai_v3_predicted_retained,1058
+spleen,gdtai_v3_predicted_retained,3235
+stomach,gdtai_v3_predicted_retained,5317
+stomach,gold_gdT_FN_added,11
+thymus,gdtai_v3_predicted_retained,555
+trachea,gdtai_v3_predicted_retained,622
+tracheal_aspirate,gdtai_v3_predicted_retained,15
+transverse colon,gdtai_v3_predicted_retained,1135
+tumor,gdtai_v3_predicted_retained,33189
+unknown,gdtai_v3_predicted_retained,2625
