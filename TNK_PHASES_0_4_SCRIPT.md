@@ -441,3 +441,25 @@ Default rule:
 
 Do not define active exceptions here.
 Active exceptions belong only in `TNK_PIPELINE_RUNBOOK.md`.
+
+## gdTAI v3 decision-report refinement
+
+Objective:
+
+- replace the dense gdTAI v3 candidate report with a reader-facing decision report
+  that emphasizes conclusions, compact figures, and promotion rationale
+
+Phase or task:
+
+- Post-Phase-4 gdTAI v3 report refinement
+
+Exact `.py` script:
+
+- `render_gdtai_v3_clear_report.py`
+
+Core outputs:
+
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v3_trdc_nk_guard/gdtai_v3_trdc_nk_guard_report.md`
+- `gdT_prediction/gdtai_v3_trdc_nk_guard_report.html`
+- `gdT_prediction/gdtai_v3_trdc_nk_guard_report.pdf`
+- compact decision PNG figures under `gdT_prediction/assets/gdtai_v3_trdc_nk_guard/`

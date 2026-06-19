@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head><meta charset='utf-8'><title>gdTAI v3 TRDC/NK Guard Decision Report</title><style>
+    @page{size:A4;margin:12mm}
+    body{font-family:Arial,Helvetica,sans-serif;margin:0;color:#18212b;background:#f5f7fa;line-height:1.48}
+    main{max-width:1180px;margin:0 auto;padding:22px}
+    section{background:white;border:1px solid #dce3eb;border-radius:8px;margin:14px 0;padding:18px;break-inside:avoid}
+    h1{font-size:28px;margin:0 0 8px}h2{font-size:20px;margin:0 0 10px}h3{font-size:15px;margin:16px 0 8px}
+    p{margin:8px 0}.muted{color:#5f6b7a}.bad-text{color:#b91c1c;font-weight:700}.good-text{color:#047857;font-weight:700}
+    .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+    .card{border:1px solid #dce3eb;border-left-width:5px;border-radius:7px;padding:12px;background:#fbfdff}
+    .card.good{border-left-color:#059669}.card.bad{border-left-color:#dc2626}.card.neutral{border-left-color:#2563eb}
+    .card-title{font-size:12px;text-transform:uppercase;color:#5f6b7a;letter-spacing:.02em}.card-value{font-size:24px;font-weight:700;margin:4px 0}.card-note{font-size:13px;color:#4b5563}
+    .conclusion{border-left:5px solid #2563eb;background:#eff6ff;padding:10px 12px;border-radius:6px;margin-top:12px}
+    .warning{border-left-color:#dc2626;background:#fef2f2}
+    .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0}
+    .flow div{border:1px solid #dce3eb;border-radius:7px;padding:10px;background:#f8fafc;text-align:center;font-size:13px}
+    table{border-collapse:collapse;width:100%;font-size:13px;margin-top:8px}th,td{border:1px solid #dce3eb;padding:7px;text-align:left;vertical-align:top}th{background:#eef2f7}
+    .figures{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    figure{margin:0;border:1px solid #dce3eb;border-radius:7px;padding:8px;background:#fbfdff;break-inside:avoid}
+    img{width:100%;height:auto}figcaption{font-size:12px;color:#5f6b7a;margin-top:4px}
+    code{background:#eef2f7;padding:1px 4px;border-radius:4px}
+    @media(max-width:850px){main{padding:10px}.cards,.figures,.flow{grid-template-columns:1fr}}
+    </style></head>
+<body><main>
+<section>
+  <h1>gdTAI v3 TRDC/NK Guard Decision Report</h1>
+  <p class='bad-text'>Decision: do not promote this candidate as the default gdTAI v3.0 model yet.</p>
+  <p>The selected candidate meets the requested atlas-level recall and estimated false-positive target, but it fails the explicit NK false-positive promotion gate on the independent external test.</p>
+  <div class='cards'><div class='card bad'><div class='card-title'>Decision</div><div class='card-value'>Do not promote</div><div class='card-note'>The v3 candidate remains packaged but should not replace v2 high-purity yet.</div></div><div class='card neutral'><div class='card-title'>External F1</div><div class='card-value'>0.902</div><div class='card-note'>v2 high-purity: 0.902</div></div><div class='card neutral'><div class='card-title'>External recall</div><div class='card-value'>85.9%</div><div class='card-note'>above 0.8 target, slightly below v2 high-purity</div></div><div class='card good'><div class='card-title'>Full-atlas recall</div><div class='card-value'>80.56%</div><div class='card-note'>primary-gold labels only</div></div><div class='card good'><div class='card-title'>Estimated atlas FP/pred</div><div class='card-value'>4.06%</div><div class='card-note'>below 5% target</div></div><div class='card bad'><div class='card-title'>External NK FP</div><div class='card-value'>9 vs 3</div><div class='card-note'>failed promotion gate</div></div></div>
+</section>
+
+<section>
+  <h2>1. What changed in this iteration</h2>
+  <div class='flow'>
+    <div>GSE144469 moved into train/tune</div>
+    <div>Other validation cohorts retained</div>
+    <div>NK hard negatives restricted to TRDC+/TRDV-</div>
+    <div>Independent external H5AD held out</div>
+    <div>Full 5.13M-cell atlas applied</div>
+  </div>
+  <p><code>GSE144469</code> contributed 63,764 train/tune cells (4,003 gdT positives and 59,761 abT negatives). The non-GSE144469 validation block remained held out with 186,195 cells.</p>
+  <p>Hard NK negatives follow the requested rule: 1,453 NK <code>TRDC+TRDV-</code> cells from 23 datasets were retained (888 train, 565 tune). NK cells outside this expression rule were excluded from NK hard negatives (31,117 cells). NK+TCRAB-overlap cells were not used as explicit NK hard negatives; 4 expression-passing weak-TRDC overlap cells were also removed.</p>
+  <div class='conclusion'>Step conclusion: the split design now matches the requested policy, and the external H5AD remains an independent final test.</div>
+</section>
+
+<section>
+  <h2>2. What the algorithm is</h2>
+  <p>The selected candidate is <code>v3_round14_v2_score_trdc_gate_fixed_0p936</code> at threshold <code>0.936</code>. It is <b>not XGBoost</b>. It is a conditional guard around the gdTAI v2 transcriptome score, with engineered features for TCR gene evidence, CD3 strength, NK-marker strength, and TRDC-only risk.</p>
+  <p>External inference requires raw counts from <code>layers["counts"]</code> and computes <code>log1p(counts per 10,000)</code>. It does not require TCR-seq metadata at inference time.</p>
+  <div class='conclusion'>Step conclusion: this model is a conservative v2-score-plus-guard candidate, designed to reduce specific false-positive modes without making NK markers automatic exclusion genes.</div>
+</section>
+
+<section>
+  <h2>3. How the candidate was selected</h2>
+  <p>The initial internal winner was <code>v3_round03_hist_gradient_target_recall80_fp05</code>, but it reached only 72.70% full-atlas primary-gold recall. The final selected round reached 80.56% recall and 4.06% estimated FP/prediction, passing the 80.5% recall-with-margin and 5.0% estimated-FP targets.</p>
+  <p>External test results were not used for model selection. The best external-F1 v3 row was <code>v3_round08_hist_gradient_fixed_0p64</code> with F1 0.9087, but that was evaluated only after the selection decision.</p>
+  <div class='figures'><figure><img src='assets/gdtai_v3_trdc_nk_guard/decision_full_atlas_tradeoff.png'><figcaption>Full-atlas recall versus estimated FP fraction. The selected point passes the target box.</figcaption></figure><figure><img src='assets/gdtai_v3_trdc_nk_guard/decision_external_metric_bars.png'><figcaption>External primary metrics after selection.</figcaption></figure></div>
+  <div class='conclusion'>Step conclusion: round14 was selected because it is the first practical operating point satisfying the atlas-level target, not because it looked best on the external test.</div>
+</section>
+
+<section>
+  <h2>4. External test result</h2>
+  <table><thead><tr><th>Metric</th><th>v3 selected</th><th>v2 high-purity</th><th>Interpretation</th></tr></thead><tbody><tr><td>External precision</td><td>95.1%</td><td>93.9%</td><td>v3 higher</td></tr><tr><td>External recall</td><td>85.9%</td><td>86.7%</td><td>v3 slightly lower</td></tr><tr><td>External F1</td><td>0.9024</td><td>0.9018</td><td>near-tie</td></tr><tr><td>External FP / predictions</td><td>4.9%</td><td>6.1%</td><td>v3 lower</td></tr><tr><td>External NK FP</td><td>9</td><td>3</td><td>v3 worse</td></tr></tbody></table>
+  <p>v3 reduced total external false positives from 53 to 42. It also reduced paired-TCRAB false positives from 51 to 36 and TRDC+/TRDV- false positives from 33 to 14.</p>
+  <p class='bad-text'>The problem is NK specificity: NK false positives increased from 3 in v2 high-purity to 9 in selected v3.</p>
+  <div class='figures'><figure><img src='assets/gdtai_v3_trdc_nk_guard/decision_external_fp_groups.png'><figcaption>False-positive stress groups.</figcaption></figure><figure><img src='assets/gdtai_v3_trdc_nk_guard/decision_external_recall_groups.png'><figcaption>Recall stress groups.</figcaption></figure></div>
+  <div class='conclusion warning'>Step conclusion: v3 is competitive overall, but it does not convincingly fix the NK false-positive failure mode.</div>
+</section>
+
+<section>
+  <h2>5. Full-atlas application</h2>
+  <table><thead><tr><th>Full-atlas metric</th><th>v3 selected</th><th>v2 high-purity</th></tr></thead><tbody><tr><td>Predicted putative gdT</td><td>251,356</td><td>359,857</td></tr><tr><td>Primary-gold recall</td><td>80.56%</td><td>80.56%</td></tr><tr><td>Primary-gold precision</td><td>97.52%</td><td>97.61%</td></tr><tr><td>Estimated total abT FP</td><td>10,212</td><td>9,680</td></tr><tr><td>Estimated FP / predictions</td><td>4.06%</td><td>2.69%</td></tr><tr><td>Predicted paired TCRAB</td><td>5,580</td><td>5,184</td></tr><tr><td>Predicted TRDC+/TRDV-</td><td>17,120</td><td>130,846</td></tr></tbody></table>
+  <p>The full-atlas recall is measured on primary gold labels only: 46,544 / (46,544 + 11,232) = 80.56%. This is not a claim of absolute biological recall for every unlabeled gdT cell.</p>
+  <p>The estimated abT FP count uses observed paired-TCRAB false-positive behavior in TCR-seq sources and extrapolates it to datasets without TCR-seq. It is the best current estimate, but it is still an estimate.</p>
+  <div class='figures'><figure><img src='assets/gdtai_v3_trdc_nk_guard/decision_external_confusion_matrix.png'><figcaption>External confusion matrix for selected v3.</figcaption></figure><figure><img src='assets/gdtai_v3_trdc_nk_guard/decision_promotion_gates.png'><figcaption>Promotion gate checklist.</figcaption></figure></div>
+  <div class='conclusion'>Step conclusion: the candidate meets the full-atlas numeric target, but the direct external NK regression prevents promotion.</div>
+</section>
+
+<section>
+  <h2>6. Why this should not be promoted yet</h2>
+  <table><thead><tr><th>Gate</th><th>Status</th><th>Evidence</th></tr></thead><tbody><tr><td>NK false positives lower than v2 high-purity</td><td>FAIL</td><td>v3 9 vs v2 high-purity 3</td></tr><tr><td>TRDC+/TRDV- false-positive burden lower</td><td>PASS</td><td>v3 14 vs v2 high-purity 33</td></tr><tr><td>External F1 not worse by more than 0.01</td><td>PASS</td><td>v3 0.9024 vs v2 high-purity 0.9018</td></tr><tr><td>Cytotoxic gdT recall preserved</td><td>PASS</td><td>v3 91.9% vs v2 high-purity 93.0%</td></tr><tr><td>Paired-TCRAB false positives not higher</td><td>PASS</td><td>v3 36 vs v2 high-purity 51</td></tr></tbody></table>
+  <p>The promotion rule was intentionally stricter than overall F1. The previous concern was NK-like contamination, especially around weak TRD evidence. A release model should not improve some aggregate metrics while worsening the named failure mode.</p>
+  <p>Therefore the correct status is: <b>package and keep as a v3 candidate</b>, but do not write it as the promoted <code>gdTAI_v3.0</code> default model.</p>
+  <div class='conclusion warning'>Final conclusion: not promoted because external NK FP is worse than v2 high-purity, while external F1 is essentially unchanged and external recall is slightly lower than v2 high-purity.</div>
+</section>
+
+<section>
+  <h2>7. Detailed artifacts</h2>
+  <p>Large tables are intentionally not embedded in this report. They remain available for audit:</p>
+  <ul>
+    <li>Model package: <code>Integrated_dataset/models/gdT_prediction_classifier/gdtai_v3_trdc_nk_guard</code></li>
+    <li>Full result tables: <code>Integrated_dataset/tables/gdT_prediction/gdtai_v3_trdc_nk_guard</code></li>
+    <li>Figures: <code>gdT_prediction/assets/gdtai_v3_trdc_nk_guard</code></li>
+    <li>Markdown report: <code>Integrated_dataset/logs/gdT_prediction/gdtai_v3_trdc_nk_guard/gdtai_v3_trdc_nk_guard_report.md</code></li>
+    <li>PDF report: <code>gdT_prediction/gdtai_v3_trdc_nk_guard_report.pdf</code></li>
+  </ul>
+</section>
+</main></body></html>
