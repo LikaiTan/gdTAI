@@ -1,0 +1,19 @@
+{
+  "model_family": "gdTAI",
+  "version": "2.0",
+  "release_date": "2026-06-17",
+  "model_file": "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v2.0/gdTAI_v2_model.pkl",
+  "model_sha256": "c7f6e7d1d1c0c8de9e7abbaa7c5b70c1070b43c964ccdb94e414bc5278e13c3e",
+  "model_file_size_bytes": 16002,
+  "base_model_source_path": "Integrated_dataset/models/gdT_prediction_classifier/gse144469_holdout_tcrgene/selected_model.pkl",
+  "base_model_sha256_at_packaging": "b2561d00ed977ee40f837823049be979b744cca8aed993cbd4f511cf890b1fa6",
+  "n_feature_genes": 187,
+  "modes": [
+    "high_f1",
+    "high_purity"
+  ],
+  "manual": "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v2.0/MANUAL.md",
+  "inference_script": "predict_with_gdtai_v2.py",
+  "mode_metrics_csv": "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v2.0/mode_metrics.csv",
+  "feature_genes_csv": "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v2.0/feature_genes.csv"
+}
