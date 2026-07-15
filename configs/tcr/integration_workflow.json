@@ -1,0 +1,203 @@
+{
+  "workflow_name": "GEO TCR Data Integration Pipeline",
+  "version": "1.1.0",
+  "description": "Pipeline for extracting, processing, and integrating TCR sequencing data from multiple GEO datasets with scRNA-seq data using a sample-aware join",
+  "author": "AI Assistant",
+  "created_date": "2026-02-12",
+
+  "input_data": {
+    "tcr_sources": {
+      "description": "TCR data sources from GEO downloads",
+      "file_patterns": [
+        "**/filtered_contig_annotations.csv",
+        "**/filtered_contig_annotations.csv.gz",
+        "**/*tcr*contig*.csv",
+        "**/*tcr*contig*.csv.gz",
+        "**/*_all_contig_annotations.csv.gz"
+      ],
+      "exclude_patterns": ["*bcr*"],
+      "supported_formats": ["csv", "csv.gz"]
+    },
+    "scrna_data": {
+      "description": "scRNA-seq data in AnnData format (h5ad)",
+      "required_obs_columns": ["GSE", "sample"],
+      "barcode_format": "10x Genomics with batch suffixes (e.g., AAACCTG-1-0-1)"
+    }
+  },
+
+  "processing_steps": [
+    {
+      "step": 1,
+      "name": "discover_tcr_files",
+      "description": "Find all TCR contig annotation files in downloads directory",
+      "command": "find downloads -name '*contig*' | grep -v bcr",
+      "output": "List of TCR file paths grouped by GSE"
+    },
+    {
+      "step": 2,
+      "name": "parse_contig_annotations",
+      "description": "Parse 10x Genomics contig annotation files",
+      "input_format": {
+        "required_columns": ["barcode", "chain", "v_gene", "j_gene", "productive", "cdr3"],
+        "optional_columns": ["d_gene", "cdr3_nt", "raw_clonotype_id", "umis", "reads"]
+      },
+      "processing_logic": {
+        "filter_productive": "productive == True",
+        "split_chains": "Separate TRA and TRB chains",
+        "deduplicate": "Keep top chain per barcode (sort by UMIs desc, then reads desc)"
+      },
+      "output": "TRA and TRB dataframes per file"
+    },
+    {
+      "step": 3,
+      "name": "extract_per_sample",
+      "description": "Extract TCR records for each sample and merge TRA/TRB",
+      "record_structure": {
+        "cell_barcode": "string - Cell barcode from 10x",
+        "GSE": "string - GEO Series accession",
+        "sample": "string - Sample identifier",
+        "TRA_cdr3": "string - TRA CDR3 amino acid sequence",
+        "TRA_v": "string - TRA V gene",
+        "TRA_d": "string - TRA D gene (if applicable)",
+        "TRA_j": "string - TRA J gene",
+        "TRA_cdr3_nt": "string - TRA CDR3 nucleotide sequence",
+        "TRA_clone_id": "string - Clonotype ID",
+        "TRA_umis": "integer - UMI count",
+        "TRA_reads": "integer - Read count",
+        "TRB_cdr3": "string - TRB CDR3 amino acid sequence",
+        "TRB_v": "string - TRB V gene",
+        "TRB_d": "string - TRB D gene",
+        "TRB_j": "string - TRB J gene",
+        "TRB_cdr3_nt": "string - TRB CDR3 nucleotide sequence",
+        "TRB_clone_id": "string - Clonotype ID",
+        "TRB_umis": "integer - UMI count",
+        "TRB_reads": "integer - Read count"
+      },
+      "null_handling": "Empty strings for missing chains, 0 for missing counts"
+    },
+    {
+      "step": 4,
+      "name": "standardize_dataframe",
+      "description": "Ensure all datasets have consistent column structure",
+      "standard_columns": [
+        "cell_barcode", "GSE", "sample",
+        "TRA_cdr3", "TRA_v", "TRA_d", "TRA_j", "TRA_cdr3_nt", "TRA_clone_id", "TRA_umis", "TRA_reads",
+        "TRB_cdr3", "TRB_v", "TRB_d", "TRB_j", "TRB_cdr3_nt", "TRB_clone_id", "TRB_umis", "TRB_reads"
+      ],
+      "data_types": {
+        "string_columns": ["cell_barcode", "GSE", "sample", "TRA_cdr3", "TRA_v", "TRA_d", "TRA_j",
+                          "TRA_cdr3_nt", "TRA_clone_id", "TRB_cdr3", "TRB_v", "TRB_d", "TRB_j",
+                          "TRB_cdr3_nt", "TRB_clone_id"],
+        "integer_columns": ["TRA_umis", "TRA_reads", "TRB_umis", "TRB_reads"]
+      }
+    },
+    {
+      "step": 5,
+      "name": "create_sample_mapping",
+      "description": "Create mapping between scRNA-seq and TCR samples",
+      "mapping_strategies": {
+        "GSE139555": {
+          "method": "GSM_ID_prefix",
+          "example": {
+            "scRNAseq": "GSM4143678_SAM24360638-rt1",
+            "TCR": "GSM4143678"
+          }
+        },
+        "GSE254176": {
+          "method": "sample_name_normalized",
+          "transformation": {
+            "scRNAseq": "Remove GSM prefix: GSM8035471_OM-HL-019-C6 -> OM-HL-019-C6",
+            "TCR": "Remove -TCR suffix: OM-HL-019-C6-TCR -> OM-HL-019-C6"
+          }
+        },
+        "GSE161918": {
+          "method": "sample_aware_barcode_core",
+          "note": "Never join by barcode alone. Standardize sample identity first, then join by sample_id plus barcode_core."
+        }
+      },
+      "output_files": [
+        "sample_mapping_scRNA_to_TCR.csv",
+        "barcode_mapping_guide.csv"
+      ]
+    },
+    {
+      "step": 6,
+      "name": "merge_with_scrna",
+      "description": "Merge TCR data into scRNA-seq AnnData object",
+      "matching_strategy": {
+        "step_1": "Build one canonical per-cell TCR table from raw contig files",
+        "step_2": "Normalize sample identity into sample_id and barcode into barcode_core",
+        "step_3": "Join by sample_id plus barcode_core between scRNA-seq and TCR data",
+        "step_4": "Replace stale TCR columns in adata.obs with the rebuilt canonical fields"
+      },
+      "tcr_obs_columns": ["TRA_cdr3", "TRA_v", "TRA_j", "TRB_cdr3", "TRB_v", "TRB_j"]
+    }
+  ],
+
+  "output_files": {
+    "tcr_all_data_complete.csv": {
+      "description": "Complete TCR data from all datasets",
+      "size": "~600 MB",
+      "records": "~2.8 million",
+      "columns": 19
+    },
+    "tcr_GSE{ACCESSION}.csv": {
+      "description": "Per-dataset TCR data (intermediate files)",
+      "count": 20
+    },
+    "sample_mapping_scRNA_to_TCR.csv": {
+      "description": "Sample-level mapping between scRNA-seq and TCR",
+      "columns": ["GSE", "scRNAseq_sample", "TCR_sample", "mapping_type", "match_method", "notes"]
+    },
+    "barcode_mapping_guide.csv": {
+      "description": "Barcode-level mapping strategy guide",
+      "columns": ["GSE", "mapping_strategy", "mapped_samples", "details"]
+    }
+  },
+
+  "data_statistics": {
+    "tcr_datasets": 20,
+    "scrna_datasets": 26,
+    "overlapping_datasets": 11,
+    "total_cells_with_tcr": 2775849,
+    "total_cells_scrna": 3581725,
+    "chain_coverage": {
+      "TRA_TRB_paired": "73.6% (2,044,046 cells)",
+      "TRA_only": "4.2% (116,251 cells)",
+      "TRB_only": "22.2% (615,552 cells)"
+    },
+    "overlapping_datasets": [
+      "GSE139555", "GSE144469", "GSE161918", "GSE188620", "GSE211504",
+      "GSE227709", "GSE241783", "GSE243572", "GSE254176", "GSE308075", "GSE311112"
+    ],
+    "tcr_only_datasets": [
+      "GSE162499", "GSE168859", "GSE169441", "GSE229860", "GSE240865",
+      "GSE247531", "GSE267639", "GSE286518", "GSE287301"
+    ],
+    "scrna_only_datasets": [
+      "GSE145926", "GSE155222", "GSE155223", "GSE162498", "GSE171037",
+      "GSE178882", "GSE190870", "GSE212217", "GSE228597", "GSE243013",
+      "GSE243905", "GSE252762", "GSE254249", "GSE267645", "GSE301528"
+    ]
+  },
+
+  "dependencies": {
+    "python_packages": ["pandas", "scanpy", "numpy", "h5py"],
+    "external_tools": ["find (Unix command)"]
+  },
+
+  "code_examples": {
+    "python_import": "import pandas as pd; tcr_df = pd.read_csv('tcr_all_data_complete.csv')",
+    "load_mapping": "mapping_df = pd.read_csv('sample_mapping_scRNA_to_TCR.csv')",
+    "merge_example": "See merge_tcr_to_scrna_example.py"
+  },
+
+  "notes_for_ai": {
+    "barcode_handling": "scRNA-seq barcodes often have batch suffixes (e.g., -1-0-1) that must be normalized to barcode_core, but barcode_core must never be used without sample_id",
+    "sample_naming": "TCR and scRNA-seq samples may have different naming conventions even within the same GSE. Always use the mapping table.",
+    "null_values": "Missing TCR chains are represented as empty strings, not NaN or None",
+    "one_to_many": "Some scRNA-seq samples may map to multiple TCR samples (or vice versa). Check mapping_type column.",
+    "sop": "Canonical SOP: parse raw contigs, build one canonical per-cell TCR table, join by sample_id plus barcode_core, replace stale TCR fields, then validate before propagation.",
+    "historical_warning": "Earlier barcode-only or barcode-prefix-only joins can create false paired TRA/TRB inflation when core barcodes recur across samples."
+  }
+}

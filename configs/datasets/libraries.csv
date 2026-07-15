@@ -1,0 +1,1786 @@
+dataset_id,library_id,sample_id,rna_assay,tcr_assay,tcr_scope,active,notes
+GDT_2020AUG_woCOV,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GDTlung2023july_7p,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE123813,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE125527,GSM3576396,GSM3576396,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576397,GSM3576397,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576398,GSM3576398,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576399,GSM3576399,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576400,GSM3576400,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576401,GSM3576401,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576402,GSM3576402,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576403,GSM3576403,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576404,GSM3576404,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576405,GSM3576405,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576406,GSM3576406,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576407,GSM3576407,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576408,GSM3576408,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576409,GSM3576409,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576410,GSM3576410,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576411,GSM3576411,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576412,GSM3576412,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576413,GSM3576413,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576414,GSM3576414,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576415,GSM3576415,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576416,GSM3576416,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576417,GSM3576417,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576418,GSM3576418,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576419,GSM3576419,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576420,GSM3576420,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576421,GSM3576421,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576422,GSM3576422,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576423,GSM3576423,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576424,GSM3576424,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576425,GSM3576425,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576426,GSM3576426,10x 5',vdj,unspecified_ab_or_gd,true,Ileum immune cell; cell subtype: immune cells
+GSE125527,GSM3576427,GSM3576427,10x 5',vdj,unspecified_ab_or_gd,true,Ileum immune cell; cell subtype: immune cells
+GSE125527,GSM3576428,GSM3576428,10x 5',vdj,unspecified_ab_or_gd,true,Ileum immune cell; cell subtype: immune cells
+GSE125527,GSM3576429,GSM3576429,10x 5',vdj,unspecified_ab_or_gd,true,Ileum immune cell; cell subtype: immune cells
+GSE125527,GSM3576430,GSM3576430,10x 5',vdj,unspecified_ab_or_gd,true,Ileum immune cell; cell subtype: immune cells
+GSE125527,GSM3576431,GSM3576431,10x 5',vdj,unspecified_ab_or_gd,true,Ileum immune cell; cell subtype: immune cells
+GSE125527,GSM3576432,GSM3576432,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576433,GSM3576433,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576434,GSM3576434,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576435,GSM3576435,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576436,GSM3576436,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576437,GSM3576437,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576438,GSM3576438,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576439,GSM3576439,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576440,GSM3576440,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576441,GSM3576441,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576442,GSM3576442,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576443,GSM3576443,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576444,GSM3576444,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576445,GSM3576445,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576446,GSM3576446,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576447,GSM3576447,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576448,GSM3576448,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576449,GSM3576449,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576450,GSM3576450,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576451,GSM3576451,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576452,GSM3576452,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576453,GSM3576453,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576454,GSM3576454,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576455,GSM3576455,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576456,GSM3576456,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576457,GSM3576457,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576458,GSM3576458,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576459,GSM3576459,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576460,GSM3576460,10x 5',vdj,unspecified_ab_or_gd,true,Ileum immune cell; cell subtype: immune cells
+GSE125527,GSM3576461,GSM3576461,10x 5',vdj,unspecified_ab_or_gd,true,Ileum immune cell; cell subtype: immune cells
+GSE125527,GSM3576462,GSM3576462,10x 5',vdj,unspecified_ab_or_gd,true,Ileum immune cell; cell subtype: immune cells
+GSE125527,GSM3576463,GSM3576463,10x 5',vdj,unspecified_ab_or_gd,true,Ileum immune cell; cell subtype: immune cells
+GSE125527,GSM3576464,GSM3576464,10x 5',vdj,unspecified_ab_or_gd,true,Ileum immune cell; cell subtype: immune cells
+GSE125527,GSM3576465,GSM3576465,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576466,GSM3576466,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576467,GSM3576467,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576468,GSM3576468,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576469,GSM3576469,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576470,GSM3576470,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576471,GSM3576471,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576472,GSM3576472,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576473,GSM3576473,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576474,GSM3576474,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576475,GSM3576475,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576476,GSM3576476,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576477,GSM3576477,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576478,GSM3576478,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576479,GSM3576479,10x 5',vdj,unspecified_ab_or_gd,true,Rectum immune cell; cell subtype: immune cells
+GSE125527,GSM3576480,GSM3576480,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576481,GSM3576481,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576482,GSM3576482,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576483,GSM3576483,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576484,GSM3576484,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576485,GSM3576485,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576486,GSM3576486,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576487,GSM3576487,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576488,GSM3576488,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576489,GSM3576489,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576490,GSM3576490,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576491,GSM3576491,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576492,GSM3576492,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576493,GSM3576493,10x 5',vdj,unspecified_ab_or_gd,true,Blood immune cell; cell subtype: immune cells
+GSE125527,GSM3576494,GSM3576494,10x 5',vdj,unspecified_ab_or_gd,true,Ileum immune cell; cell subtype: immune cells
+GSE125527,GSM3576495,GSM3576495,10x 5',vdj,unspecified_ab_or_gd,true,Ileum immune cell; cell subtype: immune cells
+GSE125527,GSM3576496,GSM3576496,10x 5',vdj,unspecified_ab_or_gd,true,Ileum immune cell; cell subtype: immune cells
+GSE125527,GSM3576497,GSM3576497,10x 5',vdj,unspecified_ab_or_gd,true,Ileum immune cell; cell subtype: immune cells
+GSE125527,GSM3576498,GSM3576498,10x 5',vdj,unspecified_ab_or_gd,true,Ileum immune cell; cell subtype: immune cells
+GSE139555,GSM4143655,GSM4143655,10x 5',vdj,unspecified_ab_or_gd,true,CD3+ immune cells; phenotype: Lung adenocarcinoma
+GSE139555,GSM4143656,GSM4143656,10x 5',vdj,unspecified_ab_or_gd,true,CD3+ immune cells; phenotype: Lung adenocarcinoma
+GSE139555,GSM4143657,GSM4143657,10x 5',vdj,unspecified_ab_or_gd,true,"CD3+ immune cells; phenotype: Lung squamous cell carcinoma, nonkeratinizing"
+GSE139555,GSM4143658,GSM4143658,10x 5',vdj,unspecified_ab_or_gd,true,"CD3+ immune cells; phenotype: Lung squamous cell carcinoma, nonkeratinizing"
+GSE139555,GSM4143659,GSM4143659,10x 5',vdj,unspecified_ab_or_gd,true,"CD3+ immune cells; phenotype: Lung squamous cell carcinoma, keratinizing"
+GSE139555,GSM4143660,GSM4143660,10x 5',vdj,unspecified_ab_or_gd,true,"CD3+ immune cells; phenotype: Lung squamous cell carcinoma, keratinizing"
+GSE139555,GSM4143661,GSM4143661,10x 5',vdj,unspecified_ab_or_gd,true,CD3+ immune cells; phenotype: Lung adenocarcinoma
+GSE139555,GSM4143662,GSM4143662,10x 5',vdj,unspecified_ab_or_gd,true,CD3+ immune cells; phenotype: Lung adenocarcinoma
+GSE139555,GSM4143663,GSM4143663,10x 5',vdj,unspecified_ab_or_gd,true,CD45+ immune cells; phenotype: Lung adenocarcinoma
+GSE139555,GSM4143664,GSM4143664,10x 5',vdj,unspecified_ab_or_gd,true,CD45+ immune cells; phenotype: Lung adenocarcinoma
+GSE139555,GSM4143665,GSM4143665,10x 5',vdj,unspecified_ab_or_gd,true,CD45+ immune cells; phenotype: Large cell neuroendocrine carcinoma
+GSE139555,GSM4143666,GSM4143666,10x 5',vdj,unspecified_ab_or_gd,true,CD45+ immune cells; phenotype: Large cell neuroendocrine carcinoma
+GSE139555,GSM4143667,GSM4143667,10x 5',vdj,unspecified_ab_or_gd,true,CD45+ immune cells; phenotype: Large cell neuroendocrine carcinoma
+GSE139555,GSM4143668,GSM4143668,10x 5',vdj,unspecified_ab_or_gd,true,CD3+ immune cells; phenotype: Endometrial adenocarcinoma
+GSE139555,GSM4143669,GSM4143669,10x 5',vdj,unspecified_ab_or_gd,true,CD3+ immune cells; phenotype: Endometrial adenocarcinoma
+GSE139555,GSM4143670,GSM4143670,10x 5',vdj,unspecified_ab_or_gd,true,CD3+ immune cells; phenotype: Endometrial adenocarcinoma
+GSE139555,GSM4143671,GSM4143671,10x 5',vdj,unspecified_ab_or_gd,true,CD3+ immune cells; phenotype: Endometrial adenocarcinoma
+GSE139555,GSM4143672,GSM4143672,10x 5',vdj,unspecified_ab_or_gd,true,CD3+ immune cells; phenotype: Endometrial adenocarcinoma
+GSE139555,GSM4143673,GSM4143673,10x 5',vdj,unspecified_ab_or_gd,true,CD3+ immune cells; phenotype: Endometrial adenocarcinoma
+GSE139555,GSM4143674,GSM4143674,10x 5',vdj,unspecified_ab_or_gd,true,CD45+ immune cells; phenotype: Colorectal adenocarcinoma
+GSE139555,GSM4143675,GSM4143675,10x 5',vdj,unspecified_ab_or_gd,true,CD45+ immune cells; phenotype: Colorectal adenocarcinoma
+GSE139555,GSM4143676,GSM4143676,10x 5',vdj,unspecified_ab_or_gd,true,CD45+ immune cells; phenotype: Colorectal adenocarcinoma
+GSE139555,GSM4143677,GSM4143677,10x 5',vdj,unspecified_ab_or_gd,true,CD45+ immune cells; phenotype: Colorectal adenocarcinoma
+GSE139555,GSM4143678,GSM4143678,10x 5',vdj,unspecified_ab_or_gd,true,"CD45+ immune cells; phenotype: Renal cell carcinoma, clear cell"
+GSE139555,GSM4143679,GSM4143679,10x 5',vdj,unspecified_ab_or_gd,true,"CD45+ immune cells; phenotype: Renal cell carcinoma, clear cell"
+GSE139555,GSM4143680,GSM4143680,10x 5',vdj,unspecified_ab_or_gd,true,"CD45+ immune cells; phenotype: Renal cell carcinoma, clear cell"
+GSE139555,GSM4143681,GSM4143681,10x 5',vdj,unspecified_ab_or_gd,true,"CD45+ immune cells; phenotype: Renal cell carcinoma, clear cell"
+GSE139555,GSM4143682,GSM4143682,10x 5',vdj,unspecified_ab_or_gd,true,"CD45+ immune cells; phenotype: Renal cell carcinoma, clear cell"
+GSE139555,GSM4143683,GSM4143683,10x 5',vdj,unspecified_ab_or_gd,true,"CD45+ immune cells; phenotype: Renal cell carcinoma, clear cell"
+GSE139555,GSM4143684,GSM4143684,10x 5',vdj,unspecified_ab_or_gd,true,"CD45+ immune cells; phenotype: Renal cell carcinoma, clear cell"
+GSE139555,GSM4143685,GSM4143685,10x 5',vdj,unspecified_ab_or_gd,true,"CD45+ immune cells; phenotype: Renal cell carcinoma, clear cell"
+GSE139555,GSM4143686,GSM4143686,10x 5',vdj,unspecified_ab_or_gd,true,"CD45+ immune cells; phenotype: Renal cell carcinoma, clear cell"
+GSE144469,GSM4288826,GSM4288826,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288827,GSM4288827,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288828,GSM4288828,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288829,GSM4288829,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288830,GSM4288830,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288831,GSM4288831,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288832,GSM4288832,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288833,GSM4288833,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288834,GSM4288834,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288835,GSM4288835,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288836,GSM4288836,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288837,GSM4288837,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288838,GSM4288838,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288839,GSM4288839,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288840,GSM4288840,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288841,GSM4288841,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288842,GSM4288842,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288843,GSM4288843,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288844,GSM4288844,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288845,GSM4288845,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288846,GSM4288846,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288847,GSM4288847,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288848,GSM4288848,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288849,GSM4288849,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288850,GSM4288850,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288851,GSM4288851,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288852,GSM4288852,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288853,GSM4288853,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288854,GSM4288854,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288855,GSM4288855,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288856,GSM4288856,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288857,GSM4288857,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288858,GSM4288858,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288859,GSM4288859,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288860,GSM4288860,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288861,GSM4288861,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288862,GSM4288862,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288863,GSM4288863,10x 5',none,none,true,Colon pinch biopsy
+GSE144469,GSM4288864,GSM4288864,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288865,GSM4288865,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288866,GSM4288866,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288867,GSM4288867,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288868,GSM4288868,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288869,GSM4288869,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288870,GSM4288870,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288871,GSM4288871,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288872,GSM4288872,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288873,GSM4288873,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288874,GSM4288874,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288875,GSM4288875,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288876,GSM4288876,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288877,GSM4288877,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288878,GSM4288878,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288879,GSM4288879,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288880,GSM4288880,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288881,GSM4288881,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288882,GSM4288882,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288883,GSM4288883,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288884,GSM4288884,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4288885,GSM4288885,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560096,GSM4560096,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560097,GSM4560097,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560098,GSM4560098,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560099,GSM4560099,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560100,GSM4560100,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560101,GSM4560101,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560102,GSM4560102,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560103,GSM4560103,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560104,GSM4560104,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560105,GSM4560105,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560106,GSM4560106,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560107,GSM4560107,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560108,GSM4560108,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560109,GSM4560109,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560110,GSM4560110,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560111,GSM4560111,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560112,GSM4560112,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560113,GSM4560113,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560114,GSM4560114,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560115,GSM4560115,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE144469,GSM4560116,GSM4560116,10x 5',vdj,unspecified_ab_or_gd,true,Colon pinch biopsy
+GSE145926,GSM4339769,GSM4339769,10x 3',none,none,true,BALF; cell subsets: Total cell
+GSE145926,GSM4339770,GSM4339770,10x 3',none,none,true,BALF; cell subsets: Total cell
+GSE145926,GSM4339771,GSM4339771,10x 3',none,none,true,BALF; cell subsets: Total cell
+GSE145926,GSM4339772,GSM4339772,10x 3',none,none,true,BALF; cell subsets: Total cell
+GSE145926,GSM4339773,GSM4339773,10x 3',none,none,true,BALF; cell subsets: Total cell
+GSE145926,GSM4339774,GSM4339774,10x 3',none,none,true,BALF; cell subsets: Total cell
+GSE145926,GSM4385990,GSM4385990,10x 3',none,none,true,BALF; cell subsets: Total cell
+GSE145926,GSM4385991,GSM4385991,10x 3',none,none,true,BALF; cell subsets: Total cell
+GSE145926,GSM4385992,GSM4385992,10x 3',none,none,true,BALF; cell subsets: Total cell
+GSE145926,GSM4385993,GSM4385993,10x 3',none,none,true,BALF; cell subsets: Total cell
+GSE145926,GSM4385994,GSM4385994,10x 3',none,none,true,BALF; cell subsets: Total cell
+GSE145926,GSM4385995,GSM4385995,10x 3',none,none,true,BALF; cell subsets: Total cell
+GSE145926,GSM4475048,GSM4475048,10x 3',none,none,true,BALF
+GSE145926,GSM4475049,GSM4475049,10x 3',none,none,true,BALF
+GSE145926,GSM4475050,GSM4475050,10x 3',none,none,true,BALF
+GSE145926,GSM4475051,GSM4475051,10x 3',none,none,true,BALF
+GSE145926,GSM4475052,GSM4475052,10x 3',none,none,true,BALF
+GSE145926,GSM4475053,GSM4475053,10x 3',none,none,true,BALF
+GSE145926,GSM4475054,GSM4475054,10x 3',none,none,true,BALF
+GSE145926,GSM4475055,GSM4475055,10x 3',none,none,true,BALF
+GSE145926,GSM4475056,GSM4475056,10x 3',none,none,true,BALF
+GSE149298,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE155222,GSM4697605,GSM4697605,10x (unspecified),none,none,true,PBMC
+GSE155222,GSM4697606,GSM4697606,10x (unspecified),none,none,true,PBMC
+GSE155222,GSM4697607,GSM4697607,10x (unspecified),none,none,true,PBMC
+GSE155222,GSM4697608,GSM4697608,10x (unspecified),none,none,true,PBMC
+GSE155222,GSM4697609,GSM4697609,10x (unspecified),none,none,true,PBMC
+GSE155222,GSM4697610,GSM4697610,10x (unspecified),none,none,true,PBMC
+GSE155223,GSM4697611,GSM4697611,10x (unspecified),none,none,true,PBMC; time difference between samples a and b (d): 4
+GSE155223,GSM4697612,GSM4697612,10x (unspecified),none,none,true,PBMC; time difference between samples a and b (d): 4
+GSE155223,GSM4697613,GSM4697613,10x (unspecified),none,none,true,PBMC; time difference between samples a and b (d): 3
+GSE155223,GSM4697614,GSM4697614,10x (unspecified),none,none,true,PBMC; time difference between samples a and b (d): 3
+GSE155223,GSM4697615,GSM4697615,10x (unspecified),none,none,true,PBMC; time difference between samples a and b (d): 7
+GSE155223,GSM4697616,GSM4697616,10x (unspecified),none,none,true,PBMC; time difference between samples a and b (d): 7
+GSE155223,GSM4697617,GSM4697617,10x (unspecified),none,none,true,PBMC; time difference between samples a and b (d): 4
+GSE155223,GSM4697618,GSM4697618,10x (unspecified),none,none,true,PBMC; time difference between samples a and b (d): 4
+GSE155223,GSM4697619,GSM4697619,10x (unspecified),none,none,true,PBMC; time difference between samples a and b (d): NA
+GSE155223,GSM4697620,GSM4697620,10x (unspecified),none,none,true,PBMC; time difference between samples a and b (d): NA
+GSE155223,GSM4697621,GSM4697621,10x (unspecified),none,none,true,PBMC; time difference between samples a and b (d): 12
+GSE155223,GSM4697622,GSM4697622,10x (unspecified),none,none,true,PBMC; time difference between samples a and b (d): 12
+GSE155223,GSM4697623,GSM4697623,10x (unspecified),none,none,true,PBMC; time difference between samples a and b (d): 4
+GSE155223,GSM4697624,GSM4697624,10x (unspecified),none,none,true,PBMC; time difference between samples a and b (d): 4
+GSE155223,GSM4697625,GSM4697625,10x (unspecified),none,none,true,PBMC; time difference between samples a and b (d): 12
+GSE155223,GSM4697626,GSM4697626,10x (unspecified),none,none,true,PBMC; time difference between samples a and b (d): 12
+GSE155223,GSM4697627,GSM4697627,10x (unspecified),none,none,true,PBMC; time difference between samples a and b (d): 4
+GSE155223,GSM4697628,GSM4697628,10x (unspecified),none,none,true,PBMC; time difference between samples a and b (d): 4
+GSE161918,GSM4929065,GSM4929065,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929066,GSM4929066,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929067,GSM4929067,10x (unspecified),none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929068,GSM4929068,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929069,GSM4929069,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929070,GSM4929070,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929071,GSM4929071,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929072,GSM4929072,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929073,GSM4929073,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929074,GSM4929074,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929075,GSM4929075,10x (unspecified),vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929076,GSM4929076,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929077,GSM4929077,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929078,GSM4929078,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929079,GSM4929079,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929080,GSM4929080,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929081,GSM4929081,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929082,GSM4929082,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929083,GSM4929083,10x (unspecified),none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929084,GSM4929084,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929085,GSM4929085,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929086,GSM4929086,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929087,GSM4929087,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929088,GSM4929088,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929089,GSM4929089,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929090,GSM4929090,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929091,GSM4929091,10x (unspecified),none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929092,GSM4929092,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929093,GSM4929093,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929094,GSM4929094,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929095,GSM4929095,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929096,GSM4929096,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929097,GSM4929097,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929098,GSM4929098,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929099,GSM4929099,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929100,GSM4929100,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929101,GSM4929101,10x (unspecified),none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929102,GSM4929102,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929103,GSM4929103,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929104,GSM4929104,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929105,GSM4929105,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929106,GSM4929106,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929107,GSM4929107,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929108,GSM4929108,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929109,GSM4929109,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929110,GSM4929110,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929111,GSM4929111,10x (unspecified),none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929112,GSM4929112,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929113,GSM4929113,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929114,GSM4929114,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929115,GSM4929115,10x (unspecified),vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929116,GSM4929116,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929117,GSM4929117,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929118,GSM4929118,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929119,GSM4929119,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929120,GSM4929120,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929121,GSM4929121,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929122,GSM4929122,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929123,GSM4929123,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929124,GSM4929124,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929125,GSM4929125,10x (unspecified),vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929126,GSM4929126,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929127,GSM4929127,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929128,GSM4929128,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929129,GSM4929129,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929130,GSM4929130,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929131,GSM4929131,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929132,GSM4929132,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929133,GSM4929133,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929134,GSM4929134,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929135,GSM4929135,10x (unspecified),vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929136,GSM4929136,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929137,GSM4929137,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929138,GSM4929138,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929139,GSM4929139,10x (unspecified),none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929140,GSM4929140,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929141,GSM4929141,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929142,GSM4929142,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929143,GSM4929143,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929144,GSM4929144,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929145,GSM4929145,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929146,GSM4929146,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929147,GSM4929147,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929148,GSM4929148,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929149,GSM4929149,10x (unspecified),none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929150,GSM4929150,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929151,GSM4929151,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929152,GSM4929152,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929153,GSM4929153,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929154,GSM4929154,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929155,GSM4929155,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929156,GSM4929156,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929157,GSM4929157,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929158,GSM4929158,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929159,GSM4929159,10x (unspecified),none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929160,GSM4929160,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929161,GSM4929161,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929162,GSM4929162,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929163,GSM4929163,10x (unspecified),none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929164,GSM4929164,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929165,GSM4929165,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929166,GSM4929166,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929167,GSM4929167,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929168,GSM4929168,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929169,GSM4929169,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929170,GSM4929170,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929171,GSM4929171,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929172,GSM4929172,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929173,GSM4929173,10x (unspecified),none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929174,GSM4929174,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929175,GSM4929175,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929176,GSM4929176,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929177,GSM4929177,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929178,GSM4929178,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929179,GSM4929179,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929180,GSM4929180,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929181,GSM4929181,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929182,GSM4929182,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929183,GSM4929183,10x (unspecified),none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929184,GSM4929184,10x 5',none,none,true,Peripheral Blood Mononuclear Cells; molecule: Cell Surface Protein Tag reads from mulitmodal scRNAseq
+GSE161918,GSM4929185,GSM4929185,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929186,GSM4929186,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929187,GSM4929187,10x (unspecified),vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929188,GSM4929188,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929189,GSM4929189,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929190,GSM4929190,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929191,GSM4929191,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929192,GSM4929192,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929193,GSM4929193,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929194,GSM4929194,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929195,GSM4929195,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929196,GSM4929196,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929197,GSM4929197,10x (unspecified),vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929198,GSM4929198,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929199,GSM4929199,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929200,GSM4929200,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929201,GSM4929201,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929202,GSM4929202,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929203,GSM4929203,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929204,GSM4929204,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929205,GSM4929205,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929206,GSM4929206,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929207,GSM4929207,10x (unspecified),vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929208,GSM4929208,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral Blood Mononuclear Cells; molecule: T cell receptor VDJ region reads from mulitmodal scRNAseq
+GSE161918,GSM4929209,GSM4929209,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929210,GSM4929210,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929211,GSM4929211,10x (unspecified),none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929212,GSM4929212,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929213,GSM4929213,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929214,GSM4929214,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929215,GSM4929215,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929216,GSM4929216,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929217,GSM4929217,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929218,GSM4929218,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929219,GSM4929219,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929220,GSM4929220,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929221,GSM4929221,10x (unspecified),none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929222,GSM4929222,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929223,GSM4929223,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929224,GSM4929224,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929225,GSM4929225,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929226,GSM4929226,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929227,GSM4929227,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929228,GSM4929228,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929229,GSM4929229,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929230,GSM4929230,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929231,GSM4929231,10x (unspecified),none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929232,GSM4929232,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929233,GSM4929233,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929234,GSM4929234,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929235,GSM4929235,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929236,GSM4929236,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929237,GSM4929237,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929238,GSM4929238,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929239,GSM4929239,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929240,GSM4929240,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929241,GSM4929241,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929242,GSM4929242,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929243,GSM4929243,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929244,GSM4929244,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929245,GSM4929245,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929246,GSM4929246,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929247,GSM4929247,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929248,GSM4929248,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929249,GSM4929249,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929250,GSM4929250,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929251,GSM4929251,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929252,GSM4929252,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929253,GSM4929253,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929254,GSM4929254,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929255,GSM4929255,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929256,GSM4929256,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929257,GSM4929257,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929258,GSM4929258,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929259,GSM4929259,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929260,GSM4929260,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929261,GSM4929261,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929262,GSM4929262,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929263,GSM4929263,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929264,GSM4929264,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929265,GSM4929265,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929266,GSM4929266,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929267,GSM4929267,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929268,GSM4929268,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929269,GSM4929269,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929270,GSM4929270,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929271,GSM4929271,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929272,GSM4929272,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929273,GSM4929273,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929274,GSM4929274,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929275,GSM4929275,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929276,GSM4929276,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929277,GSM4929277,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929278,GSM4929278,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929279,GSM4929279,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929280,GSM4929280,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929281,GSM4929281,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929282,GSM4929282,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929283,GSM4929283,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929284,GSM4929284,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929285,GSM4929285,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929286,GSM4929286,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929287,GSM4929287,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929288,GSM4929288,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929289,GSM4929289,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929290,GSM4929290,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929291,GSM4929291,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929292,GSM4929292,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929293,GSM4929293,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929294,GSM4929294,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929295,GSM4929295,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929296,GSM4929296,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929297,GSM4929297,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929298,GSM4929298,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929299,GSM4929299,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929300,GSM4929300,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929301,GSM4929301,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929302,GSM4929302,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929303,GSM4929303,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929304,GSM4929304,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE161918,GSM4929305,GSM4929305,10x 5',none,none,true,Peripheral Blood Mononuclear Cells
+GSE162498,GSM4952953,GSM4952953,10x 5',vdj,unspecified_ab_or_gd,true,NSCLC tumor tissue
+GSE162498,GSM4952954,GSM4952954,10x 5',vdj,unspecified_ab_or_gd,true,NSCLC tumor tissue
+GSE162498,GSM4952955,GSM4952955,10x 5',vdj,unspecified_ab_or_gd,true,NSCLC tumor tissue
+GSE162498,GSM4952956,GSM4952956,10x 5',vdj,unspecified_ab_or_gd,true,NSCLC tumor tissue
+GSE162498,GSM4952957,GSM4952957,10x 5',vdj,unspecified_ab_or_gd,true,NSCLC tumor tissue
+GSE162498,GSM4952958,GSM4952958,10x 5',vdj,unspecified_ab_or_gd,true,NSCLC tumor tissue
+GSE162498,GSM4952959,GSM4952959,10x 5',vdj,unspecified_ab_or_gd,true,NSCLC tumor tissue
+GSE162498,GSM4952960,GSM4952960,10x 5',vdj,unspecified_ab_or_gd,true,NSCLC tumor tissue
+GSE162498,GSM4952961,GSM4952961,10x 5',vdj,unspecified_ab_or_gd,true,Blood sample
+GSE162498,GSM4952962,GSM4952962,10x 5',vdj,unspecified_ab_or_gd,true,NSCLC tumor tissue
+GSE162498,GSM4952963,GSM4952963,10x 5',vdj,unspecified_ab_or_gd,true,Blood sample
+GSE162498,GSM4952964,GSM4952964,10x 5',vdj,unspecified_ab_or_gd,true,NSCLC tumor tissue
+GSE162498,GSM4952965,GSM4952965,10x 5',vdj,unspecified_ab_or_gd,true,NSCLC juxta tissue
+GSE162498,GSM4952966,GSM4952966,10x 5',vdj,unspecified_ab_or_gd,true,Blood sample
+GSE162498,GSM4952967,GSM4952967,10x 5',vdj,unspecified_ab_or_gd,true,NSCLC tumor tissue
+GSE162498,GSM4952968,GSM4952968,10x 5',vdj,unspecified_ab_or_gd,true,NSCLC juxta tissue
+GSE162498,GSM4952969,GSM4952969,10x 5',vdj,unspecified_ab_or_gd,true,Blood sample
+GSE162499,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE168163,__dataset_level_no_sample_id__,__dataset_level_no_sample_id__,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE168859,GSM5171588,GSM5171588,10x 5',none,none,true,Human peripheral blood; subject: UPN24
+GSE168859,GSM5171589,GSM5171589,10x 5',none,none,true,Human peripheral blood; subject: UPN24
+GSE168859,GSM5171590,GSM5171590,10x 5',none,none,true,Human peripheral blood; subject: UPN10
+GSE168859,GSM5171591,GSM5171591,10x 5',none,none,true,Human peripheral blood; subject: UPN10
+GSE168859,GSM5171592,GSM5171592,10x 5',none,none,true,Human peripheral blood; subject: UPN19
+GSE168859,GSM5171593,GSM5171593,10x 5',none,none,true,Human peripheral blood; subject: UPN19
+GSE168859,GSM5171594,GSM5171594,10x 5',none,none,true,Human peripheral blood; subject: Healthydonor1
+GSE168859,GSM5171595,GSM5171595,10x 5',none,none,true,Human peripheral blood; subject: Healthydonor2
+GSE168859,GSM5171596,GSM5171596,10x 5',none,none,true,Human peripheral blood; subject: UPN18
+GSE168859,GSM5171597,GSM5171597,10x 5',none,none,true,Human peripheral blood; subject: UPN18
+GSE168859,GSM5171598,GSM5171598,10x 5',none,none,true,Human peripheral blood; subject: UPN4
+GSE168859,GSM5171599,GSM5171599,10x 5',none,none,true,Human peripheral blood; subject: UPN4
+GSE168859,GSM5171600,GSM5171600,10x 5',none,none,true,Human peripheral blood; subject: UPN17
+GSE168859,GSM5171601,GSM5171601,10x 5',none,none,true,Human peripheral blood; subject: UPN17
+GSE168859,GSM5171602,GSM5171602,10x 5',none,none,true,Human peripheral blood; subject: Healthydonor3
+GSE168859,GSM5171603,GSM5171603,10x 5',none,none,true,Human peripheral blood; subject: Healthydonor4
+GSE168859,GSM5171604,GSM5171604,10x 5',none,none,true,Human peripheral blood; subject: UPN1
+GSE168859,GSM5171605,GSM5171605,10x 5',none,none,true,Human peripheral blood; subject: UPN1
+GSE168859,GSM5171606,GSM5171606,10x 5',none,none,true,Human peripheral blood; subject: UPN12
+GSE168859,GSM5171607,GSM5171607,10x 5',none,none,true,Human peripheral blood; subject: UPN12
+GSE168859,GSM5171608,GSM5171608,10x 5',none,none,true,Human peripheral blood; subject: UPN8
+GSE168859,GSM5171609,GSM5171609,10x 5',none,none,true,Human peripheral blood; subject: UPN13
+GSE168859,GSM5171610,GSM5171610,10x 5',none,none,true,Human peripheral blood; subject: Healthydonor5
+GSE168859,GSM5171611,GSM5171611,10x 5',none,none,true,Human peripheral blood; subject: Healthydonor6
+GSE168859,GSM5171612,GSM5171612,10x 5',none,none,true,Human peripheral blood; subject: UPN8
+GSE168859,GSM5171613,GSM5171613,10x 5',none,none,true,Human peripheral blood; subject: UPN13
+GSE168859,GSM5171614,GSM5171614,10x 5',none,none,true,Human peripheral blood; subject: UPN14
+GSE168859,GSM5171615,GSM5171615,10x 5',none,none,true,Human peripheral blood; subject: UPN14
+GSE168859,GSM5171616,GSM5171616,10x 5',none,none,true,Human peripheral blood; subject: UPN15
+GSE168859,GSM5171617,GSM5171617,10x 5',none,none,true,Human peripheral blood; subject: UPN15
+GSE168859,GSM5171618,GSM5171618,10x 5',none,none,true,Human peripheral blood; subject: UPN6
+GSE168859,GSM5171619,GSM5171619,10x 5',none,none,true,Human peripheral blood; subject: Healthydonor7
+GSE168859,GSM5171620,GSM5171620,10x 5',none,none,true,Human peripheral blood; subject: UPN24
+GSE168859,GSM5171621,GSM5171621,10x 5',none,none,true,Human peripheral blood; subject: UPN24
+GSE168859,GSM5171622,GSM5171622,10x 5',none,none,true,Human peripheral blood; subject: UPN10
+GSE168859,GSM5171623,GSM5171623,10x 5',none,none,true,Human peripheral blood; subject: UPN10
+GSE168859,GSM5171624,GSM5171624,10x 5',none,none,true,Human peripheral blood; subject: UPN19
+GSE168859,GSM5171625,GSM5171625,10x 5',none,none,true,Human peripheral blood; subject: UPN19
+GSE168859,GSM5171626,GSM5171626,10x 5',none,none,true,Human peripheral blood; subject: Healthydonor1
+GSE168859,GSM5171627,GSM5171627,10x 5',none,none,true,Human peripheral blood; subject: Healthydonor2
+GSE168859,GSM5171628,GSM5171628,10x 5',none,none,true,Human peripheral blood; subject: UPN18
+GSE168859,GSM5171629,GSM5171629,10x 5',none,none,true,Human peripheral blood; subject: UPN18
+GSE168859,GSM5171630,GSM5171630,10x 5',none,none,true,Human peripheral blood; subject: UPN4
+GSE168859,GSM5171631,GSM5171631,10x 5',none,none,true,Human peripheral blood; subject: UPN4
+GSE168859,GSM5171632,GSM5171632,10x 5',none,none,true,Human peripheral blood; subject: UPN17
+GSE168859,GSM5171633,GSM5171633,10x 5',none,none,true,Human peripheral blood; subject: UPN17
+GSE168859,GSM5171634,GSM5171634,10x 5',none,none,true,Human peripheral blood; subject: Healthydonor3
+GSE168859,GSM5171635,GSM5171635,10x 5',none,none,true,Human peripheral blood; subject: Healthydonor4
+GSE168859,GSM5171636,GSM5171636,10x 5',none,none,true,Human peripheral blood; subject: UPN1
+GSE168859,GSM5171637,GSM5171637,10x 5',none,none,true,Human peripheral blood; subject: UPN1
+GSE168859,GSM5171638,GSM5171638,10x 5',none,none,true,Human peripheral blood; subject: UPN12
+GSE168859,GSM5171639,GSM5171639,10x 5',none,none,true,Human peripheral blood; subject: UPN12
+GSE168859,GSM5171640,GSM5171640,10x 5',none,none,true,Human peripheral blood; subject: UPN8
+GSE168859,GSM5171641,GSM5171641,10x 5',none,none,true,Human peripheral blood; subject: UPN13
+GSE168859,GSM5171642,GSM5171642,10x 5',none,none,true,Human peripheral blood; subject: Healthydonor5
+GSE168859,GSM5171643,GSM5171643,10x 5',none,none,true,Human peripheral blood; subject: Healthydonor6
+GSE168859,GSM5171644,GSM5171644,10x 5',none,none,true,Human peripheral blood; subject: UPN8
+GSE168859,GSM5171645,GSM5171645,10x 5',none,none,true,Human peripheral blood; subject: UPN13
+GSE168859,GSM5171646,GSM5171646,10x 5',none,none,true,Human peripheral blood; subject: UPN14
+GSE168859,GSM5171647,GSM5171647,10x 5',none,none,true,Human peripheral blood; subject: UPN14
+GSE168859,GSM5171648,GSM5171648,10x 5',none,none,true,Human peripheral blood; subject: UPN15
+GSE168859,GSM5171649,GSM5171649,10x 5',none,none,true,Human peripheral blood; subject: UPN15
+GSE168859,GSM5171650,GSM5171650,10x 5',none,none,true,Human peripheral blood; subject: UPN6
+GSE168859,GSM5171651,GSM5171651,10x 5',none,none,true,Human peripheral blood; subject: Healthydonor7
+GSE169441,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE171037,GSM5216975,GSM5216975,10x (unspecified),none,none,true,GT_6 PBMC_1; number of cells: 6050
+GSE171037,GSM5216976,GSM5216976,10x (unspecified),none,none,true,GT_6 PBMC_2; number of cells: 5252
+GSE171037,GSM5216977,GSM5216977,10x (unspecified),none,none,true,GT PBMC_1; number of cells: 0
+GSE171037,GSM5216978,GSM5216978,10x (unspecified),none,none,true,GT PBMC_1; number of cells: 0
+GSE171037,GSM5216979,GSM5216979,10x (unspecified),none,none,true,GT_6 TA_1; number of cells: 1950
+GSE171037,GSM5216980,GSM5216980,10x (unspecified),none,none,true,GT_5 TA_1; number of cells: 1976
+GSE171037,GSM5216981,GSM5216981,10x (unspecified),none,none,true,GT_6 TA_2; number of cells: 2393
+GSE171037,GSM5216982,GSM5216982,10x (unspecified),none,none,true,GH_7 TA; number of cells: 5767
+GSE171037,GSM5216983,GSM5216983,10x (unspecified),none,none,true,GT_5 TA_2; number of cells: 2166
+GSE171037,GSM5216984,GSM5216984,10x (unspecified),none,none,true,GH_1; number of cells: 3047
+GSE171037,GSM5216985,GSM5216985,10x (unspecified),none,none,true,GH_2; number of cells: 2104
+GSE171037,GSM5216986,GSM5216986,10x (unspecified),none,none,true,GH_3; number of cells: 2393
+GSE171037,GSM5216987,GSM5216987,10x (unspecified),none,none,true,GT_2; number of cells: 4473
+GSE171037,GSM5216988,GSM5216988,10x (unspecified),none,none,true,GT_3; number of cells: 4980
+GSE175930,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE178882,GSM5399838,GSM5399838,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399839,GSM5399839,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399840,GSM5399840,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399841,GSM5399841,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399842,GSM5399842,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399843,GSM5399843,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399844,GSM5399844,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399845,GSM5399845,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399846,GSM5399846,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399847,GSM5399847,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399848,GSM5399848,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399849,GSM5399849,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399850,GSM5399850,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399851,GSM5399851,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399852,GSM5399852,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399853,GSM5399853,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399854,GSM5399854,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399855,GSM5399855,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399856,GSM5399856,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399857,GSM5399857,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399858,GSM5399858,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399859,GSM5399859,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399860,GSM5399860,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399861,GSM5399861,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399862,GSM5399862,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399863,GSM5399863,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399864,GSM5399864,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399865,GSM5399865,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399866,GSM5399866,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399867,GSM5399867,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399868,GSM5399868,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399869,GSM5399869,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399870,GSM5399870,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399871,GSM5399871,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399872,GSM5399872,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399873,GSM5399873,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399874,GSM5399874,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399875,GSM5399875,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399876,GSM5399876,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399877,GSM5399877,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399878,GSM5399878,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399879,GSM5399879,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399880,GSM5399880,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399881,GSM5399881,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399882,GSM5399882,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399883,GSM5399883,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399884,GSM5399884,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399885,GSM5399885,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399886,GSM5399886,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399887,GSM5399887,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399888,GSM5399888,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399889,GSM5399889,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399890,GSM5399890,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399891,GSM5399891,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399892,GSM5399892,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399893,GSM5399893,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399894,GSM5399894,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399895,GSM5399895,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399896,GSM5399896,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE178882,GSM5399897,GSM5399897,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; cell type: PBMC
+GSE179994,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE181710,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE188620,GSM5686902,GSM5686902,10x 5',vdj,unspecified_ab_or_gd,true,PBMCs
+GSE188620,GSM5686903,GSM5686903,10x 5',vdj,unspecified_ab_or_gd,true,PBMCs
+GSE188620,GSM5686904,GSM5686904,10x 5',vdj,unspecified_ab_or_gd,true,PBMCs
+GSE188620,GSM5686905,GSM5686905,10x 5',vdj,unspecified_ab_or_gd,true,PBMCs
+GSE188620,GSM5686906,GSM5686906,10x 5',vdj,unspecified_ab_or_gd,true,PBMCs
+GSE188620,GSM5686907,GSM5686907,10x 5',vdj,unspecified_ab_or_gd,true,PBMCs
+GSE188620,GSM5686908,GSM5686908,10x 5',vdj,unspecified_ab_or_gd,true,PBMCs
+GSE188620,GSM5686909,GSM5686909,10x 5',vdj,unspecified_ab_or_gd,true,PBMCs
+GSE188620,GSM5686910,GSM5686910,10x 5',vdj,unspecified_ab_or_gd,true,resected tumo
+GSE188620,GSM5686911,GSM5686911,10x 5',vdj,unspecified_ab_or_gd,true,resected tumo
+GSE188620,GSM5686912,GSM5686912,10x 5',vdj,unspecified_ab_or_gd,true,resected tumo
+GSE188620,GSM5686913,GSM5686913,10x 5',vdj,unspecified_ab_or_gd,true,resected tumo
+GSE188620,GSM5686914,GSM5686914,10x 5',vdj,unspecified_ab_or_gd,true,resected tumo
+GSE188620,GSM5686915,GSM5686915,10x 5',vdj,unspecified_ab_or_gd,true,resected tumo
+GSE188620,GSM5686916,GSM5686916,10x 5',vdj,unspecified_ab_or_gd,true,resected tumo
+GSE188620,GSM5686917,GSM5686917,10x 5',vdj,unspecified_ab_or_gd,true,resected tumo
+GSE188620,GSM5686918,GSM5686918,10x 5',vdj,unspecified_ab_or_gd,true,resected tumo
+GSE188620,GSM5686919,GSM5686919,10x 5',vdj,unspecified_ab_or_gd,true,resected tumo
+GSE188620,GSM5686920,GSM5686920,10x 5',vdj,unspecified_ab_or_gd,true,resected tumo
+GSE188620,GSM5686921,GSM5686921,10x 5',vdj,unspecified_ab_or_gd,true,resected tumo
+GSE188620,GSM5686922,GSM5686922,10x 5',vdj,unspecified_ab_or_gd,true,resected tumo
+GSE188620,GSM5686923,GSM5686923,10x 5',vdj,unspecified_ab_or_gd,true,resected tumo
+GSE188620,GSM5686924,GSM5686924,10x 5',vdj,unspecified_ab_or_gd,true,GBM6-AD cells
+GSE189126,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE190870,GSM5091209,GSM5091209,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091210,GSM5091210,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091211,GSM5091211,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091212,GSM5091212,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091213,GSM5091213,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091214,GSM5091214,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091215,GSM5091215,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091216,GSM5091216,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091217,GSM5091217,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091218,GSM5091218,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091219,GSM5091219,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091220,GSM5091220,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091221,GSM5091221,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091222,GSM5091222,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091223,GSM5091223,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091224,GSM5091224,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091226,GSM5091226,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091227,GSM5091227,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091228,GSM5091228,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091229,GSM5091229,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091230,GSM5091230,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091231,GSM5091231,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091232,GSM5091232,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091233,GSM5091233,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091234,GSM5091234,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091235,GSM5091235,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091236,GSM5091236,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091237,GSM5091237,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091238,GSM5091238,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091239,GSM5091239,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091240,GSM5091240,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5091241,GSM5091241,10x 5',vdj,unspecified_ab_or_gd,true,human breast cancer
+GSE190870,GSM5732357,GSM5732357,10x (unspecified),none,none,true,human breast cancer; pathological type: Invasive ductal carcinoma
+GSE190870,GSM5732358,GSM5732358,10x (unspecified),none,none,true,human breast cancer; pathological type: Invasive ductal carcinoma
+GSE190870,GSM5732359,GSM5732359,10x (unspecified),none,none,true,human breast cancer; pathological type: Invasive ductal carcinoma
+GSE190870,GSM5732360,GSM5732360,10x (unspecified),none,none,true,human breast cancer; pathological type: Invasive ductal carcinoma
+GSE198265,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE206325,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE211504,GSM6474817,GSM6474817,10x 5',vdj,unspecified_ab_or_gd,true,whole blood
+GSE211504,GSM6474818,GSM6474818,10x 5',vdj,unspecified_ab_or_gd,true,whole blood
+GSE211504,GSM6474819,GSM6474819,10x 5',vdj,unspecified_ab_or_gd,true,whole blood
+GSE211504,GSM6474820,GSM6474820,10x 5',vdj,unspecified_ab_or_gd,true,whole blood
+GSE211504,GSM6474821,GSM6474821,10x 5',vdj,unspecified_ab_or_gd,true,whole blood
+GSE211504,GSM6474822,GSM6474822,10x 5',vdj,unspecified_ab_or_gd,true,whole blood
+GSE211504,GSM6474823,GSM6474823,10x 5',vdj,unspecified_ab_or_gd,true,whole blood
+GSE211504,GSM6474824,GSM6474824,10x 5',vdj,unspecified_ab_or_gd,true,whole blood
+GSE211504,GSM6474825,GSM6474825,10x 5',vdj,unspecified_ab_or_gd,true,whole blood
+GSE211504,GSM6474826,GSM6474826,10x 5',vdj,unspecified_ab_or_gd,true,whole blood
+GSE211504,GSM6474827,GSM6474827,10x 5',vdj,unspecified_ab_or_gd,true,whole blood
+GSE211504,GSM6474828,GSM6474828,10x 5',vdj,unspecified_ab_or_gd,true,whole blood
+GSE212217,GSM6514096,GSM6514096,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514097,GSM6514097,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514098,GSM6514098,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514099,GSM6514099,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514100,GSM6514100,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514101,GSM6514101,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514102,GSM6514102,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514103,GSM6514103,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514104,GSM6514104,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514105,GSM6514105,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514106,GSM6514106,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514107,GSM6514107,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514108,GSM6514108,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514109,GSM6514109,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514110,GSM6514110,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514111,GSM6514111,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514112,GSM6514112,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514113,GSM6514113,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514114,GSM6514114,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514115,GSM6514115,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514116,GSM6514116,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514117,GSM6514117,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514118,GSM6514118,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514119,GSM6514119,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514120,GSM6514120,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514121,GSM6514121,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514122,GSM6514122,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514123,GSM6514123,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514124,GSM6514124,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514125,GSM6514125,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514126,GSM6514126,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514127,GSM6514127,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514128,GSM6514128,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514129,GSM6514129,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514130,GSM6514130,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514131,GSM6514131,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514132,GSM6514132,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514133,GSM6514133,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514134,GSM6514134,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514135,GSM6514135,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514136,GSM6514136,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514137,GSM6514137,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514138,GSM6514138,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514139,GSM6514139,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514140,GSM6514140,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514141,GSM6514141,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514142,GSM6514142,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514143,GSM6514143,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514144,GSM6514144,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514145,GSM6514145,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514146,GSM6514146,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514147,GSM6514147,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cells; cell type: Peripheral blood mononuclear cells
+GSE212217,GSM6514148,GSM6514148,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514149,GSM6514149,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514150,GSM6514150,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514151,GSM6514151,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514152,GSM6514152,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514153,GSM6514153,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514154,GSM6514154,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514155,GSM6514155,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514156,GSM6514156,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514157,GSM6514157,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514158,GSM6514158,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514159,GSM6514159,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514160,GSM6514160,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514161,GSM6514161,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514162,GSM6514162,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514163,GSM6514163,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514164,GSM6514164,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514165,GSM6514165,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514166,GSM6514166,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514167,GSM6514167,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514168,GSM6514168,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514169,GSM6514169,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514170,GSM6514170,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514171,GSM6514171,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514172,GSM6514172,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514173,GSM6514173,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514174,GSM6514174,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514175,GSM6514175,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514176,GSM6514176,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514177,GSM6514177,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514178,GSM6514178,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514179,GSM6514179,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514180,GSM6514180,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514181,GSM6514181,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514182,GSM6514182,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514183,GSM6514183,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514184,GSM6514184,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514185,GSM6514185,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514186,GSM6514186,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514187,GSM6514187,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514188,GSM6514188,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514189,GSM6514189,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514190,GSM6514190,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514191,GSM6514191,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514192,GSM6514192,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514193,GSM6514193,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514194,GSM6514194,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514195,GSM6514195,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514196,GSM6514196,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514197,GSM6514197,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514198,GSM6514198,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE212217,GSM6514199,GSM6514199,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood T cells; cell type: Peripheral blood T cells
+GSE221776,GSM6896043,GSM6896043,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD45+CD3+ T cells
+GSE221776,GSM6896044,GSM6896044,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD45+CD3+ T cells
+GSE221776,GSM6896045,GSM6896045,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD45+CD3+ T cells
+GSE221776,GSM6896046,GSM6896046,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD45+CD3+ T cells
+GSE221776,GSM6896047,GSM6896047,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD45+CD3+ T cells
+GSE221776,GSM6896048,GSM6896048,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD45+CD3+ T cells
+GSE221776,GSM6896049,GSM6896049,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD45+CD3+ T cells
+GSE221776,GSM6896050,GSM6896050,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD45+CD3+ T cells
+GSE221776,GSM6896051,GSM6896051,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD45+CD3+ T cells
+GSE221776,GSM6896052,GSM6896052,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD45+CD3+ T cells
+GSE221776,GSM6896053,GSM6896053,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD45+CD3+ T cells
+GSE221776,GSM6896054,GSM6896054,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD45+CD3+ T cells
+GSE221776,GSM6896055,GSM6896055,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD45+CD3+ T cells
+GSE221776,GSM6896056,GSM6896056,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD45+CD3+ T cells
+GSE221776,GSM6896057,GSM6896057,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD45+CD3+ T cells
+GSE221776,GSM6896058,GSM6896058,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD45+CD3+ T cells
+GSE221776,GSM6896059,GSM6896059,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD45+CD3+ T cells
+GSE221776,GSM6896060,GSM6896060,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD45+CD3+ T cells
+GSE221776,GSM6896061,GSM6896061,10x (unspecified),vdj,unspecified_ab_or_gd,true,Non-small cell lung cancer; cell type: CD4+ T cells
+GSE221776,GSM6896062,GSM6896062,10x (unspecified),vdj,unspecified_ab_or_gd,true,Non-small cell lung cancer; cell type: CD8+ T cells
+GSE221776,GSM6896063,GSM6896063,10x (unspecified),vdj,unspecified_ab_or_gd,true,Non-small cell lung cancer; cell type: CD8+ T cells
+GSE221776,GSM6896064,GSM6896064,10x (unspecified),vdj,unspecified_ab_or_gd,true,Non-small cell lung cancer; cell type: CD4+ T cells
+GSE221776,GSM6896065,GSM6896065,10x (unspecified),vdj,unspecified_ab_or_gd,true,Non-small cell lung cancer; cell type: CD8+ T cells
+GSE221776,GSM6896066,GSM6896066,10x (unspecified),vdj,unspecified_ab_or_gd,true,Non-small cell lung cancer; cell type: CD8+ T cells
+GSE221776,GSM6896067,GSM6896067,10x (unspecified),vdj,unspecified_ab_or_gd,true,Non-small cell lung cancer; cell type: CD4+ T cells
+GSE221776,GSM6896068,GSM6896068,10x (unspecified),vdj,unspecified_ab_or_gd,true,Non-small cell lung cancer; cell type: CD8+ T cells
+GSE221776,GSM6896069,GSM6896069,10x (unspecified),vdj,unspecified_ab_or_gd,true,Non-small cell lung cancer; cell type: CD8+ T cells
+GSE221776,GSM6896070,GSM6896070,10x (unspecified),vdj,unspecified_ab_or_gd,true,Non-small cell lung cancer; cell type: CD4+ T cells
+GSE221776,GSM6896071,GSM6896071,10x (unspecified),vdj,unspecified_ab_or_gd,true,Non-small cell lung cancer; cell type: CD8+ T cells
+GSE221776,GSM6896072,GSM6896072,10x (unspecified),vdj,unspecified_ab_or_gd,true,Non-small cell lung cancer; cell type: CD8+ T cells
+GSE221776,GSM6896073,GSM6896073,10x (unspecified),vdj,unspecified_ab_or_gd,true,Non-small cell lung cancer; cell type: CD4+ T cells
+GSE221776,GSM6896074,GSM6896074,10x (unspecified),vdj,unspecified_ab_or_gd,true,Non-small cell lung cancer; cell type: CD8+ T cells
+GSE221776,GSM6896075,GSM6896075,10x (unspecified),vdj,unspecified_ab_or_gd,true,Non-small cell lung cancer; cell type: CD8+ T cells
+GSE221776,GSM6896076,GSM6896076,10x (unspecified),vdj,unspecified_ab_or_gd,true,Non-small cell lung cancer; cell type: CD4+ T cells
+GSE221776,GSM6896077,GSM6896077,10x (unspecified),vdj,unspecified_ab_or_gd,true,Non-small cell lung cancer; cell type: CD8+ T cells
+GSE221776,GSM6896078,GSM6896078,10x (unspecified),vdj,unspecified_ab_or_gd,true,Non-small cell lung cancer; cell type: CD8+ T cells
+GSE221776,GSM7412587,GSM7412587,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD4+ T cells
+GSE221776,GSM7412588,GSM7412588,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD8+ T cells
+GSE221776,GSM7412589,GSM7412589,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD4+ T cells
+GSE221776,GSM7412590,GSM7412590,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD4+ T cells
+GSE221776,GSM7412591,GSM7412591,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD8+ T cells
+GSE221776,GSM7412592,GSM7412592,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD8+ T cells
+GSE221776,GSM7412593,GSM7412593,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD4+ T cells
+GSE221776,GSM7412594,GSM7412594,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD8+ T cells
+GSE221776,GSM7412595,GSM7412595,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD4+ T cells
+GSE221776,GSM7412596,GSM7412596,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD4+ T cells
+GSE221776,GSM7412597,GSM7412597,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD8+ T cells
+GSE221776,GSM7412598,GSM7412598,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD8+ T cells
+GSE221776,GSM7412599,GSM7412599,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD4+ T cells
+GSE221776,GSM7412600,GSM7412600,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD8+ T cells
+GSE221776,GSM7412601,GSM7412601,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD4+ T cells
+GSE221776,GSM7412602,GSM7412602,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD4+ T cells
+GSE221776,GSM7412603,GSM7412603,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD8+ T cells
+GSE221776,GSM7412604,GSM7412604,10x 5',vdj,unspecified_ab_or_gd,true,Pediatric brain tumor; cell type: CD8+ T cells
+GSE227709,GSM7105884,GSM7105884,10x 5',none,none,true,Tumor & Blood; library type: GEX/ADT
+GSE227709,GSM7105885,GSM7105885,10x 5',none,none,true,Tumor & Blood; library type: GEX/ADT
+GSE227709,GSM7105886,GSM7105886,10x 5',none,none,true,Tumor & Blood; library type: GEX/ADT
+GSE227709,GSM7105887,GSM7105887,10x 5',vdj,unspecified_ab_or_gd,true,Tumor & Blood; library type: TCR
+GSE227709,GSM7105888,GSM7105888,10x 5',vdj,unspecified_ab_or_gd,true,Tumor & Blood; library type: TCR
+GSE227709,GSM7105889,GSM7105889,10x 5',vdj,unspecified_ab_or_gd,true,Tumor & Blood; library type: TCR
+GSE228597,GSM7133689,GSM7133689,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133690,GSM7133690,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133691,GSM7133691,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133692,GSM7133692,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133693,GSM7133693,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133694,GSM7133694,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133695,GSM7133695,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133696,GSM7133696,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133697,GSM7133697,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133698,GSM7133698,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133699,GSM7133699,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133700,GSM7133700,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133701,GSM7133701,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133702,GSM7133702,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133703,GSM7133703,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133704,GSM7133704,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133705,GSM7133705,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133706,GSM7133706,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133707,GSM7133707,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133708,GSM7133708,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133709,GSM7133709,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133710,GSM7133710,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133711,GSM7133711,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133712,GSM7133712,10x 5',none,none,true,Heart tissue
+GSE228597,GSM7133713,GSM7133713,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133714,GSM7133714,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133715,GSM7133715,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133716,GSM7133716,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133717,GSM7133717,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133718,GSM7133718,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133719,GSM7133719,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133720,GSM7133720,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133721,GSM7133721,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133722,GSM7133722,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133723,GSM7133723,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133724,GSM7133724,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133725,GSM7133725,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133726,GSM7133726,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133727,GSM7133727,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133728,GSM7133728,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133729,GSM7133729,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133730,GSM7133730,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133731,GSM7133731,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133732,GSM7133732,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133733,GSM7133733,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133734,GSM7133734,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133735,GSM7133735,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133736,GSM7133736,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133737,GSM7133737,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133738,GSM7133738,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133739,GSM7133739,10x 5',none,none,true,PBMCs
+GSE228597,GSM7133740,GSM7133740,10x 5',none,none,true,PBMCs
+GSE228597,GSM8019276,GSM8019276,10x 5',vdj,unspecified_ab_or_gd,true,tumor
+GSE228597,GSM8019277,GSM8019277,10x 5',vdj,unspecified_ab_or_gd,true,Normal tissue adjacent to tumor
+GSE228597,GSM8019278,GSM8019278,10x 5',vdj,unspecified_ab_or_gd,true,Heart tissue
+GSE228597,GSM8019279,GSM8019279,10x 5',vdj,unspecified_ab_or_gd,true,Heart tissue
+GSE228597,GSM8019280,GSM8019280,10x 5',vdj,unspecified_ab_or_gd,true,tumor
+GSE228597,GSM8019281,GSM8019281,10x 5',vdj,unspecified_ab_or_gd,true,Normal tissue adjacent to tumor
+GSE228597,GSM8019282,GSM8019282,10x 5',vdj,unspecified_ab_or_gd,true,Heart tissue
+GSE228597,GSM8019283,GSM8019283,10x 5',vdj,unspecified_ab_or_gd,true,tumor
+GSE228597,GSM8019284,GSM8019284,10x 5',vdj,unspecified_ab_or_gd,true,Normal tissue adjacent to tumor
+GSE228597,GSM8019285,GSM8019285,10x 5',vdj,unspecified_ab_or_gd,true,Heart tissue
+GSE228597,GSM8019286,GSM8019286,10x 5',vdj,unspecified_ab_or_gd,true,tumor
+GSE228597,GSM8019287,GSM8019287,10x 5',vdj,unspecified_ab_or_gd,true,Normal tissue adjacent to tumor
+GSE228597,GSM8019288,GSM8019288,10x 5',vdj,unspecified_ab_or_gd,true,Heart tissue
+GSE228597,GSM8019289,GSM8019289,10x 5',vdj,unspecified_ab_or_gd,true,Heart tissue
+GSE228597,GSM8019290,GSM8019290,10x 5',vdj,unspecified_ab_or_gd,true,Heart tissue
+GSE228597,GSM8019291,GSM8019291,10x 5',vdj,unspecified_ab_or_gd,true,Heart tissue
+GSE228597,GSM8019292,GSM8019292,10x 5',vdj,unspecified_ab_or_gd,true,Heart tissue
+GSE228597,GSM8019293,GSM8019293,10x 5',vdj,unspecified_ab_or_gd,true,Heart tissue
+GSE228597,GSM8031456,GSM8031456,10x 5',none,none,true,PBMCs
+GSE228597,GSM8031457,GSM8031457,10x 5',none,none,true,PBMCs
+GSE228597,GSM8031458,GSM8031458,10x 5',none,none,true,PBMCs
+GSE228597,GSM8031459,GSM8031459,10x 5',none,none,true,PBMCs
+GSE228597,GSM8031460,GSM8031460,10x 5',none,none,true,PBMCs
+GSE229858,GSM7179128,GSM7179128,10x 5',none,none,true,melanoma; cell type: expanded TILs
+GSE229858,GSM7179129,GSM7179129,10x 5',none,none,true,melanoma; cell type: expanded TILs
+GSE229858,GSM7179130,GSM7179130,10x 5',none,none,true,melanoma; cell type: expanded TILs
+GSE229858,GSM7179131,GSM7179131,10x 5',none,none,true,melanoma; cell type: expanded TILs
+GSE229858,GSM7179132,GSM7179132,10x 5',none,none,true,melanoma; cell type: expanded TILs
+GSE229858,GSM7179133,GSM7179133,10x 5',none,none,true,melanoma; cell type: expanded TILs
+GSE229858,GSM7179134,GSM7179134,10x 5',none,none,true,melanoma; cell type: expanded TILs
+GSE229858,GSM7179135,GSM7179135,10x 5',none,none,true,melanoma; cell type: expanded TILs
+GSE229858,GSM7179136,GSM7179136,10x 5',none,none,true,melanoma; cell type: expanded TILs
+GSE229858,GSM7179137,GSM7179137,10x 5',none,none,true,melanoma; cell type: expanded TILs
+GSE229858,GSM7179138,GSM7179138,10x 5',none,none,true,melanoma; cell type: expanded TILs
+GSE229858,GSM7179139,GSM7179139,10x 5',none,none,true,melanoma; cell type: expanded TILs
+GSE229858,GSM7179140,GSM7179140,10x 5',none,none,true,melanoma; cell type: expanded TILs
+GSE229860,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE232240,GSM7324294,GSM7324294,10x (unspecified),vdj,unspecified_ab_or_gd,true,"tumor; response: mixed samples (RE, NR)"
+GSE232240,GSM7324295,GSM7324295,10x (unspecified),vdj,unspecified_ab_or_gd,true,"tumor; response: mixed samples (RE, NR)"
+GSE232240,GSM7324296,GSM7324296,10x 5',none,none,true,PBMCs
+GSE232240,GSM7324297,GSM7324297,10x 5',none,none,true,PBMCs
+GSE232240,GSM7324298,GSM7324298,10x 5',none,none,true,PBMCs
+GSE232240,GSM7324299,GSM7324299,10x 5',none,none,true,PBMCs
+GSE232240,GSM7324300,GSM7324300,10x 5',none,none,true,PBMCs
+GSE232240,GSM7324301,GSM7324301,10x 5',none,none,true,PBMCs
+GSE232240,GSM7324302,GSM7324302,10x 5',none,none,true,PBMCs
+GSE232240,GSM7324303,GSM7324303,10x 5',none,none,true,PBMCs
+GSE232240,GSM7324304,GSM7324304,10x 5',none,none,true,PBMCs
+GSE232240,GSM7324305,GSM7324305,10x 5',none,none,true,PBMCs
+GSE232240,GSM7324306,GSM7324306,10x 5',none,none,true,PBMCs
+GSE232240,GSM7324307,GSM7324307,10x 5',none,none,true,PBMCs
+GSE232240,GSM7324308,GSM7324308,10x 5',none,none,true,PBMCs
+GSE232240,GSM7324309,GSM7324309,10x 5',none,none,true,PBMCs
+GSE232240,GSM7324310,GSM7324310,10x 5',none,none,true,PBMCs
+GSE232240,GSM7324311,GSM7324311,10x 5',none,none,true,PBMCs
+GSE232240,GSM7324312,GSM7324312,10x 5',none,none,true,PBMCs
+GSE232240,GSM7324313,GSM7324313,10x 5',none,none,true,PBMCs
+GSE234069,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE234352,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE235863,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE240361,GSM7696769,GSM7696769,BD Rhapsody,none,none,true,RNA
+GSE240361,GSM7696770,GSM7696770,BD Rhapsody,none,none,true,"HTO; hto: Sample Tag 1 — Human, Sample Tag 2 — Human"
+GSE240361,GSM7696771,GSM7696771,BD Rhapsody,none,none,true,RNA
+GSE240361,GSM7696772,GSM7696772,BD Rhapsody,none,none,true,"HTO; hto: Sample Tag 3 — Human, Sample Tag 4 — Human, Sample Tag 5 — Human, Sample Tag 6 — Human, Sample Tag 7 — Human, Sample Tag 8 — Human, ..."
+GSE240361,GSM7696773,GSM7696773,BD Rhapsody,vdj,unspecified_ab_or_gd,true,TCR
+GSE240865,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE241783,GSM7743546,GSM7743546,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743547,GSM7743547,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743548,GSM7743548,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743549,GSM7743549,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743550,GSM7743550,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743551,GSM7743551,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743552,GSM7743552,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743553,GSM7743553,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743554,GSM7743554,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743555,GSM7743555,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743556,GSM7743556,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743557,GSM7743557,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743558,GSM7743558,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743559,GSM7743559,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743560,GSM7743560,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743561,GSM7743561,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743562,GSM7743562,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743563,GSM7743563,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743564,GSM7743564,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743565,GSM7743565,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743566,GSM7743566,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743567,GSM7743567,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743568,GSM7743568,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743569,GSM7743569,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743570,GSM7743570,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743571,GSM7743571,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743572,GSM7743572,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743573,GSM7743573,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743574,GSM7743574,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743575,GSM7743575,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743576,GSM7743576,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743577,GSM7743577,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743578,GSM7743578,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743579,GSM7743579,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743580,GSM7743580,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743581,GSM7743581,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743582,GSM7743582,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743583,GSM7743583,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743584,GSM7743584,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743585,GSM7743585,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743586,GSM7743586,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743587,GSM7743587,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743588,GSM7743588,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743589,GSM7743589,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743590,GSM7743590,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743591,GSM7743591,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743592,GSM7743592,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743593,GSM7743593,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743594,GSM7743594,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743595,GSM7743595,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743596,GSM7743596,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743597,GSM7743597,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743598,GSM7743598,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743599,GSM7743599,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743600,GSM7743600,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743601,GSM7743601,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743602,GSM7743602,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743603,GSM7743603,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE241783,GSM7743604,GSM7743604,10x 5',vdj,unspecified_ab_or_gd,true,Blood cell culture
+GSE243013,P1,P1,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P10,P10,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P102,P102,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P103,P103,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P105,P105,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P106,P106,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P107,P107,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P113,P113,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P114,P114,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P115,P115,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P118,P118,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P119,P119,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P120,P120,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P121,P121,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P122,P122,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P124,P124,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P125,P125,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P127,P127,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P130,P130,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P131,P131,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P137,P137,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P142,P142,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P146,P146,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P150,P150,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P156,P156,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P158,P158,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P16,P16,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P160,P160,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P161,P161,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P164,P164,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P166,P166,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P168,P168,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P172,P172,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P174,P174,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P179,P179,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P18,P18,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P180,P180,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P182,P182,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P184,P184,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P185,P185,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P189,P189,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P190,P190,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P192,P192,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P199,P199,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P2,P2,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P20,P20,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P200,P200,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P201,P201,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P204,P204,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P205,P205,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P206,P206,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P207,P207,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P209,P209,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P213,P213,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P218,P218,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P221,P221,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P224,P224,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P226,P226,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P227,P227,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P23,P23,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P233,P233,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P234,P234,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P235,P235,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P24,P24,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P243,P243,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P247,P247,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P248,P248,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P249,P249,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P257,P257,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P258,P258,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P259,P259,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P26,P26,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P261,P261,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P264,P264,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P265,P265,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P266,P266,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P267,P267,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P268,P268,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P270,P270,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P271,P271,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P273,P273,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P276,P276,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P277,P277,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P278,P278,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P279,P279,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P280,P280,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P281,P281,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P282,P282,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P285,P285,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P286,P286,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P287,P287,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P288,P288,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P289,P289,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P290,P290,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P291,P291,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P292,P292,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P293,P293,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P296,P296,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P297,P297,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P298,P298,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P3,P3,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P303,P303,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P304,P304,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P309,P309,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P31,P31,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P312,P312,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P32,P32,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P321,P321,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P322,P322,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P323,P323,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P325,P325,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P328,P328,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P329,P329,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P33,P33,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P334,P334,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P337,P337,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P339,P339,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P34,P34,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P340,P340,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P346,P346,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P347,P347,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P349,P349,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P35,P35,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P355,P355,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P36,P36,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P365,P365,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P367,P367,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P368,P368,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P371,P371,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P372,P372,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P377,P377,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P380,P380,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P382,P382,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P387,P387,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P389,P389,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P39,P39,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P390,P390,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P391,P391,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P394,P394,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P395,P395,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P399,P399,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P4,P4,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P402,P402,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P403,P403,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P404,P404,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P405,P405,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P407,P407,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P412,P412,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P414,P414,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P416,P416,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P417,P417,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P418,P418,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P420,P420,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P423,P423,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P427,P427,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P428,P428,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P43,P43,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P432,P432,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P433,P433,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P435,P435,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P44,P44,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P445,P445,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P45,P45,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P453,P453,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P454,P454,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P457,P457,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P459,P459,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P46,P46,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P462,P462,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P463,P463,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P464,P464,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P467,P467,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P469,P469,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P47,P47,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P470,P470,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P471,P471,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P472,P472,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P473,P473,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P477,P477,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P481,P481,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P482,P482,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P483,P483,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P485,P485,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P486,P486,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P488,P488,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P490,P490,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P491,P491,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P494,P494,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P495,P495,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P496,P496,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P498,P498,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P5,P5,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P502,P502,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P509,P509,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P510,P510,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P511,P511,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P520,P520,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P523,P523,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P524,P524,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P525,P525,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P527,P527,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P528,P528,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P53,P53,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P533,P533,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P540,P540,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P550,P550,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P567,P567,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P57,P57,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P574,P574,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P579,P579,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P58,P58,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P587,P587,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P59,P59,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P592,P592,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P595,P595,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P6,P6,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P63,P63,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P64,P64,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P66,P66,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P67,P67,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P68,P68,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P69,P69,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P70,P70,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P71,P71,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P73,P73,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P74,P74,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P9,P9,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P90,P90,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P92,P92,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P93,P93,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243013,P96,P96,unknown,vdj,no;yes,true,Derived from selected H5AD obs because the sample-information manifest had no row.
+GSE243572,GSM7791217,GSM7791217,10x 5',none,none,true,"peripheral blood; patient: SPFS_1_5, SPFS_1_10, SPFS_1_12, SPFS_1_17"
+GSE243572,GSM7791218,GSM7791218,10x 5',none,none,true,"peripheral blood; patient: SPFS_1_5, SPFS_1_10, SPFS_1_12, SPFS_1_17"
+GSE243572,GSM7791219,GSM7791219,10x 5',none,none,true,"peripheral blood; patient: SPFS_1_21, SPFS_1_23, SPFS_1_26, SPFS_3_2"
+GSE243572,GSM7791220,GSM7791220,10x 5',none,none,true,"peripheral blood; patient: SPFS_1_21, SPFS_1_23, SPFS_1_26, SPFS_3_2"
+GSE243572,GSM7791221,GSM7791221,10x 5',none,none,true,"peripheral blood; patient: SPFS_1_2, SPFS_1_27, SPFS_3_1, SPFS_3_5"
+GSE243572,GSM7791222,GSM7791222,10x 5',none,none,true,"peripheral blood; patient: SPFS_1_2, SPFS_1_27, SPFS_3_1, SPFS_3_5"
+GSE243572,GSM7791223,GSM7791223,10x 5',none,none,true,"peripheral blood; patient: SPFS_1_2, SPFS_1_27, SPFS_3_1, SPFS_3_5"
+GSE243572,GSM7791224,GSM7791224,10x 5',none,none,true,"peripheral blood; patient: SPFS_1_2, SPFS_1_27, SPFS_3_1, SPFS_3_5"
+GSE243572,GSM7791225,GSM7791225,10x 5',none,none,true,"peripheral blood; patient: SPFS_3_2, SPFS_3_4, SPFS_1_10, SPFS_1_26"
+GSE243572,GSM7791226,GSM7791226,10x 5',none,none,true,"peripheral blood; patient: SPFS_3_2, SPFS_3_4, SPFS_1_10, SPFS_1_26"
+GSE243572,GSM7791227,GSM7791227,10x 5',none,none,true,"peripheral blood; patient: SPFS_3_4, LPFS_1_28, LPFS_2_8, LPFS_3_6"
+GSE243572,GSM7791228,GSM7791228,10x 5',none,none,true,"peripheral blood; patient: SPFS_3_4, LPFS_1_28, LPFS_2_8, LPFS_3_6"
+GSE243572,GSM7791229,GSM7791229,10x 5',none,none,true,"peripheral blood; patient: SPFS_1_21, SPFS_3_7, LPFS_1_11, LPFS_1_6"
+GSE243572,GSM7791230,GSM7791230,10x 5',none,none,true,"peripheral blood; patient: SPFS_1_21, SPFS_3_7, LPFS_1_11, LPFS_1_6"
+GSE243572,GSM7791231,GSM7791231,10x 5',none,none,true,"peripheral blood; patient: LPFS_1_6, LPFS_1_11, LPFS_1_13, LPFS_1_19"
+GSE243572,GSM7791232,GSM7791232,10x 5',none,none,true,"peripheral blood; patient: LPFS_1_6, LPFS_1_11, LPFS_1_13, LPFS_1_19"
+GSE243572,GSM7791233,GSM7791233,10x 5',none,none,true,"peripheral blood; patient: LPFS_1_8, LPFS_1_18, LPFS_1_20, LPFS_3_8"
+GSE243572,GSM7791234,GSM7791234,10x 5',none,none,true,"peripheral blood; patient: LPFS_1_8, LPFS_1_18, LPFS_1_20, LPFS_3_8"
+GSE243572,GSM7791235,GSM7791235,10x 5',none,none,true,"peripheral blood; patient: LPFS_2_1, LPFS_2_2, LPFS_2_4, LPFS_2_6"
+GSE243572,GSM7791236,GSM7791236,10x 5',none,none,true,"peripheral blood; patient: LPFS_2_1, LPFS_2_2, LPFS_2_4, LPFS_2_6"
+GSE243572,GSM7791237,GSM7791237,10x 5',none,none,true,"peripheral blood; patient: LPFS_1_8, LPFS_1_18, LPFS_1_20, LPFS_3_8"
+GSE243572,GSM7791238,GSM7791238,10x 5',none,none,true,"peripheral blood; patient: LPFS_1_8, LPFS_1_18, LPFS_1_20, LPFS_3_8"
+GSE243572,GSM7791239,GSM7791239,10x 5',none,none,true,"peripheral blood; patient: LPFS_1_13, LPFS_1_19, LPFS_1_28, LPFS_2_4"
+GSE243572,GSM7791240,GSM7791240,10x 5',none,none,true,"peripheral blood; patient: LPFS_1_13, LPFS_1_19, LPFS_1_28, LPFS_2_4"
+GSE243572,GSM7791241,GSM7791241,10x 5',none,none,true,peripheral blood; patient: SPFS_1_2
+GSE243572,GSM7791242,GSM7791242,10x 5',none,none,true,peripheral blood; patient: SPFS_1_5
+GSE243572,GSM7791243,GSM7791243,10x 5',none,none,true,peripheral blood; patient: SPFS_1_10
+GSE243572,GSM7791244,GSM7791244,10x 5',none,none,true,peripheral blood; patient: SPFS_1_12
+GSE243572,GSM7791245,GSM7791245,10x 5',none,none,true,peripheral blood; patient: SPFS_1_17
+GSE243572,GSM7791246,GSM7791246,10x 5',none,none,true,peripheral blood; patient: SPFS_1_21
+GSE243572,GSM7791247,GSM7791247,10x 5',none,none,true,peripheral blood; patient: SPFS_1_23
+GSE243572,GSM7791248,GSM7791248,10x 5',none,none,true,peripheral blood; patient: SPFS_1_26
+GSE243572,GSM7791249,GSM7791249,10x 5',none,none,true,peripheral blood; patient: SPFS_1_27
+GSE243572,GSM7791250,GSM7791250,10x 5',none,none,true,peripheral blood; patient: SPFS_3_1
+GSE243572,GSM7791251,GSM7791251,10x 5',none,none,true,peripheral blood; patient: SPFS_3_2
+GSE243572,GSM7791252,GSM7791252,10x 5',none,none,true,peripheral blood; patient: SPFS_3_4
+GSE243572,GSM7791253,GSM7791253,10x 5',none,none,true,peripheral blood; patient: SPFS_3_5
+GSE243572,GSM7791254,GSM7791254,10x 5',none,none,true,peripheral blood; patient: SPFS_3_7
+GSE243572,GSM7791255,GSM7791255,10x 5',none,none,true,peripheral blood; patient: LPFS_1_6
+GSE243572,GSM7791256,GSM7791256,10x 5',none,none,true,peripheral blood; patient: LPFS_1_8
+GSE243572,GSM7791257,GSM7791257,10x 5',none,none,true,peripheral blood; patient: LPFS_1_11
+GSE243572,GSM7791258,GSM7791258,10x 5',none,none,true,peripheral blood; patient: LPFS_1_13
+GSE243572,GSM7791259,GSM7791259,10x 5',none,none,true,peripheral blood; patient: LPFS_1_18
+GSE243572,GSM7791260,GSM7791260,10x 5',none,none,true,peripheral blood; patient: LPFS_1_19
+GSE243572,GSM7791261,GSM7791261,10x 5',none,none,true,peripheral blood; patient: LPFS_1_20
+GSE243572,GSM7791262,GSM7791262,10x 5',none,none,true,peripheral blood; patient: LPFS_1_28
+GSE243572,GSM7791263,GSM7791263,10x 5',none,none,true,peripheral blood; patient: LPFS_2_1
+GSE243572,GSM7791264,GSM7791264,10x 5',none,none,true,peripheral blood; patient: LPFS_2_2
+GSE243572,GSM7791265,GSM7791265,10x 5',none,none,true,peripheral blood; patient: LPFS_2_4
+GSE243572,GSM7791266,GSM7791266,10x 5',none,none,true,peripheral blood; patient: LPFS_2_6
+GSE243572,GSM7791267,GSM7791267,10x 5',none,none,true,peripheral blood; patient: LPFS_2_8
+GSE243572,GSM7791268,GSM7791268,10x 5',none,none,true,peripheral blood; patient: LPFS_3_6
+GSE243572,GSM7791269,GSM7791269,10x 5',none,none,true,peripheral blood; patient: LPFS_3_8
+GSE243905,GSM7798067,GSM7798067,10x 5',none,none,true,PBMC
+GSE243905,GSM7798068,GSM7798068,10x 5',none,none,true,PBMC
+GSE243905,GSM7798069,GSM7798069,10x 5',none,none,true,CSF
+GSE243905,GSM7798070,GSM7798070,10x 5',none,none,true,CSF
+GSE243905,GSM7798071,GSM7798071,10x 5',none,none,true,PBMC
+GSE243905,GSM7798072,GSM7798072,10x 5',none,none,true,PBMC
+GSE243905,GSM7798073,GSM7798073,10x 5',none,none,true,PBMC
+GSE243905,GSM7798074,GSM7798074,10x 5',none,none,true,PBMC
+GSE243905,GSM7798075,GSM7798075,10x 5',none,none,true,CSF
+GSE243905,GSM7798076,GSM7798076,10x 5',none,none,true,CSF
+GSE243905,GSM7798077,GSM7798077,10x 5',none,none,true,PBMC
+GSE243905,GSM7798078,GSM7798078,10x 5',none,none,true,PBMC
+GSE243905,GSM7798079,GSM7798079,10x 5',none,none,true,PBMC
+GSE243905,GSM7798080,GSM7798080,10x 5',none,none,true,PBMC
+GSE243905,GSM7798081,GSM7798081,10x 5',none,none,true,CSF
+GSE243905,GSM7798082,GSM7798082,10x 5',none,none,true,CSF
+GSE243905,GSM7798083,GSM7798083,10x 5',none,none,true,PBMC
+GSE243905,GSM7798084,GSM7798084,10x 5',none,none,true,PBMC
+GSE243905,GSM7798085,GSM7798085,10x 5',none,none,true,PBMC
+GSE243905,GSM7798086,GSM7798086,10x 5',none,none,true,PBMC
+GSE243905,GSM7798087,GSM7798087,10x 5',none,none,true,CSF
+GSE243905,GSM7798088,GSM7798088,10x 5',none,none,true,CSF
+GSE243905,GSM7798089,GSM7798089,10x 5',none,none,true,PBMC
+GSE243905,GSM7798090,GSM7798090,10x 5',none,none,true,PBMC
+GSE243905,GSM7798091,GSM7798091,10x 5',none,none,true,CSF
+GSE243905,GSM7798092,GSM7798092,10x 5',none,none,true,CSF
+GSE243905,GSM7798093,GSM7798093,10x 5',none,none,true,PBMC
+GSE243905,GSM7798094,GSM7798094,10x 5',none,none,true,PBMC
+GSE243905,GSM7798095,GSM7798095,10x 5',none,none,true,CSF
+GSE243905,GSM7798096,GSM7798096,10x 5',none,none,true,CSF
+GSE243905,GSM7798097,GSM7798097,10x 5',none,none,true,PBMC
+GSE243905,GSM7798098,GSM7798098,10x 5',none,none,true,PBMC
+GSE243905,GSM7798099,GSM7798099,10x 5',none,none,true,CSF
+GSE243905,GSM7798100,GSM7798100,10x 5',none,none,true,CSF
+GSE243905,GSM7798101,GSM7798101,10x 5',none,none,true,PBMC
+GSE243905,GSM7798102,GSM7798102,10x 5',none,none,true,PBMC
+GSE243905,GSM7798103,GSM7798103,10x 5',none,none,true,CSF
+GSE243905,GSM7798104,GSM7798104,10x 5',none,none,true,CSF
+GSE243905,GSM7798105,GSM7798105,10x 5',none,none,true,PBMC
+GSE243905,GSM7798106,GSM7798106,10x 5',none,none,true,PBMC
+GSE243905,GSM7798107,GSM7798107,10x 5',none,none,true,PBMC
+GSE243905,GSM7798108,GSM7798108,10x 5',none,none,true,PBMC
+GSE243905,GSM7798109,GSM7798109,10x 5',none,none,true,CSF
+GSE243905,GSM7798110,GSM7798110,10x 5',none,none,true,CSF
+GSE243905,GSM7798111,GSM7798111,10x 5',none,none,true,PBMC
+GSE243905,GSM7798112,GSM7798112,10x 5',none,none,true,PBMC
+GSE243905,GSM7798113,GSM7798113,10x 5',none,none,true,PBMC
+GSE243905,GSM7798114,GSM7798114,10x 5',none,none,true,PBMC
+GSE243905,GSM7798115,GSM7798115,10x 5',none,none,true,PBMC
+GSE243905,GSM7798116,GSM7798116,10x 5',none,none,true,PBMC
+GSE243905,GSM7798117,GSM7798117,10x 5',none,none,true,CSF
+GSE243905,GSM7798118,GSM7798118,10x 5',none,none,true,CSF
+GSE243905,GSM7798119,GSM7798119,10x 5',none,none,true,PBMC
+GSE243905,GSM7798120,GSM7798120,10x 5',none,none,true,PBMC
+GSE243905,GSM7798121,GSM7798121,10x 5',none,none,true,PBMC
+GSE243905,GSM7798122,GSM7798122,10x 5',none,none,true,PBMC
+GSE243905,GSM7798123,GSM7798123,10x 5',none,none,true,PBMC
+GSE243905,GSM7798124,GSM7798124,10x 5',none,none,true,PBMC
+GSE243905,GSM7798125,GSM7798125,10x 5',none,none,true,CSF
+GSE243905,GSM7798126,GSM7798126,10x 5',none,none,true,CSF
+GSE243905,GSM7798127,GSM7798127,10x 5',none,none,true,PBMC
+GSE243905,GSM7798128,GSM7798128,10x 5',none,none,true,PBMC
+GSE243905,GSM7798129,GSM7798129,10x 5',none,none,true,PBMC
+GSE243905,GSM7798130,GSM7798130,10x 5',none,none,true,PBMC
+GSE243905,GSM7798131,GSM7798131,10x 5',none,none,true,PBMC
+GSE243905,GSM7798132,GSM7798132,10x 5',none,none,true,PBMC
+GSE243905,GSM7798133,GSM7798133,10x 5',none,none,true,CSF
+GSE243905,GSM7798134,GSM7798134,10x 5',none,none,true,CSF
+GSE243905,GSM7798135,GSM7798135,10x 5',none,none,true,PBMC
+GSE243905,GSM7798136,GSM7798136,10x 5',none,none,true,PBMC
+GSE243905,GSM7798137,GSM7798137,10x 5',none,none,true,PBMC
+GSE243905,GSM7798138,GSM7798138,10x 5',none,none,true,PBMC
+GSE243905,GSM7798139,GSM7798139,10x 5',none,none,true,PBMC
+GSE243905,GSM7798140,GSM7798140,10x 5',none,none,true,PBMC
+GSE243905,GSM7798141,GSM7798141,10x 5',none,none,true,CSF
+GSE243905,GSM7798142,GSM7798142,10x 5',none,none,true,CSF
+GSE243905,GSM7798143,GSM7798143,10x 5',none,none,true,PBMC
+GSE243905,GSM7798144,GSM7798144,10x 5',none,none,true,PBMC
+GSE243905,GSM7798145,GSM7798145,10x 5',none,none,true,PBMC
+GSE243905,GSM7798146,GSM7798146,10x 5',none,none,true,PBMC
+GSE243905,GSM7798147,GSM7798147,10x 5',none,none,true,CSF
+GSE243905,GSM7798148,GSM7798148,10x 5',none,none,true,CSF
+GSE247531,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE252762,GSM8006467,GSM8006467,10x 5',vdj,unspecified_ab_or_gd,true,Duodenum (Second part); tissue: Duodenum (Second part)
+GSE252762,GSM8006468,GSM8006468,10x 5',vdj,unspecified_ab_or_gd,true,Duodenum (Second part); tissue: Duodenum (Second part)
+GSE252762,GSM8006469,GSM8006469,10x 5',vdj,unspecified_ab_or_gd,true,Duodenum (Second part); tissue: Duodenum (Second part)
+GSE252762,GSM8006470,GSM8006470,10x 5',vdj,unspecified_ab_or_gd,true,Duodenum (Second part); tissue: Duodenum (Second part)
+GSE252762,GSM8006471,GSM8006471,10x (unspecified),vdj,unspecified_ab_or_gd,true,Duodenum (Second part); tissue: Duodenum (Second part)
+GSE252762,GSM8006472,GSM8006472,10x (unspecified),vdj,unspecified_ab_or_gd,true,Duodenum (Second part); tissue: Duodenum (Second part)
+GSE252762,GSM8006473,GSM8006473,10x 5',vdj,unspecified_ab_or_gd,true,Duodenum (Second part) / PBMC; tissue: Duodenum (Second part) / PBMC
+GSE252762,GSM8006474,GSM8006474,10x 5',vdj,unspecified_ab_or_gd,true,Duodenum (Second part) / PBMC; tissue: Duodenum (Second part) / PBMC
+GSE252762,GSM8006475,GSM8006475,10x 5',vdj,unspecified_ab_or_gd,true,Duodenum (Second part); tissue: Duodenum (Second part)
+GSE252762,GSM8006476,GSM8006476,10x 5',vdj,unspecified_ab_or_gd,true,Duodenum (Second part); tissue: Duodenum (Second part)
+GSE252762,GSM8006477,GSM8006477,10x 5',vdj,unspecified_ab_or_gd,true,Duodenum (Second part); tissue: Duodenum (Second part)
+GSE252762,GSM8006478,GSM8006478,10x 5',vdj,unspecified_ab_or_gd,true,Duodenum (Second part); tissue: Duodenum (Second part)
+GSE252762,GSM8006479,GSM8006479,10x 5',vdj,unspecified_ab_or_gd,true,PBMC; tissue: PBMC
+GSE252762,GSM8006480,GSM8006480,10x 5',vdj,unspecified_ab_or_gd,true,Duodenum (Second part); tissue: Duodenum (Second part)
+GSE252762,GSM8006481,GSM8006481,10x 5',vdj,unspecified_ab_or_gd,true,Duodenum (Second part); tissue: Duodenum (Second part)
+GSE253173,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE254176,GSM8035466,GSM8035466,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035467,GSM8035467,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035468,GSM8035468,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035469,GSM8035469,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035470,GSM8035470,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035471,GSM8035471,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035472,GSM8035472,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035473,GSM8035473,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035474,GSM8035474,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035475,GSM8035475,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035476,GSM8035476,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035477,GSM8035477,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035478,GSM8035478,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035479,GSM8035479,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035480,GSM8035480,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035481,GSM8035481,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035482,GSM8035482,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035483,GSM8035483,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035484,GSM8035484,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035485,GSM8035485,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035486,GSM8035486,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035487,GSM8035487,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035488,GSM8035488,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035489,GSM8035489,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035490,GSM8035490,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035491,GSM8035491,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035492,GSM8035492,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035493,GSM8035493,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035494,GSM8035494,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035495,GSM8035495,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035496,GSM8035496,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035497,GSM8035497,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035498,GSM8035498,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035499,GSM8035499,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035500,GSM8035500,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035501,GSM8035501,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035502,GSM8035502,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035503,GSM8035503,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035504,GSM8035504,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035505,GSM8035505,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035506,GSM8035506,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035507,GSM8035507,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035508,GSM8035508,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035509,GSM8035509,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035510,GSM8035510,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035511,GSM8035511,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035512,GSM8035512,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035513,GSM8035513,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035514,GSM8035514,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035515,GSM8035515,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035516,GSM8035516,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035517,GSM8035517,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035518,GSM8035518,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035519,GSM8035519,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035520,GSM8035520,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035521,GSM8035521,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254176,GSM8035522,GSM8035522,10x 5',vdj,unspecified_ab_or_gd,true,Peripheral blood mononuclear cell
+GSE254249,GSM8036530,GSM8036530,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036531,GSM8036531,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036532,GSM8036532,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036533,GSM8036533,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036534,GSM8036534,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036535,GSM8036535,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036536,GSM8036536,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036537,GSM8036537,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036538,GSM8036538,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036539,GSM8036539,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036540,GSM8036540,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036541,GSM8036541,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036542,GSM8036542,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036543,GSM8036543,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036544,GSM8036544,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036545,GSM8036545,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036546,GSM8036546,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036547,GSM8036547,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036548,GSM8036548,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036549,GSM8036549,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036550,GSM8036550,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036551,GSM8036551,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036552,GSM8036552,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036553,GSM8036553,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036554,GSM8036554,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036555,GSM8036555,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036556,GSM8036556,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036557,GSM8036557,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036558,GSM8036558,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036559,GSM8036559,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036560,GSM8036560,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036561,GSM8036561,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036562,GSM8036562,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036563,GSM8036563,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036564,GSM8036564,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036565,GSM8036565,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036566,GSM8036566,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036567,GSM8036567,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036568,GSM8036568,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036569,GSM8036569,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036570,GSM8036570,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036571,GSM8036571,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036572,GSM8036572,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036573,GSM8036573,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036574,GSM8036574,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036575,GSM8036575,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036576,GSM8036576,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036577,GSM8036577,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036578,GSM8036578,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036579,GSM8036579,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036580,GSM8036580,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036582,GSM8036582,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036583,GSM8036583,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036584,GSM8036584,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036585,GSM8036585,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036586,GSM8036586,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036587,GSM8036587,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036588,GSM8036588,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036590,GSM8036590,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036591,GSM8036591,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036592,GSM8036592,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036593,GSM8036593,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036594,GSM8036594,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036596,GSM8036596,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036597,GSM8036597,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036598,GSM8036598,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036599,GSM8036599,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036600,GSM8036600,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036601,GSM8036601,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036603,GSM8036603,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036604,GSM8036604,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036605,GSM8036605,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036606,GSM8036606,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036607,GSM8036607,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036608,GSM8036608,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036610,GSM8036610,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036611,GSM8036611,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036612,GSM8036612,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036613,GSM8036613,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036614,GSM8036614,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036616,GSM8036616,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036617,GSM8036617,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036618,GSM8036618,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036619,GSM8036619,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036620,GSM8036620,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036621,GSM8036621,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036622,GSM8036622,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036624,GSM8036624,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036625,GSM8036625,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036626,GSM8036626,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036627,GSM8036627,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE254249,GSM8036628,GSM8036628,10x 5',none,none,true,colorectum; tissue: colorectum
+GSE267639,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE267642,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE267645,GSM8271506,GSM8271506,10x 5',none,none,true,PBMC
+GSE267645,GSM8271507,GSM8271507,10x 5',none,none,true,PBMC
+GSE267645,GSM8271508,GSM8271508,10x 5',none,none,true,PBMC
+GSE267645,GSM8271509,GSM8271509,10x 5',none,none,true,PBMC
+GSE267645,GSM8271510,GSM8271510,10x 5',none,none,true,PBMC
+GSE267645,GSM8271511,GSM8271511,10x 5',none,none,true,PBMC
+GSE267645,GSM8271512,GSM8271512,10x 5',none,none,true,PBMC
+GSE267645,GSM8271513,GSM8271513,10x 5',none,none,true,PBMC
+GSE267645,GSM8271514,GSM8271514,10x 5',none,none,true,PBMC
+GSE267645,GSM8271515,GSM8271515,10x 5',none,none,true,PBMC
+GSE267645,GSM8271516,GSM8271516,10x 5',none,none,true,PBMC
+GSE267645,GSM8271517,GSM8271517,10x 5',none,none,true,PBMC
+GSE267645,GSM8271518,GSM8271518,10x 5',none,none,true,PBMC
+GSE267645,GSM8271519,GSM8271519,10x 5',none,none,true,PBMC
+GSE267645,GSM8271520,GSM8271520,10x 5',none,none,true,PBMC
+GSE271413,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE273170,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE276167,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE278119,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE286518,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE287301,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE287541,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE288452,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE296971,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+GSE301528,GSM9084836,GSM9084836,10x 5',none,none,true,Bone marrow; genotype: relapse/refractory
+GSE301528,GSM9084837,GSM9084837,10x 5',none,none,true,Bone marrow; genotype: relapse/refractory
+GSE301528,GSM9084838,GSM9084838,10x 5',none,none,true,Bone marrow; genotype: relapse/refractory
+GSE301528,GSM9084839,GSM9084839,10x 5',none,none,true,Bone marrow; genotype: relapse/refractory
+GSE301528,GSM9084840,GSM9084840,10x 5',none,none,true,Bone marrow; genotype: Diagnosis
+GSE301528,GSM9084841,GSM9084841,10x 5',none,none,true,Bone marrow; genotype: Diagnosis
+GSE301528,GSM9084842,GSM9084842,10x 5',none,none,true,Bone marrow; genotype: Diagnosis
+GSE301528,GSM9084843,GSM9084843,10x 5',none,none,true,Bone marrow; genotype: Diagnosis
+GSE301528,GSM9084844,GSM9084844,10x 5',none,none,true,Bone marrow; genotype: Diagnosis
+GSE301528,GSM9084845,GSM9084845,10x 5',none,none,true,Bone marrow; genotype: Remission
+GSE301528,GSM9084846,GSM9084846,10x 5',none,none,true,Bone marrow; genotype: Remission
+GSE301528,GSM9084847,GSM9084847,10x 5',none,none,true,Bone marrow; genotype: Remission
+GSE301528,GSM9084848,GSM9084848,10x 5',none,none,true,Bone marrow; genotype: healthy donor; genotype: healthy donor
+GSE301528,GSM9084849,GSM9084849,10x 5',none,none,true,"Bone marrow, CD138 purified Plasmacells; genotype: healthy donor; genotype: healthy donor"
+GSE301528,GSM9084850,GSM9084850,10x 5',none,none,true,Bone marrow; genotype: healthy donor; genotype: healthy donor
+GSE301528,GSM9084851,GSM9084851,10x 5',none,none,true,"Bone marrow, CD138 purified Plasmacells; genotype: healthy donor; genotype: healthy donor"
+GSE301528,GSM9084852,GSM9084852,10x 5',none,none,true,Bone marrow; genotype: healthy donor; genotype: healthy donor
+GSE301528,GSM9084853,GSM9084853,10x 5',none,none,true,"Bone marrow, CD138 purified Plasmacells; genotype: healthy donor; genotype: healthy donor"
+GSE308075,GSM9237523,GSM9237523,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237524,GSM9237524,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237525,GSM9237525,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237526,GSM9237526,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237527,GSM9237527,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237528,GSM9237528,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237529,GSM9237529,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237530,GSM9237530,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237531,GSM9237531,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237532,GSM9237532,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237533,GSM9237533,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237534,GSM9237534,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237535,GSM9237535,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237536,GSM9237536,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237537,GSM9237537,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237538,GSM9237538,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237539,GSM9237539,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237540,GSM9237540,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237541,GSM9237541,10x (unspecified),none,none,true,Blood
+GSE308075,GSM9237542,GSM9237542,10x (unspecified),none,none,true,Blood
+GSE311112,GSM9317153,GSM9317153,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317154,GSM9317154,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317155,GSM9317155,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317156,GSM9317156,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317157,GSM9317157,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317158,GSM9317158,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317159,GSM9317159,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317160,GSM9317160,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317161,GSM9317161,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317162,GSM9317162,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317163,GSM9317163,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317164,GSM9317164,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317165,GSM9317165,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317166,GSM9317166,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317167,GSM9317167,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317168,GSM9317168,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317169,GSM9317169,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317170,GSM9317170,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317171,GSM9317171,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317172,GSM9317172,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317173,GSM9317173,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317174,GSM9317174,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317175,GSM9317175,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317176,GSM9317176,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317177,GSM9317177,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317178,GSM9317178,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317179,GSM9317179,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317180,GSM9317180,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317181,GSM9317181,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317182,GSM9317182,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317183,GSM9317183,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317184,GSM9317184,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317185,GSM9317185,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317186,GSM9317186,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317187,GSM9317187,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317188,GSM9317188,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317189,GSM9317189,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317190,GSM9317190,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317191,GSM9317191,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317192,GSM9317192,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317193,GSM9317193,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317194,GSM9317194,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317195,GSM9317195,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317196,GSM9317196,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317197,GSM9317197,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317198,GSM9317198,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317199,GSM9317199,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317200,GSM9317200,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317201,GSM9317201,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317202,GSM9317202,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317203,GSM9317203,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317204,GSM9317204,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317205,GSM9317205,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317206,GSM9317206,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317207,GSM9317207,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317208,GSM9317208,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317209,GSM9317209,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317210,GSM9317210,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317211,GSM9317211,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317212,GSM9317212,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317213,GSM9317213,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317214,GSM9317214,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317215,GSM9317215,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317216,GSM9317216,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317217,GSM9317217,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317218,GSM9317218,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317219,GSM9317219,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317220,GSM9317220,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317221,GSM9317221,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317222,GSM9317222,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317223,GSM9317223,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317224,GSM9317224,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317225,GSM9317225,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317226,GSM9317226,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317227,GSM9317227,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317228,GSM9317228,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317229,GSM9317229,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317230,GSM9317230,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317231,GSM9317231,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317232,GSM9317232,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317233,GSM9317233,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317234,GSM9317234,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317235,GSM9317235,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317236,GSM9317236,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317237,GSM9317237,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317238,GSM9317238,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317239,GSM9317239,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317240,GSM9317240,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317241,GSM9317241,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317242,GSM9317242,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317243,GSM9317243,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317244,GSM9317244,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317245,GSM9317245,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317246,GSM9317246,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317247,GSM9317247,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317248,GSM9317248,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317249,GSM9317249,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317250,GSM9317250,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317251,GSM9317251,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317252,GSM9317252,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317253,GSM9317253,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317254,GSM9317254,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+GSE311112,GSM9317255,GSM9317255,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: gex
+GSE311112,GSM9317256,GSM9317256,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: bcr
+GSE311112,GSM9317257,GSM9317257,10x 5',vdj,unspecified_ab_or_gd,true,peripheral blood; library type: tcr
+HRA005041,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
+MalteGDT,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.

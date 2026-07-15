@@ -1,0 +1,76 @@
+{
+  "metadata_schema": {
+    "dataset_id": {
+      "canonical_name": "dataset_id",
+      "type": "string",
+      "description": "The unique GEO accession number or project identifier.",
+      "known_synonyms": ["project", "geo_id", "study", "study_id", "accession", "gse", "dataset"]
+    },
+    "sample_id": {
+      "canonical_name": "sample_id",
+      "type": "string",
+      "description": "The specific sequencing run, library, or biological replicate.",
+      "known_synonyms": ["sample", "library_id", "run", "batch", "orig.ident", "sample_name", "replicate", "sample_meta", "sample_type", "lane/replicate", "sampletimepoint"]
+    },
+    "donor_id": {
+      "canonical_name": "donor_id",
+      "type": "string",
+      "description": "Unique identifier for the biological host/patient.",
+      "known_synonyms": ["patient", "patient_id", "subject", "subject_id", "donor", "individual", "host", "pid", "patient_assignment", "patient_code"]
+    },
+    "age": {
+      "canonical_name": "age",
+      "type": "numeric",
+      "description": "Age of the donor, ideally converted uniformly to years.",
+      "known_synonyms": ["age", "age_in_years", "age_years", "patient_age", "donor_age", "yob"]
+    },
+    "sex": {
+      "canonical_name": "sex",
+      "type": "string",
+      "description": "Biological sex of the donor (e.g., male, female, unknown).",
+      "known_synonyms": ["gender", "sex", "patient_gender", "donor_sex", "male_female"]
+    },
+    "tissue": {
+      "canonical_name": "tissue",
+      "type": "string",
+      "description": "Organ or anatomical part the cells were extracted from (e.g., blood, lung, lymph node).",
+      "known_synonyms": ["organ", "source", "tissue_type", "tissue_source", "site", "biopsy_site", "anatomical_site", "location", "origin", "tissue_assignment", "source_name_ch1"]
+    },
+    "condition": {
+      "canonical_name": "condition",
+      "type": "string",
+      "description": "The disease state or health status (e.g., healthy, melanoma, COVID-19).",
+      "known_synonyms": ["disease", "disease_state", "status", "health_status", "clinical_status", "group", "phenotype", "tumor_status", "clinical", "clinicalevaluation", "general_condition", "severity", "timepoint", "timepoint_cat", "timepointbinary", "disease_assignment", "disease_subclass", "response", "study_group", "sampletimepoint"]
+    },
+    "treatment": {
+      "canonical_name": "treatment",
+      "type": "string",
+      "description": "Any therapeutic intervention applied to the donor (e.g., anti-PD1, naive, pre-treatment).",
+      "known_synonyms": ["therapy", "intervention", "treatment_status", "drug", "timepoint", "response"]
+    },
+    "enrichment_strategy": {
+      "canonical_name": "enrichment_strategy",
+      "type": "string",
+      "description": "How the cells were isolated (e.g., unsorted, FACS CD3+, MACS CD8+). Critical for adjusting cell type frequencies.",
+      "known_synonyms": ["sorting", "isolation", "purification", "enrichment", "cell_selection", "facs", "macs"]
+    },
+    "assay_type": {
+      "canonical_name": "assay_type",
+      "type": "string",
+      "description": "The sequencing technology used (e.g., 10x 3' v3, Smart-seq2, BD Rhapsody).",
+      "known_synonyms": ["platform", "technology", "assay", "sequencing_method", "protocol", "chemistry"]
+    },
+    "tcr_availability": {
+      "canonical_name": "tcr_availability",
+      "type": "boolean",
+      "description": "Whether paired scTCR-seq data exists for this specific cell/sample.",
+      "known_synonyms": ["has_tcr", "vdj", "tcr_seq", "tcr_data"]
+    },
+    "original_cell_annotation": {
+      "canonical_name": "original_cell_annotation",
+      "type": "string",
+      "description": "The cell type label provided by the original authors.",
+      "known_synonyms": ["cell_type", "celltype", "annotation", "author_annotation", "cluster", "ident", "seurat_clusters", "major_lineage"]
+    }
+  }
+}

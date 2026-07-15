@@ -26,8 +26,8 @@ The workflow is split into two bounded steps:
 
 ## Canonical Files
 
-- Rule config: [tissue_correction_rules.json](/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/tissue_correction_rules.json)
-- Workflow script: [tissue_correction_workflow.py](/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/tissue_correction_workflow.py)
+- Rule config: [tissue_correction_rules.json](/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/configs/metadata/tissue_correction_rules.json)
+- Workflow script: [tissue_correction_workflow.py](/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/workflows/metadata/tissue_correction_workflow.py)
 
 ## Tissue Scope
 
@@ -137,21 +137,21 @@ Audit first:
 
 ```bash
 /home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
-  tissue_correction_workflow.py audit --verbose
+  workflows/metadata/tissue_correction_workflow.py audit --verbose
 ```
 
 Apply to the full integrated object and export the standalone review table:
 
 ```bash
 /home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
-  tissue_correction_workflow.py apply --verbose
+  workflows/metadata/tissue_correction_workflow.py apply --verbose
 ```
 
 Write back into the H5AD only after review approval:
 
 ```bash
 /home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
-  tissue_correction_workflow.py apply --write-h5ad --verbose
+  workflows/metadata/tissue_correction_workflow.py apply --write-h5ad --verbose
 ```
 
 ## Extension Rule
@@ -163,7 +163,7 @@ When a new integrated dataset has unresolved tissue values:
 3. check the dataset `series_matrix` only if the harmonized metadata still
    cannot resolve tissue
 4. add the new deterministic mapping to
-   [tissue_correction_rules.json](/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/tissue_correction_rules.json)
+   [tissue_correction_rules.json](/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/configs/metadata/tissue_correction_rules.json)
 5. rerun `apply`
 
 Do not hard-code conclusions in a one-off notebook or assistant reply.

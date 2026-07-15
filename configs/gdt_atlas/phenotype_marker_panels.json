@@ -1,0 +1,23 @@
+{
+  "programs": {
+    "core_t_gdt": ["CD3D", "CD3E", "CD3G", "TRDC", "TRGC1", "TRGC2"],
+    "cytotoxic": ["NKG7", "GNLY", "PRF1", "GZMB", "GZMH", "GZMA", "IFNG", "FGFBP2", "CTSW"],
+    "naive_memory": ["CCR7", "SELL", "TCF7", "LEF1", "IL7R", "LTB", "MAL", "AQP3"],
+    "tissue_resident": ["ITGAE", "ITGA1", "CXCR6", "ZNF683", "CD69", "RGS1", "XCL1", "XCL2"],
+    "il17_inflammatory": ["IL17A", "IL17F", "RORC", "CCR6", "IL23R", "KLRB1", "SLC4A10", "CCL20"],
+    "ifn_response": ["ISG15", "IFIT1", "IFIT2", "IFIT3", "MX1", "OAS1", "STAT1", "IRF7"],
+    "proliferating": ["MKI67", "TOP2A", "STMN1", "TYMS", "UBE2C", "PCNA"],
+    "activation_exhaustion": ["PDCD1", "LAG3", "TIGIT", "HAVCR2", "CTLA4", "TNFRSF9", "ICOS", "CD40LG", "TOX"],
+    "nk_like": ["KLRD1", "KLRC1", "KLRC2", "NCR1", "NCAM1", "FCGR3A", "TYROBP", "FCER1G", "KLRF1"],
+    "regulatory_penalty": ["FOXP3", "IL2RA", "IKZF2", "CTLA4", "CD4"],
+    "myeloid_b_contamination": ["LYZ", "S100A8", "S100A9", "MS4A1", "CD79A", "FCER1A", "CLEC10A"],
+    "stress_low_quality": ["MALAT1", "FOS", "JUN", "HSPA1A", "HSPA1B", "HSP90AA1", "DUSP1"]
+  },
+  "v_gene_expression": [
+    "TRDV1", "TRDV2", "TRDV3", "TRDC", "TRDJ1", "TRDJ2", "TRDJ3",
+    "TRGV1", "TRGV2", "TRGV3", "TRGV4", "TRGV5", "TRGV6", "TRGV7",
+    "TRGV8", "TRGV9", "TRGV10", "TRGV11", "TRGC1", "TRGC2"
+  ],
+  "primary_v_gene_panels": ["TRDV1", "TRDV2", "TRDV3", "TRGV9", "TRDC", "TRGC1", "TRGC2"],
+  "tcr_gene_prefixes_excluded_from_primary_de": ["TRA", "TRB", "TRG", "TRD"]
+}

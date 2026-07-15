@@ -16,6 +16,13 @@
 - tissue correction completed and written back into the integrated milestone
 - pre-merge raw per-GSE TCR audit completed
 - repaired TCR rebuild and propagation completed for ten approved GSEs
+- non-destructive project reorganization completed on 2026-07-15
+  - active scripts grouped by workflow responsibility
+  - raw/interim/processed data lifecycle represented by validated symlinks
+  - dataset, library, file, and gdTAI model registries established
+  - legacy code archived with checksum-guarded move maps
+  - rollback, reproducibility, dataset-change, and model-iteration guides added
+  - all milestone H5AD sampled hashes verified unchanged
 
 ## Current working era
 

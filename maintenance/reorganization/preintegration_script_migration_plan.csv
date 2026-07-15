@@ -1,0 +1,10 @@
+old_path,new_path,category,reason
+analysis_26GSE_V4/gse26_pipeline.py,workflows/preintegration/gse26_pipeline.py,preintegration,Legacy per-dataset discovery workflow retained outside data tree
+analysis_26GSE_V4/scripts/apply_sample_info_metadata.py,workflows/preintegration/apply_sample_info_metadata.py,preintegration,Metadata application before Phase 0
+analysis_26GSE_V4/scripts/build_harmonized_metadata.py,workflows/preintegration/build_harmonized_metadata.py,preintegration,Metadata harmonization before Phase 0
+analysis_26GSE_V4/scripts/integrate_additional_tcr_to_compatible_format.py,workflows/preintegration/integrate_additional_tcr_to_compatible_format.py,preintegration,TCR standardization before Phase 0
+analysis_26GSE_V4/scripts/map_tcr_to_h5ad.py,workflows/preintegration/map_tcr_to_h5ad.py,preintegration,TCR mapping before Phase 0
+analysis_26GSE_V4/scripts/restat_gse26.py,workflows/preintegration/restat_gse26.py,preintegration,Per-dataset audit before Phase 0
+analysis_26GSE_V4/scripts/standardize_gene_symbols_and_remove_noncoding.py,workflows/preintegration/standardize_gene_symbols_and_remove_noncoding.py,preintegration,Gene schema standardization before Phase 0
+analysis_26GSE_V4/scripts/standardize_tcr_schema_in_h5ads.py,workflows/preintegration/standardize_tcr_schema_in_h5ads.py,preintegration,TCR schema standardization before Phase 0
+downloads/GSE144469/fastq/annotation_evidence_review.py,workflows/analysis/annotation_evidence_review.py,analysis,Canonical review code must not live inside a raw data tree

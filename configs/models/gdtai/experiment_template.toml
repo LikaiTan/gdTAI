@@ -1,0 +1,41 @@
+experiment_id = "YYYYMMDD_short_description"
+parent_model_id = "gdtai_v3"
+status = "planned"
+
+[provenance]
+dataset_snapshot = "data/registry/snapshots/<run_id>"
+git_commit = "<commit>"
+environment_export = "<path>"
+input_h5ad = "<path>"
+input_sampled_sha256 = "<hash>"
+
+[ground_truth]
+definition_document = "<path>"
+positive_classes = []
+negative_classes = []
+silver_classes = []
+
+[splits]
+unit = "dataset"
+training_datasets = []
+tuning_datasets = []
+validation_datasets = []
+external_datasets = []
+
+[features]
+selection_fit_on_training_only = true
+maximum_gene_features = 300
+uses_trd_trab_module_scores = false
+normalization = "log1p(counts per 10000)"
+
+[evaluation]
+operating_modes = ["high_f1", "high_purity"]
+report_per_dataset = true
+report_gold_and_silver_separately = true
+report_nk_false_positives = true
+report_paired_tcrab_false_positives = true
+
+[promotion]
+requires_explicit_approval = true
+acceptance_rule = "<pre-registered rule>"
+decision = "not_evaluated"

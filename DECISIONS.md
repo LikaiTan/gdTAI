@@ -10,6 +10,14 @@
 - `obs["tissue_corrected"]` is canonical in the current integrated milestone
 - large H5AD files may remain on the mirrored SSD tree until explicit migration approval
 - tables, PNG figures, logs, scripts, and model artifacts stay on NFS
+- pre-integration data organization uses a registry-driven symlink view during
+  migration; physical raw-data moves require dataset-level full checksums and
+  explicit cutover review
+- dataset removal means registry deactivation, not file deletion
+- `configs/models/gdtai/model_registry.csv` is authoritative for model release
+  status; a directory or version-like filename alone does not imply promotion
+- canonical Git gdTAI v3 Round 14 remains the promoted default; the existing
+  dirty-workspace Round 12 override is preserved and explicitly not promoted
 - repaired TCR propagation is approved for these ten GSEs:
   - `GSE188620`
   - `GSE212217`

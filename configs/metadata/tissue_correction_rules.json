@@ -1,0 +1,448 @@
+{
+  "sample_per_gse": 500,
+  "random_seed": 42,
+  "unknown_label": "unknown",
+  "ignore_if_contains": [
+    ".tsv.gz",
+    ".csv.gz",
+    "matrix.mtx"
+  ],
+  "global_exact_map": {
+    "blood": "blood",
+    "human peripheral blood": "blood",
+    "peripheral blood": "blood",
+    "bld": "blood",
+    "blood cell culture": "blood",
+    "pbmc": "blood",
+    "csf": "csf",
+    "cerebrospinal fluid (csf)": "csf",
+    "balf": "balf",
+    "tumor": "tumor",
+    "tumor biopsy": "tumor",
+    "nat": "adjacent_normal_tissue",
+    "adjacent normal liver tissue": "adjacent_normal_liver",
+    "liver tumor": "liver_tumor",
+    "colon pinch biopsy": "colon",
+    "rectum_t": "rectum",
+    "bone marrow": "bone_marrow"
+  },
+  "global_regex_rules": [
+    {
+      "pattern": "duodenum.*pbmc|pbmc.*duodenum",
+      "value": "mixed_duodenum_pbmc",
+      "reason": "mixed duodenum and PBMC wording"
+    },
+    {
+      "pattern": "\\bpbmc\\b|peripheral blood mononuclear",
+      "value": "blood",
+      "reason": "PBMC collapsed into blood"
+    },
+    {
+      "pattern": "cerebrospinal fluid|\\bcsf\\b",
+      "value": "csf",
+      "reason": "CSF wording"
+    },
+    {
+      "pattern": "\\bbalf\\b",
+      "value": "balf",
+      "reason": "BALF wording"
+    },
+    {
+      "pattern": "bone marrow",
+      "value": "bone_marrow",
+      "reason": "bone marrow wording"
+    },
+    {
+      "pattern": "tracheal aspirate",
+      "value": "tracheal_aspirate",
+      "reason": "tracheal aspirate wording"
+    },
+    {
+      "pattern": "lymph node metastasis|\\blnm\\b",
+      "value": "lymph_node_metastasis",
+      "reason": "lymph node metastasis wording"
+    },
+    {
+      "pattern": "adjacent normal liver",
+      "value": "adjacent_normal_liver",
+      "reason": "adjacent normal liver wording"
+    },
+    {
+      "pattern": "normal tissue adjacent to tumor|\\bjuxta\\b",
+      "value": "adjacent_normal_tissue",
+      "reason": "adjacent normal wording"
+    },
+    {
+      "pattern": "liver tumor",
+      "value": "liver_tumor",
+      "reason": "liver tumor wording"
+    },
+    {
+      "pattern": "heart tissue",
+      "value": "heart",
+      "reason": "heart tissue wording"
+    },
+    {
+      "pattern": "duodenum",
+      "value": "duodenum",
+      "reason": "duodenum wording"
+    },
+    {
+      "pattern": "ileum",
+      "value": "ileum",
+      "reason": "ileum wording"
+    },
+    {
+      "pattern": "rectum",
+      "value": "rectum",
+      "reason": "rectum wording"
+    },
+    {
+      "pattern": "colon",
+      "value": "colon",
+      "reason": "colon wording"
+    },
+    {
+      "pattern": "tumor biopsy",
+      "value": "tumor",
+      "reason": "tumor biopsy wording"
+    },
+    {
+      "pattern": "\\btumor\\b|primary tumor|human breast cancer",
+      "value": "tumor",
+      "reason": "tumor wording"
+    },
+    {
+      "pattern": "blood cell culture|human peripheral blood|peripheral blood|\\bblood\\b|\\bbld\\b",
+      "value": "blood",
+      "reason": "blood wording"
+    },
+    {
+      "pattern": "\\bbiopsy\\b",
+      "value": "biopsy_other",
+      "reason": "generic biopsy wording"
+    }
+  ],
+  "series_matrix_paths": {
+    "GSE125527": "downloads/GSE125527/matrix/GSE125527-GPL24676_series_matrix.txt.gz",
+    "GSE171037": "downloads/GSE171037/matrix/GSE171037_series_matrix.txt.gz",
+    "GSE190870": "downloads/GSE190870/matrix/GSE190870_series_matrix.txt.gz",
+    "GSE229858": "downloads/GSE229858/matrix/GSE229858_series_matrix.txt.gz",
+    "GSE228597": "downloads/GSE228597/matrix/GSE228597-GPL18573_series_matrix.txt.gz",
+    "GSE240361": "downloads/GSE240361/matrix/GSE240361_series_matrix.txt.gz",
+    "GSE243905": "downloads/GSE243905/matrix/GSE243905_series_matrix.txt.gz",
+    "GSE252762": [
+      "downloads/GSE252762/matrix/GSE252762-GPL18573_series_matrix.txt.gz",
+      "downloads/GSE252762/matrix/GSE252762-GPL24676_series_matrix.txt.gz"
+    ],
+    "GSE301528": "downloads/GSE301528/matrix/GSE301528_series_matrix.txt.gz"
+  },
+  "gse_specific_rules": {
+    "GSE125527": [
+      {
+        "fields": [
+          "tissue_obs",
+          "tissue_meta",
+          "sample_type",
+          "library_id",
+          "sample_id",
+          "sampleid",
+          "series_bundle"
+        ],
+        "pattern": "(?:^|[^A-Za-z])PBMC(?:[^A-Za-z]|$)",
+        "value": "blood",
+        "reason": "GSE125527 PBMC lane collapsed into blood"
+      },
+      {
+        "fields": [
+          "tissue_obs",
+          "tissue_meta",
+          "sample_type",
+          "library_id",
+          "sample_id",
+          "sampleid",
+          "series_bundle"
+        ],
+        "pattern": "(?:^|[^A-Za-z])I(?:[^A-Za-z]|$)|ileum",
+        "value": "ileum",
+        "reason": "GSE125527 ileum lane"
+      },
+      {
+        "fields": [
+          "tissue_obs",
+          "tissue_meta",
+          "sample_type",
+          "library_id",
+          "sample_id",
+          "sampleid",
+          "series_bundle"
+        ],
+        "pattern": "(?:^|[^A-Za-z])R(?:[^A-Za-z]|$)|rectum",
+        "value": "rectum",
+        "reason": "GSE125527 rectum lane"
+      }
+    ],
+    "GSE145926": [
+      {
+        "fields": [
+          "tissue_obs",
+          "tissue_meta",
+          "sample_type"
+        ],
+        "pattern": "balf",
+        "value": "balf",
+        "reason": "BALF in sample_type"
+      }
+    ],
+    "GSE162498": [
+      {
+        "fields": [
+          "tissue_obs",
+          "tissue_meta",
+          "sample_type",
+          "library_id",
+          "sample_id",
+          "sampleid"
+        ],
+        "pattern": "juxta",
+        "value": "adjacent_normal_tissue",
+        "reason": "NSCLC juxta tissue"
+      },
+      {
+        "fields": [
+          "tissue_obs",
+          "tissue_meta",
+          "sample_type",
+          "library_id",
+          "sample_id",
+          "sampleid"
+        ],
+        "pattern": "blood",
+        "value": "blood",
+        "reason": "blood sample wording"
+      },
+      {
+        "fields": [
+          "tissue_obs",
+          "tissue_meta",
+          "sample_type",
+          "library_id",
+          "sample_id",
+          "sampleid"
+        ],
+        "pattern": "tumor",
+        "value": "tumor",
+        "reason": "tumor sample wording"
+      }
+    ],
+    "GSE171037": [
+      {
+        "fields": [
+          "sample_type",
+          "library_id",
+          "sample_id",
+          "sampleid",
+          "series_bundle"
+        ],
+        "pattern": "tracheal aspirate|(?:^|[^A-Za-z])TA(?:[^A-Za-z]|$)",
+        "value": "tracheal_aspirate",
+        "reason": "TA stands for tracheal aspirate"
+      },
+      {
+        "fields": [
+          "sample_type",
+          "library_id",
+          "sample_id",
+          "sampleid",
+          "series_bundle"
+        ],
+        "pattern": "pbmc",
+        "value": "blood",
+        "reason": "PBMC collapsed into blood"
+      }
+    ],
+    "GSE178882": [
+      {
+        "fields": [
+          "sample_type"
+        ],
+        "pattern": "pbmc",
+        "value": "blood",
+        "reason": "PBMC in sample_type collapsed into blood"
+      }
+    ],
+    "GSE190870": [
+      {
+        "fields": [
+          "series_bundle"
+        ],
+        "pattern": "lymph node metastasis|\\blnm\\b",
+        "value": "lymph_node_metastasis",
+        "reason": "GEO site annotation"
+      },
+      {
+        "fields": [
+          "series_bundle"
+        ],
+        "pattern": "primary tumor|human breast cancer",
+        "value": "tumor",
+        "reason": "GEO site annotation"
+      }
+    ],
+    "GSE228597": [
+      {
+        "fields": [
+          "series_bundle",
+          "sample_type",
+          "sample_id",
+          "sampleid",
+          "library_id"
+        ],
+        "pattern": "normal tissue adjacent to tumor",
+        "value": "adjacent_normal_tissue",
+        "reason": "GEO tissue annotation"
+      },
+      {
+        "fields": [
+          "series_bundle",
+          "sample_type",
+          "sample_id",
+          "sampleid",
+          "library_id",
+          "obs_name"
+        ],
+        "pattern": "sic(?:_|\\b)|donor(?:_|\\b)",
+        "value": "heart",
+        "reason": "heart donor sample naming"
+      },
+      {
+        "fields": [
+          "obs_name"
+        ],
+        "pattern": "irae[_ ]controls.*gex",
+        "value": "heart",
+        "reason": "heart control obs_name prefix"
+      },
+      {
+        "fields": [
+          "series_bundle",
+          "sample_type",
+          "sample_id",
+          "sampleid",
+          "library_id"
+        ],
+        "pattern": "heart tissue|_heart",
+        "value": "heart",
+        "reason": "heart tissue annotation"
+      },
+      {
+        "fields": [
+          "series_bundle",
+          "sample_type",
+          "sample_id",
+          "sampleid",
+          "library_id"
+        ],
+        "pattern": "\\btumor\\b",
+        "value": "tumor",
+        "reason": "tumor tissue annotation"
+      }
+    ],
+    "GSE229858": [
+      {
+        "fields": [
+          "series_bundle",
+          "sample_type",
+          "tissue_obs",
+          "tissue_meta"
+        ],
+        "pattern": "melanoma|expanded tils",
+        "value": "tumor",
+        "reason": "melanoma expanded TIL sample"
+      }
+    ],
+    "GSE240361": [
+      {
+        "fields": [
+          "series_bundle",
+          "sample_type"
+        ],
+        "pattern": "blood",
+        "value": "blood",
+        "reason": "GEO tissue annotation"
+      }
+    ],
+    "GSE243905": [
+      {
+        "fields": [
+          "tissue_obs",
+          "tissue_meta",
+          "sample_type",
+          "series_bundle"
+        ],
+        "pattern": "csf",
+        "value": "csf",
+        "reason": "CSF wording"
+      },
+      {
+        "fields": [
+          "tissue_obs",
+          "tissue_meta",
+          "sample_type",
+          "series_bundle"
+        ],
+        "pattern": "pbmc",
+        "value": "blood",
+        "reason": "PBMC collapsed into blood"
+      }
+    ],
+    "GSE252762": [
+      {
+        "fields": [
+          "tissue_obs",
+          "tissue_meta",
+          "sample_type",
+          "series_bundle"
+        ],
+        "pattern": "duodenum.*pbmc|pbmc.*duodenum",
+        "value": "mixed_duodenum_pbmc",
+        "reason": "mixed duodenum and PBMC sample"
+      },
+      {
+        "fields": [
+          "tissue_obs",
+          "tissue_meta",
+          "sample_type",
+          "series_bundle"
+        ],
+        "pattern": "duodenum",
+        "value": "duodenum",
+        "reason": "duodenum sample"
+      },
+      {
+        "fields": [
+          "tissue_obs",
+          "tissue_meta",
+          "sample_type",
+          "series_bundle"
+        ],
+        "pattern": "pbmc",
+        "value": "blood",
+        "reason": "PBMC sample collapsed into blood"
+      }
+    ],
+    "GSE301528": [
+      {
+        "fields": [
+          "tissue_obs",
+          "tissue_meta",
+          "sample_type",
+          "series_bundle"
+        ],
+        "pattern": "bone marrow",
+        "value": "bone_marrow",
+        "reason": "bone marrow sample"
+      }
+    ]
+  }
+}

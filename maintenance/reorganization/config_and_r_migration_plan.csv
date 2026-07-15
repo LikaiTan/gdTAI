@@ -1,0 +1,3 @@
+old_path,new_path,category,reason
+old_verson/GSE26.json,configs/datasets/legacy_gse26.json,configuration,Retain the legacy discovery configuration outside the archive
+analysis_26GSE_V4/scripts/extract_seurat_metadata.R,workflows/preintegration/extract_seurat_metadata.R,preintegration,Seurat metadata extraction belongs with pre-integration workflows

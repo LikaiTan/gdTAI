@@ -1,0 +1,2 @@
+old_path,new_path,category,reason,operation,status,sha256,recorded_at
+workflows/maintenance/watch_h5ad_v2_and_resume.py,archive/legacy_pipeline/maintenance/watch_h5ad_v2_and_resume.py,retired_maintenance,One-shot repaired-registry watcher completed before the current Phase 4 milestone,apply,moved,23fb1017ae77304b29913a22fc8285a8620c59f398baa48ed3ebaf6cb5ac27d1,2026-07-15T18:05:31.047271+08:00

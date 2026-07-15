@@ -1,0 +1,28 @@
+{
+  "version": "2026-06-18",
+  "purpose": "Literature-informed gdT phenotype programs for the rigorous gdT-only atlas reanalysis. TCR genes are excluded from HVG selection and primary DE, but TRD/TRG V/J/C gene RNA expression is summarized separately.",
+  "programs": {
+    "core_t_gdt": ["CD3D", "CD3E", "CD3G", "TRDC", "TRGC1", "TRGC2"],
+    "cytotoxic_effector": ["NKG7", "GNLY", "PRF1", "GZMB", "GZMH", "GZMA", "IFNG", "FGFBP2", "CTSW", "CX3CR1"],
+    "naive_memory": ["CCR7", "SELL", "TCF7", "LEF1", "IL7R", "LTB", "MAL", "AQP3", "S1PR1"],
+    "tissue_resident": ["ITGAE", "ITGA1", "CXCR6", "ZNF683", "CD69", "RGS1", "XCL1", "XCL2", "KLRG1"],
+    "il17_inflammatory": ["IL17A", "IL17F", "RORC", "CCR6", "IL23R", "KLRB1", "SLC4A10", "CCL20", "IL1R1"],
+    "ifn_response": ["ISG15", "IFIT1", "IFIT2", "IFIT3", "MX1", "OAS1", "STAT1", "IRF7", "CXCL10"],
+    "proliferating": ["MKI67", "TOP2A", "STMN1", "TYMS", "UBE2C", "PCNA", "MCM5"],
+    "checkpoint_activation": ["PDCD1", "LAG3", "TIGIT", "HAVCR2", "CTLA4", "TNFRSF9", "ICOS", "CD40LG", "TOX", "ENTPD1"],
+    "nk_like_warning": ["KLRD1", "KLRC1", "KLRC2", "NCR1", "NCAM1", "FCGR3A", "TYROBP", "FCER1G", "KLRF1"],
+    "cd4_treg_death_penalty": ["CD4", "FOXP3", "IL2RA", "IKZF2", "TNFRSF18", "CCR8"],
+    "myeloid_b_contamination": ["LYZ", "S100A8", "S100A9", "MS4A1", "CD79A", "FCER1A", "CLEC10A"],
+    "stress_low_quality": ["MALAT1", "FOS", "JUN", "HSPA1A", "HSPA1B", "HSP90AA1", "DUSP1"]
+  },
+  "v_gene_expression": [
+    "TRDC", "TRDJ1", "TRDJ2", "TRDJ3",
+    "TRDV1", "TRDV2", "TRDV3",
+    "TRGC1", "TRGC2", "TRGJ1", "TRGJ2", "TRGJP1", "TRGJP2",
+    "TRGV1", "TRGV2", "TRGV3", "TRGV4", "TRGV5", "TRGV6", "TRGV7",
+    "TRGV8", "TRGV9", "TRGV10", "TRGV11"
+  ],
+  "primary_v_gene_panels": ["TRDV1", "TRDV2", "TRDV3", "TRGV9", "TRDC", "TRGC1", "TRGC2"],
+  "death_penalty_genes": ["CD4", "FOXP3", "IL2RA", "IKZF2"],
+  "tcr_gene_prefixes_excluded_from_hvg_and_de": ["TRA", "TRB", "TRG", "TRD"]
+}

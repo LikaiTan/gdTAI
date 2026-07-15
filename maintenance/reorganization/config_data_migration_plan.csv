@@ -1,0 +1,14 @@
+old_path,new_path,category,reason
+h5ad.csv,configs/datasets/integration_inputs.csv,dataset_registry,Canonical Phase 0 input registry
+sample_information_final_full.csv,configs/datasets/sample_information_final_full.csv,dataset_registry,Canonical library-level source manifest
+total_meta_downsample_v3.csv,data/registry/metadata_review/total_meta_downsample_v3.csv,metadata_review,Review-only metadata sample
+geo_scRNA_scTCR_tcell_human_donor10_PASS_STRONG.xlsx,data/raw/local/project_metadata/geo_scRNA_scTCR_tcell_human_donor10_PASS_STRONG.xlsx,raw_metadata,Original project-level source workbook
+gdt_tcr_module_sharing_package_full.zip,data/raw/local/reference_packages/gdt_tcr_module_sharing_package_full.zip,raw_reference,Original shared scoring package
+disease_status_correction_rules.json,configs/metadata/disease_status_correction_rules.json,configuration,Metadata correction rules
+tissue_correction_rules.json,configs/metadata/tissue_correction_rules.json,configuration,Metadata correction rules
+meta_harmonization.json,configs/metadata/meta_harmonization.json,configuration,Metadata harmonization rules
+gdt_atlas_literature_marker_programs.json,configs/gdt_atlas/literature_marker_programs.json,configuration,gdT atlas marker programs
+gdt_atlas_metadata_rules.json,configs/gdt_atlas/metadata_rules.json,configuration,gdT atlas metadata rules
+gdt_atlas_phenotype_marker_panels.json,configs/gdt_atlas/phenotype_marker_panels.json,configuration,gdT atlas phenotype panels
+tcr_integration_workflow.json,configs/tcr/integration_workflow.json,configuration,TCR integration configuration
+supplementary_export_rds_payloads.R,workflows/intake/supplementary_export_rds_payloads.R,intake,Active intake helper belongs with intake workflows

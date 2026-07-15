@@ -1,0 +1,210 @@
+{
+  "project": "26 GSE scRNA-seq + TCR Integration V4",
+  "working_directory": "analysis_26GSE_V4",
+  "targets": {
+    "gse_count": 26,
+    "gse_list": [
+      "GSE241783",
+      "GSE254249",
+      "GSE243905",
+      "GSE228597",
+      "GSE139555",
+      "GSE188620",
+      "GSE311112",
+      "GSE144469",
+      "GSE267645",
+      "GSE254176",
+      "GSE301528",
+      "GSE308075",
+      "GSE162498",
+      "GSE155223",
+      "GSE155222",
+      "GSE252762",
+      "GSE211504",
+      "GSE243572",
+      "GSE243013",
+      "GSE161918",
+      "GSE227709",
+      "GSE190870",
+      "GSE178882",
+      "GSE212217",
+      "GSE171037",
+      "GSE145926"
+    ]
+  },
+  "core_requirements": [
+    "Always use filtered matrix when available; use raw only if filtered is absent.",
+    "Use matrix/ as expected sample manifest and suppl/ as data source.",
+    "Validate gene names and barcodes; reject suspicious loads (e.g., mostly numeric genes).",
+    "Exclude non-coding RNAs at the earliest feasible stage.",
+    "If IDs are not gene symbols (e.g., ENSG), map to gene symbols before integration.",
+    "Do not require one-batch completion; pipeline must be resumable and GSE-by-GSE.",
+    "Use up to 80 CPUs and 500GB RAM as needed.",
+    "Integrate TCR only after all 26 GSE scRNA-seq are completed and merged.",
+    "Minimize script proliferation: revise existing scripts by default; create a new version only when context/workflow is materially different and document why."
+  ],
+  "execution_strategy": {
+    "mode": "incremental_resumable",
+    "stages": [
+      {
+        "name": "Stage 0 - Project setup",
+        "actions": [
+          "Create analysis_26GSE_V4 directory structure.",
+          "Initialize run manifest, config, and logging templates.",
+          "Capture software versions and runtime limits."
+        ]
+      },
+      {
+        "name": "Stage 1 - Discovery per GSE",
+        "actions": [
+          "Parse matrix/*.series_matrix.txt.gz for sample expectations.",
+          "Enumerate all candidate files in suppl/ and extracted_* dirs.",
+          "Build per-GSE file inventory (H5/MTX/TSV/H5AD/tar)."
+        ]
+      },
+      {
+        "name": "Stage 2 - Load per GSE",
+        "actions": [
+          "Apply priority: filtered H5/MTX > filtered alternatives > raw matrices.",
+          "Load samples with strict de-duplication based on canonical sample IDs.",
+          "For raw matrices, apply stricter QC before acceptance.",
+          "Special handling: GSE161918 RNA only (exclude CSP/protein channel)."
+        ]
+      },
+      {
+        "name": "Stage 3 - Early feature normalization",
+        "actions": [
+          "Standardize feature names to gene symbols.",
+          "Translate ENSG/other IDs to gene symbols using mapping table(s).",
+          "Resolve duplicates after mapping (stable deterministic aggregation rule).",
+          "Remove non-coding RNAs before downstream integration."
+        ]
+      },
+      {
+        "name": "Stage 4 - Per-GSE QC and save",
+        "actions": [
+          "Run cell/gene QC thresholds and mitochondrial filtering.",
+          "Save cleaned per-GSE AnnData and QC metrics.",
+          "Record expected-vs-loaded sample reconciliation."
+        ]
+      },
+      {
+        "name": "Stage 5 - Cross-GSE merge",
+        "actions": [
+          "Merge successful GSE objects with consistent gene symbol space.",
+          "Prefer integration-safe feature intersection policy where required.",
+          "Save integrated scRNA object and metadata manifests."
+        ]
+      },
+      {
+        "name": "Stage 6 - TCR integration",
+        "actions": [
+          "Use completed TCR tables after scRNA integration is finalized.",
+          "Attach TCR features via sample/barcode mapping workflow.",
+          "Produce final scRNA+TCR integrated outputs and coverage summary."
+        ]
+      }
+    ]
+  },
+  "data_loading_priority": {
+    "preferred_inputs": [
+      "*filtered_feature_bc_matrix.h5",
+      "filtered MTX triplets (matrix + features/genes + barcodes)",
+      "pre-filtered curated h5ad"
+    ],
+    "fallback_inputs": [
+      "raw_feature_bc_matrix.h5 (with strict raw-specific filtering)",
+      "raw MTX triplets",
+      "nested archives after controlled extraction"
+    ],
+    "rejection_rules": [
+      "Missing companion files for MTX and cannot reconstruct.",
+      "Corrupt/unreadable archive or matrix file.",
+      "Feature/cell dimensions implausible after reasonable parsing.",
+      "Predominantly numeric/invalid gene names without recoverable mapping."
+    ]
+  },
+  "quality_controls": {
+    "structural_checks": [
+      "obs_names uniqueness",
+      "var_names uniqueness after standardization",
+      "matrix orientation correctness (cells x genes)",
+      "sample-level de-duplication"
+    ],
+    "content_checks": [
+      "gene name plausibility (not mostly numeric)",
+      "barcode plausibility (10x-like or dataset-consistent format)",
+      "cell and gene count ranges per sample and per GSE",
+      "mitochondrial fraction sanity"
+    ],
+    "raw_matrix_specific": [
+      "min_genes and min_counts filters",
+      "mt% threshold",
+      "ambient/empty droplet risk notes"
+    ],
+    "gene_mapping_checks": [
+      "mapping source and version logged",
+      "mapped/unmapped counts",
+      "duplicate symbol collapse counts",
+      "final symbol retention rate"
+    ],
+    "ncRNA_filtering": {
+      "timing": "early",
+      "rule": "remove known non-coding RNA patterns before integration",
+      "audit": "record removed feature count per GSE"
+    }
+  },
+  "attention_points": [
+    "Avoid silent failures: never swallow exceptions without logging file path + reason.",
+    "Do not double-load the same sample from multiple extracted directories.",
+    "Do not use nCount_RNA-dependent logic; use total_counts/n_genes_by_counts style metrics.",
+    "Handle GSE-specific naming idiosyncrasies for MTX components.",
+    "Ensure filtered-vs-raw choice is explicit and recorded per sample.",
+    "Keep TCR pipeline outputs untouched until scRNA integration is complete.",
+    "Maintain resumability: each GSE should be independently restartable.",
+    "Minimize script proliferation: revise existing scripts by default; create a new version only when context/workflow is materially different and document why."
+  ],
+  "compute_plan": {
+    "cpu_limit": 80,
+    "memory_limit_gb": 500,
+    "parallelization": {
+      "unit": "GSE and sample-level where safe",
+      "guardrails": [
+        "I/O-aware scheduling to avoid extraction storms",
+        "bounded workers per heavy matrix load",
+        "checkpoint after each GSE"
+      ]
+    }
+  },
+  "logging_and_reporting": {
+    "run_logs": [
+      "analysis_26GSE_V4/logs/master.log",
+      "analysis_26GSE_V4/logs/per_gse/{GSE}.log"
+    ],
+    "manifests": [
+      "analysis_26GSE_V4/manifests/gse_file_inventory.csv",
+      "analysis_26GSE_V4/manifests/gse_sample_expectation_vs_loaded.csv",
+      "analysis_26GSE_V4/manifests/gene_mapping_stats.csv",
+      "analysis_26GSE_V4/manifests/qc_metrics_per_gse.csv"
+    ],
+    "status_tracking": [
+      "analysis_26GSE_V4/status/gse_status.json",
+      "analysis_26GSE_V4/status/blockers.json"
+    ],
+    "final_report": "analysis_26GSE_V4/FINAL_REPORT_V4.md"
+  },
+  "deliverables": [
+    "Per-GSE cleaned h5ad files",
+    "Integrated 26-GSE scRNA h5ad",
+    "Integrated scRNA+TCR h5ad",
+    "Comprehensive final report with unresolved blockers (if any)"
+  ],
+  "definition_of_done": {
+    "success": [
+      "All 26 GSEs loaded or explicitly documented as truly problematic with evidence.",
+      "Integrated scRNA object built from all valid GSEs.",
+      "TCR data added after scRNA integration.",
+      "Final report includes full traceability and QC summaries."
+    ]
+  }
+}

@@ -26,8 +26,8 @@ Use:
 
 Inputs:
 
-- `h5ad.csv`
-- dataset files listed in `h5ad.csv`
+- `configs/datasets/integration_inputs.csv`
+- dataset files selected in `configs/datasets/datasets.csv`
 
 Canonical output root:
 
@@ -48,7 +48,7 @@ Allowed supplementary milestone exception:
 
 - TCR integration:
   - `TCR_INTEGRATION_SOP.md`
-  - `tcr_integration_workflow.json`
+  - `configs/tcr/integration_workflow.json`
 - tissue harmonization:
   - `TISSUE_CORRECTION_WORKFLOW.md`
 - disease-status harmonization:
@@ -74,11 +74,11 @@ Phase or task:
 
 Exact `.py` script:
 
-- `phase0_dataset_audit.py`
+- `workflows/integration/phase0_dataset_audit.py`
 
 Related helper when rescue is needed:
 
-- `repair_h5ad_from_raw.py`
+- `workflows/intake/repair_h5ad_from_raw.py`
 
 Core checks:
 
@@ -108,8 +108,8 @@ Phase or task:
 
 Exact `.py` scripts:
 
-- `phase1_extract_tnk_candidates.py`
-- `phase1_finalize_from_temp.py`
+- `workflows/integration/phase1_extract_tnk_candidates.py`
+- `workflows/integration/phase1_finalize_from_temp.py`
 
 Core outputs:
 
@@ -129,7 +129,7 @@ Phase or task:
 
 Exact `.py` script:
 
-- `phase1b_conservative_cleanup.py`
+- `workflows/integration/phase1b_conservative_cleanup.py`
 
 Core outputs:
 
@@ -150,7 +150,7 @@ Phase or task:
 
 Exact `.py` script:
 
-- `phase1c_replace_harmonized_metadata.py`
+- `workflows/integration/phase1c_replace_harmonized_metadata.py`
 
 Required join key:
 
@@ -176,7 +176,7 @@ Phase or task:
 
 Exact `.py` script:
 
-- `phase2_merged_cleanup.py`
+- `workflows/integration/phase2_merged_cleanup.py`
 
 Core outputs:
 
@@ -197,7 +197,7 @@ Phase or task:
 
 Exact `.py` script:
 
-- `phase3_scvi_scanvi.py`
+- `workflows/integration/phase3_scvi_scanvi.py`
 
 Standard behavior:
 
@@ -224,8 +224,8 @@ Phase or task:
 
 Exact `.py` scripts:
 
-- `phase4_gdt_module_scoring.py`
-- `plot_phase4_threshold_barplots.py`
+- `workflows/integration/phase4_gdt_module_scoring.py`
+- `workflows/integration/plot_phase4_threshold_barplots.py`
 
 Standard behavior:
 
@@ -251,7 +251,7 @@ Phase or task:
 
 Exact `.py` script:
 
-- `remove_no_tcr_gene_gses_from_milestones.py`
+- `workflows/maintenance/remove_no_tcr_gene_gses_from_milestones.py`
 
 Core outputs:
 
@@ -259,7 +259,7 @@ Core outputs:
 - rewritten milestone H5ADs without the approved target GSEs
 - `Integrated_dataset/tables/no_tcr_gene_gse_removal_counts.csv`
 
-## Post-Phase-4 downstream reporting refinement
+## Post-Phase-4 extended five-million-atlas reporting refinement
 
 Objective:
 
@@ -272,11 +272,15 @@ Phase or task:
 
 Exact `.py` scripts:
 
-- `plot_plus6_tcr_pairing_umap.py`
-- `plot_plus6_sorted_gdt_umap.py`
-- `plot_plus6_tnk_marker_umaps.py`
-- `build_plus6_gdt_report_assets.py`
-- `render_plus6_final_report.py`
+- `workflows/reporting/plot_extended_atlas_tcr_pairing_umap.py`
+- `workflows/reporting/plot_extended_atlas_sorted_gdt_umap.py`
+- `workflows/reporting/plot_extended_atlas_tnk_marker_umaps.py`
+- `workflows/reporting/plot_extended_atlas_cell_type_umap.py`
+- `workflows/reporting/build_extended_atlas_gdt_report_assets.py`
+- `workflows/reporting/render_extended_atlas_report.py`
+
+The historical `plus6` output basenames below are retained for provenance and
+stable links; active entry points use the unambiguous `extended_atlas` name.
 
 Core outputs:
 
@@ -284,6 +288,7 @@ Core outputs:
 - `Integrated_dataset/figures/plus6/plus6_umap_sorted_gdt_highlight.png`
 - `Integrated_dataset/figures/plus6/plus6_umap_paired_tcr_sorted_gdt.png`
 - `Integrated_dataset/figures/plus6/plus6_tnk_marker_umap_panel.png`
+- `Integrated_dataset/figures/plus6/plus6_umap_by_corrected_simple_annotation_100x120mm.png`
 - `Integrated_dataset/tables/plus6/plus6_gdt_candidate_statistics.csv`
 - `Integrated_dataset/tables/plus6/plus6_gdt_candidate_overlap_gt0p4.csv`
 - `Integrated_dataset/tables/plus6/plus6_gdt_paired_gdtcr_by_tissue.csv`
@@ -292,6 +297,37 @@ Core outputs:
 - `Integrated_dataset/plus6_profile_report.html`
 - `Integrated_dataset/plus6_profile_report.pdf`
 - `Integrated_dataset/logs/no_tcr_gene_gse_removal.md`
+
+## Post-Phase-4 annotation evidence review
+
+Objective:
+
+- audit cluster annotations with all-cell marker signatures, Phase 4 scores,
+  TCR-chain metadata, reference labels as weak priors, and dataset/tissue
+  composition
+- produce review-only proposed labels and confidence flags without modifying
+  milestone H5AD annotation columns
+
+Phase or task:
+
+- Post-Phase-4 cluster annotation evidence review
+
+Exact `.py` script:
+
+- `workflows/analysis/annotation_evidence_review.py`
+
+Core outputs:
+
+- `Integrated_dataset/tables/annotation_evidence_review/current_integrated_cluster_annotation_proposals.csv`
+- `Integrated_dataset/tables/annotation_evidence_review/current_integrated_cluster_signature_scores.csv`
+- `Integrated_dataset/tables/annotation_evidence_review/current_integrated_cluster_marker_gene_stats.csv`
+- `Integrated_dataset/logs/annotation_evidence_review/current_integrated_annotation_evidence_summary.md`
+- `Integrated_dataset/figures/annotation_evidence_review/current_integrated_cluster_signature_heatmap.png`
+- `Integrated_dataset/tables/annotation_evidence_review/plus6_cluster_annotation_proposals.csv`
+- `Integrated_dataset/tables/annotation_evidence_review/plus6_cluster_signature_scores.csv`
+- `Integrated_dataset/tables/annotation_evidence_review/plus6_cluster_marker_gene_stats.csv`
+- `Integrated_dataset/logs/annotation_evidence_review/plus6_annotation_evidence_summary.md`
+- `Integrated_dataset/figures/annotation_evidence_review/plus6_cluster_signature_heatmap.png`
 
 ## Supplementary 10x 5' intake lane
 
@@ -327,7 +363,7 @@ Phase or task:
 
 Exact `.py` script:
 
-- `process_hra005041_tcr_intake.py`
+- `workflows/intake/process_hra005041_tcr_intake.py`
 
 Standard behavior:
 
@@ -364,7 +400,7 @@ Phase or task:
 
 Exact `.py` script:
 
-- `phase4_score_single_h5ad.py`
+- `workflows/intake/phase4_score_single_h5ad.py`
 
 Core outputs:
 
@@ -393,8 +429,8 @@ Phase or task:
 
 Exact `.py` scripts:
 
-- `process_sorted_gdt_rds_intake.py`
-- `phase4_score_single_h5ad.py`
+- `workflows/intake/process_sorted_gdt_rds_intake.py`
+- `workflows/intake/phase4_score_single_h5ad.py`
 
 Standard behavior:
 
@@ -424,14 +460,198 @@ Core outputs:
 
 Exact `.py` scripts:
 
-- `supplementary_10x5_phase01.py`
-- `validate_supplementary_10x5_schema.py`
+- `workflows/intake/supplementary_10x5_phase01.py`
+- `workflows/intake/validate_supplementary_10x5_schema.py`
 
 Key outputs:
 
 - `downloads/per_gse_h5ad_with_metadata/`
 - `Integrated_dataset/TNK_candidates_supp.h5ad`
 - supplementary tables, logs, and PNG QC figures
+
+## Post-Phase-4 gdT prediction package-style evaluation
+
+Objective:
+
+- evaluate package-style gdT score classifiers on the historical extended
+  five-million-cell integrated object
+- build project-specific primary gold and sensitivity-only silver labels from
+  TCR metadata without modifying any H5AD
+- render a static HTML/PDF report for downstream review
+
+Phase or task:
+
+- gdT prediction evaluation using shared package classifier logic
+
+Exact `.py` scripts:
+
+- `workflows/gdtai/run_gdt_prediction_package_evaluation.py`
+- `workflows/gdtai/plot_gdt_truth_trd_trab_marker_scatter.py`
+- `workflows/gdtai/run_tn_fn_trd_gt0p1_deg_reproducibility.py`
+- `workflows/gdtai/run_trd_gt0p1_high_no_ab_vs_low_ab_deg_reproducibility.py`
+- `workflows/gdtai/run_gdt_deg_tcr_classifier_training.py`
+- `workflows/gdtai/run_gdt_gse144469_holdout_tcrgene_classifier.py`
+- `workflows/gdtai/run_gdt_classifier_failure_mode_audit.py`
+- `workflows/gdtai/predict_with_selected_gdt_model.py`
+- `workflows/gdtai/build_gdtai_overview_report.py`
+- `workflows/gdtai/run_gdtai_nkguard_classifier.py`
+- `workflows/gdtai/run_gdtai_multiguard_classifier.py`
+- `workflows/gdtai/run_gdtai_transcriptome_gate_cascade.py`
+- `workflows/gdtai/run_gdtai_annotation_specific_cascade.py`
+- `workflows/gdtai/run_gdtai_annotation_specific_tp_fn_audit.py`
+
+Core outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/`
+- `Integrated_dataset/figures/gdT_prediction/`
+- `Integrated_dataset/logs/gdT_prediction/gdT_prediction_summary.md`
+- `Integrated_dataset/figures/gdT_prediction/trd_vs_trab_gold_silver_marker_expression.png`
+- `Integrated_dataset/tables/gdT_prediction/tn_fn_trd_gt0p1_global_deg.csv`
+- `Integrated_dataset/tables/gdT_prediction/tn_fn_trd_gt0p1_deg_reproducibility.csv`
+- `Integrated_dataset/figures/gdT_prediction/tn_fn_trd_gt0p1_global_deg_volcano.png`
+- `Integrated_dataset/figures/gdT_prediction/tn_fn_trd_gt0p1_source_logfc_reproducibility.png`
+- `Integrated_dataset/logs/gdT_prediction/tn_fn_trd_gt0p1_deg_reproducibility_summary.md`
+- `Integrated_dataset/tables/gdT_prediction/trd_gt0p1_high_no_ab_vs_expanded_negative_no_tcr_genes_global_deg.csv`
+- `Integrated_dataset/tables/gdT_prediction/trd_gt0p1_high_no_ab_vs_expanded_negative_no_tcr_genes_deg_reproducibility.csv`
+- `Integrated_dataset/tables/gdT_prediction/trd_gt0p1_high_no_ab_vs_expanded_negative_no_tcr_genes_excluded_tcr_genes.csv`
+- `Integrated_dataset/figures/gdT_prediction/trd_gt0p1_high_no_ab_vs_expanded_negative_no_tcr_genes_global_deg_volcano.png`
+- `Integrated_dataset/logs/gdT_prediction/trd_gt0p1_high_no_ab_vs_expanded_negative_no_tcr_genes_deg_reproducibility_report.md`
+- `gdT_prediction/trd_gt0p1_high_no_ab_vs_expanded_negative_no_tcr_genes_deg_reproducibility_report.html`
+- `gdT_prediction/trd_gt0p1_high_no_ab_vs_expanded_negative_no_tcr_genes_deg_reproducibility_report.pdf`
+- `Integrated_dataset/tables/gdT_prediction/classifier_training/classifier_metrics_validation.csv`
+- `Integrated_dataset/tables/gdT_prediction/classifier_training/classifier_acceptance_vs_best_baseline.csv`
+- `Integrated_dataset/tables/gdT_prediction/classifier_training/prevalence_aware_ppv_scenarios.csv`
+- `Integrated_dataset/tables/gdT_prediction/classifier_training/selected_model_full_dataset_prediction_overall.csv`
+- `Integrated_dataset/tables/gdT_prediction/classifier_training/selected_model_full_dataset_prediction_by_source.csv`
+- `Integrated_dataset/logs/gdT_prediction/classifier_training/gdt_deg_tcr_classifier_report.md`
+- `Integrated_dataset/models/gdT_prediction_classifier/selected_gdt_classifier.pkl`
+- `gdT_prediction/gdt_deg_tcr_classifier_report.html`
+- `gdT_prediction/gdt_deg_tcr_classifier_report.pdf`
+- `Integrated_dataset/tables/gdT_prediction/gse144469_holdout_tcrgene/validation_metrics.csv`
+- `Integrated_dataset/tables/gdT_prediction/gse144469_holdout_tcrgene/acceptance_vs_individual_gene_baseline.csv`
+- `Integrated_dataset/tables/gdT_prediction/gse144469_holdout_tcrgene/selected_model_full_dataset_prediction_overall.csv`
+- `Integrated_dataset/tables/gdT_prediction/gse144469_holdout_tcrgene/selected_model_full_dataset_false_positive_overall.csv`
+- `Integrated_dataset/tables/gdT_prediction/gse144469_holdout_tcrgene/selected_model_full_dataset_false_positive_by_source.csv`
+- `Integrated_dataset/tables/gdT_prediction/gse144469_holdout_tcrgene/selected_model_full_dataset_prediction_by_annotation.csv`
+- `Integrated_dataset/tables/gdT_prediction/gse144469_holdout_tcrgene/trd_vs_trab_prediction_scatter_sample.csv.gz`
+- `Integrated_dataset/figures/gdT_prediction/gse144469_holdout_tcrgene/trd_vs_trab_prediction_method_agreement.png`
+- `Integrated_dataset/figures/gdT_prediction/gse144469_holdout_tcrgene/trd_vs_trab_tcrgene_known_fp_status.png`
+- `Integrated_dataset/logs/gdT_prediction/gse144469_holdout_tcrgene/gse144469_holdout_tcrgene_report.md`
+- `Integrated_dataset/models/gdT_prediction_classifier/gse144469_holdout_tcrgene/selected_model.pkl`
+- `gdT_prediction/gse144469_holdout_tcrgene_report.html`
+- `gdT_prediction/gse144469_holdout_tcrgene_report.pdf`
+- `Integrated_dataset/tables/gdT_prediction/gse144469_holdout_tcrgene_failure_modes/`
+- `Integrated_dataset/figures/gdT_prediction/gse144469_holdout_tcrgene_failure_modes/`
+- `Integrated_dataset/logs/gdT_prediction/gse144469_holdout_tcrgene_failure_modes/gse144469_holdout_tcrgene_failure_mode_audit.md`
+- `gdT_prediction/gse144469_holdout_tcrgene_failure_mode_audit.html`
+- `gdT_prediction/gse144469_holdout_tcrgene_failure_mode_audit.pdf`
+- `gdT_prediction/gdT_classifier_local_handoff_plan.md`
+- `Integrated_dataset/tables/gdT_prediction/external_tests/<DATASET_ID>/`
+- `Integrated_dataset/figures/gdT_prediction/external_tests/<DATASET_ID>/`
+- `Integrated_dataset/logs/gdT_prediction/external_tests/<DATASET_ID>/`
+- `gdT_prediction/external_tests/<DATASET_ID>/index.html`
+- `Integrated_dataset/logs/gdT_prediction/gdTAI_overview_report.md`
+- `Integrated_dataset/figures/gdT_prediction/gdTAI_overview/`
+- `gdT_prediction/gdTAI_overview_report.html`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_nkguard/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_nkguard/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_nkguard/gdtai_nkguard_report.md`
+- `Integrated_dataset/models/gdT_prediction_classifier/gdtai_nkguard/best_candidate_model.pkl`
+- `gdT_prediction/gdtai_nkguard_report.html`
+- `gdT_prediction/gdtai_nkguard_report.pdf`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_multiguard/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_multiguard/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_multiguard/gdtai_multiguard_report.md`
+- `Integrated_dataset/models/gdT_prediction_classifier/gdtai_multiguard/best_candidate_model.pkl`
+- `gdT_prediction/gdtai_multiguard_report.html`
+- `gdT_prediction/gdtai_multiguard_report.pdf`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_transcriptome_gate/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_transcriptome_gate/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_transcriptome_gate/gdtai_transcriptome_gate_report.md`
+- `Integrated_dataset/models/gdT_prediction_classifier/gdtai_transcriptome_gate/gdtai_transcriptome_gate_protocol.md`
+- `gdT_prediction/gdtai_transcriptome_gate_report.html`
+- `gdT_prediction/gdtai_transcriptome_gate_report.pdf`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_annotation_specific_cascade/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_annotation_specific_cascade/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_annotation_specific_cascade/gdtai_annotation_specific_cascade_report.md`
+- `Integrated_dataset/models/gdT_prediction_classifier/gdtai_annotation_specific_cascade/selected_annotation_specific_wrapper.pkl`
+- `Integrated_dataset/models/gdT_prediction_classifier/gdtai_annotation_specific_cascade/gdtai_annotation_specific_cascade_protocol.md`
+- `gdT_prediction/gdtai_annotation_specific_cascade_report.html`
+- `gdT_prediction/gdtai_annotation_specific_cascade_report.pdf`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_annotation_specific_tp_fn_audit/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_annotation_specific_tp_fn_audit/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_annotation_specific_tp_fn_audit/gdtai_annotation_specific_tp_fn_audit_report.md`
+- `gdT_prediction/gdtai_annotation_specific_tp_fn_audit.html`
+- `gdT_prediction/gdtai_annotation_specific_tp_fn_audit.pdf`
+- `gdT_prediction/index.html`
+- `gdT_prediction/gdT_prediction_report.pdf`
+
+Phase or task:
+
+- Post-Phase-4 gdTAI v3 TRDC/NK-guard classifier training, external testing, and failure audit
+
+Exact `.py` scripts:
+
+- `workflows/gdtai/run_gdtai_v3_trdc_nk_guard_classifier.py`
+- `workflows/gdtai/run_gdtai_v3_trdc_nk_failure_audit.py`
+
+Core outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v3_trdc_nk_guard/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v3_trdc_nk_guard/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v3_trdc_nk_guard/`
+- `gdT_prediction/gdtai_v3_trdc_nk_guard_report.html`
+- `gdT_prediction/gdtai_v3_trdc_nk_guard_report.pdf`
+- `gdT_prediction/gdtai_v3_trdc_nk_failure_audit.html`
+- `gdT_prediction/gdtai_v3_trdc_nk_failure_audit.pdf`
+- if promoted: `Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/gdTAI_v3_model.pkl` plus README, methodology, feature, metrics, and example files
+
+Standard behavior:
+
+- include `GSE144469` primary gold cells in atlas train/tune splits
+- keep the non-GSE144469 validation cohorts from the prior multi-cohort validation lane: `GSE254249` paired-TCRAB/no-gdTCR negatives and `GDT_2020AUG_woCOV` cord-blood gdT positives
+- keep the independent external H5AD out of fitting, threshold tuning, and model selection
+- after training, apply the selected v3 candidate and reference strategies to the full atlas input H5AD and write whole-atlas source/tissue/annotation summaries plus selected predicted cells
+- run at least five iteration rounds unless the recall/estimated-FP target is already reached; candidate families are not restricted to XGBoost
+- select the final review candidate from full-atlas target metrics using recall `> 0.8` and estimated FP fraction `< 5%` of predictions, estimating hidden abT FP from paired-TCRAB rates in TCR-sequenced sources
+- require independent external H5AD inference from `layers["counts"]` and fail rather than using normalized `X`
+- exclude NK+TCRAB-overlap cells from negative train/tune labels and explicit hard-negative construction
+- restrict explicit NK hard negatives to expression `TRDC+TRDV-`; non-NK TCRAB hard negatives remain a separate guard set
+- report ambiguous/mixed/partial external TCR labels as stress groups outside primary binary metrics
+
+Phase or task:
+
+- Post-Phase-4 gdTAI NK-optimized gdT atlas metadata harmonization and report
+
+Exact `.py` script:
+
+- `workflows/gdt_atlas/run_gdtai_nk_optimized_gdt_atlas.py`
+
+Core outputs:
+
+- `configs/gdt_atlas/metadata_rules.json`
+- `Integrated_dataset/tables/gdT_atlas/`
+- `Integrated_dataset/figures/gdT_atlas/`
+- `Integrated_dataset/logs/gdT_atlas/gdtai_nk_optimized_gdt_atlas_summary.md`
+- `gdT_atlas/index.html`
+- `gdT_atlas/gdT_atlas_report.pdf`
+
+Phase or task:
+
+- Post-Phase-4 curated gdT phenotype atlas
+
+Exact `.py` script:
+
+- `workflows/gdt_atlas/run_gdt_atlas_curated_phenotype_analysis.py`
+
+Core outputs:
+
+- `configs/gdt_atlas/phenotype_marker_panels.json`
+- `Integrated_dataset/tables/gdT_atlas_curated_phenotypes/`
+- `Integrated_dataset/figures/gdT_atlas_curated_phenotypes/`
+- `Integrated_dataset/logs/gdT_atlas_curated_phenotypes/gdt_atlas_curated_phenotypes_summary.md`
+- `gdT_atlas/curated_phenotypes/index.html`
+- `gdT_atlas/curated_phenotypes/gdT_atlas_curated_phenotypes_report.pdf`
 
 ## QC-gate note
 
@@ -441,6 +661,33 @@ Default rule:
 
 Do not define active exceptions here.
 Active exceptions belong only in `TNK_PIPELINE_RUNBOOK.md`.
+
+## Post-Phase-4 rigorous gdT atlas reanalysis
+
+Objective:
+
+- rebuild the gdT biology atlas from promoted gdTAI predictions with no
+  silver-only FN add-back
+- remove likely false positives, add back only gold-level FN cells, re-run
+  gdT-only scVI integration, UMAP, Leiden clustering, phenotype annotation,
+  sample-level statistics, and pseudobulk-style DE
+
+Phase or task:
+
+- Post-Phase-4 rigorous gdT atlas reanalysis and report
+
+Exact `.py` script:
+
+- `workflows/gdt_atlas/run_gdt_atlas_rigorous_reanalysis.py`
+
+Core outputs:
+
+- `Integrated_dataset/gdT_atlas/gdt_curated_integrated.h5ad`
+- `Integrated_dataset/tables/gdT_atlas_rigorous/`
+- `Integrated_dataset/figures/gdT_atlas_rigorous/`
+- `Integrated_dataset/logs/gdT_atlas_rigorous/gdt_atlas_rigorous_summary.md`
+- `gdT_atlas/rigorous/index.html`
+- `gdT_atlas/rigorous/gdT_atlas_rigorous_report.pdf`
 
 ## gdTAI v3 decision-report refinement
 
@@ -455,7 +702,7 @@ Phase or task:
 
 Exact `.py` script:
 
-- `render_gdtai_v3_clear_report.py`
+- `workflows/gdtai/render_gdtai_v3_clear_report.py`
 
 Core outputs:
 
@@ -479,7 +726,7 @@ Phase or task:
 
 Exact `.py` script:
 
-- `promote_gdtai_v3_and_build_predicted_gdt_atlas.py`
+- `workflows/gdtai/promote_gdtai_v3_and_build_predicted_gdt_atlas.py`
 
 Core outputs:
 
@@ -490,3 +737,77 @@ Core outputs:
 - `Integrated_dataset/tables/gdT_atlas/predicted_gdt_cell_atlas_metadata.csv.gz`
 - `Integrated_dataset/tables/gdT_atlas/predicted_gdt_cell_atlas_removed_fp_cells.csv.gz`
 - `Integrated_dataset/tables/gdT_atlas/predicted_gdt_cell_atlas_gold_fn_added_cells.csv.gz`
+
+## Post-Phase-4 predicted gdT atlas tumor-type audit
+
+Objective:
+
+- resolve broad tumor-like atlas tissue labels to original tumor types by source GSE and row-level tissue context without modifying the atlas H5AD
+
+Phase or task:
+
+- Predicted gdT atlas tumor-type source audit
+
+Exact `.py` script:
+
+- `workflows/gdt_atlas/run_gdt_atlas_tumor_type_audit.py`
+
+Core outputs:
+
+- `Integrated_dataset/tables/gdT_atlas/tumor_type_source_mapping.csv`
+- `Integrated_dataset/tables/gdT_atlas/tumor_type_by_source_tissue.csv`
+- `Integrated_dataset/tables/gdT_atlas/tumor_type_cell_annotation_review.csv.gz`
+- `Integrated_dataset/logs/gdT_atlas/tumor_type_source_mapping.md`
+
+Standard behavior:
+
+- read `Integrated_dataset/gdT_atlas/predicted_gdt_cell_atlas.h5ad` in backed mode
+- use `configs/gdt_atlas/metadata_rules.json` source-level tumor-type rules gated by row tissue values
+- preserve raw tissue columns and keep tumor-type fields as review-only exports until write-back is explicitly approved
+
+## Post-Phase-4 gdTAI model comparison
+
+Objective:
+
+- compare the latest local gdTAI model against gdTAI v2.0 high-purity at
+  whole-atlas and per-dataset levels without mutating H5AD files
+
+Phase or task:
+
+- gdTAI latest-vs-v2 high-purity prediction overlap audit
+
+Exact `.py` script:
+
+- `workflows/gdtai/compare_gdtai_latest_vs_v2_high_purity.py`
+
+Core outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v3_vs_v2_high_purity/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v3_vs_v2_high_purity/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v3_vs_v2_high_purity/`
+- `gdT_prediction/gdtai_v3_vs_v2_high_purity_report.html`
+- `gdT_prediction/gdtai_v3_vs_v2_high_purity_report.pdf`
+
+## Post-Phase-4 gdTAI v4 two-stage retraining
+
+Objective:
+
+- train and evaluate an experimental two-stage gdTAI classifier with a soft
+  T-lineage gate and dropout-tolerant gdT classifier
+
+Phase or task:
+
+- gdTAI v4 T-cell-gate retraining and full-atlas comparison
+
+Exact `.py` script:
+
+- `workflows/gdtai/run_gdtai_v4_tcell_gate_classifier.py`
+
+Core outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_tcell_gate/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v4_tcell_gate/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_tcell_gate/`
+- `Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v4.0/`
+- `gdT_prediction/gdtai_v4_tcell_gate_report.html`
+- `gdT_prediction/gdtai_v4_tcell_gate_report.pdf`

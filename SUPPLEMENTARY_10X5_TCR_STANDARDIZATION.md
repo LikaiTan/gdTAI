@@ -19,7 +19,7 @@ converted into per-GSE H5AD files under:
 
 The implementation entrypoint is:
 
-- `supplementary_10x5_phase01.py`
+- `workflows/intake/supplementary_10x5_phase01.py`
 
 The shared TCR join rules are defined in:
 
@@ -30,7 +30,7 @@ The shared TCR join rules are defined in:
 - intake only approved `10x 5'` datasets
 - do not include any `10x 3'` data
 - for `GSE234069`, use only `downloads/GSE234069/suppl/10x_5/`
-- if TCR is provided separately, integrate it according to `TCR_INTEGRATION_SOP.md` and the sample-aware workflow in `tcr_integration_workflow.json`
+- if TCR is provided separately, integrate it according to `TCR_INTEGRATION_SOP.md` and the sample-aware workflow in `configs/tcr/integration_workflow.json`
 - metadata and TCR fields must be standardized to the same schema used by:
   - `analysis_26GSE_V4/outputs/harmonized_metadata_v4.csv`
 

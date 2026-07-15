@@ -1,0 +1,2 @@
+old_path,new_path,category,reason
+workflows/maintenance/watch_h5ad_v2_and_resume.py,archive/legacy_pipeline/maintenance/watch_h5ad_v2_and_resume.py,retired_maintenance,One-shot repaired-registry watcher completed before the current Phase 4 milestone
