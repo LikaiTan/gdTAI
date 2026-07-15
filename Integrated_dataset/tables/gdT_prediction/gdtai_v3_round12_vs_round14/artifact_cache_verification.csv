@@ -1,0 +1,5 @@
+check,model,n_cells,score_match,prediction_match,n_sampled,n_matching,n_mismatching
+external_direct_vs_cache,round12,46273.0,True,True,,,
+external_direct_vs_cache,round14,46273.0,True,True,,,
+atlas_direct_artifact_vs_cell_cache,round12,,,True,2000.0,2000.0,0.0
+atlas_direct_artifact_vs_cell_cache,round14,,,True,2000.0,2000.0,0.0

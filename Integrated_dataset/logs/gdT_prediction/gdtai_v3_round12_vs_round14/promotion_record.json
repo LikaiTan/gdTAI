@@ -1,0 +1,9 @@
+{
+  "selected_model": "round14",
+  "payload_model": "v3_round14_v2_score_trdc_gate_fixed_0p936",
+  "canonical_model": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/gdTAI_v3_model.pkl",
+  "canonical_sha256": "16dedc0081da9b8487887341232bcf8c9c9403dd3bbd72e04cab43d4cd7b2e09",
+  "candidate_model": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/models/gdT_prediction_classifier/gdtai_v3_trdc_nk_guard/best_candidate_model.pkl",
+  "candidate_sha256": "16dedc0081da9b8487887341232bcf8c9c9403dd3bbd72e04cab43d4cd7b2e09",
+  "comparison_report": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/gdT_prediction/gdtai_v3_round12_vs_round14/index.html"
+}

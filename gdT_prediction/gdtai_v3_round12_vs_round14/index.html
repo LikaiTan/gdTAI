@@ -1,0 +1,1340 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>gdTAI v3 Round 12 vs Round 14</title><style>
+    :root { --ink:#18212b; --muted:#5f6b76; --line:#d9e0e6; --panel:#f5f7f9; --r12:#126782; --r14:#d1495b; --ok:#157a6e; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:white; font-family:Arial, Helvetica, sans-serif; line-height:1.46; }
+    header { border-bottom:5px solid var(--r14); padding:34px 5vw 28px; background:#f8fafb; }
+    main { max-width:1220px; margin:0 auto; padding:26px 34px 60px; }
+    h1 { margin:0 0 8px; font-size:34px; letter-spacing:0; }
+    h2 { margin:32px 0 12px; font-size:22px; letter-spacing:0; border-bottom:1px solid var(--line); padding-bottom:7px; }
+    h3 { margin:22px 0 8px; font-size:16px; letter-spacing:0; }
+    p, li { font-size:14px; }
+    .subtitle { color:var(--muted); margin:0; max-width:900px; }
+    .decision { border-left:6px solid var(--ok); background:#edf7f4; padding:18px 20px; margin:22px 0; }
+    .decision strong { font-size:21px; }
+    .metrics { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:10px; margin:18px 0; }
+    .metric { border:1px solid var(--line); border-radius:6px; padding:13px; background:white; }
+    .metric .label { color:var(--muted); font-size:12px; }
+    .metric .value { font-size:23px; font-weight:700; margin-top:3px; }
+    .r12 { color:var(--r12); } .r14 { color:var(--r14); }
+    .table-wrap { overflow-x:auto; border:1px solid var(--line); margin:10px 0 22px; }
+    table.dataframe, table.data-table { border-collapse:collapse; width:100%; font-size:11px; }
+    th, td { border-bottom:1px solid var(--line); padding:6px 7px; text-align:right; white-space:nowrap; }
+    th:first-child, td:first-child { text-align:left; }
+    th { background:#eef2f5; color:#283744; position:sticky; top:0; }
+    figure { margin:24px 0; break-inside:avoid; }
+    figure img { display:block; max-width:100%; height:auto; border:1px solid var(--line); }
+    figcaption { color:var(--muted); font-size:11px; margin-top:5px; }
+    code { background:#eef2f5; padding:1px 4px; }
+    .note { color:var(--muted); font-size:12px; }
+    .file-list a { color:#126782; }
+    @media (max-width:780px) { main { padding:20px 14px; } .metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } h1 { font-size:27px; } }
+    @media print {
+      @page { size:A4 landscape; margin:9mm; }
+      header { padding:12mm 10mm 7mm; }
+      main { max-width:none; padding:5mm 8mm; }
+      h1 { font-size:24px; } h2 { font-size:17px; break-after:avoid; }
+      p, li { font-size:10px; }
+      .metrics { grid-template-columns:repeat(4,1fr); }
+      .metric .value { font-size:17px; }
+      table.dataframe, table.data-table { font-size:7px; }
+      th, td { padding:3px 4px; white-space:normal; }
+      .table-wrap { overflow:visible; border:0; }
+      figure { break-inside:avoid; page-break-inside:avoid; }
+      figure img { max-height:165mm; margin:auto; }
+      a { color:inherit; text-decoration:none; }
+    }
+    </style></head><body>
+<header><h1>gdTAI v3: Round 12 vs Round 14</h1>
+<p class="subtitle">A checksum-pinned, same-cohort comparison across the 5.13-million-cell atlas, held-out atlas cohorts, and an independent external H5AD.</p></header>
+<main>
+<section class="decision"><strong>Selected: Round 14</strong>
+<p>Round 14 is selected because it is the only candidate that reaches the prespecified 0.80 full-atlas gold-recall floor while remaining below all FP guardrails. It also has substantially higher held-out cord-blood recall and higher mean F1 across the three evaluation frames. Round 12 remains the lower-FP fallback.</p></section>
+<div class="metrics">
+  <div class="metric"><div class="label">Round 12 atlas calls</div><div class="value r12">213,182</div></div>
+  <div class="metric"><div class="label">Round 14 atlas calls</div><div class="value r14">251,356</div></div>
+  <div class="metric"><div class="label">Shared calls</div><div class="value">203,164</div></div>
+  <div class="metric"><div class="label">Prediction Jaccard</div><div class="value">0.777</div></div>
+</div>
+
+<h2>Executive Comparison</h2>
+<p>Round 14 adds 38,174 raw atlas calls and recovers 2,863 additional gold gdT cells. The cost is 2,832 additional paired-TCRAB calls and 2,201 additional NK-annotated calls. On the independent external set, Round 14 recovers 1 additional true gdT cell but adds 16 false positives, so Round 12 has the higher external F1. On the atlas held-out set, Round 14 has the substantially higher F1 because it rescues cord-blood gdT cells.</p>
+<div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Measure</th>
+      <th>Round 12</th>
+      <th>Round 14</th>
+      <th>Round 14 minus Round 12</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Raw atlas calls</td>
+      <td>213182</td>
+      <td>251356</td>
+      <td>38174</td>
+    </tr>
+    <tr>
+      <td>Gold gdT recovered</td>
+      <td>43681</td>
+      <td>46544</td>
+      <td>2863</td>
+    </tr>
+    <tr>
+      <td>Silver gdT recovered</td>
+      <td>1981</td>
+      <td>2031</td>
+      <td>50</td>
+    </tr>
+    <tr>
+      <td>Paired-TCRAB calls</td>
+      <td>2748</td>
+      <td>5580</td>
+      <td>2832</td>
+    </tr>
+    <tr>
+      <td>NK-annotated calls</td>
+      <td>1723</td>
+      <td>3924</td>
+      <td>2201</td>
+    </tr>
+  </tbody>
+</table></div>
+<div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Evaluation</th>
+      <th>Round 12 precision</th>
+      <th>Round 12 recall</th>
+      <th>Round 12 F1</th>
+      <th>Round 14 precision</th>
+      <th>Round 14 recall</th>
+      <th>Round 14 F1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Full atlas primary gold</td>
+      <td>0.9823</td>
+      <td>0.7560</td>
+      <td>0.8544</td>
+      <td>0.9752</td>
+      <td>0.8056</td>
+      <td>0.8823</td>
+    </tr>
+    <tr>
+      <td>Atlas held-out combined</td>
+      <td>0.9925</td>
+      <td>0.6751</td>
+      <td>0.8036</td>
+      <td>0.9854</td>
+      <td>0.8530</td>
+      <td>0.9144</td>
+    </tr>
+    <tr>
+      <td>Independent external</td>
+      <td>0.9690</td>
+      <td>0.8576</td>
+      <td>0.9099</td>
+      <td>0.9509</td>
+      <td>0.8586</td>
+      <td>0.9024</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2>Decision Rule</h2>
+<p>Pass all four safety/recall guardrails, then maximize mean F1 across full-atlas gold, atlas-held-out, and independent-external evaluations.</p>
+<div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>model</th>
+      <th>full_atlas_recall</th>
+      <th>full_atlas_estimated_fp_fraction</th>
+      <th>external_specificity</th>
+      <th>heldout_GSE254249_fp_rate</th>
+      <th>full_atlas_primary_gold_recall_ge_0p80</th>
+      <th>full_atlas_estimated_fp_fraction_le_0p05</th>
+      <th>external_specificity_ge_0p9985</th>
+      <th>heldout_GSE254249_fp_rate_le_0p001</th>
+      <th>all_guardrails_pass</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>round12</td>
+      <td>75.60%</td>
+      <td>2.47%</td>
+      <td>99.93%</td>
+      <td>0.04%</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <td>round14</td>
+      <td>80.56%</td>
+      <td>4.06%</td>
+      <td>99.89%</td>
+      <td>0.09%</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+  </tbody>
+</table></div>
+<p>Mean F1 across full-atlas gold, atlas-held-out, and independent-external evaluations: Round 12 = 0.8560; Round 14 = 0.8997.</p>
+<div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>criterion</th>
+      <th>preferred_direction</th>
+      <th>round12</th>
+      <th>round14</th>
+      <th>winner</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Full-atlas primary F1</td>
+      <td>higher</td>
+      <td>0.8544</td>
+      <td>0.8823</td>
+      <td>round14</td>
+    </tr>
+    <tr>
+      <td>Atlas held-out F1</td>
+      <td>higher</td>
+      <td>0.8036</td>
+      <td>0.9144</td>
+      <td>round14</td>
+    </tr>
+    <tr>
+      <td>Independent external F1</td>
+      <td>higher</td>
+      <td>0.9099</td>
+      <td>0.9024</td>
+      <td>round12</td>
+    </tr>
+    <tr>
+      <td>Full-atlas primary recall</td>
+      <td>higher</td>
+      <td>0.7560</td>
+      <td>0.8056</td>
+      <td>round14</td>
+    </tr>
+    <tr>
+      <td>Silver recall</td>
+      <td>higher</td>
+      <td>0.9029</td>
+      <td>0.9257</td>
+      <td>round14</td>
+    </tr>
+    <tr>
+      <td>Independent external precision</td>
+      <td>higher</td>
+      <td>0.9690</td>
+      <td>0.9509</td>
+      <td>round12</td>
+    </tr>
+    <tr>
+      <td>Full-atlas estimated FP fraction</td>
+      <td>lower</td>
+      <td>0.0247</td>
+      <td>0.0406</td>
+      <td>round12</td>
+    </tr>
+    <tr>
+      <td>Full-atlas paired-TCRAB calls</td>
+      <td>lower</td>
+      <td>2748.0000</td>
+      <td>5580.0000</td>
+      <td>round12</td>
+    </tr>
+    <tr>
+      <td>Full-atlas NK calls</td>
+      <td>lower</td>
+      <td>1723.0000</td>
+      <td>3924.0000</td>
+      <td>round12</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2>Figures</h2><figure><img src="figures/performance_across_evaluations.png" alt="performance_across_evaluations"><figcaption>Performance Across Evaluations</figcaption></figure>
+<figure><img src="figures/false_positive_safety_comparison.png" alt="false_positive_safety_comparison"><figcaption>False Positive Safety Comparison</figcaption></figure>
+<figure><img src="figures/prediction_overlap_and_composition.png" alt="prediction_overlap_and_composition"><figcaption>Prediction Overlap And Composition</figcaption></figure>
+<figure><img src="figures/per_dataset_prediction_scatter.png" alt="per_dataset_prediction_scatter"><figcaption>Per Dataset Prediction Scatter</figcaption></figure>
+<figure><img src="figures/per_dataset_prediction_delta.png" alt="per_dataset_prediction_delta"><figcaption>Per Dataset Prediction Delta</figcaption></figure>
+<figure><img src="figures/gdt_recall_by_evidence_source.png" alt="gdt_recall_by_evidence_source"><figcaption>Gdt Recall By Evidence Source</figcaption></figure>
+<figure><img src="figures/predicted_tcr_quadrant_composition.png" alt="predicted_tcr_quadrant_composition"><figcaption>Predicted Tcr Quadrant Composition</figcaption></figure>
+
+<h2>Held-Out Cohorts</h2>
+<p>The atlas-held-out frame contains sorted cord-blood gdT positives from <code>GDT_2020AUG_woCOV</code> and paired-TCRAB/no-gdTCR negatives from <code>GSE254249</code>. The external H5AD was not used for fitting or threshold selection.</p>
+<div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>strategy</th>
+      <th>group_value</th>
+      <th>n_cells</th>
+      <th>predicted_positive</th>
+      <th>tp</th>
+      <th>fp</th>
+      <th>fn</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>specificity</th>
+      <th>f1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>round12</td>
+      <td>abT_GSE254249_paired_TCRAB_no_gdTCR</td>
+      <td>173697</td>
+      <td>64</td>
+      <td>0</td>
+      <td>64</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>0.0000</td>
+      <td>0.9996</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>round12</td>
+      <td>gdT_GDT_2020AUG_woCOV_cord_blood</td>
+      <td>12498</td>
+      <td>8437</td>
+      <td>8437</td>
+      <td>0</td>
+      <td>4061</td>
+      <td>1.0000</td>
+      <td>0.6751</td>
+      <td></td>
+      <td>0.8060</td>
+    </tr>
+    <tr>
+      <td>round14</td>
+      <td>abT_GSE254249_paired_TCRAB_no_gdTCR</td>
+      <td>173697</td>
+      <td>158</td>
+      <td>0</td>
+      <td>158</td>
+      <td>0</td>
+      <td>0.0000</td>
+      <td>0.0000</td>
+      <td>0.9991</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>round14</td>
+      <td>gdT_GDT_2020AUG_woCOV_cord_blood</td>
+      <td>12498</td>
+      <td>10661</td>
+      <td>10661</td>
+      <td>0</td>
+      <td>1837</td>
+      <td>1.0000</td>
+      <td>0.8530</td>
+      <td></td>
+      <td>0.9207</td>
+    </tr>
+  </tbody>
+</table></div>
+<div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>model</th>
+      <th>group</th>
+      <th>group_type</th>
+      <th>n_cells</th>
+      <th>called_positive</th>
+      <th>rate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>round12</td>
+      <td>all_real_gdT</td>
+      <td>positive_recall</td>
+      <td>948</td>
+      <td>813</td>
+      <td>0.8576</td>
+    </tr>
+    <tr>
+      <td>round12</td>
+      <td>TRDV_positive_real_gdT</td>
+      <td>positive_recall</td>
+      <td>847</td>
+      <td>793</td>
+      <td>0.9362</td>
+    </tr>
+    <tr>
+      <td>round12</td>
+      <td>TRDC_plus_TRDV_minus_real_gdT</td>
+      <td>positive_recall</td>
+      <td>48</td>
+      <td>17</td>
+      <td>0.3542</td>
+    </tr>
+    <tr>
+      <td>round12</td>
+      <td>Vd2_real_gdT</td>
+      <td>positive_recall</td>
+      <td>638</td>
+      <td>606</td>
+      <td>0.9498</td>
+    </tr>
+    <tr>
+      <td>round12</td>
+      <td>primary_negative</td>
+      <td>negative_false_positive</td>
+      <td>38047</td>
+      <td>26</td>
+      <td>0.0007</td>
+    </tr>
+    <tr>
+      <td>round12</td>
+      <td>NK_negative</td>
+      <td>negative_false_positive</td>
+      <td>920</td>
+      <td>3</td>
+      <td>0.0033</td>
+    </tr>
+    <tr>
+      <td>round12</td>
+      <td>paired_TCRAB_negative</td>
+      <td>negative_false_positive</td>
+      <td>33168</td>
+      <td>23</td>
+      <td>0.0007</td>
+    </tr>
+    <tr>
+      <td>round12</td>
+      <td>TRDC_plus_TRDV_minus_negative</td>
+      <td>negative_false_positive</td>
+      <td>652</td>
+      <td>6</td>
+      <td>0.0092</td>
+    </tr>
+    <tr>
+      <td>round14</td>
+      <td>all_real_gdT</td>
+      <td>positive_recall</td>
+      <td>948</td>
+      <td>814</td>
+      <td>0.8586</td>
+    </tr>
+    <tr>
+      <td>round14</td>
+      <td>TRDV_positive_real_gdT</td>
+      <td>positive_recall</td>
+      <td>847</td>
+      <td>790</td>
+      <td>0.9327</td>
+    </tr>
+    <tr>
+      <td>round14</td>
+      <td>TRDC_plus_TRDV_minus_real_gdT</td>
+      <td>positive_recall</td>
+      <td>48</td>
+      <td>22</td>
+      <td>0.4583</td>
+    </tr>
+    <tr>
+      <td>round14</td>
+      <td>Vd2_real_gdT</td>
+      <td>positive_recall</td>
+      <td>638</td>
+      <td>600</td>
+      <td>0.9404</td>
+    </tr>
+    <tr>
+      <td>round14</td>
+      <td>primary_negative</td>
+      <td>negative_false_positive</td>
+      <td>38047</td>
+      <td>42</td>
+      <td>0.0011</td>
+    </tr>
+    <tr>
+      <td>round14</td>
+      <td>NK_negative</td>
+      <td>negative_false_positive</td>
+      <td>920</td>
+      <td>9</td>
+      <td>0.0098</td>
+    </tr>
+    <tr>
+      <td>round14</td>
+      <td>paired_TCRAB_negative</td>
+      <td>negative_false_positive</td>
+      <td>33168</td>
+      <td>36</td>
+      <td>0.0011</td>
+    </tr>
+    <tr>
+      <td>round14</td>
+      <td>TRDC_plus_TRDV_minus_negative</td>
+      <td>negative_false_positive</td>
+      <td>652</td>
+      <td>14</td>
+      <td>0.0215</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2>Prediction Overlap</h2>
+<div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>total_atlas_cells</th>
+      <th>round12_predicted</th>
+      <th>round14_predicted</th>
+      <th>both</th>
+      <th>round12_only</th>
+      <th>round14_only</th>
+      <th>union</th>
+      <th>jaccard</th>
+      <th>fraction_round12_also_round14</th>
+      <th>fraction_round14_also_round12</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>5128904</td>
+      <td>213182</td>
+      <td>251356</td>
+      <td>203164</td>
+      <td>10018</td>
+      <td>48192</td>
+      <td>261374</td>
+      <td>0.7773</td>
+      <td>0.9530</td>
+      <td>0.8083</td>
+    </tr>
+  </tbody>
+</table></div>
+<div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>overlap_category</th>
+      <th>n_cells</th>
+      <th>unlabeled_or_ambiguous</th>
+      <th>unlabeled_or_ambiguous_fraction</th>
+      <th>abT_gold</th>
+      <th>abT_gold_fraction</th>
+      <th>gdT_gold</th>
+      <th>gdT_gold_fraction</th>
+      <th>gdT_silver</th>
+      <th>gdT_silver_fraction</th>
+      <th>NK_annotation</th>
+      <th>paired_TCRAB_non_gdT</th>
+      <th>TRDC+TRDV+</th>
+      <th>TRDC-TRDV+</th>
+      <th>TRDC+TRDV-</th>
+      <th>TRDC-TRDV-</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Both</td>
+      <td>203164</td>
+      <td>157819</td>
+      <td>0.7768</td>
+      <td>636</td>
+      <td>0.0031</td>
+      <td>42752</td>
+      <td>0.2104</td>
+      <td>1957</td>
+      <td>0.0096</td>
+      <td>1334</td>
+      <td>2002</td>
+      <td>110470</td>
+      <td>87995</td>
+      <td>3848</td>
+      <td>851</td>
+    </tr>
+    <tr>
+      <td>Round 12 only</td>
+      <td>10018</td>
+      <td>8912</td>
+      <td>0.8896</td>
+      <td>153</td>
+      <td>0.0153</td>
+      <td>929</td>
+      <td>0.0927</td>
+      <td>24</td>
+      <td>0.0024</td>
+      <td>389</td>
+      <td>746</td>
+      <td>1809</td>
+      <td>4934</td>
+      <td>735</td>
+      <td>2540</td>
+    </tr>
+    <tr>
+      <td>Round 14 only</td>
+      <td>48192</td>
+      <td>43779</td>
+      <td>0.9084</td>
+      <td>547</td>
+      <td>0.0114</td>
+      <td>3792</td>
+      <td>0.0787</td>
+      <td>74</td>
+      <td>0.0015</td>
+      <td>2590</td>
+      <td>3578</td>
+      <td>9195</td>
+      <td>11928</td>
+      <td>13272</td>
+      <td>13797</td>
+    </tr>
+  </tbody>
+</table></div>
+<p>Round 14-only calls contain 3,792 gold and 74 silver gdT cells. Round 12-only calls contain 929 gold and 24 silver gdT cells.</p>
+
+<h2>Dataset-by-Dataset Audit</h2>
+<p>All datasets are shown. Count changes are predictions, not biological abundance estimates; denominator-aware rates and truth recovery are included where labels exist.</p>
+<div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>source_gse_id</th>
+      <th>total_cells</th>
+      <th>round12_predicted</th>
+      <th>round14_predicted</th>
+      <th>round14_minus_round12</th>
+      <th>jaccard</th>
+      <th>gdT_gold</th>
+      <th>round12_gold_recall</th>
+      <th>round14_gold_recall</th>
+      <th>round12_NK</th>
+      <th>round14_NK</th>
+      <th>round12_paired_TCRAB</th>
+      <th>round14_paired_TCRAB</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>HRA005041</td>
+      <td>766639</td>
+      <td>55253</td>
+      <td>66167</td>
+      <td>10914</td>
+      <td>79.26%</td>
+      <td>4894</td>
+      <td>94.34%</td>
+      <td>96.16%</td>
+      <td>152</td>
+      <td>194</td>
+      <td>1109</td>
+      <td>3208</td>
+    </tr>
+    <tr>
+      <td>GSE243905</td>
+      <td>350438</td>
+      <td>5119</td>
+      <td>8726</td>
+      <td>3607</td>
+      <td>55.54%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>191</td>
+      <td>532</td>
+      <td>147</td>
+      <td>510</td>
+    </tr>
+    <tr>
+      <td>GSE206325</td>
+      <td>501012</td>
+      <td>18458</td>
+      <td>21428</td>
+      <td>2970</td>
+      <td>78.37%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>61</td>
+      <td>93</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE254249</td>
+      <td>406494</td>
+      <td>16261</td>
+      <td>18895</td>
+      <td>2634</td>
+      <td>78.60%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>138</td>
+      <td>54</td>
+      <td>64</td>
+      <td>158</td>
+    </tr>
+    <tr>
+      <td>GDT_2020AUG_woCOV</td>
+      <td>25904</td>
+      <td>21275</td>
+      <td>23677</td>
+      <td>2402</td>
+      <td>88.16%</td>
+      <td>25904</td>
+      <td>82.13%</td>
+      <td>91.40%</td>
+      <td>11</td>
+      <td>12</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE311112</td>
+      <td>90599</td>
+      <td>2206</td>
+      <td>4479</td>
+      <td>2273</td>
+      <td>46.44%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>15</td>
+      <td>19</td>
+      <td>9</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td>GSE228597</td>
+      <td>149812</td>
+      <td>6222</td>
+      <td>8287</td>
+      <td>2065</td>
+      <td>70.25%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>34</td>
+      <td>49</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE243572</td>
+      <td>188217</td>
+      <td>3804</td>
+      <td>5576</td>
+      <td>1772</td>
+      <td>61.45%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>424</td>
+      <td>1661</td>
+      <td>59</td>
+      <td>88</td>
+    </tr>
+    <tr>
+      <td>GSE243013</td>
+      <td>759436</td>
+      <td>24043</td>
+      <td>25620</td>
+      <td>1577</td>
+      <td>81.24%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>127</td>
+      <td>154</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE287541</td>
+      <td>110874</td>
+      <td>562</td>
+      <td>1926</td>
+      <td>1364</td>
+      <td>24.46%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>9</td>
+      <td>25</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE212217</td>
+      <td>213706</td>
+      <td>5673</td>
+      <td>6860</td>
+      <td>1187</td>
+      <td>75.66%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>47</td>
+      <td>138</td>
+      <td>207</td>
+      <td>384</td>
+    </tr>
+    <tr>
+      <td>GSE188620</td>
+      <td>123218</td>
+      <td>1232</td>
+      <td>1954</td>
+      <td>722</td>
+      <td>56.79%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>76</td>
+      <td>228</td>
+      <td>25</td>
+      <td>123</td>
+    </tr>
+    <tr>
+      <td>GSE254176</td>
+      <td>96953</td>
+      <td>2422</td>
+      <td>3142</td>
+      <td>720</td>
+      <td>73.33%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>37</td>
+      <td>80</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE162498</td>
+      <td>75880</td>
+      <td>1471</td>
+      <td>2081</td>
+      <td>610</td>
+      <td>63.91%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>85</td>
+      <td>213</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE301528</td>
+      <td>44105</td>
+      <td>1223</td>
+      <td>1764</td>
+      <td>541</td>
+      <td>66.78%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>55</td>
+      <td>124</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE252762</td>
+      <td>45132</td>
+      <td>6187</td>
+      <td>6708</td>
+      <td>521</td>
+      <td>85.25%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>2</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GDTlung2023july_7p</td>
+      <td>15175</td>
+      <td>6561</td>
+      <td>7081</td>
+      <td>520</td>
+      <td>80.74%</td>
+      <td>15175</td>
+      <td>43.24%</td>
+      <td>46.66%</td>
+      <td>17</td>
+      <td>25</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE267645</td>
+      <td>92501</td>
+      <td>2730</td>
+      <td>3182</td>
+      <td>452</td>
+      <td>77.64%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>32</td>
+      <td>79</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE125527</td>
+      <td>46396</td>
+      <td>1848</td>
+      <td>2168</td>
+      <td>320</td>
+      <td>79.69%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>3</td>
+      <td>23</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE178882</td>
+      <td>67755</td>
+      <td>1412</td>
+      <td>1675</td>
+      <td>263</td>
+      <td>75.00%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>24</td>
+      <td>89</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE235863</td>
+      <td>241766</td>
+      <td>7506</td>
+      <td>7724</td>
+      <td>218</td>
+      <td>77.96%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>15</td>
+      <td>24</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE308075</td>
+      <td>112337</td>
+      <td>180</td>
+      <td>328</td>
+      <td>148</td>
+      <td>47.25%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>0</td>
+      <td>2</td>
+      <td>4</td>
+      <td>32</td>
+    </tr>
+    <tr>
+      <td>GSE144469</td>
+      <td>107068</td>
+      <td>7018</td>
+      <td>7103</td>
+      <td>85</td>
+      <td>83.34%</td>
+      <td>4003</td>
+      <td>89.78%</td>
+      <td>86.64%</td>
+      <td>70</td>
+      <td>5</td>
+      <td>1124</td>
+      <td>1067</td>
+    </tr>
+    <tr>
+      <td>GSE145926</td>
+      <td>21039</td>
+      <td>245</td>
+      <td>330</td>
+      <td>85</td>
+      <td>52.93%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>43</td>
+      <td>23</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE234069</td>
+      <td>20807</td>
+      <td>184</td>
+      <td>262</td>
+      <td>78</td>
+      <td>63.37%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>1</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE287301</td>
+      <td>340227</td>
+      <td>6161</td>
+      <td>6216</td>
+      <td>55</td>
+      <td>77.50%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>27</td>
+      <td>32</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE211504</td>
+      <td>37244</td>
+      <td>50</td>
+      <td>80</td>
+      <td>30</td>
+      <td>46.07%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE240865</td>
+      <td>21680</td>
+      <td>189</td>
+      <td>213</td>
+      <td>24</td>
+      <td>77.09%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>10</td>
+      <td>16</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>MalteGDT</td>
+      <td>7800</td>
+      <td>7634</td>
+      <td>7612</td>
+      <td>-22</td>
+      <td>98.57%</td>
+      <td>7800</td>
+      <td>97.87%</td>
+      <td>97.59%</td>
+      <td>3</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE190870</td>
+      <td>16753</td>
+      <td>0</td>
+      <td>20</td>
+      <td>20</td>
+      <td>0.00%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>0</td>
+      <td>20</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE171037</td>
+      <td>31937</td>
+      <td>53</td>
+      <td>72</td>
+      <td>19</td>
+      <td>32.98%</td>
+      <td>0</td>
+      <td></td>
+      <td></td>
+      <td>14</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2>Paired Statistical Tests</h2>
+<p>Exact McNemar tests compare discordant cell-level errors. P-values are descriptive because cells from the same donor are correlated; effect sizes and cohort consistency remain the primary evidence.</p>
+<div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>evaluation</th>
+      <th>n_cells</th>
+      <th>round12_errors</th>
+      <th>round14_errors</th>
+      <th>round12_correct_round14_wrong</th>
+      <th>round12_wrong_round14_correct</th>
+      <th>discordant</th>
+      <th>exact_mcnemar_p</th>
+      <th>favored_model</th>
+      <th>note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>independent_external_primary</td>
+      <td>38995</td>
+      <td>161</td>
+      <td>176</td>
+      <td>47</td>
+      <td>32</td>
+      <td>79</td>
+      <td>0.1147</td>
+      <td>round12</td>
+      <td>Cell-level paired test; descriptive because cells within donors are correlated.</td>
+    </tr>
+    <tr>
+      <td>independent_external_gdT</td>
+      <td>948</td>
+      <td>135</td>
+      <td>134</td>
+      <td>21</td>
+      <td>22</td>
+      <td>43</td>
+      <td>1.0000</td>
+      <td>round14</td>
+      <td>Cell-level paired test; descriptive because cells within donors are correlated.</td>
+    </tr>
+    <tr>
+      <td>independent_external_negative</td>
+      <td>38047</td>
+      <td>26</td>
+      <td>42</td>
+      <td>26</td>
+      <td>10</td>
+      <td>36</td>
+      <td>0.0113</td>
+      <td>round12</td>
+      <td>Cell-level paired test; descriptive because cells within donors are correlated.</td>
+    </tr>
+    <tr>
+      <td>atlas_heldout_combined</td>
+      <td>186195</td>
+      <td>4125</td>
+      <td>1995</td>
+      <td>286</td>
+      <td>2416</td>
+      <td>2702</td>
+      <td>0.0000</td>
+      <td>round14</td>
+      <td>Cell-level paired test; descriptive because cells within donors are correlated.</td>
+    </tr>
+    <tr>
+      <td>atlas_heldout:abT_GSE254249_paired_TCRAB_no_gdTCR</td>
+      <td>173697</td>
+      <td>64</td>
+      <td>158</td>
+      <td>127</td>
+      <td>33</td>
+      <td>160</td>
+      <td>0.0000</td>
+      <td>round12</td>
+      <td>Cell-level paired test; descriptive because cells within donors are correlated.</td>
+    </tr>
+    <tr>
+      <td>atlas_heldout:gdT_GDT_2020AUG_woCOV_cord_blood</td>
+      <td>12498</td>
+      <td>4061</td>
+      <td>1837</td>
+      <td>159</td>
+      <td>2383</td>
+      <td>2542</td>
+      <td>0.0000</td>
+      <td>round14</td>
+      <td>Cell-level paired test; descriptive because cells within donors are correlated.</td>
+    </tr>
+    <tr>
+      <td>full_atlas_gdT_gold</td>
+      <td>57776</td>
+      <td>14095</td>
+      <td>11232</td>
+      <td>929</td>
+      <td>3792</td>
+      <td>4721</td>
+      <td>0.0000</td>
+      <td>round14</td>
+      <td>Cell-level paired test; descriptive because cells within donors are correlated.</td>
+    </tr>
+    <tr>
+      <td>full_atlas_gdT_silver</td>
+      <td>2194</td>
+      <td>213</td>
+      <td>163</td>
+      <td>24</td>
+      <td>74</td>
+      <td>98</td>
+      <td>0.0000</td>
+      <td>round14</td>
+      <td>Cell-level paired test; descriptive because cells within donors are correlated.</td>
+    </tr>
+    <tr>
+      <td>full_atlas_abT_gold</td>
+      <td>603203</td>
+      <td>789</td>
+      <td>1183</td>
+      <td>547</td>
+      <td>153</td>
+      <td>700</td>
+      <td>0.0000</td>
+      <td>round12</td>
+      <td>Cell-level paired test; descriptive because cells within donors are correlated.</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2>Artifact and Cache Verification</h2>
+<p>Both artifacts were frozen before comparison. Direct external inference was required to match the existing validated cache exactly. A deterministic atlas sample included shared calls, each model-only group, and cells called by neither model.</p>
+<div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>model</th>
+      <th>display_name</th>
+      <th>payload_model</th>
+      <th>threshold</th>
+      <th>sha256</th>
+      <th>size_bytes</th>
+      <th>snapshot_path</th>
+      <th>provenance</th>
+      <th>n_gene_features</th>
+      <th>n_total_features</th>
+      <th>model_object_type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>round12</td>
+      <td>Round 12</td>
+      <td>v3_round12_hist_gradient_fixed_0p5</td>
+      <td>0.5000</td>
+      <td>7373e79350f7db190c415b376b9763e31652754438ee8c5afd3853beb7b2ebc4</td>
+      <td>808096</td>
+      <td>/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/models/gdT_prediction_classifier/gdtai_v3_round12_vs_round14/round12_model.pkl</td>
+      <td>/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/gdTAI_v3_model.pkl</td>
+      <td>210</td>
+      <td>226</td>
+      <td>PlattCalibratedModel</td>
+    </tr>
+    <tr>
+      <td>round14</td>
+      <td>Round 14</td>
+      <td>v3_round14_v2_score_trdc_gate_fixed_0p936</td>
+      <td>0.9360</td>
+      <td>16dedc0081da9b8487887341232bcf8c9c9403dd3bbd72e04cab43d4cd7b2e09</td>
+      <td>15532</td>
+      <td>/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/models/gdT_prediction_classifier/gdtai_v3_round12_vs_round14/round14_model.pkl</td>
+      <td>git:21b5d60:Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/gdTAI_v3_model.pkl</td>
+      <td>210</td>
+      <td>226</td>
+      <td>ConditionalGateModel</td>
+    </tr>
+  </tbody>
+</table></div>
+<div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>check</th>
+      <th>model</th>
+      <th>n_cells</th>
+      <th>score_match</th>
+      <th>prediction_match</th>
+      <th>n_sampled</th>
+      <th>n_matching</th>
+      <th>n_mismatching</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>external_direct_vs_cache</td>
+      <td>round12</td>
+      <td>46273.0000</td>
+      <td>True</td>
+      <td>True</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>external_direct_vs_cache</td>
+      <td>round14</td>
+      <td>46273.0000</td>
+      <td>True</td>
+      <td>True</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>atlas_direct_artifact_vs_cell_cache</td>
+      <td>round12</td>
+      <td></td>
+      <td>NaN</td>
+      <td>True</td>
+      <td>2000.0000</td>
+      <td>2000.0000</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>atlas_direct_artifact_vs_cell_cache</td>
+      <td>round14</td>
+      <td></td>
+      <td>NaN</td>
+      <td>True</td>
+      <td>2000.0000</td>
+      <td>2000.0000</td>
+      <td>0.0000</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2>Interpretation</h2>
+<p><strong>Round 14 should remain the canonical balanced model.</strong> Its recall gain is large in the fully held-out cord-blood cohort and sufficient to clear the established 0.80 atlas gold-recall floor. Its independent external recall is essentially unchanged relative to Round 12, while external precision is lower. This means Round 14 is not uniformly superior: Round 12 is the appropriate documented high-purity fallback when false-positive minimization is more important than sorted-gdT recovery.</p>
+<p>The Round 14 increase in NK and TRDC+TRDV- calls remains a real caveat. Downstream atlas construction should continue removing cells with direct paired-TCRAB/no-gdT evidence and should report NK-annotation sensitivity analyses. The comparison does not justify treating every unlabeled Round 14-only cell as a confirmed gdT cell.</p>
+
+<h2>Reproducibility</h2>
+<ul>
+<li>Atlas H5AD: <code>/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/high_speed_temp/Integrated_dataset/integrated_plus6.h5ad</code></li>
+<li>External H5AD: <code>/home/tanlikai/databank/owndata/singlecell/data/results/phase4_final_annotated.h5ad</code></li>
+<li>No H5AD was modified.</li>
+<li>Detailed CSV tables: <code>/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/tables/gdT_prediction/gdtai_v3_round12_vs_round14</code></li>
+<li>Model snapshots: <code>/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/models/gdT_prediction_classifier/gdtai_v3_round12_vs_round14</code></li>
+</ul>
+<p class="note">Generated from <code>workflows/gdtai/compare_gdtai_v3_round12_vs_round14.py</code>.</p>
+</main></body></html>

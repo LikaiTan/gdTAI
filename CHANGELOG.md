@@ -23,6 +23,12 @@
   - legacy code archived with checksum-guarded move maps
   - rollback, reproducibility, dataset-change, and model-iteration guides added
   - all milestone H5AD sampled hashes verified unchanged
+- gdTAI v3 Round 12 versus Round 14 revalidation completed on 2026-07-15
+  - both artifacts pinned and preserved by SHA256
+  - identical full-atlas, atlas-held-out, and independent-external evaluation
+  - Round 14 selected as the balanced default by prespecified guardrails and
+    mean F1
+  - Round 12 retained as the validated high-purity fallback
 
 ## Current working era
 

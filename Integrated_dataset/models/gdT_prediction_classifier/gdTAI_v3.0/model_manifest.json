@@ -1,38 +1,53 @@
 {
   "model_name": "v3_round14_v2_score_trdc_gate_fixed_0p936",
   "model_file": "gdTAI_v3_model.pkl",
+  "model_sha256": "16dedc0081da9b8487887341232bcf8c9c9403dd3bbd72e04cab43d4cd7b2e09",
+  "model_size_bytes": 15532,
   "version": "gdTAI_v3.0",
+  "status": "promoted_default",
+  "operating_profile": "balanced",
   "threshold": 0.936,
   "accepted_for_promotion": true,
+  "promotion_basis": "checksum-pinned Round 12 versus Round 14 revalidation",
+  "promotion_date_local": "2026-07-15 Asia/Hong_Kong",
+  "comparison_report": "gdT_prediction/gdtai_v3_round12_vs_round14/index.html",
+  "comparison_workflow": "workflows/gdtai/compare_gdtai_v3_round12_vs_round14.py",
   "requires_counts_layer_for_external_h5ad": true,
   "normalization": "log1p(counts per 10000)",
   "n_gene_features": 210,
   "n_engineered_features": 16,
   "n_total_features": 226,
-  "selected_for": {
-    "full_atlas_primary_gold_recall_min": 0.8,
-    "estimated_fp_fraction_max": 0.05
-  },
+  "selection_rule": "Pass all four safety/recall guardrails, then maximize mean F1 across full-atlas gold, atlas-held-out, and independent-external evaluations.",
   "full_atlas": {
     "total_cells": 5128904,
     "predicted_putative_gdT": 251356,
     "primary_gold_recall": 0.8055940182774854,
     "primary_gold_precision": 0.9752131916944288,
+    "primary_gold_f1": 0.8823256210723865,
     "estimated_total_abT_fp": 10211.867684114588,
-    "estimated_fp_fraction_of_predictions": 0.0406271092956388
+    "estimated_fp_fraction_of_predictions": 0.0406271092956388,
+    "silver_recall": 0.9257064721969006
   },
-  "external_primary": {
+  "atlas_heldout": {
+    "n_cells": 186195,
+    "precision": 0.9853960624826694,
+    "recall": 0.853016482637222,
+    "specificity": 0.9990903700121476,
+    "f1": 0.9144401080756529
+  },
+  "independent_external": {
     "n_cells": 38995,
     "predicted_positive": 856,
-    "precision": 0.9509345794392524,
+    "precision": 0.9509345794392523,
     "recall": 0.8586497890295358,
-    "f1": 0.902439024390244,
-    "fp_fraction_of_predictions": 0.0490654205607476
+    "specificity": 0.9988961021893973,
+    "f1": 0.9024390243902439,
+    "fp": 42
   },
-  "caveat": "Candidate met the user recall/estimated-FP target but was not promoted under older strict promotion gates because external NK FP was higher than v2 high-purity.",
-  "promotion_decision": "user_approved",
-  "automated_gate_result_before_user_override": false,
-  "promotion_note": "Promoted by user decision after review. The prior automated gate failed only because external NK false positives were higher than v2 high-purity; this caveat remains documented.",
-  "promotion_date_local": "2026-06-20 Asia/Hong_Kong",
-  "promotion_date_utc": "2026-06-19"
+  "high_purity_fallback": {
+    "model_name": "v3_round12_hist_gradient_fixed_0p5",
+    "artifact_path": "Integrated_dataset/models/gdT_prediction_classifier/gdtai_v3_round12_vs_round14/round12_model.pkl",
+    "sha256": "7373e79350f7db190c415b376b9763e31652754438ee8c5afd3853beb7b2ebc4"
+  },
+  "caveat": "The balanced Round 14 default has higher NK and paired-TCRAB call burdens than the Round 12 high-purity fallback; report these sensitivity checks on new datasets."
 }

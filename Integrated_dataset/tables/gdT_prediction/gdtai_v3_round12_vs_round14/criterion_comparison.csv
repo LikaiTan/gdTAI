@@ -1,0 +1,10 @@
+criterion,preferred_direction,round12,round14,winner
+Full-atlas primary F1,higher,0.8544295131349882,0.8823256210723865,round14
+Atlas held-out F1,higher,0.8035620743844945,0.9144401080756529,round14
+Independent external F1,higher,0.9099048684946839,0.9024390243902439,round12
+Full-atlas primary recall,higher,0.7560405704790917,0.8055940182774854,round14
+Silver recall,higher,0.9029170464904285,0.9257064721969006,round14
+Independent external precision,higher,0.9690107270560191,0.9509345794392523,round12
+Full-atlas estimated FP fraction,lower,0.0246787676545859,0.0406271092956388,round12
+Full-atlas paired-TCRAB calls,lower,2748.0,5580.0,round12
+Full-atlas NK calls,lower,1723.0,3924.0,round12

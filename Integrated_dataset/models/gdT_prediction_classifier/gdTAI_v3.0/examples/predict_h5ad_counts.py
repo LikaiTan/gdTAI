@@ -3,12 +3,20 @@
 from __future__ import annotations
 
 import argparse
+import os
 import pickle
+import sys
 from pathlib import Path
 
 import h5py
 import numpy as np
 import pandas as pd
+
+PROJECT_ROOT = Path(__file__).resolve().parents[5]
+WORKFLOW_DIR = PROJECT_ROOT / "workflows" / "gdtai"
+os.environ.setdefault("MPLCONFIGDIR", "/tmp/gdtai_matplotlib_cache")
+if str(WORKFLOW_DIR) not in sys.path:
+    sys.path.insert(0, str(WORKFLOW_DIR))
 
 from run_gdtai_v3_trdc_nk_guard_classifier import (
     FeatureSpec,
@@ -25,9 +33,10 @@ from run_gdtai_v3_trdc_nk_guard_classifier import (
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run gdTAI v3 TRDC/NK guard inference on layers['counts'].")
     parser.add_argument("--input-h5ad", type=Path, required=True)
-    parser.add_argument("--model-pkl", type=Path, default=Path(__file__).resolve().parents[1] / "best_candidate_model.pkl")
+    parser.add_argument("--model-pkl", type=Path, default=Path(__file__).resolve().parents[1] / "gdTAI_v3_model.pkl")
     parser.add_argument("--output-csv", type=Path, required=True)
     parser.add_argument("--chunk-size", type=int, default=50000)
+    parser.add_argument("--overwrite", action="store_true")
     return parser.parse_args()
 
 
@@ -52,6 +61,10 @@ def build_input_spec(var_names: list[str], gene_names: list[str], engineered_fea
 
 def main() -> None:
     args = parse_args()
+    if args.output_csv.exists() and not args.overwrite:
+        raise FileExistsError(f"Output already exists: {args.output_csv}. Pass --overwrite to replace it.")
+    if args.output_csv.exists():
+        args.output_csv.unlink()
     with args.model_pkl.open("rb") as handle:
         payload = pickle.load(handle)
     threshold = float(payload["threshold"])

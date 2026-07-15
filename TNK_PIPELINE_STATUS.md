@@ -63,12 +63,20 @@ Additional current state:
   carve-out
 - scANVI fields remain reference-only; simple scVI-based annotation is the
   canonical downstream interpretation layer
+- gdTAI v3 Round 12 and Round 14 were revalidated on identical cohorts with
+  checksum-pinned artifacts; Round 14 at threshold `0.936` is the promoted
+  balanced default, while Round 12 at threshold `0.5` is preserved as the
+  validated high-purity fallback
 
 ## Current review artifacts
 
 - project reorganization:
   - `docs/REORGANIZATION_RECORD.md`
   - `Integrated_dataset/logs/project_reorganization/checkpoints/pre_reorganization_20260715/`
+- gdTAI v3 Round 12 versus Round 14 model decision:
+  - `gdT_prediction/gdtai_v3_round12_vs_round14/index.html`
+  - `gdT_prediction/gdtai_v3_round12_vs_round14/gdtai_v3_round12_vs_round14_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v3_round12_vs_round14/gdtai_v3_round12_vs_round14_summary.json`
 - Phase 4 QC:
   - `Integrated_dataset/logs/phase4_qc_summary.md`
 - tissue correction:

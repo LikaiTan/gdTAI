@@ -16,8 +16,10 @@
 - dataset removal means registry deactivation, not file deletion
 - `configs/models/gdtai/model_registry.csv` is authoritative for model release
   status; a directory or version-like filename alone does not imply promotion
-- canonical Git gdTAI v3 Round 14 remains the promoted default; the existing
-  dirty-workspace Round 12 override is preserved and explicitly not promoted
+- gdTAI v3 Round 14 at threshold `0.936` is the promoted balanced default after
+  checksum-pinned revalidation against Round 12 on 2026-07-15
+- gdTAI v3 Round 12 at threshold `0.5` is retained as the validated high-purity
+  fallback and is not the canonical default
 - repaired TCR propagation is approved for these ten GSEs:
   - `GSE188620`
   - `GSE212217`

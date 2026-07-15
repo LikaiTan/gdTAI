@@ -105,6 +105,19 @@ Independent external primary metrics:
 - F1: `0.9024`
 - FP / predictions: `0.0491`
 
+## Round 12 Versus Round 14 Revalidation
+
+Both model artifacts were pinned by SHA256 and compared on identical cohorts.
+Round 14 was selected on 2026-07-15 because it was the only model to pass all
+four prespecified guardrails, including full-atlas gold recall >= 0.80, while
+remaining below the atlas, external, and GSE254249 false-positive limits.
+
+- mean F1 across the three evaluation frames: `0.8997`
+- comparison report: `gdT_prediction/gdtai_v3_round12_vs_round14/index.html`
+- Round 12 remains a lower-FP fallback; it is not the canonical default.
+
 ## Promotion Status
 
-`accepted_for_promotion = False` under the older promotion-gate table because external NK FP was higher than v2 high-purity. This does not invalidate the candidate for review use, but it should be reported explicitly whenever the model is used.
+`v3_round14_v2_score_trdc_gate_fixed_0p936` is the promoted gdTAI v3.0 balanced default. Its higher NK and
+paired-TCRAB call burdens relative to Round 12 must remain visible in external
+QC reports.

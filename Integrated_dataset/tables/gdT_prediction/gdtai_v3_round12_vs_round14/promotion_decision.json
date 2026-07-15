@@ -1,0 +1,11 @@
+{
+  "selected_model": "round14",
+  "selected_payload_model": "v3_round14_v2_score_trdc_gate_fixed_0p936",
+  "selection_rule": "Pass all four safety/recall guardrails, then maximize mean F1 across full-atlas gold, atlas-held-out, and independent-external evaluations.",
+  "mean_f1_among_passing": {
+    "round14": 0.8997349178460944
+  },
+  "round12_mean_f1_all_evaluations": 0.8559654853380555,
+  "round14_mean_f1_all_evaluations": 0.8997349178460944,
+  "rationale": "Round 14 is selected because it is the only candidate that reaches the prespecified 0.80 full-atlas gold-recall floor while remaining below all FP guardrails. It also has substantially higher held-out cord-blood recall and higher mean F1 across the three evaluation frames. Round 12 remains the lower-FP fallback."
+}

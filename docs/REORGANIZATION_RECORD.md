@@ -46,8 +46,9 @@ deleted or physically relocated.
 - representative commands from `/tmp`: passed after setting writable Numba and
   Matplotlib cache directories for the restricted runtime
 - gdTAI v2 and v4 artifact checksums: passed
-- gdTAI v3: known dirty-workspace Round 12 override detected against the
-  canonical Git Round 14 release hash
+- gdTAI v3: Round 12/Round 14 conflict resolved after a checksum-pinned
+  same-cohort comparison; Round 14 is canonical and Round 12 is preserved as a
+  validated high-purity fallback
 - gdTAI v2, v3, and v4 trusted pickle loading: passed
 - `TNK_candidates.h5ad`: size, timestamp, and sampled SHA256 unchanged
 - `TNK_cleaned.h5ad`: size, timestamp, and sampled SHA256 unchanged
@@ -61,10 +62,19 @@ new 4.9 GB temporary directory was removed after confirming it was absent from
 the checkpoint, and all H5AD fingerprints were reverified. The script now has
 an argument parser so `--help` exits before any work.
 
-## Known issue retained
+## Model conflict resolution
 
-The canonical Git gdTAI v3 pickle and `PROMOTION_DECISION.md` identify Round 14
-at threshold 0.936. Before reorganization, the dirty workspace had already
-overwritten that path with Round 12 at threshold 0.5. The model registry records
-both hashes and reports the workspace override. No model bytes or scientific
-metrics were changed or committed to resolve it during this maintenance task.
+The reorganization audit found that the canonical gdTAI v3 path contained a
+dirty Round 12 artifact while Git and the promotion documentation identified
+Round 14. The user authorized a new comparison rather than an unconditional
+restore. `workflows/gdtai/compare_gdtai_v3_round12_vs_round14.py` pinned both
+artifacts by SHA256, compared them on identical full-atlas, atlas-held-out, and
+independent-external cohorts, and selected Round 14 by prespecified recall and
+false-positive guardrails followed by mean F1.
+
+The canonical path now contains Round 14 with SHA256
+`16dedc0081da9b8487887341232bcf8c9c9403dd3bbd72e04cab43d4cd7b2e09`.
+Round 12 remains available at
+`Integrated_dataset/models/gdT_prediction_classifier/gdtai_v3_round12_vs_round14/round12_model.pkl`
+with SHA256
+`7373e79350f7db190c415b376b9763e31652754438ee8c5afd3853beb7b2ebc4`.

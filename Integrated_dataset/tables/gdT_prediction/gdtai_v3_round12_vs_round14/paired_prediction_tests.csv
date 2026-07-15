@@ -1,0 +1,10 @@
+evaluation,n_cells,round12_errors,round14_errors,round12_correct_round14_wrong,round12_wrong_round14_correct,discordant,exact_mcnemar_p,favored_model,note
+independent_external_primary,38995,161,176,47,32,79,0.11466035574580133,round12,Cell-level paired test; descriptive because cells within donors are correlated.
+independent_external_gdT,948,135,134,21,22,43,1.0,round14,Cell-level paired test; descriptive because cells within donors are correlated.
+independent_external_negative,38047,26,42,26,10,36,0.011330984183587134,round12,Cell-level paired test; descriptive because cells within donors are correlated.
+atlas_heldout_combined,186195,4125,1995,286,2416,2702,0.0,round14,Cell-level paired test; descriptive because cells within donors are correlated.
+atlas_heldout:abT_GSE254249_paired_TCRAB_no_gdTCR,173697,64,158,127,33,160,3.3085267653952476e-14,round12,Cell-level paired test; descriptive because cells within donors are correlated.
+atlas_heldout:gdT_GDT_2020AUG_woCOV_cord_blood,12498,4061,1837,159,2383,2542,0.0,round14,Cell-level paired test; descriptive because cells within donors are correlated.
+full_atlas_gdT_gold,57776,14095,11232,929,3792,4721,0.0,round14,Cell-level paired test; descriptive because cells within donors are correlated.
+full_atlas_gdT_silver,2194,213,163,24,74,98,4.2159207369916054e-07,round14,Cell-level paired test; descriptive because cells within donors are correlated.
+full_atlas_abT_gold,603203,789,1183,547,153,700,8.228465749257914e-53,round12,Cell-level paired test; descriptive because cells within donors are correlated.

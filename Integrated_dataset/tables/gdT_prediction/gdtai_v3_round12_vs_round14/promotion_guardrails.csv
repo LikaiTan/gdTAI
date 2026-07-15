@@ -1,0 +1,3 @@
+model,full_atlas_recall,full_atlas_estimated_fp_fraction,external_specificity,heldout_GSE254249_fp_rate,full_atlas_primary_gold_recall_ge_0p80,full_atlas_estimated_fp_fraction_le_0p05,external_specificity_ge_0p9985,heldout_GSE254249_fp_rate_le_0p001,all_guardrails_pass
+round12,0.7560405704790917,0.0246787676545859,0.9993166346886745,0.00036845771659843596,False,True,True,True,False
+round14,0.8055940182774854,0.0406271092956388,0.9988961021893973,0.0009096299878523784,True,True,True,True,True

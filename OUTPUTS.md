@@ -83,6 +83,11 @@
   - `newdata/Sorted_gdT/GDT_2020AUG_woCOV_sorted_gdt.h5ad`
   - `newdata/Sorted_gdT/GDTlung2023july_7p_sorted_gdt.h5ad`
   - `newdata/Sorted_gdT/MalteGDT_sorted_gdt.h5ad`
+- gdTAI v3 Round 12 versus Round 14 revalidation:
+  - `gdT_prediction/gdtai_v3_round12_vs_round14/index.html`
+  - `gdT_prediction/gdtai_v3_round12_vs_round14/gdtai_v3_round12_vs_round14_report.pdf`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v3_round12_vs_round14/`
+  - `Integrated_dataset/models/gdT_prediction_classifier/gdtai_v3_round12_vs_round14/`
   - `Integrated_dataset/tables/Sorted_gdT/`
   - `Integrated_dataset/logs/Sorted_gdT/`
   - `Integrated_dataset/figures/GDT_2020AUG_woCOV_phase4/`

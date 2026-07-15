@@ -1,0 +1,2 @@
+strategy,threshold,n_cells,n_positive,n_negative,predicted_positive,tp,fp,tn,fn,precision,recall,specificity,f1,f0.5,balanced_accuracy,mcc,roc_auc,pr_auc,fp_fraction_of_predictions,brier_score,evaluation
+v3_round14_v2_score_trdc_gate_fixed_0p936,0.936,38995,948,38047,856,814,42,38005,134,0.9509345794392523,0.8586497890295358,0.9988961021893973,0.9024390243902439,0.9309240622140896,0.9287729456094665,0.9013640135248334,0.9733873044432385,0.9145727084738267,0.04906542056074766,0.026772197588979797,independent_external_primary

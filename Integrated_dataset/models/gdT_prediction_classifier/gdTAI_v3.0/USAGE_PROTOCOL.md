@@ -117,9 +117,9 @@ Independent external primary evaluation:
 
 ## 9. Caveats
 
-- This is a review candidate, not a promoted `gdTAI_v3.0` release.
-- It met the user target of full-atlas primary-gold recall above `0.8` and estimated FP below `5%`.
-- It failed the older strict promotion gate because external NK false positives were higher than v2 high-purity.
+- This is the promoted `gdTAI_v3.0` balanced release.
+- It passed the 2026-07-15 Round 12 versus Round 14 promotion guardrails, including full-atlas primary-gold recall above `0.8` and estimated FP below `5%`.
+- Round 12 remains the lower-FP fallback because Round 14 has higher NK and paired-TCRAB call burdens.
 - It does not use TCR-seq metadata for prediction. TCR metadata is only for evaluation/QC.
 - Full-atlas recall is measured against known primary gold labels, not against every true biological gdT cell in the atlas.
 

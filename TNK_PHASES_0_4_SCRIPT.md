@@ -788,6 +788,55 @@ Core outputs:
 - `gdT_prediction/gdtai_v3_vs_v2_high_purity_report.html`
 - `gdT_prediction/gdtai_v3_vs_v2_high_purity_report.pdf`
 
+## Post-Phase-4 gdTAI v3 Round 12 versus Round 14 revalidation
+
+Objective:
+
+- resolve the canonical-model conflict by comparing the actual Round 12 and
+  Round 14 artifacts on identical cohorts without mutating H5AD files
+- select one balanced default by prespecified recall and false-positive
+  guardrails, while retaining the other artifact as a documented fallback
+
+Phase or task:
+
+- checksum-pinned gdTAI v3 Round 12 versus Round 14 comparison and promotion
+
+Exact `.py` script:
+
+- `workflows/gdtai/compare_gdtai_v3_round12_vs_round14.py`
+
+Promotion command:
+
+```bash
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/compare_gdtai_v3_round12_vs_round14.py \
+  --promote-selected
+```
+
+Core outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v3_round12_vs_round14/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v3_round12_vs_round14/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v3_round12_vs_round14/`
+- `Integrated_dataset/models/gdT_prediction_classifier/gdtai_v3_round12_vs_round14/`
+- `gdT_prediction/gdtai_v3_round12_vs_round14/index.html`
+- `gdT_prediction/gdtai_v3_round12_vs_round14/gdtai_v3_round12_vs_round14_report.pdf`
+- selected package synchronized to
+  `Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/`
+
+Standard behavior:
+
+- require exact Round 12 and Round 14 SHA256 identities
+- rerun both artifacts directly on the independent external H5AD
+- verify direct predictions against the validated external cache and a
+  deterministic full-atlas cache sample
+- compare raw full-atlas calls, gold and silver recovery, paired-TCRAB and NK
+  burdens, held-out cord-blood positives, and held-out GSE254249 negatives
+- run descriptive exact paired tests and report every dataset separately
+- select the model that passes all guardrails, then maximize mean F1 across
+  full-atlas gold, atlas-held-out, and independent-external evaluations
+- preserve Round 12 as the high-purity fallback when Round 14 is promoted
+
 ## Post-Phase-4 gdTAI v4 two-stage retraining
 
 Objective:
