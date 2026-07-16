@@ -305,6 +305,190 @@ def rollback_absolute_move(
     raise RuntimeError(f"Cannot safely roll back {source} <- {destination}")
 
 
+def apply_h5ad_only_external_layout(
+    external_workspace: Path,
+    project_workspace: Path,
+    selected_relative: Path,
+    canonical_file: Path,
+    *,
+    expected_workspace_device: int,
+    expected_workspace_inode: int,
+    expected_file_device: int,
+    expected_file_inode: int,
+) -> str:
+    """Restore a workspace externally while retaining one canonical project file."""
+    external_selected = external_workspace / selected_relative
+    project_selected = project_workspace / selected_relative
+
+    if (
+        external_workspace.is_dir()
+        and not external_workspace.is_symlink()
+        and not project_workspace.exists()
+        and not project_workspace.is_symlink()
+        and canonical_file.is_file()
+        and not canonical_file.is_symlink()
+        and external_selected.is_symlink()
+        and external_selected.resolve() == canonical_file.resolve()
+    ):
+        workspace_stat = external_workspace.stat()
+        file_stat = canonical_file.stat()
+        if (
+            workspace_stat.st_dev != expected_workspace_device
+            or workspace_stat.st_ino != expected_workspace_inode
+        ):
+            raise RuntimeError(
+                f"External workspace inode differs from the plan: {external_workspace}"
+            )
+        if (
+            file_stat.st_dev != expected_file_device
+            or file_stat.st_ino != expected_file_inode
+        ):
+            raise RuntimeError(f"Canonical file inode differs from the plan: {canonical_file}")
+        return "already_applied"
+
+    if canonical_file.is_symlink():
+        if not project_selected.exists() or canonical_file.resolve() != project_selected.resolve():
+            raise RuntimeError(f"Canonical-file link has the wrong target: {canonical_file}")
+        canonical_file.unlink()
+    elif canonical_file.exists():
+        stat = canonical_file.stat()
+        if stat.st_dev != expected_file_device or stat.st_ino != expected_file_inode:
+            raise RuntimeError(f"Canonical file inode differs from the plan: {canonical_file}")
+
+    if project_selected.exists() and not project_selected.is_symlink():
+        stat = project_selected.stat()
+        if stat.st_dev != expected_file_device or stat.st_ino != expected_file_inode:
+            raise RuntimeError(f"Selected file inode differs from the plan: {project_selected}")
+        canonical_file.parent.mkdir(parents=True, exist_ok=True)
+        if canonical_file.exists():
+            raise FileExistsError(f"Canonical file already exists: {canonical_file}")
+        os.rename(project_selected, canonical_file)
+    elif not canonical_file.exists():
+        raise FileNotFoundError(
+            f"Neither selected nor canonical file exists: {project_selected}, {canonical_file}"
+        )
+
+    if external_workspace.is_symlink():
+        if (
+            not project_workspace.exists()
+            or external_workspace.resolve() != project_workspace.resolve()
+        ):
+            raise RuntimeError(f"External workspace link has the wrong target: {external_workspace}")
+        external_workspace.unlink()
+    elif external_workspace.exists() and project_workspace.exists():
+        raise FileExistsError(
+            f"Both external and project workspaces exist: "
+            f"{external_workspace}, {project_workspace}"
+        )
+
+    if project_workspace.exists():
+        stat = project_workspace.stat()
+        if (
+            stat.st_dev != expected_workspace_device
+            or stat.st_ino != expected_workspace_inode
+        ):
+            raise RuntimeError(f"Project workspace inode differs from the plan: {project_workspace}")
+        external_workspace.parent.mkdir(parents=True, exist_ok=True)
+        os.rename(project_workspace, external_workspace)
+    elif not external_workspace.exists():
+        raise FileNotFoundError(
+            f"Neither external nor project workspace exists: "
+            f"{external_workspace}, {project_workspace}"
+        )
+
+    if external_selected.is_symlink():
+        if external_selected.resolve() != canonical_file.resolve():
+            raise RuntimeError(f"Selected-file link has the wrong target: {external_selected}")
+    elif external_selected.exists():
+        raise FileExistsError(f"Selected-file path unexpectedly exists: {external_selected}")
+    else:
+        create_compatibility_link(external_selected, canonical_file)
+    return "applied"
+
+
+def validate_h5ad_only_external_layout(
+    external_workspace: Path,
+    project_workspace: Path,
+    selected_relative: Path,
+    canonical_file: Path,
+    *,
+    expected_workspace_device: int,
+    expected_workspace_inode: int,
+    expected_file_device: int,
+    expected_file_inode: int,
+) -> list[str]:
+    errors: list[str] = []
+    external_selected = external_workspace / selected_relative
+    if external_workspace.is_symlink() or not external_workspace.is_dir():
+        errors.append(f"external workspace is not a physical directory: {external_workspace}")
+    else:
+        stat = external_workspace.stat()
+        if (
+            stat.st_dev != expected_workspace_device
+            or stat.st_ino != expected_workspace_inode
+        ):
+            errors.append(f"external workspace inode mismatch: {external_workspace}")
+    if project_workspace.exists() or project_workspace.is_symlink():
+        errors.append(f"project workspace still exists: {project_workspace}")
+    if canonical_file.is_symlink() or not canonical_file.is_file():
+        errors.append(f"canonical file is not physical: {canonical_file}")
+    else:
+        stat = canonical_file.stat()
+        if stat.st_dev != expected_file_device or stat.st_ino != expected_file_inode:
+            errors.append(f"canonical file inode mismatch: {canonical_file}")
+    if not external_selected.is_symlink():
+        errors.append(f"legacy selected-file path is not a symlink: {external_selected}")
+    elif canonical_file.exists() and external_selected.resolve() != canonical_file.resolve():
+        errors.append(f"legacy selected-file target mismatch: {external_selected}")
+    return errors
+
+
+def rollback_h5ad_only_external_layout(
+    external_workspace: Path,
+    project_workspace: Path,
+    selected_relative: Path,
+    canonical_file: Path,
+    *,
+    expected_workspace_device: int,
+    expected_workspace_inode: int,
+    expected_file_device: int,
+    expected_file_inode: int,
+) -> str:
+    """Restore the prior project-hosted workspace layout."""
+    external_selected = external_workspace / selected_relative
+    project_selected = project_workspace / selected_relative
+
+    if (
+        external_workspace.is_symlink()
+        and project_workspace.is_dir()
+        and canonical_file.is_symlink()
+        and project_selected.is_file()
+    ):
+        return "already_rolled_back"
+
+    errors = validate_h5ad_only_external_layout(
+        external_workspace,
+        project_workspace,
+        selected_relative,
+        canonical_file,
+        expected_workspace_device=expected_workspace_device,
+        expected_workspace_inode=expected_workspace_inode,
+        expected_file_device=expected_file_device,
+        expected_file_inode=expected_file_inode,
+    )
+    if errors:
+        raise RuntimeError("Cannot safely roll back:\n" + "\n".join(errors))
+
+    external_selected.unlink()
+    project_workspace.parent.mkdir(parents=True, exist_ok=True)
+    os.rename(external_workspace, project_workspace)
+    project_selected.parent.mkdir(parents=True, exist_ok=True)
+    os.rename(canonical_file, project_selected)
+    create_compatibility_link(external_workspace, project_workspace)
+    create_compatibility_link(canonical_file, project_selected)
+    return "rolled_back"
+
+
 def translate_path(path: Path, root: Path, moves: Iterable[StorageMove]) -> Path:
     """Translate a pre-migration path to its canonical post-migration location."""
     absolute = path if path.is_absolute() else root / path

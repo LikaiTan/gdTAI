@@ -1,0 +1,164 @@
+{
+  "base_migration_id": "balf_blood_copd_20260716",
+  "canonical_artifact": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/datasets/BALF_BLOOD_COPD/processed/artifacts/phase4_final_annotated.h5ad",
+  "created_at": "2026-07-16T22:55:52.762055+08:00",
+  "current_h5ad": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/datasets/BALF_BLOOD_COPD/processed/current.h5ad",
+  "dataset_id": "BALF_BLOOD_COPD",
+  "destination_device": 62,
+  "external_workspace": "/home/tanlikai/databank/owndata/singlecell",
+  "git_head": "d1d1a76d7c9db604e433e8eebc7220b3ec860bf1",
+  "h5ad": {
+    "device": 62,
+    "inode": 25179089,
+    "layer_keys": [
+      "counts"
+    ],
+    "mtime_ns": 1778688119479718016,
+    "n_obs": 46273,
+    "n_vars": 15681,
+    "relative_path": "data/results/phase4_final_annotated.h5ad",
+    "sampled_sha256": "18e5fbfc6fbf8129ba796340a62e934897ea967c3efd410070695c24db0991bf",
+    "size_bytes": 2110825599,
+    "top_level_keys": [
+      "X",
+      "layers",
+      "obs",
+      "obsm",
+      "obsp",
+      "uns",
+      "var",
+      "varm",
+      "varp"
+    ]
+  },
+  "migration_id": "balf_blood_copd_h5ad_only_20260716",
+  "project_workspace": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/datasets/BALF_BLOOD_COPD/workspace",
+  "raw_sentinels": [
+    {
+      "device": 62,
+      "file_role": "filtered_count_matrix",
+      "inode": 25108014,
+      "lifecycle_level": "raw",
+      "mtime_ns": 1752855052000000000,
+      "relative_path": "data/matrix/25060703_LIB1_5/filtered_feature_bc_matrix/matrix.mtx.gz",
+      "sampled_sha256": "39409174260da254dba3f7a8c1c83de036126ae622b068bd1f71366641ae499c",
+      "size_bytes": 58446990
+    },
+    {
+      "device": 62,
+      "file_role": "filtered_count_matrix",
+      "inode": 25108018,
+      "lifecycle_level": "raw",
+      "mtime_ns": 1753995254000000000,
+      "relative_path": "data/matrix/25060703_LIB2_5/filtered_feature_bc_matrix/matrix.mtx.gz",
+      "sampled_sha256": "6706db2ef1d0d5a64091e18d9d913eb6cd1459bf03325620f02bef2cb0386324",
+      "size_bytes": 151339323
+    },
+    {
+      "device": 62,
+      "file_role": "filtered_count_matrix",
+      "inode": 25108022,
+      "lifecycle_level": "raw",
+      "mtime_ns": 1752856858000000000,
+      "relative_path": "data/matrix/25060703_LIB3_5/filtered_feature_bc_matrix/matrix.mtx.gz",
+      "sampled_sha256": "4e9ff3f4f3e462876a527c6a725ab8541e483890a45249dd48dcbbf12850ce48",
+      "size_bytes": 149085780
+    },
+    {
+      "device": 62,
+      "file_role": "filtered_count_matrix",
+      "inode": 25108008,
+      "lifecycle_level": "raw",
+      "mtime_ns": 1753991983000000000,
+      "relative_path": "data/matrix/25060703_LIB4_5/filtered_feature_bc_matrix/matrix.mtx.gz",
+      "sampled_sha256": "ace4052b4e5f06d8df917d50d817ef905da341c85dd34710e93e97cd0eca0c55",
+      "size_bytes": 144727063
+    },
+    {
+      "device": 62,
+      "file_role": "raw_count_matrix",
+      "inode": 25169558,
+      "lifecycle_level": "raw",
+      "mtime_ns": 1752854758000000000,
+      "relative_path": "data/raw_matrix/25060703_LIB1_5/raw_feature_bc_matrix/matrix.mtx.gz",
+      "sampled_sha256": "bf175c4dd5d24628909b4cd2b0c45a4747ff0e9e45e2052afef8597e8dcfaebf",
+      "size_bytes": 89302639
+    },
+    {
+      "device": 62,
+      "file_role": "raw_count_matrix",
+      "inode": 24939204,
+      "lifecycle_level": "raw",
+      "mtime_ns": 1753994776000000000,
+      "relative_path": "data/raw_matrix/25060703_LIB2_5/raw_feature_bc_matrix/matrix.mtx.gz",
+      "sampled_sha256": "b873ca5be3ed262e66395cd206086dbf2bc65845146db9939436e5dcd74869bc",
+      "size_bytes": 224366914
+    },
+    {
+      "device": 62,
+      "file_role": "raw_count_matrix",
+      "inode": 25169564,
+      "lifecycle_level": "raw",
+      "mtime_ns": 1752856412000000000,
+      "relative_path": "data/raw_matrix/25060703_LIB3_5/raw_feature_bc_matrix/matrix.mtx.gz",
+      "sampled_sha256": "857f2aaa9a8975853230f2be8e73797b1f2faa751a3e46d88dbc5ddcf4daa838",
+      "size_bytes": 215063917
+    },
+    {
+      "device": 62,
+      "file_role": "raw_count_matrix",
+      "inode": 25169566,
+      "lifecycle_level": "raw",
+      "mtime_ns": 1753991594000000000,
+      "relative_path": "data/raw_matrix/25060703_LIB4_5/raw_feature_bc_matrix/matrix.mtx.gz",
+      "sampled_sha256": "bb274e501438e470e6be157ba6548f3d332d70e251b4f393e80f5704b35c48ea",
+      "size_bytes": 204551157
+    },
+    {
+      "device": 62,
+      "file_role": "harmonized_tcr_table",
+      "inode": 25103295,
+      "lifecycle_level": "interim",
+      "mtime_ns": 1778592102044860761,
+      "relative_path": "data/TCR/tcr_integration_output_allchains/tcr_final_wide.tsv",
+      "sampled_sha256": "926101ceb36de1864c8c312831a6efd156cdd88ed8ddcddef278315da4778ee7",
+      "size_bytes": 9672481
+    },
+    {
+      "device": 62,
+      "file_role": "demultiplexing_assignment",
+      "inode": 24643185,
+      "lifecycle_level": "interim",
+      "mtime_ns": 1764580789481794762,
+      "relative_path": "data/demultiplexing_Result/donor_ids_1_3.tsv",
+      "sampled_sha256": "7a16fc5ee5e9b25ae0608cf188cbc2a76a50936479078efc2e7385ae3a7fc548",
+      "size_bytes": 1647163
+    },
+    {
+      "device": 62,
+      "file_role": "demultiplexing_assignment",
+      "inode": 24643310,
+      "lifecycle_level": "interim",
+      "mtime_ns": 1764580856645286757,
+      "relative_path": "data/demultiplexing_Result/donor_ids_2_4.tsv",
+      "sampled_sha256": "febc9e3635d639c45b36c0135247d060889f840171989310c19a7a97b0e6ad8c",
+      "size_bytes": 2269477
+    }
+  ],
+  "raw_source_link": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/datasets/BALF_BLOOD_COPD/raw/legacy_source",
+  "registry_snapshot": "pre_balf_blood_copd_h5ad_only_20260716",
+  "same_filesystem": true,
+  "selected_relative": "data/results/phase4_final_annotated.h5ad",
+  "source_layout": "full_workspace_in_project",
+  "target_layout": "selected_h5ad_only_in_project",
+  "top_level_entries": [
+    ".ossutil_checkpoint",
+    "Data_Verification_ReadMe.pdf",
+    "data",
+    "md5.txt",
+    "md5summer.exe",
+    "ossutil_output"
+  ],
+  "workspace_device": 62,
+  "workspace_inode": 24644876
+}

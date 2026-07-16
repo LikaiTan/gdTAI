@@ -143,6 +143,12 @@ Only this section may define active run-specific exceptions.
 - stable NFS-side symlink view: `high_speed_temp/Integrated_dataset`
 - keep validated large H5AD files on the mirrored tree until explicit user
   migration approval
+- `BALF_BLOOD_COPD` raw and interim files remain physically under
+  `/home/tanlikai/databank/owndata/singlecell`
+- only its selected validation H5AD is physically stored under
+  `data/datasets/BALF_BLOOD_COPD/processed/`
+- the project raw lifecycle path is a compatibility view of the original
+  workspace
 
 ### QC-gate exception
 

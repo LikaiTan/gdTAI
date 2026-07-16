@@ -1,0 +1,13 @@
+{
+  "canonical_dataset_path": "data/datasets/BALF_BLOOD_COPD",
+  "current_h5ad": "data/datasets/BALF_BLOOD_COPD/processed/current.h5ad",
+  "current_h5ad_target": "data/datasets/BALF_BLOOD_COPD/workspace/data/results/phase4_final_annotated.h5ad",
+  "dataset_id": "BALF_BLOOD_COPD",
+  "integration_role": "gdTAI_independent_external_validation",
+  "legacy_workspace_path": "/home/tanlikai/databank/owndata/singlecell",
+  "processed_path": "data/datasets/BALF_BLOOD_COPD/processed",
+  "raw_path": "data/datasets/BALF_BLOOD_COPD/raw",
+  "source_type": "local_external",
+  "storage_migration_id": "balf_blood_copd_20260716",
+  "workspace_path": "data/datasets/BALF_BLOOD_COPD/workspace"
+}

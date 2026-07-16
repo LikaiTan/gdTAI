@@ -1,0 +1,7 @@
+{
+  "dataset_id": "BALF_BLOOD_COPD",
+  "failure_count": 0,
+  "failures": [],
+  "migration_id": "balf_blood_copd_h5ad_only_20260716",
+  "validated_at": "2026-07-16T22:56:36.312987+08:00"
+}

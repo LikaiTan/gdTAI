@@ -906,8 +906,8 @@ Objective:
 
 - register the four-library BALF/PBMC study used for independent gdTAI
   validation as dataset `BALF_BLOOD_COPD`
-- preserve the complete original study workspace and all historical absolute
-  paths
+- retain the complete raw/interim study workspace at its original path
+- store only the selected validation H5AD physically inside the project
 - keep the cohort validation-only unless atlas integration is separately
   approved
 
@@ -915,22 +915,27 @@ Phase or task:
 
 - Dataset-centered intake of the independent BALF/PBMC COPD validation cohort
 
-Exact `.py` script:
+Exact `.py` scripts:
 
 - `workflows/maintenance/migrate_balf_blood_copd_dataset.py`
+- `workflows/maintenance/relocate_balf_blood_copd_raw_workspace.py`
 
 Core outputs:
 
-- `data/datasets/BALF_BLOOD_COPD/workspace/`
+- `/home/tanlikai/databank/owndata/singlecell/`
+- `data/datasets/BALF_BLOOD_COPD/raw/legacy_source`
 - `data/datasets/BALF_BLOOD_COPD/processed/current.h5ad`
 - `data/registry/migrations/balf_blood_copd_20260716/`
+- `data/registry/migrations/balf_blood_copd_h5ad_only_20260716/`
 - dataset, library, file, and storage-index registry entries
-- compatibility link at `/home/tanlikai/databank/owndata/singlecell`
 
 Standard behavior:
 
-- move the complete workspace with one same-filesystem rename
-- retain `/home/tanlikai/databank/owndata/singlecell` as a compatibility link
+- keep raw, FASTQ, BAM, matrix, TCR, demultiplexing, and other study files in
+  the original workspace
+- retain the selected validation H5AD as the only physical cohort data file in
+  `data/datasets/BALF_BLOOD_COPD/`
+- keep the historical H5AD path as a compatibility link to the canonical H5AD
 - fingerprint the selected H5AD, four filtered matrices, four raw matrices,
   harmonized TCR table, and two demultiplexing tables
 - register `LIB1`-`LIB4` as inactive validation-only libraries

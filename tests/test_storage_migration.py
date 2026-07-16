@@ -5,11 +5,14 @@ import unittest
 from tnk_atlas.storage import (
     StorageMove,
     apply_absolute_move_with_link,
+    apply_h5ad_only_external_layout,
     apply_move,
     rollback_absolute_move,
+    rollback_h5ad_only_external_layout,
     rollback_move,
     translate_path,
     validate_absolute_move,
+    validate_h5ad_only_external_layout,
     validate_move,
 )
 
@@ -161,3 +164,78 @@ class StorageMigrationTests(unittest.TestCase):
             self.assertTrue(source.is_dir())
             self.assertFalse(source.is_symlink())
             self.assertFalse(destination.exists())
+
+    def test_h5ad_only_external_layout_and_rollback(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            external = root / "external" / "study"
+            project_workspace = root / "project" / "datasets" / "STUDY" / "workspace"
+            project_workspace.mkdir(parents=True)
+            selected_relative = Path("data/results/final.h5ad")
+            selected = project_workspace / selected_relative
+            selected.parent.mkdir(parents=True)
+            selected.write_bytes(b"h5ad")
+            workspace_stat = project_workspace.stat()
+            file_stat = selected.stat()
+            external.parent.mkdir(parents=True)
+            external.symlink_to(project_workspace)
+            canonical = (
+                root
+                / "project"
+                / "datasets"
+                / "STUDY"
+                / "processed"
+                / "artifacts"
+                / "final.h5ad"
+            )
+            canonical.parent.mkdir(parents=True)
+            canonical.symlink_to(selected)
+
+            self.assertEqual(
+                apply_h5ad_only_external_layout(
+                    external,
+                    project_workspace,
+                    selected_relative,
+                    canonical,
+                    expected_workspace_device=workspace_stat.st_dev,
+                    expected_workspace_inode=workspace_stat.st_ino,
+                    expected_file_device=file_stat.st_dev,
+                    expected_file_inode=file_stat.st_ino,
+                ),
+                "applied",
+            )
+            self.assertFalse(
+                validate_h5ad_only_external_layout(
+                    external,
+                    project_workspace,
+                    selected_relative,
+                    canonical,
+                    expected_workspace_device=workspace_stat.st_dev,
+                    expected_workspace_inode=workspace_stat.st_ino,
+                    expected_file_device=file_stat.st_dev,
+                    expected_file_inode=file_stat.st_ino,
+                )
+            )
+            self.assertTrue(external.is_dir())
+            self.assertFalse(external.is_symlink())
+            self.assertTrue(canonical.is_file())
+            self.assertFalse(canonical.is_symlink())
+            self.assertEqual((external / selected_relative).resolve(), canonical.resolve())
+
+            self.assertEqual(
+                rollback_h5ad_only_external_layout(
+                    external,
+                    project_workspace,
+                    selected_relative,
+                    canonical,
+                    expected_workspace_device=workspace_stat.st_dev,
+                    expected_workspace_inode=workspace_stat.st_ino,
+                    expected_file_device=file_stat.st_dev,
+                    expected_file_inode=file_stat.st_ino,
+                ),
+                "rolled_back",
+            )
+            self.assertTrue(external.is_symlink())
+            self.assertTrue(project_workspace.is_dir())
+            self.assertTrue((project_workspace / selected_relative).is_file())
+            self.assertTrue(canonical.is_symlink())
