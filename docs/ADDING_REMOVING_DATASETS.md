@@ -4,8 +4,9 @@ Dataset membership is a registry operation, not a filesystem deletion.
 
 ## Add a dataset
 
-1. Place immutable source files under an approved legacy source location or a
-   staged `data/raw/` location.
+1. Create `data/datasets/<dataset_id>/raw/source/` and place immutable source
+   files there. Do not add new data under `downloads/` or `newdata/`; those
+   names are compatibility aliases only.
 2. Build and validate one standardized per-dataset H5AD without overwriting an
    existing selected H5AD.
 3. Register it:
@@ -14,8 +15,8 @@ Dataset membership is a registry operation, not a filesystem deletion.
 PY=/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python
 $PY workflows/maintenance/manage_dataset_registry.py register GSEXXXXXX \
   --source-type GEO \
-  --raw-path downloads/GSEXXXXXX \
-  --processed-h5ad downloads/per_gse_h5ad_with_metadata/GSEXXXXXX.h5ad \
+  --raw-path data/datasets/GSEXXXXXX/raw/source \
+  --processed-h5ad data/datasets/GSEXXXXXX/processed/current.h5ad \
   --integration-role selected_for_next_integration \
   --activate
 ```
@@ -37,6 +38,15 @@ $PY workflows/maintenance/manage_dataset_registry.py deactivate GSEXXXXXX \
 This marks the dataset and its libraries inactive and preserves all files and
 historical membership. Existing atlas milestones remain unchanged until a new
 integration is approved and built.
+
+## Find a dataset
+
+```bash
+$PY workflows/maintenance/manage_dataset_registry.py locate GSEXXXXXX
+```
+
+This prints the canonical dataset root, lifecycle directories, promoted H5AD,
+resolved H5AD target, and retained legacy source alias.
 
 ## Required review
 

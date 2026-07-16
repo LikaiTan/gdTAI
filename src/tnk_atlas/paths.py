@@ -70,6 +70,18 @@ class ProjectPaths:
         return self.root / "data"
 
     @property
+    def datasets(self) -> Path:
+        return self.data / "datasets"
+
+    @property
+    def shared_data(self) -> Path:
+        return self.data / "shared"
+
+    @property
+    def compatibility_data(self) -> Path:
+        return self.data / "compat"
+
+    @property
     def dataset_registry(self) -> Path:
         return self.root / "configs" / "datasets"
 
@@ -91,6 +103,24 @@ class ProjectPaths:
     @property
     def historical_five_million_atlas(self) -> Path:
         return self.root / "high_speed_temp" / "Integrated_dataset" / "integrated_plus6.h5ad"
+
+    def dataset(self, dataset_id: str) -> Path:
+        """Return the canonical physical root for one pre-integration dataset."""
+        if not dataset_id or "/" in dataset_id or dataset_id in {".", ".."}:
+            raise ValueError(f"Invalid dataset ID: {dataset_id!r}")
+        return self.datasets / dataset_id
+
+    def dataset_raw(self, dataset_id: str) -> Path:
+        return self.dataset(dataset_id) / "raw"
+
+    def dataset_interim(self, dataset_id: str) -> Path:
+        return self.dataset(dataset_id) / "interim"
+
+    def dataset_processed(self, dataset_id: str) -> Path:
+        return self.dataset(dataset_id) / "processed"
+
+    def dataset_current_h5ad(self, dataset_id: str) -> Path:
+        return self.dataset_processed(dataset_id) / "current.h5ad"
 
     def relative(self, path: str | Path) -> str:
         candidate = Path(path)

@@ -860,3 +860,42 @@ Core outputs:
 - `Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v4.0/`
 - `gdT_prediction/gdtai_v4_tcell_gate_report.html`
 - `gdT_prediction/gdtai_v4_tcell_gate_report.pdf`
+
+## Project maintenance: dataset-centered pre-integration storage
+
+Objective:
+
+- make `data/datasets/<dataset_id>/` the physical home for raw, interim, and
+  processed per-dataset inputs
+- preserve all historical `downloads/`, `analysis_26GSE_V4/`, and `newdata/`
+  paths as compatibility symlinks to the same inodes
+- support validated forward migration and reverse rollback without rewriting
+  any H5AD
+
+Phase or task:
+
+- Dataset-centered physical storage migration with legacy-path compatibility
+
+Exact `.py` scripts:
+
+- `workflows/maintenance/migrate_dataset_storage.py`
+- `workflows/maintenance/build_data_compatibility_view.py`
+- `workflows/maintenance/manage_dataset_registry.py`
+
+Core outputs:
+
+- `data/datasets/<dataset_id>/`
+- `data/shared/`
+- `data/compat/`
+- `data/registry/storage_index.csv`
+- `data/registry/migrations/dataset_centered_20260716/`
+- top-level compatibility aliases at `downloads`, `analysis_26GSE_V4`, and
+  `newdata`
+
+Standard behavior:
+
+- run `plan` and `preflight` before `apply --confirm`
+- use same-filesystem renames and verify source device/inode identities
+- preserve selected-H5AD sampled hashes, HDF5 dimensions, size, and timestamps
+- run `finalize --confirm` only after all physical moves validate
+- retain a registry snapshot and reverse journal for `rollback --confirm`

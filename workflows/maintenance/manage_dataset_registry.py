@@ -40,6 +40,9 @@ def parse_args() -> argparse.Namespace:
 
     subparsers.add_parser("list")
 
+    locate = subparsers.add_parser("locate")
+    locate.add_argument("dataset_id")
+
     snapshot = subparsers.add_parser("snapshot")
     snapshot.add_argument("run_id")
 
@@ -282,6 +285,30 @@ def main() -> int:
                     ]
                 )
             )
+        return 0
+    if args.command == "locate":
+        matches = [
+            row for row in read_csv(DATASETS) if row["dataset_id"] == args.dataset_id
+        ]
+        if not matches:
+            raise KeyError(args.dataset_id)
+        row = matches[0]
+        canonical = PROJECT_ROOT / "data" / "datasets" / args.dataset_id
+        current_value = row["processed_h5ad_path"]
+        current = PROJECT_ROOT / current_value if current_value else None
+        payload = {
+            "dataset_id": args.dataset_id,
+            "canonical_dataset_path": str(canonical),
+            "raw_path": str(canonical / "raw"),
+            "interim_path": str(canonical / "interim"),
+            "processed_path": str(canonical / "processed"),
+            "current_h5ad": str(current) if current else "",
+            "current_h5ad_target": str(current.resolve()) if current and current.exists() else "",
+            "legacy_raw_path": str(PROJECT_ROOT / row["legacy_raw_path"])
+            if row["legacy_raw_path"]
+            else "",
+        }
+        print(json.dumps(payload, indent=2))
         return 0
     if args.command == "snapshot":
         print(snapshot(args.run_id))

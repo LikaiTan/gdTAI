@@ -1,0 +1,1568 @@
+[
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/local/GDT_2020AUG_woCOV/legacy_source",
+    "target_path": "newdata/Sorted_gdT",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GDT_2020AUG_woCOV/current.h5ad",
+    "target_path": "newdata/Sorted_gdT/GDT_2020AUG_woCOV_sorted_gdt.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/local/GDTlung2023july_7p/legacy_source",
+    "target_path": "newdata/Sorted_gdT",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GDTlung2023july_7p/current.h5ad",
+    "target_path": "newdata/Sorted_gdT/GDTlung2023july_7p_sorted_gdt.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE123813/legacy_source",
+    "target_path": "downloads/GSE123813",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE123813/geo_matrix",
+    "target_path": "downloads/GSE123813/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE123813/supplementary",
+    "target_path": "downloads/GSE123813/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE125527/legacy_source",
+    "target_path": "downloads/GSE125527",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE125527/geo_matrix",
+    "target_path": "downloads/GSE125527/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE125527/supplementary",
+    "target_path": "downloads/GSE125527/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE125527/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/GSE125527_with_metadata.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE139555/legacy_source",
+    "target_path": "downloads/GSE139555",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE139555/geo_matrix",
+    "target_path": "downloads/GSE139555/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE139555/supplementary",
+    "target_path": "downloads/GSE139555/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE139555/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE139555/outputs/GSE139555_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE139555/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE139555",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE144469/legacy_source",
+    "target_path": "downloads/GSE144469",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE144469/geo_matrix",
+    "target_path": "downloads/GSE144469/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE144469/supplementary",
+    "target_path": "downloads/GSE144469/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_metadata",
+    "link_path": "data/raw/geo/GSE144469/metadata",
+    "target_path": "downloads/GSE144469/metadata",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_fastq_legacy_mixed",
+    "link_path": "data/raw/geo/GSE144469/fastq_legacy_mixed",
+    "target_path": "downloads/GSE144469/fastq",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE144469/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/GSE144469_with_metadata.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE144469/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE144469",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE145926/legacy_source",
+    "target_path": "downloads/GSE145926",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE145926/geo_matrix",
+    "target_path": "downloads/GSE145926/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE145926/supplementary",
+    "target_path": "downloads/GSE145926/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE145926/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE145926/outputs/GSE145926_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE145926/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE145926",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE149298/legacy_source",
+    "target_path": "downloads/GSE149298",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE149298/geo_matrix",
+    "target_path": "downloads/GSE149298/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE149298/supplementary",
+    "target_path": "downloads/GSE149298/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE155222/legacy_source",
+    "target_path": "downloads/GSE155222",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE155222/geo_matrix",
+    "target_path": "downloads/GSE155222/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE155222/supplementary",
+    "target_path": "downloads/GSE155222/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_metadata",
+    "link_path": "data/raw/geo/GSE155222/metadata",
+    "target_path": "downloads/GSE155222/metadata",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE155222/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/GSE155222_with_metadata.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE155222/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE155222",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE155223/legacy_source",
+    "target_path": "downloads/GSE155223",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE155223/geo_matrix",
+    "target_path": "downloads/GSE155223/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE155223/supplementary",
+    "target_path": "downloads/GSE155223/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_metadata",
+    "link_path": "data/raw/geo/GSE155223/metadata",
+    "target_path": "downloads/GSE155223/metadata",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE155223/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/GSE155223_with_metadata.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE155223/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE155223",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE161918/legacy_source",
+    "target_path": "downloads/GSE161918",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE161918/geo_matrix",
+    "target_path": "downloads/GSE161918/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE161918/supplementary",
+    "target_path": "downloads/GSE161918/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_fastq_legacy_mixed",
+    "link_path": "data/raw/geo/GSE161918/fastq_legacy_mixed",
+    "target_path": "downloads/GSE161918/fastq",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE161918/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE161918/outputs/GSE161918_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE161918/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE161918",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE162498/legacy_source",
+    "target_path": "downloads/GSE162498",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE162498/geo_matrix",
+    "target_path": "downloads/GSE162498/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE162498/supplementary",
+    "target_path": "downloads/GSE162498/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_metadata",
+    "link_path": "data/raw/geo/GSE162498/metadata",
+    "target_path": "downloads/GSE162498/metadata",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE162498/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE162498/outputs/GSE162498_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE162498/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE162498",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE162499/legacy_source",
+    "target_path": "downloads/GSE162499",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE162499/geo_matrix",
+    "target_path": "downloads/GSE162499/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE162499/supplementary",
+    "target_path": "downloads/GSE162499/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE168163/legacy_source",
+    "target_path": "downloads/GSE168163",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_metadata",
+    "link_path": "data/raw/geo/GSE168163/metadata",
+    "target_path": "downloads/GSE168163/metadata",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE168163/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/GSE168163_with_metadata.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE168859/legacy_source",
+    "target_path": "downloads/GSE168859",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE168859/geo_matrix",
+    "target_path": "downloads/GSE168859/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE168859/supplementary",
+    "target_path": "downloads/GSE168859/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_metadata",
+    "link_path": "data/raw/geo/GSE168859/metadata",
+    "target_path": "downloads/GSE168859/metadata",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_fastq_legacy_mixed",
+    "link_path": "data/raw/geo/GSE168859/fastq_legacy_mixed",
+    "target_path": "downloads/GSE168859/fastq",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE168859/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/GSE168859_with_metadata.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE169441/legacy_source",
+    "target_path": "downloads/GSE169441",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE169441/geo_matrix",
+    "target_path": "downloads/GSE169441/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE169441/supplementary",
+    "target_path": "downloads/GSE169441/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE171037/legacy_source",
+    "target_path": "downloads/GSE171037",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE171037/geo_matrix",
+    "target_path": "downloads/GSE171037/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE171037/supplementary",
+    "target_path": "downloads/GSE171037/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE171037/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE171037/outputs/GSE171037_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE171037/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE171037",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE175930/legacy_source",
+    "target_path": "downloads/GSE175930",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE175930/geo_matrix",
+    "target_path": "downloads/GSE175930/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE175930/supplementary",
+    "target_path": "downloads/GSE175930/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE178882/legacy_source",
+    "target_path": "downloads/GSE178882",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE178882/geo_matrix",
+    "target_path": "downloads/GSE178882/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE178882/supplementary",
+    "target_path": "downloads/GSE178882/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE178882/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE178882/outputs/GSE178882_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE178882/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE178882",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE179994/legacy_source",
+    "target_path": "downloads/GSE179994",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE179994/geo_matrix",
+    "target_path": "downloads/GSE179994/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE179994/supplementary",
+    "target_path": "downloads/GSE179994/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE179994/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/GSE179994_with_tcr.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE181710/legacy_source",
+    "target_path": "downloads/GSE181710",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE181710/geo_matrix",
+    "target_path": "downloads/GSE181710/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE181710/supplementary",
+    "target_path": "downloads/GSE181710/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE188620/legacy_source",
+    "target_path": "downloads/GSE188620",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE188620/geo_matrix",
+    "target_path": "downloads/GSE188620/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE188620/supplementary",
+    "target_path": "downloads/GSE188620/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE188620/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE188620/outputs/GSE188620_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE188620/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE188620",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE189126/legacy_source",
+    "target_path": "downloads/GSE189126",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE189126/geo_matrix",
+    "target_path": "downloads/GSE189126/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE189126/supplementary",
+    "target_path": "downloads/GSE189126/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE190870/legacy_source",
+    "target_path": "downloads/GSE190870",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE190870/geo_matrix",
+    "target_path": "downloads/GSE190870/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE190870/supplementary",
+    "target_path": "downloads/GSE190870/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_metadata",
+    "link_path": "data/raw/geo/GSE190870/metadata",
+    "target_path": "downloads/GSE190870/metadata",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE190870/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE190870/outputs/GSE190870_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE190870/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE190870",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE198265/legacy_source",
+    "target_path": "downloads/GSE198265",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE198265/geo_matrix",
+    "target_path": "downloads/GSE198265/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE198265/supplementary",
+    "target_path": "downloads/GSE198265/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE211504/legacy_source",
+    "target_path": "downloads/GSE211504",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE211504/geo_matrix",
+    "target_path": "downloads/GSE211504/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE211504/supplementary",
+    "target_path": "downloads/GSE211504/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE211504/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE211504/outputs/GSE211504_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE211504/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE211504",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE212217/legacy_source",
+    "target_path": "downloads/GSE212217",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE212217/geo_matrix",
+    "target_path": "downloads/GSE212217/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE212217/supplementary",
+    "target_path": "downloads/GSE212217/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE212217/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE212217/outputs/GSE212217_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE212217/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE212217",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE221776/legacy_source",
+    "target_path": "downloads/GSE221776",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE221776/geo_matrix",
+    "target_path": "downloads/GSE221776/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE221776/supplementary",
+    "target_path": "downloads/GSE221776/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_fastq_legacy_mixed",
+    "link_path": "data/raw/geo/GSE221776/fastq_legacy_mixed",
+    "target_path": "downloads/GSE221776/fastq",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE221776/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/GSE221776_with_metadata.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE227709/legacy_source",
+    "target_path": "downloads/GSE227709",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE227709/geo_matrix",
+    "target_path": "downloads/GSE227709/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE227709/supplementary",
+    "target_path": "downloads/GSE227709/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE227709/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE227709/outputs/GSE227709_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE227709/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE227709",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE228597/legacy_source",
+    "target_path": "downloads/GSE228597",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE228597/geo_matrix",
+    "target_path": "downloads/GSE228597/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE228597/supplementary",
+    "target_path": "downloads/GSE228597/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE228597/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE228597/outputs/GSE228597_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE228597/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE228597",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE229858/legacy_source",
+    "target_path": "downloads/GSE229858",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE229858/geo_matrix",
+    "target_path": "downloads/GSE229858/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE229858/supplementary",
+    "target_path": "downloads/GSE229858/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE229858/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/GSE229858_with_metadata.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE229860/legacy_source",
+    "target_path": "downloads/GSE229860",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE229860/geo_matrix",
+    "target_path": "downloads/GSE229860/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE229860/supplementary",
+    "target_path": "downloads/GSE229860/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE232240/legacy_source",
+    "target_path": "downloads/GSE232240",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE232240/geo_matrix",
+    "target_path": "downloads/GSE232240/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE232240/supplementary",
+    "target_path": "downloads/GSE232240/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_metadata",
+    "link_path": "data/raw/geo/GSE232240/metadata",
+    "target_path": "downloads/GSE232240/metadata",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE232240/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/GSE232240_with_metadata.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE234069/legacy_source",
+    "target_path": "downloads/GSE234069",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE234069/geo_matrix",
+    "target_path": "downloads/GSE234069/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE234069/supplementary",
+    "target_path": "downloads/GSE234069/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_metadata",
+    "link_path": "data/raw/geo/GSE234069/metadata",
+    "target_path": "downloads/GSE234069/metadata",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE234069/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/GSE234069_with_tcr.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE234352/legacy_source",
+    "target_path": "downloads/GSE234352",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE234352/geo_matrix",
+    "target_path": "downloads/GSE234352/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE234352/supplementary",
+    "target_path": "downloads/GSE234352/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE235863/legacy_source",
+    "target_path": "downloads/GSE235863",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE235863/geo_matrix",
+    "target_path": "downloads/GSE235863/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE235863/supplementary",
+    "target_path": "downloads/GSE235863/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE235863/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/GSE235863_with_tcr.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE240361/legacy_source",
+    "target_path": "downloads/GSE240361",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE240361/geo_matrix",
+    "target_path": "downloads/GSE240361/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE240361/supplementary",
+    "target_path": "downloads/GSE240361/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE240361/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/GSE240361_with_metadata.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE240865/legacy_source",
+    "target_path": "downloads/GSE240865",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE240865/geo_matrix",
+    "target_path": "downloads/GSE240865/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE240865/supplementary",
+    "target_path": "downloads/GSE240865/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE240865/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/GSE240865_with_tcr.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE241783/legacy_source",
+    "target_path": "downloads/GSE241783",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE241783/geo_matrix",
+    "target_path": "downloads/GSE241783/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE241783/supplementary",
+    "target_path": "downloads/GSE241783/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE241783/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/GSE241783_with_tcr.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE241783/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE241783",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE243013/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/GSE243013_TNK.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE243013/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE243013",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE243572/legacy_source",
+    "target_path": "downloads/GSE243572",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE243572/geo_matrix",
+    "target_path": "downloads/GSE243572/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE243572/supplementary",
+    "target_path": "downloads/GSE243572/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE243572/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE243572/outputs/GSE243572_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE243572/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE243572",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE243905/legacy_source",
+    "target_path": "downloads/GSE243905",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE243905/geo_matrix",
+    "target_path": "downloads/GSE243905/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE243905/supplementary",
+    "target_path": "downloads/GSE243905/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE243905/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE243905/outputs/GSE243905_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE243905/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE243905",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE247531/legacy_source",
+    "target_path": "downloads/GSE247531",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE247531/geo_matrix",
+    "target_path": "downloads/GSE247531/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE247531/supplementary",
+    "target_path": "downloads/GSE247531/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE252762/legacy_source",
+    "target_path": "downloads/GSE252762",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE252762/geo_matrix",
+    "target_path": "downloads/GSE252762/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE252762/supplementary",
+    "target_path": "downloads/GSE252762/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE252762/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE252762/outputs/GSE252762_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE252762/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE252762",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE253173/legacy_source",
+    "target_path": "downloads/GSE253173",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE253173/geo_matrix",
+    "target_path": "downloads/GSE253173/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE253173/supplementary",
+    "target_path": "downloads/GSE253173/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE254176/legacy_source",
+    "target_path": "downloads/GSE254176",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE254176/geo_matrix",
+    "target_path": "downloads/GSE254176/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE254176/supplementary",
+    "target_path": "downloads/GSE254176/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE254176/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE254176/outputs/GSE254176_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE254176/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE254176",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE254249/legacy_source",
+    "target_path": "downloads/GSE254249",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE254249/geo_matrix",
+    "target_path": "downloads/GSE254249/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE254249/supplementary",
+    "target_path": "downloads/GSE254249/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE254249/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE254249/outputs/GSE254249_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE254249/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE254249",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE267639/legacy_source",
+    "target_path": "downloads/GSE267639",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE267639/geo_matrix",
+    "target_path": "downloads/GSE267639/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE267639/supplementary",
+    "target_path": "downloads/GSE267639/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE267642/legacy_source",
+    "target_path": "downloads/GSE267642",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE267642/geo_matrix",
+    "target_path": "downloads/GSE267642/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE267642/supplementary",
+    "target_path": "downloads/GSE267642/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE267645/legacy_source",
+    "target_path": "downloads/GSE267645",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE267645/geo_matrix",
+    "target_path": "downloads/GSE267645/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE267645/supplementary",
+    "target_path": "downloads/GSE267645/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE267645/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE267645/outputs/GSE267645_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE267645/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE267645",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE271413/legacy_source",
+    "target_path": "downloads/GSE271413",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE271413/geo_matrix",
+    "target_path": "downloads/GSE271413/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE271413/supplementary",
+    "target_path": "downloads/GSE271413/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE273170/legacy_source",
+    "target_path": "downloads/GSE273170",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE273170/geo_matrix",
+    "target_path": "downloads/GSE273170/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE273170/supplementary",
+    "target_path": "downloads/GSE273170/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE276167/legacy_source",
+    "target_path": "downloads/GSE276167",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE276167/geo_matrix",
+    "target_path": "downloads/GSE276167/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE276167/supplementary",
+    "target_path": "downloads/GSE276167/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE278119/legacy_source",
+    "target_path": "downloads/GSE278119",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE278119/geo_matrix",
+    "target_path": "downloads/GSE278119/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE278119/supplementary",
+    "target_path": "downloads/GSE278119/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE286518/legacy_source",
+    "target_path": "downloads/GSE286518",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE286518/geo_matrix",
+    "target_path": "downloads/GSE286518/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE286518/supplementary",
+    "target_path": "downloads/GSE286518/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE287301/legacy_source",
+    "target_path": "downloads/GSE287301",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE287301/geo_matrix",
+    "target_path": "downloads/GSE287301/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE287301/supplementary",
+    "target_path": "downloads/GSE287301/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE287301/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/GSE287301_with_tcr.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE287541/legacy_source",
+    "target_path": "downloads/GSE287541",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE287541/geo_matrix",
+    "target_path": "downloads/GSE287541/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE287541/supplementary",
+    "target_path": "downloads/GSE287541/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE287541/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/GSE287541_with_tcr.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE288452/legacy_source",
+    "target_path": "downloads/GSE288452",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE288452/geo_matrix",
+    "target_path": "downloads/GSE288452/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE288452/supplementary",
+    "target_path": "downloads/GSE288452/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE296971/legacy_source",
+    "target_path": "downloads/GSE296971",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE296971/geo_matrix",
+    "target_path": "downloads/GSE296971/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE296971/supplementary",
+    "target_path": "downloads/GSE296971/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE301528/legacy_source",
+    "target_path": "downloads/GSE301528",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE301528/geo_matrix",
+    "target_path": "downloads/GSE301528/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE301528/supplementary",
+    "target_path": "downloads/GSE301528/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE301528/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE301528/outputs/GSE301528_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE301528/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE301528",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE308075/legacy_source",
+    "target_path": "downloads/GSE308075",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE308075/geo_matrix",
+    "target_path": "downloads/GSE308075/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE308075/supplementary",
+    "target_path": "downloads/GSE308075/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE308075/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE308075/outputs/GSE308075_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE308075/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE308075",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/geo/GSE311112/legacy_source",
+    "target_path": "downloads/GSE311112",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_geo_matrix",
+    "link_path": "data/raw/geo/GSE311112/geo_matrix",
+    "target_path": "downloads/GSE311112/matrix",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_supplementary",
+    "link_path": "data/raw/geo/GSE311112/supplementary",
+    "target_path": "downloads/GSE311112/suppl",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/GSE311112/current.h5ad",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE311112/outputs/GSE311112_scanpy_processed.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "interim_legacy_scanpy_project",
+    "link_path": "data/interim/GSE311112/legacy_scanpy_project",
+    "target_path": "analysis_26GSE_V4/scanpy_projects/GSE311112",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/local/HRA005041/legacy_source",
+    "target_path": "newdata/HRA005041",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/HRA005041/current.h5ad",
+    "target_path": "downloads/per_gse_h5ad_with_metadata/HRA005041_T_cells_subset.h5ad",
+    "status": "already_correct"
+  },
+  {
+    "role": "raw_legacy_source",
+    "link_path": "data/raw/local/MalteGDT/legacy_source",
+    "target_path": "newdata/Sorted_gdT",
+    "status": "already_correct"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/MalteGDT/current.h5ad",
+    "target_path": "newdata/Sorted_gdT/MalteGDT_sorted_gdt.h5ad",
+    "status": "already_correct"
+  }
+]

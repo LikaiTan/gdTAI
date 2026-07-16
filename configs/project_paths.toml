@@ -8,6 +8,9 @@ file_registry = "configs/datasets/files.csv"
 sample_information = "configs/datasets/sample_information_final_full.csv"
 
 [data]
+dataset_root = "data/datasets"
+shared_root = "data/shared"
+compatibility_root = "data/compat"
 raw_root = "data/raw"
 interim_root = "data/interim"
 processed_root = "data/processed/per_dataset"

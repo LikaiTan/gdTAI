@@ -20,6 +20,9 @@ analysis_26GSE_V4/scanpy_projects/*/logs/
 analysis_26GSE_V4/
 
 # The organized data view is generated locally from configs/datasets/*.csv.
+data/datasets/*/
+data/shared/
+data/compat/
 data/raw/geo/*/
 data/raw/local/*/
 data/interim/*/

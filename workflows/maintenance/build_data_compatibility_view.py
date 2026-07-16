@@ -23,6 +23,11 @@ def parse_args() -> argparse.Namespace:
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--apply", action="store_true", help="Create missing links.")
     mode.add_argument("--verify", action="store_true", help="Verify links without modifying them.")
+    parser.add_argument(
+        "--replace-generated-links",
+        action="store_true",
+        help="Replace only existing symlinks owned by this generated view.",
+    )
     return parser.parse_args()
 
 
@@ -37,20 +42,31 @@ def planned_links(paths: ProjectPaths, rows: list[dict[str, str]]) -> list[tuple
     links: list[tuple[Path, Path, str]] = []
     for row in rows:
         dataset_id = row["dataset_id"]
-        raw = resolve_legacy(row["legacy_raw_path"])
+        canonical_root = paths.dataset(dataset_id)
+        canonical_raw = paths.dataset_raw(dataset_id)
+        raw = canonical_raw if canonical_raw.exists() else resolve_legacy(row["legacy_raw_path"])
         if raw and raw.exists():
             raw_base = paths.data / "raw" / ("geo" if dataset_id.startswith("GSE") else "local") / dataset_id
-            links.append((raw_base / "legacy_source", raw, "raw_legacy_source"))
+            legacy_source = canonical_raw / "legacy_source"
+            source = legacy_source if legacy_source.exists() else canonical_raw / "source"
+            if not source.exists():
+                source = raw
+            links.append((raw_base / "legacy_source", source, "raw_legacy_source"))
             for legacy_name, canonical_name in (
                 ("matrix", "geo_matrix"),
                 ("suppl", "supplementary"),
                 ("metadata", "metadata"),
                 ("fastq", "fastq_legacy_mixed"),
             ):
-                candidate = raw / legacy_name
+                candidate = source / legacy_name
                 if candidate.exists():
                     links.append((raw_base / canonical_name, candidate, f"raw_{canonical_name}"))
-        processed = resolve_legacy(row["processed_h5ad_path"])
+        canonical_current = paths.dataset_current_h5ad(dataset_id)
+        processed = (
+            canonical_current
+            if canonical_current.exists()
+            else resolve_legacy(row["processed_h5ad_path"])
+        )
         if processed and processed.exists():
             links.append(
                 (
@@ -59,7 +75,12 @@ def planned_links(paths: ProjectPaths, rows: list[dict[str, str]]) -> list[tuple
                     "processed_current_h5ad",
                 )
             )
-        scanpy_project = paths.legacy_scanpy_projects / dataset_id
+        canonical_scanpy = canonical_root / "interim" / "scanpy_project"
+        scanpy_project = (
+            canonical_scanpy
+            if canonical_scanpy.exists()
+            else paths.legacy_scanpy_projects / dataset_id
+        )
         if scanpy_project.exists():
             links.append(
                 (
@@ -71,13 +92,15 @@ def planned_links(paths: ProjectPaths, rows: list[dict[str, str]]) -> list[tuple
     return links
 
 
-def create_link(link: Path, target: Path) -> str:
+def create_link(link: Path, target: Path, replace_generated: bool) -> str:
     link.parent.mkdir(parents=True, exist_ok=True)
     relative_target = os.path.relpath(target, start=link.parent)
     if link.is_symlink():
-        if link.resolve() == target.resolve():
+        if link.resolve() == target.resolve() and not replace_generated:
             return "already_correct"
-        raise FileExistsError(f"Refusing to replace mismatched symlink: {link}")
+        if not replace_generated:
+            raise FileExistsError(f"Refusing to replace mismatched symlink: {link}")
+        link.unlink()
     if link.exists():
         raise FileExistsError(f"Refusing to replace existing path: {link}")
     link.symlink_to(relative_target, target_is_directory=target.is_dir())
@@ -99,7 +122,7 @@ def main() -> int:
     for link, target, role in links:
         status = "planned"
         if args.apply:
-            status = create_link(link, target)
+            status = create_link(link, target, args.replace_generated_links)
         elif args.verify:
             status = verify_link(link, target)
         manifest.append(

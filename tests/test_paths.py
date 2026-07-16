@@ -14,4 +14,9 @@ class ProjectPathTests(unittest.TestCase):
         paths = ProjectPaths.discover(Path(__file__))
         self.assertEqual(paths.dataset_registry.name, "datasets")
         self.assertEqual(paths.outputs.name, "Integrated_dataset")
+        self.assertEqual(paths.datasets, paths.data / "datasets")
+        self.assertEqual(
+            paths.dataset_current_h5ad("GSE144469"),
+            paths.data / "datasets" / "GSE144469" / "processed" / "current.h5ad",
+        )
         self.assertTrue(paths.integrated_h5ad.exists())
