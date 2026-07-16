@@ -78,3 +78,32 @@ Round 12 remains available at
 `Integrated_dataset/models/gdT_prediction_classifier/gdtai_v3_round12_vs_round14/round12_model.pkl`
 with SHA256
 `7373e79350f7db190c415b376b9763e31652754438ee8c5afd3853beb7b2ebc4`.
+
+## Dataset-centered physical cutover
+
+The user approved the physical pre-integration storage cutover on 2026-07-16.
+The migration used 191 same-filesystem rename operations, so source files were
+not copied or rewritten. Physical storage is now organized under:
+
+- `data/datasets/<dataset_id>/` for per-dataset raw, interim, and processed data
+- `data/shared/` for project-wide pre-integration artifacts
+- `data/compat/` for historical path trees
+
+The legacy top-level names `downloads`, `analysis_26GSE_V4`, and `newdata`
+remain compatibility aliases. Validation confirmed:
+
+- 65 canonical dataset directories
+- 44 promoted `processed/current.h5ad` links
+- 43 preselected H5AD baselines with unchanged inode, size, timestamp, sampled
+  SHA256, and HDF5 dimensions
+- 262 correct lifecycle compatibility links
+- 1,200 file-registry rows with matching canonical and legacy device/inode
+- 18 passing structural and integrity tests
+- unchanged milestone-H5AD fingerprints
+
+The ordered plan, journals, preflight, registry copies, and final validation
+are under `data/registry/migrations/dataset_centered_20260716/`. The filesystem
+checkpoint is under
+`Integrated_dataset/logs/project_reorganization/checkpoints/pre_dataset_centered_migration_20260716/`.
+The post-cutover registry snapshot is
+`data/registry/snapshots/post_dataset_centered_migration_20260716/`.

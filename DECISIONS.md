@@ -10,9 +10,13 @@
 - `obs["tissue_corrected"]` is canonical in the current integrated milestone
 - large H5AD files may remain on the mirrored SSD tree until explicit migration approval
 - tables, PNG figures, logs, scripts, and model artifacts stay on NFS
-- pre-integration data organization uses a registry-driven symlink view during
-  migration; physical raw-data moves require dataset-level full checksums and
-  explicit cutover review
+- canonical pre-integration physical storage is
+  `data/datasets/<dataset_id>/`; `data/raw`, `data/interim`, and
+  `data/processed` are lifecycle compatibility views
+- historical `downloads`, `analysis_26GSE_V4`, and `newdata` paths remain
+  supported aliases and must not be removed while legacy workflows exist
+- physical storage changes use journaled same-filesystem renames with
+  inode/hash validation and a tested reverse rollback plan
 - dataset removal means registry deactivation, not file deletion
 - `configs/models/gdtai/model_registry.csv` is authoritative for model release
   status; a directory or version-like filename alone does not imply promotion

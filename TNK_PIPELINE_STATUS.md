@@ -36,10 +36,14 @@
 
 Additional current state:
 
-- the non-destructive project reorganization is validated: active code is
-  grouped under `workflows/`, configuration under `configs/`, and the
-  pre-integration `data/` lifecycle view resolves through registry-driven
-  symlinks without changing legacy source paths or milestone H5ADs
+- the project reorganization is validated: active code is grouped under
+  `workflows/`, configuration under `configs/`, and physical pre-integration
+  data are dataset-centered under `data/datasets/<dataset_id>/`
+- the dataset-centered storage migration completed with 191 same-filesystem
+  rename operations; 65 dataset directories, 44 promoted `current.h5ad` links,
+  and 262 lifecycle compatibility links validate without failures
+- the historical `downloads`, `analysis_26GSE_V4`, and `newdata` paths remain
+  usable as compatibility aliases to the same inodes
 - the dataset registry currently contains 65 datasets and 1,785 library rows;
   all 33 Phase 0 active datasets pass strict path and library validation
 - `obs["tissue_corrected"]` is already written into the current integrated
@@ -73,6 +77,11 @@ Additional current state:
 - project reorganization:
   - `docs/REORGANIZATION_RECORD.md`
   - `Integrated_dataset/logs/project_reorganization/checkpoints/pre_reorganization_20260715/`
+- dataset-centered storage migration:
+  - `docs/DATASET_STORAGE_MIGRATION.md`
+  - `data/registry/migrations/dataset_centered_20260716/validation.json`
+  - `data/registry/snapshots/post_dataset_centered_migration_20260716/`
+  - `Integrated_dataset/logs/project_reorganization/checkpoints/pre_dataset_centered_migration_20260716/`
 - gdTAI v3 Round 12 versus Round 14 model decision:
   - `gdT_prediction/gdtai_v3_round12_vs_round14/index.html`
   - `gdT_prediction/gdtai_v3_round12_vs_round14/gdtai_v3_round12_vs_round14_report.pdf`

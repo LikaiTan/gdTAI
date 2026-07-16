@@ -2,39 +2,41 @@
 
 ## Levels
 
-1. `data/raw/`: immutable source downloads or user-supplied files.
-2. `data/interim/`: reproducible extraction, conversion, Cell Ranger, metadata,
-   barcode, and TCR-join products.
-3. `data/processed/per_dataset/`: the selected standardized H5AD for each
-   dataset before Phase 0.
+1. `data/datasets/<dataset_id>/raw/`: immutable source downloads or
+   user-supplied files.
+2. `data/datasets/<dataset_id>/interim/`: reproducible extraction, conversion,
+   Cell Ranger, metadata, barcode, and TCR-join products.
+3. `data/datasets/<dataset_id>/processed/`: versioned artifacts and the
+   selected standardized `current.h5ad` before Phase 0.
 4. `Integrated_dataset/`: merged milestones, scientific tables, figures, logs,
    and released model artifacts.
 
 Raw files are never analysis output destinations. A processed H5AD is promoted
 by registry update after validation; it is not overwritten in place.
 
-## Current migration state
+`data/raw`, `data/interim`, and `data/processed` are generated lifecycle views.
+`data/shared` contains project-wide pre-integration material, and `data/compat`
+contains historical path trees.
 
-The `data/` tree is a compatibility view over established source locations.
-Symlinks were chosen deliberately because moving terabytes of source material
-would create unnecessary downtime and rollback risk. The legacy source paths
-remain authoritative until each dataset receives a physical-migration audit.
+## Current storage state
+
+The physical cutover completed on 2026-07-16 with 191 same-filesystem renames.
+The migration did not copy or rewrite H5AD files. The historical `downloads`,
+`analysis_26GSE_V4`, and `newdata` names remain supported compatibility
+aliases.
+
+Current registry state:
+
+- 65 dataset directories
+- 44 promoted per-dataset H5ADs
+- 1,785 library rows
+- 1,200 file rows
+- 262 lifecycle compatibility links
 
 `configs/datasets/datasets.csv` records dataset membership and selected H5ADs.
-`libraries.csv` records sample/library assay scope. `files.csv` records bounded
-file roles and intended lifecycle locations. The compatibility-link manifest is
-`data/registry/compatibility_links.json`.
+`libraries.csv` records sample/library assay scope. `files.csv` records
+canonical and legacy file locations. The storage index is
+`data/registry/storage_index.csv`.
 
-## Physical cutover policy
-
-A later physical move must be performed one dataset at a time:
-
-1. Freeze the dataset registry and file manifest.
-2. Calculate full hashes for source files selected for movement.
-3. Copy to a staging directory on the target filesystem.
-4. Verify hashes and expected file counts.
-5. Atomically update registry paths and compatibility links.
-6. Run the per-dataset schema and Phase 0 checks.
-7. Retain the original until an explicit deletion approval.
-
-No physical raw-data cutover was performed during this reorganization.
+New datasets must enter through `data/datasets/<dataset_id>/`; do not place new
+physical data under a legacy alias.

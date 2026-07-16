@@ -10,6 +10,7 @@ fingerprint, and exact command/configuration.
 PY=/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python
 $PY workflows/maintenance/manage_dataset_registry.py validate --strict-libraries
 $PY workflows/maintenance/manage_dataset_registry.py snapshot <run_id>
+$PY workflows/maintenance/migrate_dataset_storage.py validate
 $PY workflows/maintenance/build_data_compatibility_view.py --verify
 ```
 

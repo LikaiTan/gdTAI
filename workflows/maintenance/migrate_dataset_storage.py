@@ -554,7 +554,24 @@ def translated_selected_paths(moves: list[StorageMove]) -> dict[str, Path]:
     for row in read_csv(PROJECT_ROOT / "configs" / "datasets" / "datasets.csv"):
         value = row["processed_h5ad_path"].strip()
         if value:
-            selected[row["dataset_id"]] = translate_path(Path(value), PROJECT_ROOT, moves)
+            registered = Path(value)
+            if not registered.is_absolute():
+                registered = PROJECT_ROOT / registered
+            selected[row["dataset_id"]] = (
+                registered.resolve()
+                if registered.is_symlink()
+                else translate_path(registered, PROJECT_ROOT, moves)
+            )
+
+    fallback_candidates: dict[str, list[Path]] = {}
+    for move in moves:
+        if move.dataset_id and move.role == "standalone_processed_h5ad":
+            fallback_candidates.setdefault(move.dataset_id, []).append(
+                PROJECT_ROOT / move.new_path
+            )
+    for dataset_id, candidates in fallback_candidates.items():
+        if dataset_id not in selected and len(candidates) == 1:
+            selected[dataset_id] = candidates[0]
     return selected
 
 

@@ -37,6 +37,8 @@ After cutover:
   dataset-centered location
 - old scripts and notebooks therefore continue to resolve the same file inode
 - new workflows use the dataset registry and `ProjectPaths`
+- a sole unambiguous standalone dataset H5AD is promoted to
+  `processed/current.h5ad` during finalization
 
 No H5AD is rewritten. The migration uses same-filesystem `rename(2)` operations.
 
@@ -83,3 +85,16 @@ It contains:
 The broader filesystem and Git checkpoint is:
 
 `Integrated_dataset/logs/project_reorganization/checkpoints/pre_dataset_centered_migration_20260716/`
+
+The validated post-cutover registry snapshot is:
+
+`data/registry/snapshots/post_dataset_centered_migration_20260716/`
+
+## Validated Result
+
+- 191 physical rename-and-link operations
+- 65 canonical dataset directories
+- 44 promoted `processed/current.h5ad` links
+- 262 correct lifecycle compatibility links
+- 1,200 canonical/legacy file-registry inode matches
+- zero failures in `validation.json`

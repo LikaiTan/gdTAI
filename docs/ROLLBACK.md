@@ -1,7 +1,8 @@
 # Rollback Procedure
 
 The reorganization is reversible because scientific files were not rewritten,
-legacy data paths remain present, and every file move has a checksum map.
+legacy data paths remain available through compatibility links, and every file
+move has an inode-checked reverse plan.
 
 ## Code and configuration rollback
 
@@ -41,11 +42,23 @@ $PY workflows/maintenance/manage_dataset_registry.py restore <run_id> --confirm
 The command verifies snapshot hashes and creates another backup before changing
 the live registry.
 
-## Data-view rollback
+## Dataset-storage rollback
 
-The `data/` tree contains generated symlinks. Stopping use of that view is
-sufficient; legacy paths were never removed. Do not recursively delete source
-targets. Rebuild or verify links from the registry when needed.
+Run the physical rollback before reverting the migration code:
+
+```bash
+$PY workflows/maintenance/migrate_dataset_storage.py rollback --confirm
+```
+
+This reverses the 191 operations in descending order, restores the
+`pre_dataset_centered_migration_20260716` registry snapshot, rebuilds the prior
+lifecycle links, and writes a rollback journal. It only removes generated
+metadata, symlinks, and empty canonical directories; unexpected content is
+reported rather than deleted.
+
+Do not recursively delete `data/datasets`, `data/shared`, or `data/compat`.
+Migration evidence is under
+`data/registry/migrations/dataset_centered_20260716/`.
 
 ## Scientific milestone rollback
 

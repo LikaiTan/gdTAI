@@ -52,11 +52,18 @@
 - shared Python utilities: `src/tnk_atlas/`
 - dataset registries: `configs/datasets/`
 - metadata and assay configuration: `configs/`
-- pre-integration lifecycle view: `data/`
+- physical per-dataset inputs: `data/datasets/<dataset_id>/`
+- shared pre-integration artifacts: `data/shared/`
+- legacy path trees: `data/compat/`
+- lifecycle compatibility views: `data/raw/`, `data/interim/`, and
+  `data/processed/`
+- storage index: `data/registry/storage_index.csv`
 - model release registry: `configs/models/gdtai/model_registry.csv`
 - reader-facing report index: `reports/`
 - retired code and records: `archive/`
 - migration plans and checksum maps: `maintenance/reorganization/`
+- physical storage migration evidence:
+  `data/registry/migrations/dataset_centered_20260716/`
 - reproducibility and rollback guides: `docs/`
 
 ## Current review packages

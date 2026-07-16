@@ -30,9 +30,13 @@ points remain directly executable to avoid forcing a large package refactor.
 
 ## Data and outputs
 
-`data/` is the pre-integration lifecycle view. `Integrated_dataset/` remains
-the canonical output root required by the runbook. Large milestone H5ADs can
-remain on the approved SSD mirror through `high_speed_temp/Integrated_dataset`.
+`data/datasets/<dataset_id>/` is the physical pre-integration home for each
+study. `data/shared/` stores project-wide pre-integration artifacts,
+`data/compat/` preserves legacy path trees, and `data/raw`, `data/interim`, and
+`data/processed` provide lifecycle-oriented views. `Integrated_dataset/`
+remains the canonical output root required by the runbook. Large milestone
+H5ADs can remain on the approved SSD mirror through
+`high_speed_temp/Integrated_dataset`.
 
 `reports/` describes curated reader-facing packages. Existing
 `gdT_prediction/` and `gdT_atlas/` paths remain stable for the port 8000 static

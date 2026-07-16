@@ -29,6 +29,15 @@
   - Round 14 selected as the balanced default by prespecified guardrails and
     mean F1
   - Round 12 retained as the validated high-purity fallback
+- dataset-centered physical storage migration completed on 2026-07-16
+  - 191 same-filesystem rename operations completed without copying or
+    rewriting H5AD files
+  - 65 datasets organized under `data/datasets/<dataset_id>/`
+  - 44 selected H5ADs promoted through `processed/current.h5ad`
+  - 262 lifecycle links and all historical top-level paths retained
+  - all 1,200 file-registry rows resolve to identical canonical/legacy inodes
+  - rollback plan, journals, registry snapshot, and validation evidence stored
+    under `data/registry/migrations/dataset_centered_20260716/`
 
 ## Current working era
 
