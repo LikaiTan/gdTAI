@@ -4,9 +4,12 @@ import unittest
 
 from tnk_atlas.storage import (
     StorageMove,
+    apply_absolute_move_with_link,
     apply_move,
+    rollback_absolute_move,
     rollback_move,
     translate_path,
+    validate_absolute_move,
     validate_move,
 )
 
@@ -118,3 +121,43 @@ class StorageMigrationTests(unittest.TestCase):
             self.assertEqual(rollback_move(root, root_move), "rolled_back")
             self.assertTrue(child.is_dir())
             self.assertFalse(legacy_root.is_symlink())
+
+    def test_absolute_workspace_move_and_rollback(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "outside" / "study"
+            source.mkdir(parents=True)
+            (source / "result.h5ad").write_bytes(b"h5ad")
+            destination = root / "project" / "data" / "datasets" / "STUDY" / "workspace"
+            stat = source.stat()
+
+            self.assertEqual(
+                apply_absolute_move_with_link(
+                    source,
+                    destination,
+                    expected_device=stat.st_dev,
+                    expected_inode=stat.st_ino,
+                ),
+                "applied",
+            )
+            self.assertEqual(source.resolve(), destination.resolve())
+            self.assertFalse(
+                validate_absolute_move(
+                    source,
+                    destination,
+                    expected_device=stat.st_dev,
+                    expected_inode=stat.st_ino,
+                )
+            )
+            self.assertEqual(
+                rollback_absolute_move(
+                    source,
+                    destination,
+                    expected_device=stat.st_dev,
+                    expected_inode=stat.st_ino,
+                ),
+                "rolled_back",
+            )
+            self.assertTrue(source.is_dir())
+            self.assertFalse(source.is_symlink())
+            self.assertFalse(destination.exists())

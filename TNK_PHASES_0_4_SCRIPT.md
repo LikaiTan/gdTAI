@@ -899,3 +899,38 @@ Standard behavior:
 - preserve selected-H5AD sampled hashes, HDF5 dimensions, size, and timestamps
 - run `finalize --confirm` only after all physical moves validate
 - retain a registry snapshot and reverse journal for `rollback --confirm`
+
+## Local external cohort intake: BALF_BLOOD_COPD
+
+Objective:
+
+- register the four-library BALF/PBMC study used for independent gdTAI
+  validation as dataset `BALF_BLOOD_COPD`
+- preserve the complete original study workspace and all historical absolute
+  paths
+- keep the cohort validation-only unless atlas integration is separately
+  approved
+
+Phase or task:
+
+- Dataset-centered intake of the independent BALF/PBMC COPD validation cohort
+
+Exact `.py` script:
+
+- `workflows/maintenance/migrate_balf_blood_copd_dataset.py`
+
+Core outputs:
+
+- `data/datasets/BALF_BLOOD_COPD/workspace/`
+- `data/datasets/BALF_BLOOD_COPD/processed/current.h5ad`
+- `data/registry/migrations/balf_blood_copd_20260716/`
+- dataset, library, file, and storage-index registry entries
+- compatibility link at `/home/tanlikai/databank/owndata/singlecell`
+
+Standard behavior:
+
+- move the complete workspace with one same-filesystem rename
+- retain `/home/tanlikai/databank/owndata/singlecell` as a compatibility link
+- fingerprint the selected H5AD, four filtered matrices, four raw matrices,
+  harmonized TCR table, and two demultiplexing tables
+- register `LIB1`-`LIB4` as inactive validation-only libraries

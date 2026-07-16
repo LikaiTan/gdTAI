@@ -209,6 +209,102 @@ def rollback_move(root: Path, move: StorageMove) -> str:
     raise RuntimeError(f"Cannot safely roll back {old} <- {new}")
 
 
+def apply_absolute_move_with_link(
+    source: Path,
+    destination: Path,
+    *,
+    expected_device: int,
+    expected_inode: int,
+) -> str:
+    """Move an absolute directory and leave its original path as a link."""
+    if source.is_symlink():
+        if not destination.exists() or source.resolve() != destination.resolve():
+            raise RuntimeError(f"Compatibility link has the wrong target: {source}")
+        stat = destination.stat()
+        if stat.st_dev != expected_device or stat.st_ino != expected_inode:
+            raise RuntimeError(f"Destination inode differs from the plan: {destination}")
+        return "already_applied"
+
+    if source.exists() and destination.exists():
+        raise FileExistsError(f"Both source and destination exist: {source}, {destination}")
+
+    if source.exists():
+        stat = source.stat()
+        if stat.st_dev != expected_device or stat.st_ino != expected_inode:
+            raise RuntimeError(f"Source inode differs from the plan: {source}")
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        os.rename(source, destination)
+        try:
+            create_compatibility_link(source, destination)
+        except Exception:
+            if not source.exists() and destination.exists():
+                os.rename(destination, source)
+            raise
+        return "applied"
+
+    if destination.exists():
+        stat = destination.stat()
+        if stat.st_dev != expected_device or stat.st_ino != expected_inode:
+            raise RuntimeError(f"Destination inode differs from the plan: {destination}")
+        create_compatibility_link(source, destination)
+        return "recovered_link"
+
+    raise FileNotFoundError(
+        f"Neither source nor destination workspace exists: {source}, {destination}"
+    )
+
+
+def validate_absolute_move(
+    source: Path,
+    destination: Path,
+    *,
+    expected_device: int,
+    expected_inode: int,
+) -> list[str]:
+    errors: list[str] = []
+    if not source.is_symlink():
+        errors.append(f"legacy workspace path is not a symlink: {source}")
+    if not destination.is_dir():
+        errors.append(f"canonical workspace is missing: {destination}")
+        return errors
+    if source.is_symlink() and source.resolve() != destination.resolve():
+        errors.append(f"legacy workspace target mismatch: {source}")
+    stat = destination.stat()
+    if stat.st_dev != expected_device or stat.st_ino != expected_inode:
+        errors.append(f"workspace inode mismatch: {destination}")
+    return errors
+
+
+def rollback_absolute_move(
+    source: Path,
+    destination: Path,
+    *,
+    expected_device: int,
+    expected_inode: int,
+) -> str:
+    """Restore an absolute workspace. Generated children must be removed first."""
+    if source.exists() and not source.is_symlink() and not destination.exists():
+        stat = source.stat()
+        if stat.st_dev != expected_device or stat.st_ino != expected_inode:
+            raise RuntimeError(f"Restored workspace inode differs from the plan: {source}")
+        return "already_rolled_back"
+
+    if source.is_symlink():
+        if not destination.exists() or source.resolve() != destination.resolve():
+            raise RuntimeError(f"Refusing to remove a mismatched link: {source}")
+        source.unlink()
+        source.parent.mkdir(parents=True, exist_ok=True)
+        os.rename(destination, source)
+        return "rolled_back"
+
+    if not source.exists() and destination.exists():
+        source.parent.mkdir(parents=True, exist_ok=True)
+        os.rename(destination, source)
+        return "recovered_source"
+
+    raise RuntimeError(f"Cannot safely roll back {source} <- {destination}")
+
+
 def translate_path(path: Path, root: Path, moves: Iterable[StorageMove]) -> Path:
     """Translate a pre-migration path to its canonical post-migration location."""
     absolute = path if path.is_absolute() else root / path
