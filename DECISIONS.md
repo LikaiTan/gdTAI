@@ -30,9 +30,12 @@
 - `BALF_BLOOD_COPD` is validation-only and must remain inactive for Phase 0,
   milestone integration, and extended-atlas integration unless the user
   separately approves a role change
-- `/home/tanlikai/databank/owndata/singlecell` remains a supported
-  compatibility alias so the cohort's original scripts and RStudio project
-  paths continue to work
+- `BALF_BLOOD_COPD` raw and interim files remain physically under
+  `/home/tanlikai/databank/owndata/singlecell`; only the selected validation
+  H5AD is physically retained inside this project
+- the historical external H5AD path remains a supported compatibility link to
+  the project-managed artifact so the cohort's original scripts and RStudio
+  project paths continue to work
 - repaired TCR propagation is approved for these ten GSEs:
   - `GSE188620`
   - `GSE212217`

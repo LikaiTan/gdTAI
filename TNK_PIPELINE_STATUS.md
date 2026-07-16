@@ -41,14 +41,19 @@ Additional current state:
   data are dataset-centered under `data/datasets/<dataset_id>/`
 - the base dataset-centered storage migration completed with 191
   same-filesystem rename operations
-- the independent `BALF_BLOOD_COPD` validation workspace was subsequently
-  added with one atomic same-filesystem rename; the current storage view has
-  66 dataset directories, 45 promoted `current.h5ad` links, and 264 lifecycle
-  compatibility links
+- the independent `BALF_BLOOD_COPD` validation cohort was subsequently
+  registered; its storage was refined so the approximately 949 GB raw/interim
+  workspace remains at its original location and only the 2,110,825,599-byte
+  validation H5AD is physically stored in the project
+- the current storage view has 66 dataset directories, 45 promoted
+  `current.h5ad` links, and 264 lifecycle compatibility links
 - the historical `downloads`, `analysis_26GSE_V4`, and `newdata` paths remain
   usable as compatibility aliases to the same inodes
-- the historical `/home/tanlikai/databank/owndata/singlecell` path remains a
-  compatibility alias to `data/datasets/BALF_BLOOD_COPD/workspace`
+- `/home/tanlikai/databank/owndata/singlecell` is again the physical
+  `BALF_BLOOD_COPD` raw/interim workspace; the project raw path is a
+  compatibility link to it
+- the historical external H5AD path is a compatibility link to
+  `data/datasets/BALF_BLOOD_COPD/processed/artifacts/phase4_final_annotated.h5ad`
 - the dataset registry currently contains 66 datasets and 1,789 library rows;
   all 33 Phase 0 active datasets pass strict path and library validation
 - `BALF_BLOOD_COPD` is registered as
@@ -94,6 +99,8 @@ Additional current state:
   - `docs/BALF_BLOOD_COPD_INTAKE.md`
   - `data/registry/migrations/balf_blood_copd_20260716/validation.json`
   - `data/registry/snapshots/post_balf_blood_copd_intake_20260716/`
+  - `data/registry/migrations/balf_blood_copd_h5ad_only_20260716/validation.json`
+  - `data/registry/snapshots/post_balf_blood_copd_h5ad_only_20260716/`
 - gdTAI v3 Round 12 versus Round 14 model decision:
   - `gdT_prediction/gdtai_v3_round12_vs_round14/index.html`
   - `gdT_prediction/gdtai_v3_round12_vs_round14/gdtai_v3_round12_vs_round14_report.pdf`

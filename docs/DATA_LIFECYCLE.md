@@ -34,14 +34,18 @@ Current registry state:
 - 264 lifecycle compatibility links
 
 The additional dataset is `BALF_BLOOD_COPD`, an independent external
-validation cohort. Its complete legacy workspace is physically stored under
-`data/datasets/BALF_BLOOD_COPD/workspace/`, while the selected object is
-available through the standard `processed/current.h5ad` path.
+validation cohort. Its approximately 949 GB raw/interim workspace remains
+physically under `/home/tanlikai/databank/owndata/singlecell`. The project raw
+entry is a compatibility view of that workspace, while only the selected
+2,110,825,599-byte validation H5AD is physically retained under
+`data/datasets/BALF_BLOOD_COPD/processed/`.
 
 `configs/datasets/datasets.csv` records dataset membership and selected H5ADs.
 `libraries.csv` records sample/library assay scope. `files.csv` records
 canonical and legacy file locations. The storage index is
 `data/registry/storage_index.csv`.
 
-New datasets must enter through `data/datasets/<dataset_id>/`; do not place new
-physical data under a legacy alias.
+New datasets normally enter through `data/datasets/<dataset_id>/`. An external
+physical workspace requires an explicit runbook exception, registry entries,
+compatibility links, and validation evidence such as the approved
+`BALF_BLOOD_COPD` H5AD-only layout.

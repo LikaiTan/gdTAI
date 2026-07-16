@@ -103,12 +103,22 @@ The validated post-cutover registry snapshot is:
 
 The independent `BALF_BLOOD_COPD` study was added after the base migration
 using the same rename, compatibility-link, registry-snapshot, and validation
-contract. The current storage state is:
+contract. At the user's request, a second journaled migration then restored
+the raw/interim workspace to its original location and retained only the
+selected validation H5AD physically inside the project.
+
+The current storage state is:
 
 - 66 canonical dataset directories
 - 45 promoted `processed/current.h5ad` links
 - 264 correct lifecycle compatibility links
 - 1,212 file-registry rows
+- approximately 949 GB of `BALF_BLOOD_COPD` raw/interim files at
+  `/home/tanlikai/databank/owndata/singlecell`
+- one 2,110,825,599-byte physical `BALF_BLOOD_COPD` H5AD under the project
+- no `data/datasets/BALF_BLOOD_COPD/workspace/` directory
 
-Its dedicated evidence is under
-`data/registry/migrations/balf_blood_copd_20260716/`.
+Its intake evidence is under
+`data/registry/migrations/balf_blood_copd_20260716/`. The current H5AD-only
+storage evidence is under
+`data/registry/migrations/balf_blood_copd_h5ad_only_20260716/`.

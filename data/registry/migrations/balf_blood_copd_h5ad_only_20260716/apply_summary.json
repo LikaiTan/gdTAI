@@ -1,0 +1,8 @@
+{
+  "canonical_h5ad": "data/datasets/BALF_BLOOD_COPD/processed/artifacts/phase4_final_annotated.h5ad",
+  "completed_at": "2026-07-16T22:57:36.275795+08:00",
+  "dataset_id": "BALF_BLOOD_COPD",
+  "external_workspace": "/home/tanlikai/databank/owndata/singlecell",
+  "migration_id": "balf_blood_copd_h5ad_only_20260716",
+  "status": "applied"
+}

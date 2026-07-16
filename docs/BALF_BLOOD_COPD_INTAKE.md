@@ -22,7 +22,11 @@ The complete raw/interim study workspace remains physically at:
 `/home/tanlikai/databank/owndata/singlecell`
 
 The selected validation object is the only physical cohort data file retained
-inside this project:
+inside this project. Its artifact path is:
+
+`data/datasets/BALF_BLOOD_COPD/processed/artifacts/phase4_final_annotated.h5ad`
+
+The standard selected-object link is:
 
 `data/datasets/BALF_BLOOD_COPD/processed/current.h5ad`
 
@@ -59,26 +63,36 @@ $PY workflows/maintenance/relocate_balf_blood_copd_raw_workspace.py finalize --c
 $PY workflows/maintenance/relocate_balf_blood_copd_raw_workspace.py validate
 ```
 
-Rollback the physical move and restore the pre-intake registries:
+Rollback the storage refinement and restore the preceding
+full-workspace-in-project layout:
 
 ```bash
 $PY workflows/maintenance/relocate_balf_blood_copd_raw_workspace.py rollback --confirm
 ```
 
-After rollback, revert the associated Git commit so active gdTAI defaults again
-match the restored filesystem state.
+After rollback, revert the associated H5AD-only migration Git commit so the
+registries and documentation match the restored filesystem state.
 
 ## Validation Evidence
 
 - migration state:
   `data/registry/migrations/balf_blood_copd_20260716/`
+- H5AD-only storage migration state:
+  `data/registry/migrations/balf_blood_copd_h5ad_only_20260716/`
 - pre-intake registry snapshot:
   `data/registry/snapshots/pre_balf_blood_copd_intake_20260716/`
 - post-intake registry snapshot:
   `data/registry/snapshots/post_balf_blood_copd_intake_20260716/`
+- pre-H5AD-only registry snapshot:
+  `data/registry/snapshots/pre_balf_blood_copd_h5ad_only_20260716/`
+- post-H5AD-only registry snapshot:
+  `data/registry/snapshots/post_balf_blood_copd_h5ad_only_20260716/`
 - 12 fingerprinted sentinels passed
-- workspace device and inode were preserved
+- raw/interim workspace inode `24644876` was preserved
 - old and canonical selected-H5AD paths resolve inode `25179089`
+- selected H5AD size is `2,110,825,599` bytes
+- the original raw/interim workspace occupies approximately 949 GB; the
+  project-local cohort footprint is approximately 2.0 GB
 - strict registry validation passed with 66 datasets and 33 active datasets
 - all 264 lifecycle compatibility links passed
 

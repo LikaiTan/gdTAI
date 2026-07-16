@@ -50,6 +50,18 @@
     for atlas integration
   - 12 selected raw, interim, TCR, demultiplexing, and H5AD sentinels validated
     without failures
+- `BALF_BLOOD_COPD` storage refined on 2026-07-16 at user request
+  - raw, FASTQ, BAM, matrix, TCR, demultiplexing, and other interim files
+    restored to the original `/home/tanlikai/databank/owndata/singlecell`
+    workspace with its directory inode preserved
+  - only the 2,110,825,599-byte validation H5AD remains physically under
+    `data/datasets/BALF_BLOOD_COPD/processed/artifacts/`
+  - the H5AD was relocated by a same-filesystem rename with its inode,
+    timestamp, dimensions, and sampled SHA256 preserved
+  - project raw access and the historical external H5AD path remain valid
+    through compatibility links
+  - strict registries, all 264 lifecycle links, 12 sentinels, and active
+    workflow path resolution validated without failures
 
 ## Current working era
 
