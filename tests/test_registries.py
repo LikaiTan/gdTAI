@@ -13,7 +13,7 @@ class RegistryTests(unittest.TestCase):
     def test_dataset_registry_is_valid(self) -> None:
         result = validate_dataset_registry(REGISTRY / "datasets.csv", ROOT)
         self.assertTrue(result.ok)
-        self.assertEqual(result.dataset_count, 65)
+        self.assertEqual(result.dataset_count, 66)
         self.assertEqual(result.active_dataset_count, 33)
 
     def test_every_dataset_has_curated_library_rows(self) -> None:
@@ -26,3 +26,29 @@ class RegistryTests(unittest.TestCase):
             and row["library_id"] == "__dataset_level_pending_curation__"
         ]
         self.assertFalse(placeholders)
+
+    def test_balf_blood_copd_is_validation_only(self) -> None:
+        datasets = {
+            row["dataset_id"]: row
+            for row in read_csv(REGISTRY / "datasets.csv")
+        }
+        row = datasets["BALF_BLOOD_COPD"]
+        self.assertEqual(row["integration_role"], "gdTAI_independent_external_validation")
+        self.assertEqual(row["phase0_active"], "false")
+        self.assertEqual(row["current_milestone_active"], "false")
+        self.assertEqual(row["extended_atlas_active"], "false")
+        current = ROOT / row["processed_h5ad_path"]
+        self.assertTrue(current.is_file())
+        self.assertEqual(
+            current.resolve(),
+            (
+                ROOT
+                / "data"
+                / "datasets"
+                / "BALF_BLOOD_COPD"
+                / "workspace"
+                / "data"
+                / "results"
+                / "phase4_final_annotated.h5ad"
+            ).resolve(),
+        )

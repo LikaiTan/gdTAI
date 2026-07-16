@@ -92,9 +92,11 @@ from run_gdt_prediction_package_evaluation import (
     read_obs_column,
     read_string_dataset,
 )
+from tnk_atlas.paths import ProjectPaths
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_PATHS = ProjectPaths.discover(PROJECT_ROOT)
 OUTPUT_ROOT = PROJECT_ROOT / "Integrated_dataset"
 STATIC_DIR = PROJECT_ROOT / "gdT_prediction"
 OUT_PREFIX = "gdtai_v3_trdc_nk_guard"
@@ -109,7 +111,7 @@ REPORT_PDF = STATIC_DIR / "gdtai_v3_trdc_nk_guard_report.pdf"
 RUN_LOG = LOG_DIR / "run.log"
 SUMMARY_JSON = LOG_DIR / "gdtai_v3_trdc_nk_guard_summary.json"
 
-EXTERNAL_H5AD = Path("/home/tanlikai/databank/owndata/singlecell/data/results/phase4_final_annotated.h5ad")
+EXTERNAL_H5AD = PROJECT_PATHS.dataset_current_h5ad("BALF_BLOOD_COPD")
 V2_WRAPPER = OUTPUT_ROOT / "models" / "gdT_prediction_classifier" / "gdTAI_v2.0" / "gdTAI_v2_model.pkl"
 
 TARGET_SUM = 10_000.0

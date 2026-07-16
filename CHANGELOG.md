@@ -38,6 +38,18 @@
   - all 1,200 file-registry rows resolve to identical canonical/legacy inodes
   - rollback plan, journals, registry snapshot, and validation evidence stored
     under `data/registry/migrations/dataset_centered_20260716/`
+- independent `BALF_BLOOD_COPD` validation cohort intake completed on
+  2026-07-16
+  - complete 951 GB study workspace moved intact with one same-filesystem
+    rename into `data/datasets/BALF_BLOOD_COPD/workspace/`
+  - historical `/home/tanlikai/databank/owndata/singlecell` path retained as a
+    compatibility symlink to the same directory inode
+  - 46,273-cell validation H5AD exposed through
+    `data/datasets/BALF_BLOOD_COPD/processed/current.h5ad`
+  - four 10x 5' BALF/PBMC libraries registered as validation-only and inactive
+    for atlas integration
+  - 12 selected raw, interim, TCR, demultiplexing, and H5AD sentinels validated
+    without failures
 
 ## Current working era
 

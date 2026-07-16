@@ -8,6 +8,8 @@ This is the promoted balanced gdTAI v3 package.
 - Input transform: `log1p(raw counts per 10,000)`
 - Features: 210 genes plus 16 engineered expression features
 - Comparison decision: `gdT_prediction/gdtai_v3_round12_vs_round14/index.html`
+- Independent validation dataset: `BALF_BLOOD_COPD`
+- Validation H5AD: `data/datasets/BALF_BLOOD_COPD/processed/current.h5ad`
 
 ## Headline Metrics
 

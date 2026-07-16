@@ -24,6 +24,15 @@
   checksum-pinned revalidation against Round 12 on 2026-07-15
 - gdTAI v3 Round 12 at threshold `0.5` is retained as the validated high-purity
   fallback and is not the canonical default
+- the independent BALF/PBMC COPD cohort is registered as
+  `BALF_BLOOD_COPD`; its canonical H5AD is
+  `data/datasets/BALF_BLOOD_COPD/processed/current.h5ad`
+- `BALF_BLOOD_COPD` is validation-only and must remain inactive for Phase 0,
+  milestone integration, and extended-atlas integration unless the user
+  separately approves a role change
+- `/home/tanlikai/databank/owndata/singlecell` remains a supported
+  compatibility alias so the cohort's original scripts and RStudio project
+  paths continue to work
 - repaired TCR propagation is approved for these ten GSEs:
   - `GSE188620`
   - `GSE212217`

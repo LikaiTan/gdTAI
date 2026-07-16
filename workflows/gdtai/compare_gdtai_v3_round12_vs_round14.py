@@ -1381,6 +1381,10 @@ def promote_selected_package(
         "promotion_date_local": "2026-07-15 Asia/Hong_Kong",
         "comparison_report": "gdT_prediction/gdtai_v3_round12_vs_round14/index.html",
         "comparison_workflow": "workflows/gdtai/compare_gdtai_v3_round12_vs_round14.py",
+        "external_validation_dataset_id": "BALF_BLOOD_COPD",
+        "external_validation_h5ad": (
+            "data/datasets/BALF_BLOOD_COPD/processed/current.h5ad"
+        ),
         "requires_counts_layer_for_external_h5ad": True,
         "normalization": "log1p(counts per 10000)",
         "n_gene_features": 210,
@@ -1464,6 +1468,8 @@ This is the promoted balanced gdTAI v3 package.
 - Input transform: `log1p(raw counts per 10,000)`
 - Features: 210 genes plus 16 engineered expression features
 - Comparison decision: `gdT_prediction/gdtai_v3_round12_vs_round14/index.html`
+- Independent validation dataset: `BALF_BLOOD_COPD`
+- Validation H5AD: `data/datasets/BALF_BLOOD_COPD/processed/current.h5ad`
 
 ## Headline Metrics
 

@@ -27,11 +27,16 @@ aliases.
 
 Current registry state:
 
-- 65 dataset directories
-- 44 promoted per-dataset H5ADs
-- 1,785 library rows
-- 1,200 file rows
-- 262 lifecycle compatibility links
+- 66 dataset directories
+- 45 promoted per-dataset H5ADs
+- 1,789 library rows
+- 1,212 file rows
+- 264 lifecycle compatibility links
+
+The additional dataset is `BALF_BLOOD_COPD`, an independent external
+validation cohort. Its complete legacy workspace is physically stored under
+`data/datasets/BALF_BLOOD_COPD/workspace/`, while the selected object is
+available through the standard `processed/current.h5ad` path.
 
 `configs/datasets/datasets.csv` records dataset membership and selected H5ADs.
 `libraries.csv` records sample/library assay scope. `files.csv` records

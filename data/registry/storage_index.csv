@@ -1,4 +1,5 @@
 dataset_id,canonical_dataset_path,raw_exists,interim_exists,current_h5ad,legacy_raw_path
+BALF_BLOOD_COPD,data/datasets/BALF_BLOOD_COPD,true,false,data/datasets/BALF_BLOOD_COPD/processed/current.h5ad,/home/tanlikai/databank/owndata/singlecell
 GDT_2020AUG_woCOV,data/datasets/GDT_2020AUG_woCOV,true,false,data/datasets/GDT_2020AUG_woCOV/processed/current.h5ad,newdata/Sorted_gdT
 GDTlung2023july_7p,data/datasets/GDTlung2023july_7p,true,false,data/datasets/GDTlung2023july_7p/processed/current.h5ad,newdata/Sorted_gdT
 GSE123813,data/datasets/GSE123813,true,false,,downloads/GSE123813

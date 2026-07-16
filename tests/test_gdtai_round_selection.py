@@ -27,6 +27,14 @@ class GdtaiRoundSelectionTests(unittest.TestCase):
         self.assertEqual(manifest["model_name"], "v3_round14_v2_score_trdc_gate_fixed_0p936")
         self.assertEqual(manifest["model_sha256"], R14_SHA256)
         self.assertEqual(float(manifest["threshold"]), 0.936)
+        self.assertEqual(
+            manifest["external_validation_dataset_id"],
+            "BALF_BLOOD_COPD",
+        )
+        self.assertEqual(
+            manifest["external_validation_h5ad"],
+            "data/datasets/BALF_BLOOD_COPD/processed/current.h5ad",
+        )
 
     def test_comparison_decision_and_cache_checks(self) -> None:
         decision = json.loads((TABLE_DIR / "promotion_decision.json").read_text(encoding="utf-8"))

@@ -107,3 +107,18 @@ checkpoint is under
 `Integrated_dataset/logs/project_reorganization/checkpoints/pre_dataset_centered_migration_20260716/`.
 The post-cutover registry snapshot is
 `data/registry/snapshots/post_dataset_centered_migration_20260716/`.
+
+## Subsequent BALF_BLOOD_COPD intake
+
+On 2026-07-16, the independent four-library BALF/PBMC validation study was
+added as `BALF_BLOOD_COPD`. Its complete 951 GB workspace was moved intact by
+one same-filesystem rename to
+`data/datasets/BALF_BLOOD_COPD/workspace/`. The prior absolute path remains a
+compatibility symlink, so existing study scripts and RStudio paths still
+resolve the same files.
+
+The selected H5AD contains 46,273 cells and 15,681 genes and is exposed at
+`data/datasets/BALF_BLOOD_COPD/processed/current.h5ad`. The dataset and all
+four library rows are validation-only and inactive for integration. Twelve
+sentinel files, the workspace inode, 264 lifecycle links, strict registries,
+and the selected H5AD identity all validated without failures.

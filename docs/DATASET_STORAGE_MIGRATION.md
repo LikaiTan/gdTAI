@@ -98,3 +98,17 @@ The validated post-cutover registry snapshot is:
 - 262 correct lifecycle compatibility links
 - 1,200 canonical/legacy file-registry inode matches
 - zero failures in `validation.json`
+
+## Subsequent External Cohort Intake
+
+The independent `BALF_BLOOD_COPD` study was added after the base migration
+using the same rename, compatibility-link, registry-snapshot, and validation
+contract. The current storage state is:
+
+- 66 canonical dataset directories
+- 45 promoted `processed/current.h5ad` links
+- 264 correct lifecycle compatibility links
+- 1,212 file-registry rows
+
+Its dedicated evidence is under
+`data/registry/migrations/balf_blood_copd_20260716/`.

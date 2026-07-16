@@ -1,6 +1,18 @@
 [
   {
     "role": "raw_legacy_source",
+    "link_path": "data/raw/local/BALF_BLOOD_COPD/legacy_source",
+    "target_path": "data/datasets/BALF_BLOOD_COPD/raw/legacy_source",
+    "status": "created"
+  },
+  {
+    "role": "processed_current_h5ad",
+    "link_path": "data/processed/per_dataset/BALF_BLOOD_COPD/current.h5ad",
+    "target_path": "data/datasets/BALF_BLOOD_COPD/processed/current.h5ad",
+    "status": "created"
+  },
+  {
+    "role": "raw_legacy_source",
     "link_path": "data/raw/local/GDT_2020AUG_woCOV/legacy_source",
     "target_path": "data/datasets/GDT_2020AUG_woCOV/raw/source",
     "status": "created"

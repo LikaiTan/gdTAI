@@ -1,4 +1,8 @@
 dataset_id,library_id,sample_id,rna_assay,tcr_assay,tcr_scope,active,notes
+BALF_BLOOD_COPD,LIB1,LIB1,10x 5',vdj,ab_and_gd,false,BALF; multiplexed donor library. External validation only; not active for atlas integration.
+BALF_BLOOD_COPD,LIB2,LIB2,10x 5',vdj,ab_and_gd,false,BALF; multiplexed donor library. External validation only; not active for atlas integration.
+BALF_BLOOD_COPD,LIB3,LIB3,10x 5',vdj,ab_and_gd,false,PBMC; multiplexed donor library. External validation only; not active for atlas integration.
+BALF_BLOOD_COPD,LIB4,LIB4,10x 5',vdj,ab_and_gd,false,PBMC; multiplexed donor library. External validation only; not active for atlas integration.
 GDT_2020AUG_woCOV,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
 GDTlung2023july_7p,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
 GSE123813,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.

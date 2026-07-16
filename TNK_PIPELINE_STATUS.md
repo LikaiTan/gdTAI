@@ -39,13 +39,21 @@ Additional current state:
 - the project reorganization is validated: active code is grouped under
   `workflows/`, configuration under `configs/`, and physical pre-integration
   data are dataset-centered under `data/datasets/<dataset_id>/`
-- the dataset-centered storage migration completed with 191 same-filesystem
-  rename operations; 65 dataset directories, 44 promoted `current.h5ad` links,
-  and 262 lifecycle compatibility links validate without failures
+- the base dataset-centered storage migration completed with 191
+  same-filesystem rename operations
+- the independent `BALF_BLOOD_COPD` validation workspace was subsequently
+  added with one atomic same-filesystem rename; the current storage view has
+  66 dataset directories, 45 promoted `current.h5ad` links, and 264 lifecycle
+  compatibility links
 - the historical `downloads`, `analysis_26GSE_V4`, and `newdata` paths remain
   usable as compatibility aliases to the same inodes
-- the dataset registry currently contains 65 datasets and 1,785 library rows;
+- the historical `/home/tanlikai/databank/owndata/singlecell` path remains a
+  compatibility alias to `data/datasets/BALF_BLOOD_COPD/workspace`
+- the dataset registry currently contains 66 datasets and 1,789 library rows;
   all 33 Phase 0 active datasets pass strict path and library validation
+- `BALF_BLOOD_COPD` is registered as
+  `gdTAI_independent_external_validation` and remains inactive for Phase 0,
+  current-milestone integration, and extended-atlas integration
 - `obs["tissue_corrected"]` is already written into the current integrated
   milestone
 - `HRA005041` intake H5AD was rebuilt with harmonized metadata plus productive
@@ -82,6 +90,10 @@ Additional current state:
   - `data/registry/migrations/dataset_centered_20260716/validation.json`
   - `data/registry/snapshots/post_dataset_centered_migration_20260716/`
   - `Integrated_dataset/logs/project_reorganization/checkpoints/pre_dataset_centered_migration_20260716/`
+- `BALF_BLOOD_COPD` independent-validation intake:
+  - `docs/BALF_BLOOD_COPD_INTAKE.md`
+  - `data/registry/migrations/balf_blood_copd_20260716/validation.json`
+  - `data/registry/snapshots/post_balf_blood_copd_intake_20260716/`
 - gdTAI v3 Round 12 versus Round 14 model decision:
   - `gdT_prediction/gdtai_v3_round12_vs_round14/index.html`
   - `gdT_prediction/gdtai_v3_round12_vs_round14/gdtai_v3_round12_vs_round14_report.pdf`

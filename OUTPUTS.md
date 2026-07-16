@@ -64,6 +64,8 @@
 - migration plans and checksum maps: `maintenance/reorganization/`
 - physical storage migration evidence:
   `data/registry/migrations/dataset_centered_20260716/`
+- independent-validation intake evidence:
+  `data/registry/migrations/balf_blood_copd_20260716/`
 - reproducibility and rollback guides: `docs/`
 
 ## Current review packages
@@ -100,6 +102,10 @@
   - `Integrated_dataset/figures/GDT_2020AUG_woCOV_phase4/`
   - `Integrated_dataset/figures/GDTlung2023july_7p_phase4/`
   - `Integrated_dataset/figures/MalteGDT_phase4/`
+- `BALF_BLOOD_COPD` independent validation cohort:
+  - `data/datasets/BALF_BLOOD_COPD/processed/current.h5ad`
+  - `docs/BALF_BLOOD_COPD_INTAKE.md`
+  - `data/registry/migrations/balf_blood_copd_20260716/validation.json`
 - no-TCR-gene GSE carve-out:
   - `Integrated_dataset/tables/no_tcr_gene_gse_removal_counts.csv`
   - `Integrated_dataset/logs/no_tcr_gene_gse_removal.md`

@@ -12,6 +12,8 @@
   "promotion_date_local": "2026-07-15 Asia/Hong_Kong",
   "comparison_report": "gdT_prediction/gdtai_v3_round12_vs_round14/index.html",
   "comparison_workflow": "workflows/gdtai/compare_gdtai_v3_round12_vs_round14.py",
+  "external_validation_dataset_id": "BALF_BLOOD_COPD",
+  "external_validation_h5ad": "data/datasets/BALF_BLOOD_COPD/processed/current.h5ad",
   "requires_counts_layer_for_external_h5ad": true,
   "normalization": "log1p(counts per 10000)",
   "n_gene_features": 210,

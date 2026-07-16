@@ -13,6 +13,8 @@ It contains four 10x 5' libraries from paired BALF and PBMC samples:
 
 The final validation H5AD contains 46,273 cells and 15,681 genes.
 
+The intake completed on 2026-07-16.
+
 ## Storage
 
 The complete original study workspace is moved intact to:
@@ -34,6 +36,9 @@ The historical workspace path remains valid:
 It becomes a compatibility symlink to the canonical workspace, preserving the
 study's relative paths and existing absolute-path scripts.
 
+The move used one same-filesystem `rename(2)` operation. No H5AD or source
+matrix was copied or rewritten.
+
 ## Commands
 
 ```bash
@@ -54,6 +59,20 @@ $PY workflows/maintenance/migrate_balf_blood_copd_dataset.py rollback --confirm
 
 After rollback, revert the associated Git commit so active gdTAI defaults again
 match the restored filesystem state.
+
+## Validation Evidence
+
+- migration state:
+  `data/registry/migrations/balf_blood_copd_20260716/`
+- pre-intake registry snapshot:
+  `data/registry/snapshots/pre_balf_blood_copd_intake_20260716/`
+- post-intake registry snapshot:
+  `data/registry/snapshots/post_balf_blood_copd_intake_20260716/`
+- 12 fingerprinted sentinels passed
+- workspace device and inode were preserved
+- old and canonical selected-H5AD paths resolve inode `25179089`
+- strict registry validation passed with 66 datasets and 33 active datasets
+- all 264 lifecycle compatibility links passed
 
 ## Validation Role
 

@@ -7,7 +7,9 @@ The objective was to move `GSE144469` into training/tuning, retain non-GSE144469
 ## Input Data Policy
 
 - The atlas training input was `high_speed_temp/Integrated_dataset/integrated_plus6.h5ad`.
-- The independent external test input was `/home/tanlikai/databank/owndata/singlecell/data/results/phase4_final_annotated.h5ad`.
+- The independent external test dataset is registered as `BALF_BLOOD_COPD`.
+- Its canonical input is `data/datasets/BALF_BLOOD_COPD/processed/current.h5ad`.
+- The historical path `/home/tanlikai/databank/owndata/singlecell/data/results/phase4_final_annotated.h5ad` remains a compatibility alias to the same file.
 - The external H5AD was never used for fitting, threshold tuning, feature selection, or full-atlas candidate selection.
 - External inference requires `layers["counts"]`; the pipeline refuses normalized/log `X` for external use.
 
