@@ -939,3 +939,41 @@ Standard behavior:
 - fingerprint the selected H5AD, four filtered matrices, four raw matrices,
   harmonized TCR table, and two demultiplexing tables
 - register `LIB1`-`LIB4` as inactive validation-only libraries
+
+## Post-Phase-4 external application: GSE305372 CD8 cells
+
+Objective:
+
+- apply the promoted gdTAI model to independently author-tagged CD8 T cells
+  from GSE305372 lung and lung-associated lymph-node processed objects
+- keep the cohort out of training, Phase 0, and atlas integration
+
+Phase or task:
+
+- GSE305372 processed-object intake and gdTAI v3 external inference
+
+Exact scripts:
+
+- `workflows/intake/download_gse305372_cd8.sh`
+- `workflows/intake/export_gse305372_cd8_model_payload.R`
+- `workflows/gdtai/run_gdtai_gse305372_cd8.py`
+
+Core outputs:
+
+- `data/datasets/GSE305372/raw/source/`
+- `data/datasets/GSE305372/interim/rds_export/`
+- `Integrated_dataset/tables/gdT_prediction/GSE305372/`
+- `Integrated_dataset/figures/gdT_prediction/GSE305372/`
+- `Integrated_dataset/logs/gdT_prediction/GSE305372/`
+- `reports/GSE305372_gdtai_cd8/index.html`
+
+Standard behavior:
+
+- download only the two processed CD8 Seurat objects required for inference
+- select cells only by the authors' `cite.cell.type.tag == CD8A` annotation
+- read the Seurat RNA raw-count layer and normalize with the full-transcriptome
+  raw-count denominator
+- require exact packaged feature order and promoted-model SHA256 identity
+- apply gdTAI v3 Round 14 at the registered fixed threshold of `0.936`
+- treat paired TRA/TRB calls as a conflict-screening stratum, not definitive
+  false positives, because these objects lack TRG/TRD clonotype fields

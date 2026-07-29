@@ -27,18 +27,22 @@ aliases.
 
 Current registry state:
 
-- 66 dataset directories
+- 67 dataset directories
 - 45 promoted per-dataset H5ADs
-- 1,789 library rows
-- 1,212 file rows
+- 1,791 library rows
+- 1,214 file rows
 - 264 lifecycle compatibility links
 
-The additional dataset is `BALF_BLOOD_COPD`, an independent external
-validation cohort. Its approximately 949 GB raw/interim workspace remains
+`BALF_BLOOD_COPD` is an independent external validation cohort. Its
+approximately 949 GB raw/interim workspace remains
 physically under `/home/tanlikai/databank/owndata/singlecell`. The project raw
 entry is a compatibility view of that workspace, while only the selected
 2,110,825,599-byte validation H5AD is physically retained under
 `data/datasets/BALF_BLOOD_COPD/processed/`.
+
+`GSE305372` is an inactive external-application cohort. Its two processed CD8
+Seurat objects and compact model-input payloads are stored under
+`data/datasets/GSE305372/`; it is not selected for atlas integration.
 
 `configs/datasets/datasets.csv` records dataset membership and selected H5ADs.
 `libraries.csv` records sample/library assay scope. `files.csv` records

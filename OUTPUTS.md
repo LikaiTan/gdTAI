@@ -119,3 +119,9 @@
   - `Integrated_dataset/tables/annotation_evidence_review/`
   - `Integrated_dataset/logs/annotation_evidence_review/`
   - `Integrated_dataset/figures/annotation_evidence_review/`
+- GSE305372 external CD8 gdTAI application:
+  - `reports/GSE305372_gdtai_cd8/index.html`
+  - `Integrated_dataset/tables/gdT_prediction/GSE305372/`
+  - `Integrated_dataset/figures/gdT_prediction/GSE305372/`
+  - `Integrated_dataset/logs/gdT_prediction/GSE305372/`
+  - `docs/GSE305372_GDTAI_CD8.md`

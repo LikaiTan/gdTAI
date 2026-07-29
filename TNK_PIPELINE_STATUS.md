@@ -45,7 +45,7 @@ Additional current state:
   registered; its storage was refined so the approximately 949 GB raw/interim
   workspace remains at its original location and only the 2,110,825,599-byte
   validation H5AD is physically stored in the project
-- the current storage view has 66 dataset directories, 45 promoted
+- the current storage view has 67 dataset directories, 45 promoted
   `current.h5ad` links, and 264 lifecycle compatibility links
 - the historical `downloads`, `analysis_26GSE_V4`, and `newdata` paths remain
   usable as compatibility aliases to the same inodes
@@ -54,7 +54,7 @@ Additional current state:
   compatibility link to it
 - the historical external H5AD path is a compatibility link to
   `data/datasets/BALF_BLOOD_COPD/processed/artifacts/phase4_final_annotated.h5ad`
-- the dataset registry currently contains 66 datasets and 1,789 library rows;
+- the dataset registry currently contains 67 datasets and 1,791 library rows;
   all 33 Phase 0 active datasets pass strict path and library validation
 - `BALF_BLOOD_COPD` is registered as
   `gdTAI_independent_external_validation` and remains inactive for Phase 0,
@@ -84,6 +84,9 @@ Additional current state:
   checksum-pinned artifacts; Round 14 at threshold `0.936` is the promoted
   balanced default, while Round 12 at threshold `0.5` is preserved as the
   validated high-purity fallback
+- `GSE305372` is registered as an inactive external-application cohort; the
+  promoted gdTAI v3 Round 14 model was applied to 157,846 author-tagged CD8A
+  cells from its lung and lung-associated lymph-node processed objects
 
 ## Current review artifacts
 
@@ -124,3 +127,7 @@ Additional current state:
 - cluster annotation evidence review:
   - `Integrated_dataset/logs/annotation_evidence_review/current_integrated_annotation_evidence_summary.md`
   - `Integrated_dataset/logs/annotation_evidence_review/plus6_annotation_evidence_summary.md`
+- GSE305372 external CD8 application:
+  - `reports/GSE305372_gdtai_cd8/index.html`
+  - `docs/GSE305372_GDTAI_CD8.md`
+  - `Integrated_dataset/logs/gdT_prediction/GSE305372/gdtai_v3_gse305372_cd8_manifest.json`

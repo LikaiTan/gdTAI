@@ -62,6 +62,15 @@
     through compatibility links
   - strict registries, all 264 lifecycle links, 12 sentinels, and active
     workflow path resolution validated without failures
+- GSE305372 external CD8 gdTAI application completed on 2026-07-30
+  - checksum-verified lung and lung-associated lymph-node CD8 Seurat objects
+    stored under the dataset-centered raw path
+  - 157,846 cells selected only by the authors' `CD8A` CITE-seq tag
+  - promoted gdTAI v3 Round 14 model applied with exact raw-count CP10K
+    normalization and fixed threshold `0.936`
+  - 651 cells called positive; donor, author-cluster, TCR-gene quadrant, and
+    paired TRA/TRB conflict-screening summaries generated
+  - cohort registered as inactive for training, Phase 0, and atlas integration
 
 ## Current working era
 
