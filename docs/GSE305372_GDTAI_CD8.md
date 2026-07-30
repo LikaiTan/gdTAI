@@ -1,5 +1,12 @@
 # GSE305372 CD8 gdTAI Application
 
+> **Superseded.** This report used an incorrect secondary
+> `cite.cell.type.tag == CD8A` filter. The canonical corrected analysis applies
+> V2 and V3 to every cell in all four transcriptome-eligible lung and
+> lymph-node CD4/CD8 objects. See `docs/GSE305372_GDTAI_ALL_T.md` and
+> `reports/GSE305372_gdtai_all_t/index.html`. The files below are retained only
+> for provenance and score-regression testing.
+
 ## Scope
 
 GSE305372 is an external application cohort from the study *Human lungs

@@ -940,40 +940,49 @@ Standard behavior:
   harmonized TCR table, and two demultiplexing tables
 - register `LIB1`-`LIB4` as inactive validation-only libraries
 
-## Post-Phase-4 external application: GSE305372 CD8 cells
+## Post-Phase-4 external application: GSE305372 all T cells
 
 Objective:
 
-- apply the promoted gdTAI model to independently author-tagged CD8 T cells
-  from GSE305372 lung and lung-associated lymph-node processed objects
+- apply released gdTAI V2 and promoted V3 to every cell in all four deposited
+  GSE305372 lung and lung-associated lymph-node CD4/CD8 processed objects
+- eliminate the superseded secondary CITE-CD8A inclusion filter
 - keep the cohort out of training, Phase 0, and atlas integration
 
 Phase or task:
 
-- GSE305372 processed-object intake and gdTAI v3 external inference
+- GSE305372 processed-object intake and gdTAI V2/V3 external inference
 
 Exact scripts:
 
-- `workflows/intake/download_gse305372_cd8.sh`
-- `workflows/intake/export_gse305372_cd8_model_payload.R`
-- `workflows/gdtai/run_gdtai_gse305372_cd8.py`
+- `workflows/intake/download_gse305372_all_t.sh`
+- `workflows/intake/export_gse305372_all_t_model_payload.R`
+- `workflows/gdtai/run_gdtai_gse305372_all_t.py`
 
 Core outputs:
 
 - `data/datasets/GSE305372/raw/source/`
-- `data/datasets/GSE305372/interim/rds_export/`
-- `Integrated_dataset/tables/gdT_prediction/GSE305372/`
-- `Integrated_dataset/figures/gdT_prediction/GSE305372/`
-- `Integrated_dataset/logs/gdT_prediction/GSE305372/`
-- `reports/GSE305372_gdtai_cd8/index.html`
+- `data/datasets/GSE305372/interim/all_t_model_payload/`
+- `Integrated_dataset/tables/gdT_prediction/GSE305372_all_T/`
+- `Integrated_dataset/figures/gdT_prediction/GSE305372_all_T/`
+- `Integrated_dataset/logs/gdT_prediction/GSE305372_all_T/`
+- `reports/GSE305372_gdtai_all_t/index.html`
+- `reports/GSE305372_gdtai_all_t/GSE305372_gdTAI_v2_v3_all_T_report.pdf`
+- `docs/GSE305372_GDTAI_ALL_T.md`
 
 Standard behavior:
 
-- download only the two processed CD8 Seurat objects required for inference
-- select cells only by the authors' `cite.cell.type.tag == CD8A` annotation
+- checksum the four processed Seurat objects and audit the separate DICE-TCR
+  metadata-only CSV for transcriptome-model eligibility
+- include every cell in the four transcriptome-eligible CD4/CD8 objects;
+  retain CITE tags for audit only
 - read the Seurat RNA raw-count layer and normalize with the full-transcriptome
   raw-count denominator
-- require exact packaged feature order and promoted-model SHA256 identity
-- apply gdTAI v3 Round 14 at the registered fixed threshold of `0.936`
+- require exact shared feature order and registered model SHA256 identity
+- apply V2 high-F1, V2 high-purity, and V3 Round 14 to identical cells
+- use the authors' published cluster map to disable V2 high-purity calls in
+  Treg clusters
+- reconcile deposited-object counts against manuscript counts and state that
+  the lymph-node deposit is partial
 - treat paired TRA/TRB calls as a conflict-screening stratum, not definitive
   false positives, because these objects lack TRG/TRD clonotype fields

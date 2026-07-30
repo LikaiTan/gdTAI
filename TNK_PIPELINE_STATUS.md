@@ -85,8 +85,14 @@ Additional current state:
   balanced default, while Round 12 at threshold `0.5` is preserved as the
   validated high-purity fallback
 - `GSE305372` is registered as an inactive external-application cohort; the
-  promoted gdTAI v3 Round 14 model was applied to 157,846 author-tagged CD8A
-  cells from its lung and lung-associated lymph-node processed objects
+  corrected external application uses every cell in all four deposited lung
+  and lung-associated lymph-node CD4/CD8 objects without a CITE inclusion
+  filter
+- the corrected GSE305372 denominator is 690,715 transcriptome-eligible cells;
+  V2 high-F1 calls 2,474, V2 high-purity calls 1,942, and promoted V3 Round 14
+  calls 2,043
+- the earlier 157,846-cell CD8A-filtered GSE305372 package is superseded and
+  retained only for provenance and score-regression testing
 
 ## Current review artifacts
 
@@ -127,7 +133,8 @@ Additional current state:
 - cluster annotation evidence review:
   - `Integrated_dataset/logs/annotation_evidence_review/current_integrated_annotation_evidence_summary.md`
   - `Integrated_dataset/logs/annotation_evidence_review/plus6_annotation_evidence_summary.md`
-- GSE305372 external CD8 application:
-  - `reports/GSE305372_gdtai_cd8/index.html`
-  - `docs/GSE305372_GDTAI_CD8.md`
-  - `Integrated_dataset/logs/gdT_prediction/GSE305372/gdtai_v3_gse305372_cd8_manifest.json`
+- GSE305372 corrected all-T V2/V3 application:
+  - `reports/GSE305372_gdtai_all_t/index.html`
+  - `reports/GSE305372_gdtai_all_t/GSE305372_gdTAI_v2_v3_all_T_report.pdf`
+  - `docs/GSE305372_GDTAI_ALL_T.md`
+  - `Integrated_dataset/logs/gdT_prediction/GSE305372_all_T/gdtai_v2_v3_gse305372_all_t_manifest.json`

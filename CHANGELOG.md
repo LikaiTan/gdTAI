@@ -71,6 +71,17 @@
   - 651 cells called positive; donor, author-cluster, TCR-gene quadrant, and
     paired TRA/TRB conflict-screening summaries generated
   - cohort registered as inactive for training, Phase 0, and atlas integration
+- GSE305372 all-T V2/V3 correction completed on 2026-07-30
+  - downloaded and checksummed the two CD4 Seurat objects and audited the
+    metadata-only DICE-TCR blood CD4 resource as ineligible for expression
+    inference
+  - removed the erroneous secondary CITE-CD8A inclusion filter and analyzed
+    all 690,715 cells in the four transcriptome-eligible CD4/CD8 objects
+  - applied V2 high-F1, V2 high-purity, and promoted V3 Round 14 to an identical
+    raw-count CP10K input; called 2,474, 1,942, and 2,043 cells, respectively
+  - reconciled the 189-cell lung CD4 RDS/manuscript difference to unmapped
+    author cluster IDs 6-8 and documented the partial lymph-node deposit
+  - marked the earlier 157,846-cell CD8A package as superseded provenance
 
 ## Current working era
 
