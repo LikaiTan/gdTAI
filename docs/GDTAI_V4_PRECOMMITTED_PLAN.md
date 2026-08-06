@@ -1,8 +1,10 @@
 # Precommitted gdTAI V4 Training and Validation Protocol
 
-- **Protocol version:** 1.1
+- **Protocol version:** 1.2
 - **Frozen:** 2026-08-07
-- **Amendment:** M4 CD4/Treg exclusion recall-cost preflight, added before fitting
+- **Amendments:** M4 CD4/Treg exclusion recall-cost preflight; M5 audited
+  transformed-input contract and sensitivity-only sorted cohorts, both added
+  before fitting
 - **Status:** supervision required; model fitting has not started
 - **Primary objective:** improve dataset-macro balanced F1 without relaxing the
   precommitted alpha-beta T-cell and NK false-positive guardrails
@@ -31,8 +33,15 @@ full-atlas inference or model promotion.
 
 - The model accepts T/NK-filtered single-cell RNA-seq data only. It is not a
   pan-cell-type classifier.
-- Input values must be raw non-negative integer counts. Features are transformed as
-  `log1p(counts / total_counts_per_cell * 10000)` without densifying the full matrix.
+- Input values must be raw non-negative integer counts, except for the registered
+  HRA005041 object whose only matrix is already `log1p(CP10K)`. Raw inputs are
+  transformed as `log1p(counts / total_counts_per_cell * 10000)` without densifying
+  the full matrix; HRA005041 is consumed without a second normalization.
+- HRA005041 is eligible only if a full sparse-matrix audit confirms finite,
+  nonnegative values, no empty cells, and `abs(sum(expm1(X_i)) - 10000) <= 1e-4`
+  for every cell. This is an input-representation exception, not permission to
+  accept arbitrary normalized matrices; any other transformed input requires a
+  new protocol version.
 - The canonical development atlas is
   `high_speed_temp/Integrated_dataset/integrated.h5ad`, currently containing
   3,705,306 cells after the approved no-TCR-gene source carve-out.
@@ -48,7 +57,7 @@ full-atlas inference or model promotion.
 ### 2.2 Required metadata
 
 Every development row must provide a stable cell ID, `source_gse_id`, donor when
-available, `sample_id`, `library_id`, raw-count provenance, productive chain fields for
+available, `sample_id`, `library_id`, expression-state provenance, productive chain fields for
 TRA/TRB/TRG/TRD, canonical paired/any-chain flags, and doublet status when available.
 Clonotype IDs are required where TCR sequence permits them.
 
@@ -63,15 +72,16 @@ Phase-4 scores, and model predictions cannot change these labels.
 | `abT_primary` | Productive paired TRA and TRB, with no productive TRG or TRD | 1.0 |
 | `dual_or_ambiguous` | Evidence for both receptor classes, conflicting flags, or incomplete contradictory metadata | Excluded |
 | `single_abT_weak` | Productive TRA or TRB, no productive TRG/TRD | 0.5, training only |
-| `sorted_gdT_weak` | MalteGDT or eligible GDT_2020AUG_woCOV sorted cells without primary TCR truth | 0.25, training supplement only |
+| `sorted_gdT_sensitivity` | GDT_2020AUG_woCOV, MalteGDT, or GDTlung sorted cells without primary TCR truth | Sensitivity only |
 | `gdT_silver` | Project silver rule, including isolated productive TRD evidence | Sensitivity only |
 
-GDTlung2023july_7p is sensitivity-only because of its suboptimal library quality.
-Silver cells never enter feature selection, fitting, calibration, threshold selection,
-or promotion metrics. Sorted weak positives may supplement an outer-training partition,
-but never its held-out evaluation partition. TCR-confirmed CD4-like or Treg-like cells
-remain positive truth and count as false negatives if a post-model exclusion rejects
-them.
+All three sorted cohorts are sensitivity-only. GDTlung2023july_7p remains
+sensitivity-only because of its suboptimal library quality; GDT_2020AUG_woCOV and
+MalteGDT are sensitivity-only because they cover only 82.7% and 41.6% of the frozen
+feature universe. Silver and sorted cells never enter feature selection, either model
+stage, calibration, threshold selection, or promotion metrics. TCR-confirmed CD4-like
+or Treg-like cells remain positive truth and count as false negatives if a post-model
+exclusion rejects them.
 
 ### 2.4 Dataset roles
 
@@ -179,8 +189,8 @@ Any later change starts a separately named, separately precommitted experiment.
 Training weights are the product of truth reliability, inverse dataset frequency within
 class, and inverse class frequency within dataset. Weights are normalized to mean 1 in
 each training fold. No cell is duplicated. Donor/library groups cannot be split between
-train and validation. Sorted weak positives and single-chain weak negatives use the
-fixed reliability weights in Section 2.3.
+train and validation. Single-chain weak negatives use the fixed reliability weight in
+Section 2.3; sorted and silver cells have zero training weight.
 
 ## 5. Nested evaluation and operating points
 
@@ -238,7 +248,7 @@ the **exclusion-imposed recall ceiling** `1 - union_excluded / gdT_primary`. Thi
 is the best recall any RNA classifier can achieve after the fixed exclusions, even if its
 pre-exclusion recall were perfect. Report the corresponding absolute and percentage-point
 margin above the 0.80 macro-recall selection guardrail and the 0.70 per-source promotion
-floor. Sorted weak positives and silver cells receive the same descriptive audit but
+floor. Sorted sensitivity cells and silver cells receive the same descriptive audit but
 cannot alter feasibility or selection.
 
 Preflight fails and training remains blocked if the source-macro ceiling is below 0.80 or
@@ -330,8 +340,9 @@ semantics agree with the serialized artifact and registry.
 ### Step 1: preflight and split freeze
 
 - Archive the existing experimental V4 artifact without overwriting it.
-- Verify raw-count state, hashes, required metadata, label conflicts, class counts,
-  feature coverage, and the GSE144469 `SRR + barcode` join.
+- Verify the frozen raw-count or audited transformed-input state, hashes, required
+  metadata, label conflicts, class counts, feature coverage, and the GSE144469
+  `SRR + barcode` join.
 - Quantify the fixed CD4/Treg exclusions on primary positives and report their per-source
   and source-macro recall ceilings, guardrail margins, overlap, and donor/library
   concentration using the rules in Section 5.3.
@@ -356,7 +367,9 @@ semantics agree with the serialized artifact and registry.
 
 Before any candidate can run, tests must prove:
 
-1. All expression inputs are raw counts and remain unchanged by size, mtime, and SHA-256.
+1. Every fitting input is either raw counts or the uniquely registered HRA005041
+   `log1p(CP10K)` matrix passing the full per-cell inverse-library-size audit; all
+   inputs remain unchanged by size, mtime, and SHA-256.
 2. Primary positive and negative labels are nonempty, mutually exclusive, and independent
    of expression and annotations; silver cells are absent from fitting and selection.
 3. GSE144469 maps 107,068 of 107,068 cells uniquely by `SRR + barcode`.
@@ -410,6 +423,8 @@ Before any candidate can run, tests must prove:
 - Current promoted comparator: gdTAI v3 Round 14, threshold 0.936
 - High-purity fallback: gdTAI v3 Round 12, threshold 0.5
 - Existing experimental V4: not promoted; archive before Step 1
-- CD4/Treg exclusion values: fixed in protocol v1.1; no retuning after Step 2 begins
+- CD4/Treg exclusion values: fixed since protocol v1.1; no retuning after Step 2 begins
+- HRA005041 transformed-input exception and sensitivity-only sorted roles: fixed in
+  protocol v1.2 before fitting
 - No training, calibration, threshold search, full-atlas inference, or model promotion was
   performed as part of Step 0.

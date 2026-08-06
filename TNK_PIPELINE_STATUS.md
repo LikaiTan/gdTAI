@@ -2,15 +2,15 @@
 
 ## Current milestone
 
-- gdTAI V4 Step 1 preflight and grouped split freeze completed with a failed
-  QC gate; no model fitting has started and Step 2 remains blocked
+- gdTAI V4 protocol v1.2 frozen before fitting to resolve the failed v1.1 input
+  contract; a fresh Step 1 preflight is pending and Step 2 remains blocked
 
 ## Next action
 
-- review the gdTAI V4 Step 1 report and decide whether to locate compliant
-  raw/high-coverage inputs or issue a new precommitted protocol version
-- rerun Step 1 under any approved replacement protocol before authorizing
-  nested evaluation; do not proceed directly to Step 2
+- rerun the gdTAI V4 Step 1 input, label, recall-cost, and grouped-split
+  preflight under protocol v1.2
+- review the fresh Step 1 gate before authorizing nested evaluation; do not
+  proceed directly to Step 2
 - do not promote or claim superiority for another gdTAI model before grouped
   resampling, expression-independent labels, and fold-local selection are in place
 - review the frozen-profile negative-control report and official-GEO metadata
@@ -22,10 +22,12 @@
 
 ## Current blockers or review items
 
-- gdTAI V4 Step 1 failed because HRA005041 provides only a normalized
-  `log1p(CP10K)` matrix and no raw-count layer
-- `GDT_2020AUG_woCOV` and `MalteGDT` cover only `82.7%` and `41.6%` of the
-  frozen 197-gene feature set, below the `90%` training-input floor
+- the v1.1 Step 1 gate failed because HRA005041 has no raw-count layer and the
+  GDT2020/Malte supplements had inadequate feature coverage
+- protocol v1.2 resolves those design conflicts before fitting by permitting
+  only the registered HRA005041 `log1p(CP10K)` matrix after a full per-cell
+  inverse-library-size audit and making all sorted cohorts sensitivity-only
+- the v1.2 resolution remains unverified until the fresh Step 1 audit passes
 - the fixed CD4/Treg exclusions passed their feasibility guardrail with a
   source-macro primary-gdT recall ceiling of `98.38%`; those thresholds remain
   frozen and were not tuned
@@ -74,6 +76,10 @@
 
 Additional current state:
 
+- gdTAI V4 protocol v1.2 keeps the 197-gene universe, labels, folds, model
+  families, grids, guardrails, CD4/Treg thresholds, and promotion rule fixed
+- protocol v1.2 removes silver, dual/ambiguous, and all sorted cells from both
+  fitting stages; no fitting result informed this amendment
 - gdTAI V4 Step 1 created a checksum-pinned 1,137,739-cell label manifest and
   deterministic three-fold grouped split manifest without fitting a model
 - all 16 declared preflight inputs matched registered hashes where available

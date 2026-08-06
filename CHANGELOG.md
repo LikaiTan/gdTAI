@@ -198,6 +198,17 @@
     matched; performed no fitting, threshold search, inference, or promotion
   - published and visually checked the HTML/PDF supervision package; Step 2
     remains blocked
+- gdTAI V4 protocol v1.2 amendment frozen on 2026-08-07 before fitting
+  - retained the frozen 197 genes, expression-independent labels, nested folds,
+    model grids, guardrails, CD4/Treg thresholds, and promotion criteria
+  - permitted only the registered HRA005041 `log1p(CP10K)` representation,
+    conditional on a full per-cell `sum(expm1(X))` audit at a frozen tolerance
+  - moved GDT_2020AUG_woCOV, MalteGDT, and GDTlung to sensitivity-only roles
+    with zero weight in both training stages
+  - corrected the preflight contract so silver and dual/ambiguous cells cannot
+    enter Stage 1 fitting
+  - regenerated and visually checked the protocol HTML/PDF; no fitting,
+    threshold search, inference, or promotion was performed
 
 ## Current working era
 

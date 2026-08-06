@@ -390,6 +390,9 @@ Gate semantics:
 
 - no model fitting, calibration, threshold search, whole-atlas inference, or
   promotion is authorized by Step 0
+- protocol v1.2 permits the registered HRA005041 `log1p(CP10K)` matrix only
+  after a full per-cell transformed-state audit and makes all sorted cohorts
+  sensitivity-only; this amendment was frozen before fitting
 - Step 1 is limited to input/label/feature preflight, a per-source CD4/Treg
   exclusion-imposed recall-ceiling audit, and checksum-pinned grouped split
   construction after explicit supervision approval
@@ -433,13 +436,11 @@ Core outputs:
 
 Current gate result:
 
-- Step 1 completed with `FAIL`
-- HRA005041 has no raw-count matrix, and the two sorted training supplements
-  fail the frozen 90% feature-coverage floor
+- protocol v1.1 Step 1 completed with `FAIL`
+- protocol v1.2 is frozen and requires a fresh Step 1 run
 - the fixed CD4/Treg recall-ceiling audit passed; no cutoff was tuned
 - no model fitting, calibration, threshold search, inference, or promotion ran
-- Step 2 requires a reviewed input or protocol resolution and successful fresh
-  preflight
+- Step 2 requires a successful fresh preflight and supervision review
 
 ## Phase 1: Coarse T/NK extraction
 

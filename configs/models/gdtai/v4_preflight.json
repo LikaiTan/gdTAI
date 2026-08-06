@@ -1,5 +1,5 @@
 {
-  "protocol_version": "1.1",
+  "protocol_version": "1.2",
   "protocol_path": "docs/GDTAI_V4_PRECOMMITTED_PLAN.md",
   "random_seed": 20260807,
   "expected_tcr_gene_count": 153,
@@ -33,12 +33,17 @@
   },
   "matrix_states": {
     "current_atlas": "raw_counts",
-    "hra005041": "log1p_cp10k_recall_audit_only",
+    "hra005041": "log1p_cp10k_registered",
     "gse144469": "raw_counts",
     "balf_blood_copd": "raw_counts",
     "gdt_2020aug_wocov": "raw_counts",
     "maltegdt": "raw_counts",
     "gdtlung": "raw_counts"
+  },
+  "transformed_input_contract": {
+    "permitted_input_id": "hra005041",
+    "target_sum_expm1": 10000.0,
+    "absolute_tolerance": 0.0001
   },
   "expected_sha256": {
     "gse144469": "456b2da064c9ad601294878d23102836bf01717e9c21493aeb651ecb7f537926"

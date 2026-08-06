@@ -299,7 +299,7 @@ def make_labeled_frame(
     dual = any_ab & any_gd
     single_abt = any_ab & (~pair_ab) & (~any_gd) & (~doublet)
     silver = trd_evidence & (~pair_gd) & (~any_ab) & (~doublet)
-    t_positive = (any_ab | any_gd) & (~doublet)
+    t_positive = (primary_gdt | primary_abt | single_abt) & (~doublet)
     nk_negative = nk_mask & (~any_ab) & (~any_gd) & (~doublet)
 
     truth = np.full(n_cells, "unlabeled", dtype=object)
@@ -544,7 +544,7 @@ def load_balf_frame(path: Path) -> pd.DataFrame:
     )
 
 
-def load_sorted_frame(path: Path, input_id: str, source_id: str, training_weak: bool) -> pd.DataFrame:
+def load_sorted_frame(path: Path, input_id: str, source_id: str) -> pd.DataFrame:
     logging.info("Loading sorted source %s", source_id)
     with h5py.File(path, "r") as handle:
         source_ids = clean_strings(read_obs(handle, "cell_id") if "cell_id" in handle["obs"] else read_obs_index(handle))
@@ -565,19 +565,17 @@ def load_sorted_frame(path: Path, input_id: str, source_id: str, training_weak: 
     groups, levels = build_group_keys(
         np.full(ids.size, source_id, dtype=object), donor, sample, library, clone
     )
-    stage1 = np.where(any_ab | any_gd, "t_positive", "none")
-    truth = SORTED_WEAK if training_weak else SORTED_SENSITIVITY
     return pd.DataFrame(
         {
             "cell_id": ids,
             "source_gse_id": source_id,
             "expression_input_id": input_id,
             "expression_row": selected,
-            "truth_class": truth,
-            "truth_reliability": 0.25 if training_weak else 0.0,
-            "stage1_role": stage1,
-            "stage1_weight": np.where(stage1 == "t_positive", 0.25, 0.0),
-            "stage2_role": "positive" if training_weak else "none",
+            "truth_class": SORTED_SENSITIVITY,
+            "truth_reliability": 0.0,
+            "stage1_role": "none",
+            "stage1_weight": 0.0,
+            "stage2_role": "none",
             "group_key": groups,
             "group_level": levels,
             "clonotype_key": clone,
@@ -681,8 +679,10 @@ def scan_sparse_matrix(
     data_chunk: int,
     row_chunk: int,
     matrix_state: str,
+    transformed_target: float,
+    transformed_tolerance: float,
 ) -> tuple[pd.DataFrame, np.ndarray, np.ndarray]:
-    logging.info("Scanning raw-count matrix %s [%s]", path, matrix_key)
+    logging.info("Scanning expression matrix %s [%s; %s]", path, matrix_key, matrix_state)
     selected_rows = np.asarray(sorted(set(map(int, selected_rows))), dtype=np.int64)
     with h5py.File(path, "r") as handle:
         matrix = get_matrix_group(handle, matrix_key)
@@ -710,6 +710,12 @@ def scan_sparse_matrix(
         negative = 0
         fractional = 0
         max_fractional_distance = 0.0
+        transformed_rows_checked = 0
+        transformed_empty_rows = 0
+        transformed_rows_outside_tolerance = 0
+        transformed_sum_min = float("inf")
+        transformed_sum_max = float("-inf")
+        transformed_max_abs_deviation = 0.0
         nnz = int(data_ds.shape[0])
         processed_nnz = 0
         last_log = time.monotonic()
@@ -719,6 +725,7 @@ def scan_sparse_matrix(
             data_start, data_end = int(indptr[row_start]), int(indptr[row_end])
             data = np.asarray(data_ds[data_start:data_end])
             indices = np.asarray(indices_ds[data_start:data_end], dtype=np.int64)
+            local_indptr = indptr[row_start : row_end + 1] - data_start
             finite = np.isfinite(data)
             nonfinite += int((~finite).sum())
             negative += int((data[finite] < 0).sum())
@@ -727,11 +734,27 @@ def scan_sparse_matrix(
                 fractional += int((distance > 1e-6).sum())
                 max_fractional_distance = max(max_fractional_distance, float(distance.max(initial=0.0)))
 
+            if matrix_state == "log1p_cp10k_registered":
+                row_nnz = np.diff(local_indptr)
+                nonempty_rows = np.flatnonzero(row_nnz > 0)
+                transformed_rows_checked += int(row_nnz.size)
+                transformed_empty_rows += int((row_nnz == 0).sum())
+                if nonempty_rows.size:
+                    transformed_data = np.expm1(data.astype(np.float64, copy=False))
+                    row_sums = np.add.reduceat(transformed_data, local_indptr[:-1][nonempty_rows])
+                    deviations = np.abs(row_sums - transformed_target)
+                    transformed_rows_outside_tolerance += int((deviations > transformed_tolerance).sum())
+                    transformed_sum_min = min(transformed_sum_min, float(row_sums.min()))
+                    transformed_sum_max = max(transformed_sum_max, float(row_sums.max()))
+                    transformed_max_abs_deviation = max(
+                        transformed_max_abs_deviation,
+                        float(deviations.max(initial=0.0)),
+                    )
+
             left = int(np.searchsorted(selected_rows, row_start, side="left"))
             right = int(np.searchsorted(selected_rows, row_end, side="left"))
             if right > left:
                 local_rows = selected_rows[left:right] - row_start
-                local_indptr = indptr[row_start : row_end + 1] - data_start
                 chunk_matrix = sparse.csr_matrix((data, indices, local_indptr), shape=(row_end - row_start, shape[1]))
                 selected_matrix = chunk_matrix[local_rows]
                 totals_output[left:right] = np.asarray(selected_matrix.sum(axis=1)).ravel()
@@ -745,6 +768,16 @@ def scan_sparse_matrix(
                 logging.info("Matrix scan %s: %.1f%% of nonzeros", path.name, 100.0 * processed_nnz / max(nnz, 1))
                 last_log = time.monotonic()
 
+    raw_count_pass = bool(nonfinite == 0 and negative == 0 and fractional == 0)
+    transformed_cp10k_pass = bool(
+        matrix_state == "log1p_cp10k_registered"
+        and nonfinite == 0
+        and negative == 0
+        and transformed_empty_rows == 0
+        and transformed_rows_outside_tolerance == 0
+        and transformed_rows_checked == shape[0]
+    )
+    expression_contract_pass = raw_count_pass if matrix_state == "raw_counts" else transformed_cp10k_pass
     audit = pd.DataFrame(
         [
             {
@@ -759,7 +792,17 @@ def scan_sparse_matrix(
                 "negative_values": negative,
                 "fractional_values_gt_1e_6": fractional,
                 "max_fractional_distance": max_fractional_distance,
-                "raw_count_pass": bool(nonfinite == 0 and negative == 0 and fractional == 0),
+                "raw_count_pass": raw_count_pass,
+                "transformed_rows_checked": transformed_rows_checked,
+                "transformed_empty_rows": transformed_empty_rows,
+                "transformed_target": transformed_target if transformed_rows_checked else np.nan,
+                "transformed_tolerance": transformed_tolerance if transformed_rows_checked else np.nan,
+                "transformed_sum_min": transformed_sum_min if transformed_rows_checked else np.nan,
+                "transformed_sum_max": transformed_sum_max if transformed_rows_checked else np.nan,
+                "transformed_max_abs_deviation": transformed_max_abs_deviation if transformed_rows_checked else np.nan,
+                "transformed_rows_outside_tolerance": transformed_rows_outside_tolerance,
+                "transformed_cp10k_pass": transformed_cp10k_pass,
+                "expression_contract_pass": expression_contract_pass,
                 "selected_rows_extracted": int(selected_rows.size),
             }
         ]
@@ -780,6 +823,7 @@ def apply_expression_audits(
         cells["stage1_role"].eq("nk_negative")
         | cells["truth_class"].isin([PRIMARY_GDT, SILVER, SORTED_WEAK, SORTED_SENSITIVITY])
     )
+    transformed_contract = config["transformed_input_contract"]
     for input_id, spec in input_specs.items():
         if spec.matrix_key is None:
             continue
@@ -796,12 +840,14 @@ def apply_expression_audits(
             int(config["matrix_scan_data_chunk"]),
             int(config["matrix_scan_row_chunk"]),
             spec.matrix_state,
+            float(transformed_contract["target_sum_expm1"]),
+            float(transformed_contract["absolute_tolerance"]),
         )
         if spec.matrix_state == "raw_counts":
             if (totals <= 0).any():
                 raise RuntimeError(f"Requested cells in {input_id} contain non-positive raw total counts")
             marker_values = np.log1p(marker_values * (10000.0 / totals[:, None])).astype(np.float32)
-        elif spec.matrix_state != "log1p_cp10k_recall_audit_only":
+        elif spec.matrix_state != "log1p_cp10k_registered":
             raise ValueError(f"Unsupported matrix state for {input_id}: {spec.matrix_state}")
         audit.insert(0, "input_id", input_id)
         matrix_audits.append(audit)
@@ -1132,13 +1178,24 @@ def build_checks(
     nk_audit: pd.DataFrame,
 ) -> pd.DataFrame:
     checks: list[dict[str, str]] = []
-    add_check(checks, "protocol_version", "PASS" if config["protocol_version"] == "1.1" else "FAIL", config["protocol_version"], "1.1", "Frozen protocol version")
+    add_check(checks, "protocol_version", "PASS" if config["protocol_version"] == "1.2" else "FAIL", config["protocol_version"], "1.2", "Frozen protocol version")
     add_check(checks, "feature_count", "PASS" if len(features) == int(config["expected_total_gene_count"]) else "FAIL", len(features), config["expected_total_gene_count"], "Frozen individual-gene universe")
     hard_coverage = coverage[coverage["hard_feature_gate"]]
     failed_coverage = hard_coverage[(hard_coverage["feature_coverage"] < float(config["minimum_feature_coverage"])) | (hard_coverage["missing_critical_count"] > 0)]
     add_check(checks, "training_feature_coverage", "PASS" if failed_coverage.empty else "FAIL", ";".join(failed_coverage["input_id"].astype(str)), f">={config['minimum_feature_coverage']} and all critical genes", "Hard-gated development inputs")
-    raw_fail = matrix_audit[~matrix_audit["raw_count_pass"]]
-    add_check(checks, "raw_count_state", "PASS" if raw_fail.empty else "FAIL", ";".join(raw_fail["input_id"].astype(str)), "all sparse values finite, nonnegative, integer-like", "Full sparse data-array scan")
+    contract_fail = matrix_audit[~matrix_audit["expression_contract_pass"]]
+    transformed = matrix_audit[matrix_audit["configured_matrix_state"].eq("log1p_cp10k_registered")]
+    permitted_transformed = str(config["transformed_input_contract"]["permitted_input_id"])
+    transformed_scope_ok = transformed["input_id"].tolist() == [permitted_transformed]
+    expression_ok = contract_fail.empty and transformed_scope_ok
+    add_check(
+        checks,
+        "expression_input_contract",
+        "PASS" if expression_ok else "FAIL",
+        ";".join(contract_fail["input_id"].astype(str)) if not contract_fail.empty else transformed["input_id"].tolist(),
+        "raw counts, except registered HRA005041 passing full log1p(CP10K) audit",
+        "Full sparse data-array and inverse-library-size scan",
+    )
     hash_fail = input_table[~input_table["expected_hash_match"]]
     add_check(checks, "registered_hashes", "PASS" if hash_fail.empty else "FAIL", ";".join(hash_fail["input_id"].astype(str)), "all available expected hashes match", "Full SHA-256 unless explicitly skipped")
     add_check(checks, "input_file_state", "PASS" if file_state["unchanged"].all() else "FAIL", int(file_state["unchanged"].sum()), len(file_state), "Size and mtime unchanged after read-only workflow")
@@ -1149,8 +1206,11 @@ def build_checks(
     add_check(checks, "primary_labels_nonempty", "PASS" if primary_ok else "FAIL", primary_counts.to_dict(), "both classes in each primary source", "Expression-independent productive TCR rules")
     conflict_count = int(((cells["truth_class"] == PRIMARY_GDT) & (cells["truth_class"] == PRIMARY_ABT)).sum())
     add_check(checks, "primary_label_overlap", "PASS" if conflict_count == 0 else "FAIL", conflict_count, 0, "Mutually exclusive primary labels")
-    silver_train = int(((cells["truth_class"] == SILVER) & (cells["stage2_role"] != "none")).sum())
-    add_check(checks, "silver_excluded_from_training", "PASS" if silver_train == 0 else "FAIL", silver_train, 0, "Sensitivity-only silver cells")
+    sensitivity = cells["truth_class"].isin([SILVER, SORTED_WEAK, SORTED_SENSITIVITY])
+    sensitivity_train = int(
+        (sensitivity & ((cells["stage1_role"] != "none") | (cells["stage2_role"] != "none"))).sum()
+    )
+    add_check(checks, "sensitivity_excluded_from_training", "PASS" if sensitivity_train == 0 else "FAIL", sensitivity_train, 0, "Silver and all sorted cohorts are sensitivity-only")
     primary_recall = recall[recall["population"].eq(PRIMARY_GDT)]
     macro = primary_recall[primary_recall["source_gse_id"].eq("SOURCE_MACRO")].iloc[0]
     per_source = primary_recall[~primary_recall["source_gse_id"].eq("SOURCE_MACRO")]
@@ -1303,16 +1363,15 @@ post-exclusion recall even for a perfect pre-exclusion classifier.
 
 {dataframe_markdown(coverage_view)}
 
-## Raw-count audit
+## Expression input audit
 
-Every stored sparse value was scanned. Integer-like means its distance from the
-nearest integer was no greater than `1e-6`.
+Every stored sparse value was scanned. Raw inputs must be finite, nonnegative,
+and integer-like within `1e-6`.
 
-The HRA005041 matrix is known `log1p(CP10K)` and is used here only to
-quantify exclusion cost. It remains ineligible for fitting because no raw-count
-layer is available.
+The registered HRA005041 exception must additionally reconstruct a per-cell
+library sum of 10,000 from `expm1(X)` within the frozen absolute tolerance.
 
-{dataframe_markdown(matrix_audit, ['input_id', 'matrix_key', 'configured_matrix_state', 'n_obs', 'nnz', 'dtype', 'fractional_values_gt_1e_6', 'raw_count_pass'])}
+{dataframe_markdown(matrix_audit, ['input_id', 'matrix_key', 'configured_matrix_state', 'n_obs', 'nnz', 'raw_count_pass', 'transformed_max_abs_deviation', 'transformed_rows_outside_tolerance', 'expression_contract_pass'])}
 
 ## Ground-truth audit
 
@@ -1388,8 +1447,8 @@ def make_input_specs(config: dict[str, Any]) -> list[InputSpec]:
         InputSpec("hra005041", resolve_path(paths["hra005041"]), keys["hra005041"], "primary_development", "HRA005041", matrix_state=states["hra005041"]),
         InputSpec("gse144469", resolve_path(paths["gse144469"]), keys["gse144469"], "primary_development", "GSE144469", expected.get("gse144469", ""), matrix_state=states["gse144469"]),
         InputSpec("balf_blood_copd", resolve_path(paths["balf_blood_copd"]), keys["balf_blood_copd"], "primary_development_reused_benchmark", "BALF_BLOOD_COPD", matrix_state=states["balf_blood_copd"]),
-        InputSpec("gdt_2020aug_wocov", resolve_path(paths["gdt_2020aug_wocov"]), keys["gdt_2020aug_wocov"], "sorted_training_supplement", "GDT_2020AUG_woCOV", matrix_state=states["gdt_2020aug_wocov"]),
-        InputSpec("maltegdt", resolve_path(paths["maltegdt"]), keys["maltegdt"], "sorted_training_supplement", "MalteGDT", matrix_state=states["maltegdt"]),
+        InputSpec("gdt_2020aug_wocov", resolve_path(paths["gdt_2020aug_wocov"]), keys["gdt_2020aug_wocov"], "sorted_sensitivity_only", "GDT_2020AUG_woCOV", hard_feature_gate=False, matrix_state=states["gdt_2020aug_wocov"]),
+        InputSpec("maltegdt", resolve_path(paths["maltegdt"]), keys["maltegdt"], "sorted_sensitivity_only", "MalteGDT", hard_feature_gate=False, matrix_state=states["maltegdt"]),
         InputSpec("gdtlung", resolve_path(paths["gdtlung"]), keys["gdtlung"], "sorted_sensitivity_only", "GDTlung2023july_7p", hard_feature_gate=False, matrix_state=states["gdtlung"]),
     ]
     extension = pd.read_csv(resolve_path(paths["extension_manifest"]))
@@ -1445,9 +1504,9 @@ def main() -> None:
     hra = load_hra_frame(input_by_id["hra005041"].path)
     gse, join_audit = load_gse144469_frame(input_by_id["gse144469"].path, legacy)
     balf = load_balf_frame(input_by_id["balf_blood_copd"].path)
-    gdt2020 = load_sorted_frame(input_by_id["gdt_2020aug_wocov"].path, "gdt_2020aug_wocov", "GDT_2020AUG_woCOV", True)
-    malte = load_sorted_frame(input_by_id["maltegdt"].path, "maltegdt", "MalteGDT", True)
-    lung = load_sorted_frame(input_by_id["gdtlung"].path, "gdtlung", "GDTlung2023july_7p", False)
+    gdt2020 = load_sorted_frame(input_by_id["gdt_2020aug_wocov"].path, "gdt_2020aug_wocov", "GDT_2020AUG_woCOV")
+    malte = load_sorted_frame(input_by_id["maltegdt"].path, "maltegdt", "MalteGDT")
+    lung = load_sorted_frame(input_by_id["gdtlung"].path, "gdtlung", "GDTlung2023july_7p")
     atlas_nk, nk_audit = load_atlas_supplemental_nk(
         input_by_id["current_atlas"].path, legacy, set(config["primary_sources"])
     )
