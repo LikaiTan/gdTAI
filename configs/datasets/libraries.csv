@@ -592,6 +592,7 @@ GSE168859,GSM5171648,GSM5171648,10x 5',none,none,true,Human peripheral blood; su
 GSE168859,GSM5171649,GSM5171649,10x 5',none,none,true,Human peripheral blood; subject: UPN15
 GSE168859,GSM5171650,GSM5171650,10x 5',none,none,true,Human peripheral blood; subject: UPN6
 GSE168859,GSM5171651,GSM5171651,10x 5',none,none,true,Human peripheral blood; subject: Healthydonor7
+GSE169246,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,Must be curated before integration.
 GSE169441,__dataset_level_pending_curation__,,unknown,unknown,unknown,false,No row in sample_information_final_full.csv; curate before activation.
 GSE171037,GSM5216975,GSM5216975,10x (unspecified),none,none,true,GT_6 PBMC_1; number of cells: 6050
 GSE171037,GSM5216976,GSM5216976,10x (unspecified),none,none,true,GT_6 PBMC_2; number of cells: 5252

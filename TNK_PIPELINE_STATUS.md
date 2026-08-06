@@ -7,6 +7,8 @@
 ## Next action
 
 - Await explicit user review and approval of the extension Phase 0 package
+- harmonize and audit the newly selected GSE169246 processed
+  `TNK_cleaned.h5ad` as a standalone extension input
 - after approval, compare the frozen gdTAI V2/V3 profiles on the standalone
   extension cohorts before any merge or integration
 
@@ -14,11 +16,10 @@
 
 - extension-cohort merge, integration, and model-evaluation phase advancement
   are not approved
-- all seven extension cohorts have zero productive TRG/TRD chain records; they
-  support independent alpha-beta T-cell and NK false-positive evaluation but
-  not independent TCR-defined gdT recall
-- staged-source audit found 1,267 TRG/TRD fragment rows but zero productive
-  TRG/TRD CDR3s, confirming that this is not a parser loss
+- the seven completed extension cohorts used alpha-beta TCR assays; zero
+  productive TRG/TRD is therefore expected, and these cohorts support
+  alpha-beta T-cell and NK false-positive evaluation rather than independent
+  TCR-defined gdT recall
 - five extension cohorts have unmatched productive TCR-contig warnings that
   require review; all seven nevertheless passed structural QC
 - Phase 4 scoring outputs remain under user review
@@ -53,7 +54,10 @@ Additional current state:
 - extension tumor-project specimen context passed for all 498,901 cells with
   zero unresolved rows and zero violations; original tissue and diagnosis
   fields were not modified
-- GSE169246 remains provenance-blocked and was not staged or built
+- the user selected the processed GSE169246 `TNK_cleaned.h5ad`; an unchanged,
+  checksum-verified copy is registered under
+  `data/datasets/GSE169246/processed/current.h5ad`, but standalone
+  harmonization and Phase 0 review remain pending
 - Tan et al. 2021 remains excluded as a duplicate of
   `GDT_2020AUG_woCOV`
 - the project reorganization is validated: active code is grouped under
@@ -74,7 +78,7 @@ Additional current state:
   compatibility link to it
 - the historical external H5AD path is a compatibility link to
   `data/datasets/BALF_BLOOD_COPD/processed/artifacts/phase4_final_annotated.h5ad`
-- the dataset registry currently contains 66 datasets and 1,789 library rows;
+- the dataset registry currently contains 67 datasets and 1,790 library rows;
   all 33 Phase 0 active datasets pass strict path and library validation
 - `BALF_BLOOD_COPD` is registered as
   `gdTAI_independent_external_validation` and remains inactive for Phase 0,
@@ -116,6 +120,10 @@ Additional current state:
   - `Integrated_dataset/tables/extension_intake/extension_phase0_cohort_summary.csv`
   - `Integrated_dataset/tables/extension_intake/extension_tcr_source_chain_audit.csv`
   - `Integrated_dataset/figures/extension_intake/extension_phase0_cohort_overview.png`
+- GSE169246 selected processed input:
+  - `docs/GSE169246_PROCESSED_H5AD_INTAKE.md`
+  - `data/datasets/GSE169246/processed/current.h5ad`
+  - `data/registry/snapshots/post_gse169246_processed_h5ad_intake_20260806/`
 - extension tumor-project specimen-context review:
   - `Integrated_dataset/logs/sample_source_refinement/extension_sample_source_review.md`
   - `Integrated_dataset/tables/sample_source_refinement/extensions/extension_tumor_project_context_counts.csv`

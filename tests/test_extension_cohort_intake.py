@@ -58,7 +58,9 @@ class ExtensionCohortIntakeTests(unittest.TestCase):
         self.assertNotIn("esophageal", " ".join(gse294.values()).lower())
 
         gse169 = self.cohort_by_id["GSE169246"]
-        self.assertEqual(gse169["builder_adapter"], "provenance_blocked")
+        self.assertEqual(gse169["builder_adapter"], "gse169246_processed_h5ad")
+        self.assertEqual(gse169["tcr_schema"], "partial_embedded_paired_tra_trb_cdr3")
+        self.assertEqual(gse169["intake_role"], "extension_candidate_pending_phase0")
         self.assertEqual(gse169["stage_enabled"], "false")
         self.assertEqual(gse169["build_enabled"], "false")
 
@@ -106,26 +108,26 @@ class ExtensionCohortIntakeTests(unittest.TestCase):
         self.assertEqual({row["gse"] for row in rows}, {"GSE294273", "GSE294274"})
         self.assertTrue(all("melanoma" in row["cancer"].lower() for row in rows))
 
-    def test_gse169246_stage_and_build_fail_closed(self) -> None:
+    def test_gse169246_selected_source_remains_stage_and_build_disabled(self) -> None:
         cohort = [self.cohort_by_id["GSE169246"]]
         libraries = [row for row in self.libraries if row["cohort_id"] == "GSE169246"]
         with tempfile.TemporaryDirectory() as temporary:
-            with self.assertRaises(validator.ManifestError):
-                stager.stage_extension_cohorts(
-                    Path(temporary),
-                    Path(temporary) / "stage",
-                    cohort,
-                    libraries,
-                    validator.DEFAULT_SHARED_METASHEET,
-                    dry_run=True,
-                )
-            with self.assertRaises(builder.IntakeBuildError):
-                builder.build_extension_cohorts(
-                    Path(temporary) / "stage",
-                    Path(temporary) / "output",
-                    cohort,
-                    dry_run=True,
-                )
+            stage_summary = stager.stage_extension_cohorts(
+                Path(temporary),
+                Path(temporary) / "stage",
+                cohort,
+                libraries,
+                validator.DEFAULT_SHARED_METASHEET,
+                dry_run=True,
+            )
+            self.assertEqual(stage_summary["cohorts"], [])
+            build_summary = builder.build_extension_cohorts(
+                Path(temporary) / "stage",
+                Path(temporary) / "output",
+                cohort,
+                dry_run=True,
+            )
+            self.assertEqual(build_summary["plans"], [])
 
     def test_stage_snapshots_filtered_shared_metadata_without_local_metasheet(self) -> None:
         cohort = self.cohort_by_id["GSE294273_GSE294274"]

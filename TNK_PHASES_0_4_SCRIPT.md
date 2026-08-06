@@ -137,10 +137,35 @@ Core outputs:
 Current gate semantics:
 
 - all H5AD review is read-only
-- GSE169246 remains fail-closed until accession-pure provenance is demonstrated
+- the user-selected GSE169246 processed `TNK_cleaned.h5ad` is registered as a
+  pending standalone input; it must pass harmonization and Phase 0 review
+  before merge or integration
 - Tan et al. 2021 remains excluded because `GDT_2020AUG_woCOV` already
   represents that study
 - no merge or integration may proceed without explicit user approval
+
+### GSE169246 processed-source registration
+
+Phase or task:
+
+- select and register the user-specified processed GSE169246 T/NK object
+
+Exact `.py` script:
+
+- `workflows/maintenance/manage_dataset_registry.py`
+
+Key input:
+
+- `/home/leeaaron/Exhausted_GDT/TNBC_validation/Integrated_dataset/TNK_cleaned.h5ad`
+
+Key outputs:
+
+- `data/datasets/GSE169246/processed/artifacts/TNK_cleaned.h5ad`
+- `data/datasets/GSE169246/processed/current.h5ad`
+- `docs/GSE169246_PROCESSED_H5AD_INTAKE.md`
+
+The selected source remains inactive until standalone metadata and TCR-schema
+harmonization, QC, and user review are complete.
 
 ## Phase 1: Coarse T/NK extraction
 

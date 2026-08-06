@@ -72,6 +72,10 @@
 
 ## Current review packages
 
+- GSE169246 selected processed input:
+  - `data/datasets/GSE169246/processed/current.h5ad`
+  - `docs/GSE169246_PROCESSED_H5AD_INTAKE.md`
+  - `data/registry/snapshots/post_gse169246_processed_h5ad_intake_20260806/`
 - extension-cohort standalone Phase 0 review:
   - `Integrated_dataset/logs/extension_intake/extension_phase0_supervision_report.md`
   - `Integrated_dataset/logs/extension_intake/extension_phase0_qc_summary.md`

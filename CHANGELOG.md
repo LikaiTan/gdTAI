@@ -102,6 +102,15 @@
   - supervision report and source-audit addendum emailed to Likai
   - merge, integration, and model-evaluation phase advancement remain pending
     explicit review approval
+- GSE169246 processed-source selection registered on 2026-08-06
+  - copied the user-selected 394,225-cell `TNK_cleaned.h5ad` unchanged into
+    `data/datasets/GSE169246/processed/artifacts/`
+  - source and canonical copy matched by full SHA-256
+  - registered the dataset as inactive and pending standalone Phase 0
+  - updated extension guards to accept only this processed object while
+    keeping stage, build, merge, and integration disabled
+  - documented incomplete published-annotation coverage as a required review
+    item rather than treating the object as the complete unfiltered study
 
 ## Current working era
 

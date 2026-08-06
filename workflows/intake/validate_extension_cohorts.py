@@ -226,27 +226,46 @@ def _add_duplicate_issues(
                 owners[value] = row["cohort_id"]
 
 
-def _canonical_identifiers(path: Path) -> set[str]:
+def _canonical_registry_state(path: Path) -> tuple[set[str], set[str]]:
     if not path.exists():
         raise ManifestError(f"Canonical registry not found: {path}")
     with path.open(newline="", encoding="utf-8-sig") as handle:
         reader = csv.DictReader(handle)
-        required = {"dataset_id", "accession"}
+        required = {
+            "dataset_id",
+            "accession",
+            "phase0_active",
+            "current_milestone_active",
+            "extended_atlas_active",
+            "integration_role",
+        }
         if not required.issubset(reader.fieldnames or []):
             raise ManifestError(f"Canonical registry lacks {sorted(required)}: {path}")
         identifiers: set[str] = set()
+        inactive_pending_extensions: set[str] = set()
         for row in reader:
             identifiers.update(
                 value.strip().upper()
                 for value in (row.get("dataset_id", ""), row.get("accession", ""))
                 if value and value.strip()
             )
-    return identifiers
+            dataset_id = row.get("dataset_id", "").strip().upper()
+            if (
+                dataset_id
+                and row.get("phase0_active", "").strip().lower() == "false"
+                and row.get("current_milestone_active", "").strip().lower() == "false"
+                and row.get("extended_atlas_active", "").strip().lower() == "false"
+                and row.get("integration_role", "").strip()
+                == "extension_candidate_processed_tnk_pending_phase0"
+            ):
+                inactive_pending_extensions.add(dataset_id)
+    return identifiers, inactive_pending_extensions
 
 
 def _validate_cohort_rows(
     rows: list[dict[str, str]],
     canonical_ids: set[str],
+    inactive_pending_extensions: set[str],
     issues: list[ValidationIssue],
 ) -> None:
     seen_ids: set[str] = set()
@@ -312,7 +331,14 @@ def _validate_cohort_rows(
                     )
                 )
             conflicts = cohort_accessions(row) & canonical_ids
-            if conflicts:
+            pending_self_registration = (
+                conflicts == {cohort_id.upper()}
+                and cohort_id.upper() in inactive_pending_extensions
+                and row["intake_role"] == "extension_candidate_pending_phase0"
+                and row["stage_enabled"] == "false"
+                and row["build_enabled"] == "false"
+            )
+            if conflicts and not pending_self_registration:
                 issues.append(
                     ValidationIssue(
                         "error",
@@ -395,17 +421,17 @@ def _validate_cohort_rows(
 
     gse169246 = by_id.get("GSE169246")
     if gse169246 and (
-        gse169246["intake_role"] != "blocked_provenance"
-        or gse169246["builder_adapter"] != "provenance_blocked"
-        or gse169246["tcr_schema"] != "unverified_blocked"
+        gse169246["intake_role"] != "extension_candidate_pending_phase0"
+        or gse169246["builder_adapter"] != "gse169246_processed_h5ad"
+        or gse169246["tcr_schema"] != "partial_embedded_paired_tra_trb_cdr3"
         or gse169246["stage_enabled"] != "false"
         or gse169246["build_enabled"] != "false"
     ):
         issues.append(
             ValidationIssue(
                 "error",
-                "gse169246_provenance_block",
-                "GSE169246 must remain stage/build disabled until accession-matched provenance is proven",
+                "gse169246_pending_phase0_policy",
+                "GSE169246 must use the selected processed H5AD and remain stage/build disabled until standalone harmonization and Phase 0 review",
                 "GSE169246",
             )
         )
@@ -521,19 +547,24 @@ def _validate_library_rows(
             continue
         cohort_libraries = libraries_by_cohort.get(cohort["cohort_id"], [])
         if cohort["cohort_id"] == "GSE169246":
-            forbidden = [
-                row
-                for row in cohort_libraries
-                if any(token in row["source_glob"].casefold() for token in ("bootstrap", "mmc3", "mmc5"))
-                or row["source_role"] != "gex"
-                or row["required"] != "false"
+            selected = [
+                row for row in cohort_libraries
+                if row["library_id"] == "GSE169246_PROCESSED_TNK"
             ]
-            if forbidden:
+            invalid = len(selected) != 1 or any(
+                any(token in row["source_glob"].casefold() for token in ("bootstrap", "mmc3", "mmc5"))
+                or "tnk_cleaned.h5ad" not in row["source_glob"].casefold()
+                or row["source_role"] != "combined"
+                or row["required"] != "false"
+                or row["metasheet_required"] != "false"
+                for row in cohort_libraries
+            )
+            if invalid:
                 issues.append(
                     ValidationIssue(
                         "error",
                         "gse169246_forbidden_source",
-                        "GSE169246 may not accept bootstrap, mmc3/mmc5, or TCR/metadata sources",
+                        "GSE169246 must select only the processed TNK_cleaned.h5ad; bootstrap and direct mmc3/mmc5 sources remain forbidden",
                         cohort["cohort_id"],
                     )
                 )
@@ -789,14 +820,16 @@ def validate_extension_manifests(
     try:
         cohorts = read_manifest(cohort_path, COHORT_COLUMNS)
         libraries = read_manifest(library_path, LIBRARY_COLUMNS)
-        canonical_ids = _canonical_identifiers(canonical_registry_path)
+        canonical_ids, inactive_pending_extensions = _canonical_registry_state(
+            canonical_registry_path
+        )
     except (OSError, ManifestError) as exc:
         report = ValidationReport(
             [ValidationIssue("error", "manifest_parse", str(exc))]
         )
         return report, [], []
 
-    _validate_cohort_rows(cohorts, canonical_ids, issues)
+    _validate_cohort_rows(cohorts, canonical_ids, inactive_pending_extensions, issues)
     _validate_library_rows(cohorts, libraries, issues)
     _validate_shared_metasheet(cohorts, shared_metasheet_path, issues)
 
