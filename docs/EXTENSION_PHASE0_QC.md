@@ -175,3 +175,21 @@ The JSON is the machine-readable gate record. It always includes
 `review_required: true`, `merge_approved: false`, the manifest checksum, source
 paths and file statistics, artifact paths, cohort summaries, and all issues.
 Only explicit user review can authorize a later phase.
+
+## Source-Chain Audit
+
+Run the staged-source audit alongside Phase 0 QC:
+
+```bash
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/intake/audit_extension_tcr_source_chains.py
+```
+
+It reads original staged contig tables and records total, productive, and
+productive-CDR3 rows by TRA/TRB/TRG/TRD. This distinguishes a genuine
+alpha-beta-only source from a TCR-ingestion defect. Outputs are:
+
+```text
+Integrated_dataset/tables/extension_intake/extension_tcr_source_chain_audit.csv
+Integrated_dataset/logs/extension_intake/extension_tcr_source_chain_audit.md
+```

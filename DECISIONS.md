@@ -36,6 +36,15 @@
 - the historical external H5AD path remains a supported compatibility link to
   the project-managed artifact so the cohort's original scripts and RStudio
   project paths continue to work
+- tumor-related projects must preserve disease-aware specimen context that
+  distinguishes primary tumor, adjacent/non-tumor tissue, blood, and metastatic
+  sites whenever source metadata provide that distinction; original metadata
+  fields are not overwritten
+- the seven extension H5ADs remain standalone and unmerged after their Phase 0
+  structural review until explicit user approval
+- GSE169246 remains fail-closed because the available local files are not
+  proven accession-pure, and Tan et al. 2021 is excluded as a duplicate of
+  `GDT_2020AUG_woCOV`
 - repaired TCR propagation is approved for these ten GSEs:
   - `GSE188620`
   - `GSE212217`

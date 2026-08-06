@@ -2,15 +2,25 @@
 
 ## Current milestone
 
-- Post-Phase 4 review on the validated integrated milestone
+- Post-Phase 4 review plus extension-cohort standalone Phase 0 review gate
 
 ## Next action
 
-- Continue user-directed downstream analyses and reporting on the current
-  integrated object
+- Await explicit user review and approval of the extension Phase 0 package
+- after approval, compare the frozen gdTAI V2/V3 profiles on the standalone
+  extension cohorts before any merge or integration
 
 ## Current blockers or review items
 
+- extension-cohort merge, integration, and model-evaluation phase advancement
+  are not approved
+- all seven extension cohorts have zero productive TRG/TRD chain records; they
+  support independent alpha-beta T-cell and NK false-positive evaluation but
+  not independent TCR-defined gdT recall
+- staged-source audit found 1,267 TRG/TRD fragment rows but zero productive
+  TRG/TRD CDR3s, confirming that this is not a parser loss
+- five extension cohorts have unmatched productive TCR-contig warnings that
+  require review; all seven nevertheless passed structural QC
 - Phase 4 scoring outputs remain under user review
 - disease-status correction remains export-only and has not been written back
   into `integrated.h5ad`
@@ -36,6 +46,16 @@
 
 Additional current state:
 
+- seven extension H5ADs containing 498,901 cells and 154 libraries were built
+  under `data/interim/extension_intake/built_h5ads/`
+- all seven extension H5ADs passed sparse raw-count, metadata, TCR-schema,
+  logical-flag, and sample-plus-barcode Phase 0 structural QC
+- extension tumor-project specimen context passed for all 498,901 cells with
+  zero unresolved rows and zero violations; original tissue and diagnosis
+  fields were not modified
+- GSE169246 remains provenance-blocked and was not staged or built
+- Tan et al. 2021 remains excluded as a duplicate of
+  `GDT_2020AUG_woCOV`
 - the project reorganization is validated: active code is grouped under
   `workflows/`, configuration under `configs/`, and physical pre-integration
   data are dataset-centered under `data/datasets/<dataset_id>/`
@@ -90,6 +110,15 @@ Additional current state:
 
 ## Current review artifacts
 
+- extension standalone Phase 0 review:
+  - `Integrated_dataset/logs/extension_intake/extension_phase0_supervision_report.md`
+  - `Integrated_dataset/logs/extension_intake/extension_phase0_qc_summary.md`
+  - `Integrated_dataset/tables/extension_intake/extension_phase0_cohort_summary.csv`
+  - `Integrated_dataset/tables/extension_intake/extension_tcr_source_chain_audit.csv`
+  - `Integrated_dataset/figures/extension_intake/extension_phase0_cohort_overview.png`
+- extension tumor-project specimen-context review:
+  - `Integrated_dataset/logs/sample_source_refinement/extension_sample_source_review.md`
+  - `Integrated_dataset/tables/sample_source_refinement/extensions/extension_tumor_project_context_counts.csv`
 - project reorganization:
   - `docs/REORGANIZATION_RECORD.md`
   - `Integrated_dataset/logs/project_reorganization/checkpoints/pre_reorganization_20260715/`

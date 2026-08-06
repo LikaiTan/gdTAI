@@ -1,0 +1,257 @@
+{
+  "schema_version": 1,
+  "workflow_id": "gdt_atlas_de_novo_v1",
+  "description": "Fail-closed de novo gamma-delta T-cell atlas build and donor-level analysis from an explicitly approved rebuilt integrated object.",
+  "execution": {
+    "required_environment": "rapids_sc_py310",
+    "rebuilt_integrated_h5ad": "high_speed_temp/Integrated_dataset/rebuilt_integrated.h5ad",
+    "approval_marker": "Integrated_dataset/approvals/gdt_atlas_rebuilt_integrated.approved.json",
+    "atlas_h5ad": "Integrated_dataset/gdT_atlas/de_novo/gdt_atlas.h5ad",
+    "build_manifest": "Integrated_dataset/logs/gdT_atlas_de_novo/build_manifest.json",
+    "build_table_dir": "Integrated_dataset/tables/gdT_atlas_de_novo/build",
+    "build_log_dir": "Integrated_dataset/logs/gdT_atlas_de_novo",
+    "scvi_model_dir": "Integrated_dataset/models/gdT_atlas_de_novo/scvi",
+    "analysis_manifest": "Integrated_dataset/logs/gdT_atlas_de_novo/analysis_manifest.json",
+    "analysis_table_dir": "Integrated_dataset/tables/gdT_atlas_de_novo/analysis",
+    "allow_overwrite": false
+  },
+  "prerequisites": {
+    "approval_schema_version": 2,
+    "approval_decision": "approved",
+    "approval_purpose": "build_gdt_atlas_de_novo",
+    "digest_algorithm": "sha256",
+    "require_config_sha256": true,
+    "require_input_sha256": true,
+    "require_input_size_bytes": true,
+    "counts_layer": "counts",
+    "require_csr_counts": true,
+    "require_nonnegative_integer_counts": true,
+    "require_unique_obs_names": true,
+    "require_unique_var_names": true,
+    "minimum_cells": 1000,
+    "minimum_genes": 1000
+  },
+  "frozen_profile_selection": {
+    "comparison_workflow": "workflows/gdtai/compare_frozen_gdtai_profiles.py",
+    "evaluation_config": "configs/models/gdtai/extension_evaluation.json",
+    "evaluation_input_manifest": "data/interim/extension_intake/evaluation_inputs.csv",
+    "selection_decision": "Integrated_dataset/logs/gdT_prediction/gdtai_extension_evaluation/selection_decision.json",
+    "holdout_status": "Integrated_dataset/logs/gdT_prediction/gdtai_extension_evaluation/holdout_status.json",
+    "required_profiles": [
+      {
+        "profile_id": "v2_high_f1",
+        "model_id": "gdtai_v2",
+        "mode": "high_f1"
+      },
+      {
+        "profile_id": "v2_high_purity",
+        "model_id": "gdtai_v2",
+        "mode": "high_purity"
+      },
+      {
+        "profile_id": "v3_round14_balanced",
+        "model_id": "gdtai_v3",
+        "mode": "fixed_threshold"
+      },
+      {
+        "profile_id": "v3_round12_high_purity",
+        "model_id": "gdtai_v3_round12",
+        "mode": "fixed_threshold"
+      }
+    ],
+    "required_sealed_holdout_ids": [
+      "GSE315928",
+      "GSE121636"
+    ],
+    "required_selection_status": "selected",
+    "required_holdout_promotion_status": "holdout_passed",
+    "required_normalization": "log1p(raw_counts_per_10000)",
+    "normalization_target_sum": 10000,
+    "counts_layer": "counts",
+    "chunk_size": 50000,
+    "maximum_missing_model_genes": 0,
+    "score_obs_column": "gdtai_selected_frozen_score",
+    "threshold_obs_column": "gdtai_selected_frozen_threshold",
+    "prediction_obs_column": "gdtai_selected_frozen_prediction",
+    "annotation_obs_column": "gdtai_evaluation_annotation",
+    "annotation_source_obs_column": "gdtai_evaluation_annotation_source"
+  },
+  "selection": {
+    "columns": {
+      "paired_alpha_beta": "has_TRA_TRB_paired",
+      "any_alpha_beta": "has_any_ab_tcr",
+      "paired_gamma_delta": "has_TRG_TRD_paired",
+      "trg_cdr3": "TRG_cdr3",
+      "trd_cdr3": "TRD_cdr3",
+      "truth_class": "gdt_truth_class",
+      "high_confidence_nk": "atlas_high_confidence_nk",
+      "doublet": "atlas_doublet",
+      "non_t_contaminant": "atlas_non_t_contaminant",
+      "severe_qc_failure": "atlas_severe_qc_failure"
+    },
+    "primary_gold_values": [
+      "gdt_gold"
+    ],
+    "alpha_beta_gold_values": [
+      "abt_gold"
+    ],
+    "silver_only_values": [
+      "gdt_silver"
+    ],
+    "invalid_cdr3_tokens": [
+      "",
+      "na",
+      "nan",
+      "none",
+      "null",
+      "unknown",
+      "<na>"
+    ],
+    "require_both_productive_cdr3_for_gold_addback": true,
+    "known_alpha_beta_only_requires_paired_trab_or_gold": true,
+    "known_alpha_beta_only_requires_no_productive_gdt_evidence": true,
+    "hard_exclusions_apply_to_gold_addback": true,
+    "allow_silver_only_fn_addback": false,
+    "hard_trdv_exclusion": false,
+    "nk_gene_only_exclusion": false,
+    "minimum_selected_cells": 10000,
+    "required_obs_columns": [
+      "source_gse_id",
+      "sample_id",
+      "library_id",
+      "donor_id",
+      "condition",
+      "tissue_corrected",
+      "technology_simple",
+      "atlas_targeted_cohort",
+      "has_TRA_TRB_paired",
+      "has_any_ab_tcr",
+      "has_TRG_TRD_paired",
+      "TRG_cdr3",
+      "TRD_cdr3",
+      "gdt_truth_class",
+      "atlas_high_confidence_nk",
+      "atlas_doublet",
+      "atlas_non_t_contaminant",
+      "atlas_severe_qc_failure"
+    ]
+  },
+  "feature_selection": {
+    "flavor": "seurat_v3",
+    "batch_key": "source_gse_id",
+    "candidate_pool_size": 8000,
+    "n_top_genes": 4000,
+    "tcr_gene_prefixes_excluded": [
+      "TRA",
+      "TRB",
+      "TRG",
+      "TRD"
+    ]
+  },
+  "scvi": {
+    "batch_key": "source_gse_id",
+    "categorical_covariate_keys": [
+      "technology_simple"
+    ],
+    "n_hidden": 128,
+    "n_latent": 30,
+    "n_layers": 2,
+    "dropout_rate": 0.1,
+    "dispersion": "gene-batch",
+    "gene_likelihood": "nb",
+    "max_epochs": 120,
+    "batch_size": 1024,
+    "early_stopping": true,
+    "early_stopping_patience": 15,
+    "accelerator": "auto",
+    "devices": "auto",
+    "training_seed": 20260806,
+    "latent_key": "X_scVI_gdT"
+  },
+  "embedding_clustering": {
+    "n_neighbors": 30,
+    "metric": "euclidean",
+    "umap_min_dist": 0.3,
+    "umap_spread": 1.0,
+    "seeds": [
+      20260806,
+      20260817,
+      20260829
+    ],
+    "leiden_resolutions": [
+      0.4,
+      0.7,
+      1.0,
+      1.3
+    ],
+    "primary_seed": 20260806,
+    "primary_resolution": 0.7,
+    "primary_cluster_key": "gdt_leiden"
+  },
+  "analysis": {
+    "study_column": "source_gse_id",
+    "sample_column": "sample_id",
+    "library_column": "library_id",
+    "donor_column": "donor_id",
+    "condition_column": "condition",
+    "tissue_column": "tissue_corrected",
+    "cluster_column": "gdt_leiden",
+    "targeted_cohort_exclusion": {
+      "required_boolean_column": "atlas_targeted_cohort",
+      "source_ids": [
+        "GDT_2020AUG_woCOV",
+        "GDTlung2023july_7p",
+        "MalteGDT"
+      ],
+      "exclude_from_abundance_inference": true,
+      "exclude_from_primary_de": false
+    },
+    "composition": {
+      "minimum_cells_per_sample": 20,
+      "minimum_cells_per_donor": 30,
+      "minimum_donors_per_group": 3,
+      "continuity_offset": 0.5
+    },
+    "within_study_contrasts": [
+      {
+        "contrast_id": "disease_vs_control_template",
+        "enabled": false,
+        "study_ids": [],
+        "group_column": "condition",
+        "case_values": [],
+        "reference_values": [],
+        "paired_by_donor": false,
+        "note": "Enable only after exact study-level condition mappings are reviewed on the approved rebuilt object."
+      }
+    ],
+    "random_effects_meta_analysis": {
+      "method": "dersimonian_laird",
+      "minimum_studies": 2,
+      "confidence_level": 0.95
+    },
+    "donor_pseudobulk_de": {
+      "enabled": true,
+      "comparison": "cluster_vs_rest_within_donor",
+      "minimum_cells_per_donor_cluster": 10,
+      "minimum_paired_donors": 3,
+      "minimum_total_counts_per_gene": 20,
+      "normalization_target": 1000000,
+      "pseudocount": 0.5,
+      "gene_chunk_size": 2000,
+      "tcr_gene_prefixes_excluded": [
+        "TRA",
+        "TRB",
+        "TRG",
+        "TRD"
+      ]
+    },
+    "separate_tcr_expression": {
+      "gene_prefixes": [
+        "TRDV",
+        "TRGV"
+      ],
+      "normalization_target": 1000000,
+      "minimum_cells_per_donor_cluster": 10
+    }
+  }
+}

@@ -72,6 +72,14 @@
 
 ## Current review packages
 
+- extension-cohort standalone Phase 0 review:
+  - `Integrated_dataset/logs/extension_intake/extension_phase0_supervision_report.md`
+  - `Integrated_dataset/logs/extension_intake/extension_phase0_qc_summary.md`
+  - `Integrated_dataset/tables/extension_intake/`
+  - `Integrated_dataset/figures/extension_intake/`
+- extension tumor-project specimen-context review:
+  - `Integrated_dataset/logs/sample_source_refinement/extension_sample_source_review.md`
+  - `Integrated_dataset/tables/sample_source_refinement/extensions/`
 - Phase 4 QC:
   - `Integrated_dataset/logs/phase4_qc_summary.md`
 - tissue correction:

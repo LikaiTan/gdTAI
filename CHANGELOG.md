@@ -89,6 +89,19 @@
   - retained GEO URLs, byte sizes, SHA-256 checksums, and Git rollback commit
   - deleted the 16,750,876,819-byte local dataset directory by explicit user
     request
+- extension-cohort standalone Phase 0 review completed on 2026-08-06
+  - seven checksum-pinned H5ADs built with 498,901 cells and 154 libraries
+  - all seven passed sparse raw-count, metadata, TCR-schema, logical-flag, and
+    sample-plus-barcode structural QC
+  - tumor-project specimen context resolved for every cell with zero violations
+    and without modifying source H5ADs
+  - staged-source audit confirmed 1,267 nonproductive TRG/TRD fragments and
+    zero productive TRG/TRD CDR3s
+  - GSE169246 remained provenance-blocked; Tan et al. 2021 remained excluded
+    as the existing `GDT_2020AUG_woCOV` study
+  - supervision report and source-audit addendum emailed to Likai
+  - merge, integration, and model-evaluation phase advancement remain pending
+    explicit review approval
 
 ## Current working era
 

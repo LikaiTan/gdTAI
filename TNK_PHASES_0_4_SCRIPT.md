@@ -96,6 +96,52 @@ Core outputs:
 - `Integrated_dataset/logs/phase0_qc_summary.md`
 - Phase 0 PNG QC figures
 
+## Extension cohort standalone Phase 0 lane
+
+Objective:
+
+- stage and build approved new GEX/TCR cohorts without merging them
+- enforce disease-aware tumor specimen context without overwriting source fields
+- stop at a user-reviewed standalone Phase 0 gate
+
+Phase or task:
+
+- extension cohort intake, build, and standalone Phase 0 review
+
+Exact scripts:
+
+- `workflows/intake/validate_extension_cohorts.py`
+- `workflows/intake/stage_extension_cohorts.py`
+- `workflows/intake/build_extension_h5ads.py`
+- `workflows/intake/qc_extension_h5ads.py`
+- `workflows/intake/audit_extension_tcr_source_chains.py`
+- `workflows/metadata/review_extension_sample_sources.py`
+
+Core inputs:
+
+- `configs/datasets/extension_cohorts.csv`
+- `configs/datasets/extension_libraries.csv`
+- `configs/metadata/sample_source_refinement_rules.json`
+
+Core outputs:
+
+- `data/interim/extension_intake/built_h5ads_manifest.csv`
+- `data/interim/extension_intake/built_h5ads/<cohort_id>.h5ad`
+- `Integrated_dataset/logs/extension_intake/extension_phase0_qc_summary.md`
+- `Integrated_dataset/tables/extension_intake/extension_phase0_cohort_summary.csv`
+- `Integrated_dataset/figures/extension_intake/extension_phase0_cohort_overview.png`
+- `Integrated_dataset/tables/extension_intake/extension_tcr_source_chain_audit.csv`
+- `Integrated_dataset/logs/sample_source_refinement/extension_sample_source_review.md`
+- `Integrated_dataset/tables/sample_source_refinement/extensions/extension_tumor_project_context_counts.csv`
+
+Current gate semantics:
+
+- all H5AD review is read-only
+- GSE169246 remains fail-closed until accession-pure provenance is demonstrated
+- Tan et al. 2021 remains excluded because `GDT_2020AUG_woCOV` already
+  represents that study
+- no merge or integration may proceed without explicit user approval
+
 ## Phase 1: Coarse T/NK extraction
 
 Objective:

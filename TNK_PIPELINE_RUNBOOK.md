@@ -182,3 +182,10 @@ Re-read the same three files whenever:
 - push regularly
 - use descriptive commit messages
 - use git history instead of filename proliferation
+
+## 10. Supervision notification policy
+
+- email Likai at `likai.tan@outlook.com` for every major validated milestone
+- email Likai whenever an action requires supervision or explicit approval
+- the email must state whether a QC gate passed, what remains blocked, and the
+  exact review artifact paths

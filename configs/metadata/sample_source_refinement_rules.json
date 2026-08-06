@@ -1,0 +1,718 @@
+{
+  "schema_version": 1,
+  "ruleset_id": "sample_source_refinement_20260806",
+  "output_field": "sample_source_refined",
+  "unresolved_label": "unresolved",
+  "precedence": [
+    "cell_level",
+    "sample_library",
+    "gse_tissue",
+    "global_tissue_fallback",
+    "unresolved"
+  ],
+  "source_columns": {
+    "obs_name": [
+      "_index"
+    ],
+    "source_gse_id": [
+      "source_gse_id",
+      "gse_id",
+      "GSE_ID",
+      "gse",
+      "GSE",
+      "source_accession",
+      "project name",
+      "dataset"
+    ],
+    "cell_id": [
+      "_index",
+      "cell_id",
+      "original_cell_id",
+      "obs_name",
+      "barcodes",
+      "barcode"
+    ],
+    "cell_source": [
+      "sample_source_cell",
+      "cell_source",
+      "sample_source"
+    ],
+    "sample_id": [
+      "sample_id",
+      "sampleid",
+      "sampleID",
+      "sample",
+      "orig.ident"
+    ],
+    "library_id": [
+      "library_id",
+      "sample_info_join_library_id",
+      "sample_info_library_id"
+    ],
+    "patient_id": [
+      "patient_id",
+      "donor_patient",
+      "patient",
+      "donor_id"
+    ],
+    "sample_context": [
+      "sample_source_type",
+      "sample_info_sample_type",
+      "sample_type",
+      "condition"
+    ],
+    "tissue": [
+      "tissue_corrected",
+      "tissue",
+      "sample_info_sample_type",
+      "sample_type"
+    ]
+  },
+  "missing_values": [
+    "",
+    "na",
+    "n/a",
+    "nan",
+    "none",
+    "null",
+    "not available",
+    "unknown",
+    "unresolved"
+  ],
+  "suspicious_value_patterns": [
+    "\\.h5ad(?:\\.gz)?$",
+    "\\.(?:csv|tsv)(?:\\.gz)?$",
+    "matrix\\.mtx(?:\\.gz)?$",
+    "raw_feature_bc_matrix",
+    "filtered_feature_bc_matrix"
+  ],
+  "cell_level_passthrough": true,
+  "cell_level_value_aliases": {
+    "luad": "LUAD_tumor",
+    "lung adenocarcinoma": "LUAD_tumor",
+    "lusc": "LUSC_tumor",
+    "lung squamous cell carcinoma": "LUSC_tumor",
+    "nsclc": "NSCLC_tumor",
+    "non small cell lung cancer": "NSCLC_tumor",
+    "hnscc": "HNSCC_tumor",
+    "head and neck squamous cell carcinoma": "HNSCC_tumor",
+    "hbv positive hcc": "HBV_positive_HCC_tumor",
+    "hbv positive hepatocellular carcinoma": "HBV_positive_HCC_tumor",
+    "breast invasive ductal carcinoma lymph node metastasis": "breast_invasive_ductal_carcinoma_lymph_node_metastasis"
+  },
+  "cell_level_overrides": [],
+  "sample_library_rules": [
+    {
+      "id": "gse287301_patient_10_mixed_tumor_pool",
+      "gse": "GSE287301",
+      "patient_id_regex": "(?:^|[;,|/ ]+)(?:patient[ _-]*#?[ _-]*)?10(?:$|[;,|/ ]+)",
+      "sample_id_exact": [
+        "chip1pool3",
+        "chip2pool3"
+      ],
+      "library_id_exact": [
+        "GSM8743444",
+        "GSM8743452"
+      ],
+      "value": "tumor_pool_HNSCC_with_ameloblastoma_ambiguity",
+      "reason": "The libraries pool HNSCC cases with patient 10, who was ultimately diagnosed with ameloblastoma; tumor context is known but per-cell histology is not.",
+      "evidence": "data/datasets/GSE287301/raw/legacy_source/matrix/GSE287301_series_matrix.txt.gz and GSE287301_patient_matrix.txt.gz"
+    }
+  ],
+  "sample_value_maps": [
+    {
+      "id": "gse243013_exact_luad_lusc",
+      "gse": "GSE243013",
+      "key_fields": [
+        "sample_id",
+        "library_id"
+      ],
+      "tissue_values": [
+        "tumor"
+      ],
+      "value_groups": [
+        {
+          "id": "gse243013_exact_luad",
+          "value": "LUAD_tumor",
+          "reason": "Exact GSE243013 sample-to-cancer_type mapping: LUAD.",
+          "keys": [
+            "P5",
+            "P10",
+            "P18",
+            "P33",
+            "P34",
+            "P36",
+            "P39",
+            "P43",
+            "P52",
+            "P64",
+            "P70",
+            "P71",
+            "P96",
+            "P105",
+            "P122",
+            "P130",
+            "P160",
+            "P172",
+            "P179",
+            "P180",
+            "P182",
+            "P209",
+            "P213",
+            "P218",
+            "P223",
+            "P226",
+            "P266",
+            "P270",
+            "P273",
+            "P282",
+            "P289",
+            "P292",
+            "P293",
+            "P297",
+            "P312",
+            "P340",
+            "P346",
+            "P355",
+            "P382",
+            "P389",
+            "P390",
+            "P394",
+            "P399",
+            "P402",
+            "P404",
+            "P407",
+            "P472",
+            "P481",
+            "P483",
+            "P498",
+            "P509",
+            "P510",
+            "P520",
+            "P523",
+            "P528",
+            "P533",
+            "P550",
+            "P567",
+            "P574",
+            "P579",
+            "P587",
+            "P592",
+            "P595"
+          ]
+        },
+        {
+          "id": "gse243013_exact_lusc",
+          "value": "LUSC_tumor",
+          "reason": "Exact GSE243013 sample-to-cancer_type mapping: LUSC.",
+          "keys": [
+            "P1",
+            "P2",
+            "P3",
+            "P4",
+            "P6",
+            "P9",
+            "P16",
+            "P20",
+            "P22",
+            "P23",
+            "P24",
+            "P26",
+            "P29",
+            "P31",
+            "P32",
+            "P35",
+            "P44",
+            "P45",
+            "P46",
+            "P47",
+            "P49",
+            "P53",
+            "P57",
+            "P58",
+            "P59",
+            "P62",
+            "P63",
+            "P66",
+            "P67",
+            "P68",
+            "P69",
+            "P73",
+            "P74",
+            "P84",
+            "P90",
+            "P92",
+            "P93",
+            "P94",
+            "P97",
+            "P102",
+            "P103",
+            "P106",
+            "P107",
+            "P111",
+            "P113",
+            "P114",
+            "P115",
+            "P118",
+            "P119",
+            "P120",
+            "P121",
+            "P124",
+            "P125",
+            "P127",
+            "P131",
+            "P137",
+            "P142",
+            "P146",
+            "P150",
+            "P156",
+            "P158",
+            "P159",
+            "P161",
+            "P164",
+            "P166",
+            "P168",
+            "P174",
+            "P181",
+            "P184",
+            "P185",
+            "P189",
+            "P190",
+            "P192",
+            "P199",
+            "P200",
+            "P201",
+            "P204",
+            "P205",
+            "P206",
+            "P207",
+            "P221",
+            "P224",
+            "P227",
+            "P233",
+            "P234",
+            "P235",
+            "P243",
+            "P247",
+            "P248",
+            "P249",
+            "P257",
+            "P258",
+            "P259",
+            "P261",
+            "P264",
+            "P265",
+            "P267",
+            "P268",
+            "P271",
+            "P276",
+            "P277",
+            "P278",
+            "P279",
+            "P280",
+            "P281",
+            "P285",
+            "P286",
+            "P287",
+            "P288",
+            "P290",
+            "P291",
+            "P296",
+            "P298",
+            "P303",
+            "P304",
+            "P309",
+            "P321",
+            "P322",
+            "P323",
+            "P325",
+            "P328",
+            "P329",
+            "P334",
+            "P337",
+            "P339",
+            "P347",
+            "P349",
+            "P365",
+            "P367",
+            "P368",
+            "P371",
+            "P372",
+            "P377",
+            "P380",
+            "P387",
+            "P391",
+            "P395",
+            "P403",
+            "P405",
+            "P412",
+            "P414",
+            "P416",
+            "P417",
+            "P418",
+            "P420",
+            "P423",
+            "P427",
+            "P428",
+            "P432",
+            "P433",
+            "P435",
+            "P445",
+            "P453",
+            "P454",
+            "P457",
+            "P459",
+            "P462",
+            "P463",
+            "P464",
+            "P467",
+            "P469",
+            "P470",
+            "P471",
+            "P473",
+            "P477",
+            "P482",
+            "P485",
+            "P486",
+            "P488",
+            "P490",
+            "P491",
+            "P494",
+            "P495",
+            "P496",
+            "P502",
+            "P511",
+            "P524",
+            "P525",
+            "P527",
+            "P540"
+          ]
+        }
+      ],
+      "unmatched": {
+        "id": "gse243013_unmapped_sample_unresolved",
+        "terminal_unresolved": true,
+        "reason": "GSE243013 tumor row lacks an exact reviewed LUAD/LUSC sample mapping."
+      },
+      "evidence": "data/datasets/GSE243013/processed/current.h5ad: sampleID or cell-name prefix mapped to cancer_type"
+    }
+  ],
+  "gse_tissue_rules": [
+    {
+      "id": "gse162498_nsclc_tumor",
+      "gse": "GSE162498",
+      "tissue_values": [
+        "tumor",
+        "nsclc tumor tissue"
+      ],
+      "value": "NSCLC_tumor",
+      "reason": "GSE162498 tumor rows are NSCLC; blood and juxta rows are excluded by tissue gating.",
+      "evidence": "data/datasets/GSE162498/processed/current.h5ad: sample_info_sample_type"
+    },
+    {
+      "id": "gse162498_nsclc_adjacent_non_tumor",
+      "gse": "GSE162498",
+      "tissue_values": [
+        "adjacent normal tissue",
+        "adjacent_normal_tissue",
+        "nsclc juxta tissue",
+        "juxta"
+      ],
+      "value": "NSCLC_adjacent_non_tumor_tissue",
+      "reason": "GSE162498 juxta rows are adjacent non-tumor lung tissue.",
+      "evidence": "data/datasets/GSE162498/processed/current.h5ad: sample_info_sample_type"
+    },
+    {
+      "id": "gse162498_nsclc_blood",
+      "gse": "GSE162498",
+      "tissue_values": [
+        "blood",
+        "peripheral blood",
+        "pbmc"
+      ],
+      "value": "NSCLC_blood",
+      "reason": "GSE162498 blood rows are matched peripheral-blood specimens from the NSCLC cohort.",
+      "evidence": "data/datasets/GSE162498/processed/current.h5ad: sample_info_sample_type"
+    },
+    {
+      "id": "gse235863_hbv_positive_hcc_tumor",
+      "gse": "GSE235863",
+      "tissue_values": [
+        "liver tumor",
+        "liver_tumor"
+      ],
+      "value": "HBV_positive_HCC_tumor",
+      "reason": "GSE235863 liver-tumor rows are from HBV-positive hepatocellular carcinoma.",
+      "evidence": "data/datasets/GSE235863/raw/legacy_source/matrix/GSE235863_series_matrix.txt.gz and processed/current.h5ad"
+    },
+    {
+      "id": "gse235863_hcc_adjacent_normal_liver",
+      "gse": "GSE235863",
+      "tissue_values": [
+        "adjacent normal liver",
+        "adjacent normal liver tissue",
+        "adjacent_normal_liver"
+      ],
+      "value": "HBV_positive_HCC_adjacent_normal_liver",
+      "reason": "GSE235863 adjacent-liver rows are non-tumor specimens from the HBV-positive HCC cohort.",
+      "evidence": "data/datasets/GSE235863/raw/legacy_source/matrix/GSE235863_series_matrix.txt.gz and processed/current.h5ad"
+    },
+    {
+      "id": "gse235863_hcc_blood",
+      "gse": "GSE235863",
+      "tissue_values": [
+        "blood",
+        "peripheral blood",
+        "pbmc"
+      ],
+      "value": "HBV_positive_HCC_blood",
+      "reason": "GSE235863 blood rows are peripheral-blood specimens from the HBV-positive HCC cohort.",
+      "evidence": "data/datasets/GSE235863/raw/legacy_source/matrix/GSE235863_series_matrix.txt.gz and processed/current.h5ad"
+    },
+    {
+      "id": "gse190870_breast_idc_lymph_node_metastasis",
+      "gse": "GSE190870",
+      "tissue_values": [
+        "lymph node metastasis",
+        "lymph_node_metastasis",
+        "human breast cancer; pathological type: Invasive ductal carcinoma"
+      ],
+      "value": "breast_invasive_ductal_carcinoma_lymph_node_metastasis",
+      "reason": "GSE190870 rows are breast invasive ductal carcinoma lymph-node metastasis samples.",
+      "evidence": "data/datasets/GSE190870/processed/current.h5ad: sample_info_sample_type"
+    },
+    {
+      "id": "gse287301_hnscc_tumor",
+      "gse": "GSE287301",
+      "tissue_values": [
+        "tumor"
+      ],
+      "value": "HNSCC_tumor",
+      "reason": "GSE287301 tumor rows are HNSCC except the terminal patient-10 pool exception.",
+      "evidence": "data/datasets/GSE287301/raw/legacy_source/matrix/GSE287301_series_matrix.txt.gz"
+    },
+    {
+      "id": "gse114724_breast_primary_tumor",
+      "gse": "GSE114724",
+      "tissue_values": [
+        "breast tumor",
+        "breast_tumor",
+        "tumor"
+      ],
+      "value": "breast_cancer_primary_tumor",
+      "reason": "The selected GSE114724 libraries are breast-tumor T-cell specimens.",
+      "evidence": "data/interim/extension_intake/staged/GSE114724/sample_metasheet.csv"
+    },
+    {
+      "id": "gse121636_rcc_primary_tumor",
+      "gse": "GSE121636",
+      "tissue_values": [
+        "renal tumor",
+        "renal_tumor",
+        "tumor"
+      ],
+      "value": "clear_cell_RCC_primary_tumor",
+      "reason": "GSE121636 *_T libraries are renal clear-cell carcinoma tumor specimens.",
+      "evidence": "data/interim/extension_intake/staged/GSE121636_GSE121637/sample_metasheet.csv"
+    },
+    {
+      "id": "gse121636_rcc_blood",
+      "gse": "GSE121636",
+      "tissue_values": [
+        "blood",
+        "peripheral blood",
+        "matched peripheral blood"
+      ],
+      "value": "clear_cell_RCC_blood",
+      "reason": "GSE121636 *_P libraries are matched peripheral-blood specimens.",
+      "evidence": "data/interim/extension_intake/staged/GSE121636_GSE121637/sample_metasheet.csv"
+    },
+    {
+      "id": "gse159251_melanoma_blood",
+      "gse": "GSE159251",
+      "tissue_values": [
+        "blood",
+        "peripheral blood"
+      ],
+      "value": "metastatic_melanoma_blood",
+      "reason": "GSE159251 blood libraries are peripheral-blood specimens from metastatic melanoma patients.",
+      "evidence": "data/interim/extension_intake/staged/GSE159251/sample_metasheet.csv"
+    },
+    {
+      "id": "gse159251_melanoma_lymph_node_metastasis",
+      "gse": "GSE159251",
+      "tissue_values": [
+        "lymph node",
+        "lymph_node",
+        "lymph node metastasis",
+        "lymph_node_metastasis"
+      ],
+      "value": "melanoma_lymph_node_metastasis",
+      "reason": "GSE159251 LN-met libraries are involved regional lymph-node metastases.",
+      "evidence": "data/interim/extension_intake/staged/GSE159251/sample_metasheet.csv"
+    },
+    {
+      "id": "gse159251_melanoma_subcutaneous_metastasis",
+      "gse": "GSE159251",
+      "tissue_values": [
+        "subcutaneous metastasis",
+        "subcutaneous_metastasis"
+      ],
+      "value": "melanoma_subcutaneous_metastasis",
+      "reason": "GSE159251 subcu-met libraries are axillary subcutaneous metastases.",
+      "evidence": "data/interim/extension_intake/staged/GSE159251/sample_metasheet.csv"
+    },
+    {
+      "id": "gse292700_luad_primary_tumor",
+      "gse": "GSE292700",
+      "tissue_values": [
+        "tumor",
+        "tumors"
+      ],
+      "value": "LUAD_primary_tumor",
+      "reason": "GSE292700 tumor libraries are BRCA1/2-mutant lung adenocarcinoma specimens.",
+      "evidence": "data/interim/extension_intake/staged/GSE292700/sample_metasheet.csv"
+    },
+    {
+      "id": "gse292700_luad_adjacent_non_tumor",
+      "gse": "GSE292700",
+      "tissue_values": [
+        "paracancerous",
+        "adjacent tissue",
+        "adjacent_tissue",
+        "adjacent normal tissue"
+      ],
+      "value": "LUAD_adjacent_non_tumor_tissue",
+      "reason": "GSE292700 paracancerous libraries are adjacent non-tumor lung specimens.",
+      "evidence": "data/interim/extension_intake/staged/GSE292700/sample_metasheet.csv"
+    },
+    {
+      "id": "gse292700_luad_blood",
+      "gse": "GSE292700",
+      "tissue_values": [
+        "blood",
+        "peripheral blood"
+      ],
+      "value": "LUAD_blood",
+      "reason": "GSE292700 blood libraries are matched peripheral-blood specimens.",
+      "evidence": "data/interim/extension_intake/staged/GSE292700/sample_metasheet.csv"
+    },
+    {
+      "id": "gse294273_melanoma_lymph_node_metastasis",
+      "gse": "GSE294273",
+      "tissue_values": [
+        "lymph node",
+        "lymph_node",
+        "lymph node metastasis",
+        "lymph_node_metastasis"
+      ],
+      "value": "melanoma_lymph_node_metastasis",
+      "reason": "GSE294273 samples are melanoma lymph-node metastases.",
+      "evidence": "data/interim/extension_intake/staged/GSE294273_GSE294274/sample_metasheet.csv"
+    },
+    {
+      "id": "gse296954_hnscc_primary_tumor",
+      "gse": "GSE296954",
+      "tissue_values": [
+        "tumor",
+        "tumor tissue"
+      ],
+      "value": "HNSCC_primary_tumor",
+      "reason": "GSE296954 libraries are pre/post-treatment HNSCC tumor specimens.",
+      "evidence": "data/interim/extension_intake/staged/GSE296954/sample_metasheet.csv"
+    },
+    {
+      "id": "gse315928_gastric_primary_tumor",
+      "gse": "GSE315928",
+      "tissue_values": [
+        "tumor",
+        "primary gastric tumor"
+      ],
+      "value": "gastric_cancer_primary_tumor",
+      "reason": "GSE315928 samples are longitudinal primary gastric-tumor specimens.",
+      "evidence": "data/interim/extension_intake/staged/GSE315928/sample_metasheet.csv"
+    }
+  ],
+  "tumor_project_requirements": [
+    {
+      "gse": "GSE162498",
+      "allowed_refined_values": ["NSCLC_tumor", "NSCLC_adjacent_non_tumor_tissue", "NSCLC_blood"]
+    },
+    {
+      "gse": "GSE190870",
+      "allowed_refined_values": ["breast_invasive_ductal_carcinoma_lymph_node_metastasis"]
+    },
+    {
+      "gse": "GSE235863",
+      "allowed_refined_values": ["HBV_positive_HCC_tumor", "HBV_positive_HCC_adjacent_normal_liver", "HBV_positive_HCC_blood"]
+    },
+    {
+      "gse": "GSE243013",
+      "allowed_refined_values": ["LUAD_tumor", "LUSC_tumor"]
+    },
+    {
+      "gse": "GSE287301",
+      "allowed_refined_values": ["HNSCC_tumor", "tumor_pool_HNSCC_with_ameloblastoma_ambiguity"]
+    },
+    {
+      "gse": "GSE114724",
+      "allowed_refined_values": ["breast_cancer_primary_tumor"]
+    },
+    {
+      "gse": "GSE121636",
+      "allowed_refined_values": ["clear_cell_RCC_primary_tumor", "clear_cell_RCC_blood"]
+    },
+    {
+      "gse": "GSE159251",
+      "allowed_refined_values": ["metastatic_melanoma_blood", "melanoma_lymph_node_metastasis", "melanoma_subcutaneous_metastasis"]
+    },
+    {
+      "gse": "GSE292700",
+      "allowed_refined_values": ["LUAD_primary_tumor", "LUAD_adjacent_non_tumor_tissue", "LUAD_blood"]
+    },
+    {
+      "gse": "GSE294273",
+      "allowed_refined_values": ["melanoma_lymph_node_metastasis"]
+    },
+    {
+      "gse": "GSE296954",
+      "allowed_refined_values": ["HNSCC_primary_tumor"]
+    },
+    {
+      "gse": "GSE315928",
+      "allowed_refined_values": ["gastric_cancer_primary_tumor"]
+    }
+  ],
+  "global_tissue_aliases": {
+    "blood": "blood",
+    "blood sample": "blood",
+    "human peripheral blood": "blood",
+    "peripheral blood": "blood",
+    "peripheral blood mononuclear cells": "blood",
+    "pbmc": "blood",
+    "balf": "balf",
+    "bronchoalveolar lavage fluid": "balf",
+    "bone marrow": "bone_marrow",
+    "cerebrospinal fluid": "csf",
+    "csf": "csf",
+    "tumor": "tumor",
+    "tumour": "tumor",
+    "liver tumor": "liver_tumor",
+    "adjacent normal liver": "adjacent_normal_liver",
+    "adjacent normal liver tissue": "adjacent_normal_liver",
+    "adjacent normal tissue": "adjacent_normal_tissue",
+    "nsclc juxta tissue": "adjacent_normal_tissue",
+    "juxta": "adjacent_normal_tissue",
+    "lymph node metastasis": "lymph_node_metastasis",
+    "lymph node": "lymph_node",
+    "spleen": "spleen",
+    "lung": "lung",
+    "liver": "liver",
+    "skin": "skin",
+    "colon": "colon",
+    "rectum": "rectum",
+    "ileum": "ileum",
+    "duodenum": "duodenum"
+  },
+  "global_tissue_passthrough": true
+}

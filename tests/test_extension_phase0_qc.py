@@ -10,6 +10,8 @@ import numpy as np
 import pandas as pd
 from scipy import sparse
 
+pd.options.future.infer_string = False
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "workflows/intake/qc_extension_h5ads.py"
@@ -78,6 +80,11 @@ def write_h5ad(
     external_join: bool = False,
 ) -> None:
     obs = valid_obs() if obs is None else obs
+    obs = obs.copy()
+    for column in obs.columns:
+        if pd.api.types.is_string_dtype(obs[column].dtype):
+            obs[column] = obs[column].astype(object)
+    obs.index = pd.Index(obs.index.astype(str).to_numpy(dtype=object), name=obs.index.name)
     if matrix is None:
         matrix = sparse.csr_matrix(
             np.array(
@@ -91,7 +98,7 @@ def write_h5ad(
             )
         )
     var = pd.DataFrame(
-        index=pd.Index(["CD3D", "MT-CO1", "TRDC", "TRBC1"], name="gene_symbol")
+        index=pd.Index(np.asarray(["CD3D", "MT-CO1", "TRDC", "TRBC1"], dtype=object), name="gene_symbol")
     )
     adata = ad.AnnData(X=matrix, obs=obs, var=var)
     if external_join:

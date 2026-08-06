@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "normalization": "log1p(raw_counts_per_10000)",
+  "profiles": [
+    {
+      "profile_id": "v2_high_f1",
+      "model_id": "gdtai_v2",
+      "mode": "high_f1"
+    },
+    {
+      "profile_id": "v2_high_purity",
+      "model_id": "gdtai_v2",
+      "mode": "high_purity"
+    },
+    {
+      "profile_id": "v3_round14_balanced",
+      "model_id": "gdtai_v3",
+      "mode": "fixed_threshold"
+    },
+    {
+      "profile_id": "v3_round12_high_purity",
+      "model_id": "gdtai_v3_round12",
+      "mode": "fixed_threshold"
+    }
+  ],
+  "sealed_holdouts": {
+    "GSE315928": "alpha-beta T-cell negative holdout",
+    "GSE121636": "mixed immune and strict-NK holdout"
+  },
+  "selection_guardrails": {
+    "minimum_gold_recall": 0.8,
+    "maximum_pooled_abt_fpr": 0.001,
+    "maximum_pooled_strict_nk_fpr": 0.001,
+    "maximum_large_cohort_fpr": 0.005,
+    "large_cohort_minimum_negatives": 1000,
+    "maximum_labeled_fp_fraction": 0.05
+  },
+  "critical_genes": [
+    "TRDC",
+    "TRDV1",
+    "TRDV2",
+    "TRAC",
+    "TRBC1",
+    "TRBC2",
+    "CD3D",
+    "CD3E",
+    "CD3G"
+  ],
+  "minimum_model_gene_fraction": 0.0,
+  "model_gene_fraction_warning_below": 0.8,
+  "prevalence_scenarios": [0.001, 0.005, 0.01, 0.02, 0.05],
+  "bootstrap_iterations": 1000,
+  "random_seed": 20260806
+}
