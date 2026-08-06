@@ -111,6 +111,20 @@
     keeping stage, build, merge, and integration disabled
   - documented incomplete published-annotation coverage as a required review
     item rather than treating the object as the complete unfiltered study
+- extension-cohort standalone Phase 1 T/NK filtering completed on 2026-08-06
+  - independently filtered all eight new inputs from 893,126 cells to 758,135
+    T/NK candidates without merging cohorts
+  - retained all 338,046 cells with productive TRA/TRB/TRG/TRD evidence
+  - tightened transcriptomic T-cell evidence so `IL7R` or `LTB` alone cannot
+    pass the lineage gate, while retaining the multi-marker NK rule
+  - passed metadata completeness, exact source-accession, cohort-ID, unique
+    cell/library-barcode, canonical TCR-flag, and specimen-context checks for
+    all eight outputs
+  - resolved GSE169246 barcode reuse by distinguishing 78 source libraries
+    from 51 biological samples; 76 libraries retained T/NK candidates
+  - verified source H5AD SHA-256 values were unchanged
+  - left merge, integration, and gdTAI evaluation blocked pending explicit
+    user review
 
 ## Current working era
 

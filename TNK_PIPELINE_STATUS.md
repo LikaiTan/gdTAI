@@ -2,22 +2,21 @@
 
 ## Current milestone
 
-- Post-Phase 4 review plus extension-cohort standalone Phase 0 review gate
+- Post-Phase 4 review plus extension-cohort standalone Phase 1 T/NK review gate
 
 ## Next action
 
-- Await explicit user review and approval of the extension Phase 0 package
-- harmonize and audit the newly selected GSE169246 processed
-  `TNK_cleaned.h5ad` as a standalone extension input
-- after approval, compare the frozen gdTAI V2/V3 profiles on the standalone
-  extension cohorts before any merge or integration
+- Await explicit user review and approval of the extension standalone T/NK
+  filter package
+- after approval, compare the frozen gdTAI V2/V3 profiles on the
+  cohort-separated T/NK outputs before any merge or integration
 
 ## Current blockers or review items
 
 - extension-cohort merge, integration, and model-evaluation phase advancement
   are not approved
-- the seven completed extension cohorts used alpha-beta TCR assays; zero
-  productive TRG/TRD is therefore expected, and these cohorts support
+- the extension inputs used alpha-beta TCR assays rather than gdTCR assays;
+  zero productive TRG/TRD is therefore expected, and these cohorts support
   alpha-beta T-cell and NK false-positive evaluation rather than independent
   TCR-defined gdT recall
 - five extension cohorts have unmatched productive TCR-contig warnings that
@@ -54,10 +53,15 @@ Additional current state:
 - extension tumor-project specimen context passed for all 498,901 cells with
   zero unresolved rows and zero violations; original tissue and diagnosis
   fields were not modified
-- the user selected the processed GSE169246 `TNK_cleaned.h5ad`; an unchanged,
-  checksum-verified copy is registered under
-  `data/datasets/GSE169246/processed/current.h5ad`, but standalone
-  harmonization and Phase 0 review remain pending
+- all eight new inputs were independently filtered to `758,135` T/NK
+  candidates from `893,126` cells; all `338,046` productive-TCR cells were
+  retained
+- all eight filtered outputs passed required-metadata completeness, exact
+  source-accession, cohort-ID, unique cell/library-barcode, canonical TCR-flag,
+  and specimen-context checks
+- GSE169246 metadata now distinguish 51 biological samples from 78 source
+  libraries using the full barcode suffix; 76 libraries retain T/NK cells
+- source H5AD checksums were unchanged and no source H5AD was modified
 - Tan et al. 2021 remains excluded as a duplicate of
   `GDT_2020AUG_woCOV`
 - the project reorganization is validated: active code is grouped under
@@ -114,6 +118,12 @@ Additional current state:
 
 ## Current review artifacts
 
+- extension standalone Phase 1 T/NK filter review:
+  - `Integrated_dataset/logs/extension_intake/extension_tnk_filter_qc.md`
+  - `Integrated_dataset/tables/extension_intake/tnk_filter/extension_tnk_filter_cohort_summary.csv`
+  - `Integrated_dataset/tables/extension_intake/tnk_filter/extension_tnk_filter_metadata_audit.csv`
+  - `Integrated_dataset/figures/extension_intake/tnk_filter/extension_tnk_filter_overview.png`
+  - `data/interim/extension_intake/tnk_filtered_h5ads_manifest.csv`
 - extension standalone Phase 0 review:
   - `Integrated_dataset/logs/extension_intake/extension_phase0_supervision_report.md`
   - `Integrated_dataset/logs/extension_intake/extension_phase0_qc_summary.md`

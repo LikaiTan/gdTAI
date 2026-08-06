@@ -138,8 +138,8 @@ Current gate semantics:
 
 - all H5AD review is read-only
 - the user-selected GSE169246 processed `TNK_cleaned.h5ad` is registered as a
-  pending standalone input; it must pass harmonization and Phase 0 review
-  before merge or integration
+  standalone input and has passed the extension T/NK filter audit; it remains
+  inactive before merge or integration pending user review
 - Tan et al. 2021 remains excluded because `GDT_2020AUG_woCOV` already
   represents that study
 - no merge or integration may proceed without explicit user approval
@@ -164,8 +164,64 @@ Key outputs:
 - `data/datasets/GSE169246/processed/current.h5ad`
 - `docs/GSE169246_PROCESSED_H5AD_INTAKE.md`
 
-The selected source remains inactive until standalone metadata and TCR-schema
-harmonization, QC, and user review are complete.
+The selected source passed standalone metadata/TCR harmonization and filter QC.
+It remains inactive until user review is complete.
+
+## Extension cohort standalone Phase 1 T/NK filter
+
+Objective:
+
+- filter every new cohort independently to a high-recall T/NK candidate set
+- preserve NK cells for downstream gdTAI false-positive evaluation
+- stop at a user-reviewed standalone gate before merge or integration
+
+Phase or task:
+
+- extension cohort T/NK filtering and metadata audit
+
+Exact `.py` script:
+
+- `workflows/intake/filter_extension_tnk_cells.py`
+
+Core inputs:
+
+- `data/interim/extension_intake/built_h5ads/<cohort_id>.h5ad`
+- `data/datasets/GSE169246/processed/current.h5ad`
+
+Selection rules:
+
+- retain every cell with productive TRA, TRB, TRG, or TRD evidence
+- retain author-annotated T or NK cells
+- otherwise require a core CD3/TCR-alpha-beta marker, a gamma-delta marker,
+  or the canonical multi-marker NK rule
+- do not accept `IL7R` or `LTB` alone as T-lineage evidence
+- explicit non-T/NK annotations block marker-only retention but cannot remove
+  a productive-TCR cell
+
+Metadata rules:
+
+- preserve exact RNA-series provenance in `source_gse_id`
+- record the intake bundle separately in `extension_cohort_id`
+- require complete sample, library, donor, tissue, and specimen-context fields
+- require unique cell IDs and `library_id + barcode` keys
+- recompute and validate canonical TCR logical flags from CDR3 fields
+- distinguish the 78 GSE169246 source libraries from 51 biological samples
+  using the preserved full-barcode suffix
+
+Core outputs:
+
+- `data/interim/extension_intake/tnk_filtered_h5ads_manifest.csv`
+- `data/interim/extension_intake/tnk_filtered_h5ads/<cohort_id>.h5ad`
+- `Integrated_dataset/logs/extension_intake/extension_tnk_filter_qc.md`
+- `Integrated_dataset/logs/extension_intake/extension_tnk_filter_qc.json`
+- `Integrated_dataset/tables/extension_intake/tnk_filter/`
+- `Integrated_dataset/figures/extension_intake/tnk_filter/extension_tnk_filter_overview.png`
+
+Gate semantics:
+
+- outputs remain cohort-separated and inactive for integration
+- explicit user approval is required before merge, integration, or gdTAI
+  evaluation
 
 ## Phase 1: Coarse T/NK extraction
 

@@ -72,6 +72,13 @@
 
 ## Current review packages
 
+- extension-cohort standalone Phase 1 T/NK filter:
+  - `data/interim/extension_intake/tnk_filtered_h5ads_manifest.csv`
+  - `data/interim/extension_intake/tnk_filtered_h5ads/`
+  - `Integrated_dataset/logs/extension_intake/extension_tnk_filter_qc.md`
+  - `Integrated_dataset/logs/extension_intake/extension_tnk_filter_qc.json`
+  - `Integrated_dataset/tables/extension_intake/tnk_filter/`
+  - `Integrated_dataset/figures/extension_intake/tnk_filter/extension_tnk_filter_overview.png`
 - GSE169246 selected processed input:
   - `data/datasets/GSE169246/processed/current.h5ad`
   - `docs/GSE169246_PROCESSED_H5AD_INTAKE.md`
