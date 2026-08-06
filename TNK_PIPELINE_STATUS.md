@@ -45,7 +45,7 @@ Additional current state:
   registered; its storage was refined so the approximately 949 GB raw/interim
   workspace remains at its original location and only the 2,110,825,599-byte
   validation H5AD is physically stored in the project
-- the current storage view has 67 dataset directories, 45 promoted
+- the current storage view has 66 dataset directories, 45 promoted
   `current.h5ad` links, and 264 lifecycle compatibility links
 - the historical `downloads`, `analysis_26GSE_V4`, and `newdata` paths remain
   usable as compatibility aliases to the same inodes
@@ -54,7 +54,7 @@ Additional current state:
   compatibility link to it
 - the historical external H5AD path is a compatibility link to
   `data/datasets/BALF_BLOOD_COPD/processed/artifacts/phase4_final_annotated.h5ad`
-- the dataset registry currently contains 67 datasets and 1,791 library rows;
+- the dataset registry currently contains 66 datasets and 1,789 library rows;
   all 33 Phase 0 active datasets pass strict path and library validation
 - `BALF_BLOOD_COPD` is registered as
   `gdTAI_independent_external_validation` and remains inactive for Phase 0,
@@ -84,15 +84,9 @@ Additional current state:
   checksum-pinned artifacts; Round 14 at threshold `0.936` is the promoted
   balanced default, while Round 12 at threshold `0.5` is preserved as the
   validated high-purity fallback
-- `GSE305372` is registered as an inactive external-application cohort; the
-  corrected external application uses every cell in all four deposited lung
-  and lung-associated lymph-node CD4/CD8 objects without a CITE inclusion
-  filter
-- the corrected GSE305372 denominator is 690,715 transcriptome-eligible cells;
-  V2 high-F1 calls 2,474, V2 high-purity calls 1,942, and promoted V3 Round 14
-  calls 2,043
-- the earlier 157,846-cell CD8A-filtered GSE305372 package is superseded and
-  retained only for provenance and score-regression testing
+- `GSE305372` was excluded and retired on 2026-08-06; it has no active registry
+  rows, its local scientific data were deleted, and its code, reports, source
+  checksums, and historical results were moved under `archive/`
 
 ## Current review artifacts
 
@@ -133,8 +127,7 @@ Additional current state:
 - cluster annotation evidence review:
   - `Integrated_dataset/logs/annotation_evidence_review/current_integrated_annotation_evidence_summary.md`
   - `Integrated_dataset/logs/annotation_evidence_review/plus6_annotation_evidence_summary.md`
-- GSE305372 corrected all-T V2/V3 application:
-  - `reports/GSE305372_gdtai_all_t/index.html`
-  - `reports/GSE305372_gdtai_all_t/GSE305372_gdTAI_v2_v3_all_T_report.pdf`
-  - `docs/GSE305372_GDTAI_ALL_T.md`
-  - `Integrated_dataset/logs/gdT_prediction/GSE305372_all_T/gdtai_v2_v3_gse305372_all_t_manifest.json`
+- GSE305372 retirement record:
+  - `archive/retired_experiments/GSE305372_external_application/README.md`
+  - `archive/retired_experiments/GSE305372_external_application/deleted_source_files.csv`
+  - `maintenance/reorganization/gse305372_retirement_map.csv`

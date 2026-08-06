@@ -1,0 +1,6 @@
+filename,size_bytes,sha256,source_url,disposition
+GSE305372_HIPC-1_LG-CD4-ALL_SeuratObject.RDS,8368100613,5b5ff9b8e5b63bd3b0f0a0e09a1d639cc0c4e5e809c238cb998c58cf13100f9e,https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305372/suppl/GSE305372_HIPC-1_LG-CD4-ALL_SeuratObject.RDS,deleted_2026-08-06
+GSE305372_HIPC-1_LG-CD8-ALL_SeuratObject.RDS,5623543662,b4e1f62c4f34fc6b024f3769dbffd0e9513cf7d22bab915e0dd1a1e3eb4fca71,https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305372/suppl/GSE305372_HIPC-1_LG-CD8-ALL_SeuratObject.RDS,deleted_2026-08-06
+GSE305372_HIPC-1_LN-CD4-ALL_SeuratObject.RDS,2066160300,59817faf26be5568bef616cfe4addd3f25d8fd357aa5ee8a3d1950f0de181068,https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305372/suppl/GSE305372_HIPC-1_LN-CD4-ALL_SeuratObject.RDS,deleted_2026-08-06
+GSE305372_HIPC-1_LN-CD8-ALL_SeuratObject.RDS,515670151,2e36d7ff4ab771e400a13cb807431198aa8ec8f7b7d1554842cb49a1196958e7,https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305372/suppl/GSE305372_HIPC-1_LN-CD8-ALL_SeuratObject.RDS,deleted_2026-08-06
+GSE305372_DICE-TCR_BL-CD4-ALL_ProcessedObject.csv.gz,76152700,50c6f946ea67c4e2194a926bc121a802f2dea9ee12b879151eff2f0740c8ad44,https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305372/suppl/GSE305372_DICE-TCR_BL-CD4-ALL_ProcessedObject.csv.gz,deleted_2026-08-06

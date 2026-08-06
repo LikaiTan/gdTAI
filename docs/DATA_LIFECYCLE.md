@@ -27,10 +27,10 @@ aliases.
 
 Current registry state:
 
-- 67 dataset directories
+- 66 dataset directories
 - 45 promoted per-dataset H5ADs
-- 1,791 library rows
-- 1,214 file rows
+- 1,789 library rows
+- 1,212 file rows
 - 264 lifecycle compatibility links
 
 `BALF_BLOOD_COPD` is an independent external validation cohort. Its
@@ -40,9 +40,10 @@ entry is a compatibility view of that workspace, while only the selected
 2,110,825,599-byte validation H5AD is physically retained under
 `data/datasets/BALF_BLOOD_COPD/processed/`.
 
-`GSE305372` is an inactive external-application cohort. Its two processed CD8
-Seurat objects and compact model-input payloads are stored under
-`data/datasets/GSE305372/`; it is not selected for atlas integration.
+`GSE305372` was excluded and retired on 2026-08-06. Its local dataset directory
+was deleted, its active registry rows were removed, and its reproducibility
+records are retained under
+`archive/retired_experiments/GSE305372_external_application/`.
 
 `configs/datasets/datasets.csv` records dataset membership and selected H5ADs.
 `libraries.csv` records sample/library assay scope. `files.csv` records

@@ -119,11 +119,13 @@
   - `Integrated_dataset/tables/annotation_evidence_review/`
   - `Integrated_dataset/logs/annotation_evidence_review/`
   - `Integrated_dataset/figures/annotation_evidence_review/`
-- GSE305372 corrected all-T gdTAI V2/V3 application:
-  - `reports/GSE305372_gdtai_all_t/index.html`
-  - `reports/GSE305372_gdtai_all_t/GSE305372_gdTAI_v2_v3_all_T_report.pdf`
-  - `Integrated_dataset/tables/gdT_prediction/GSE305372_all_T/`
-  - `Integrated_dataset/figures/gdT_prediction/GSE305372_all_T/`
-  - `Integrated_dataset/logs/gdT_prediction/GSE305372_all_T/`
-  - `docs/GSE305372_GDTAI_ALL_T.md`
-  - superseded CITE-CD8A provenance: `reports/GSE305372_gdtai_cd8/`
+
+## Retired External Applications
+
+- GSE305372 gdTAI application:
+  - retirement record and archived code:
+    `archive/retired_experiments/GSE305372_external_application/`
+  - archived rendered reports:
+    `archive/historical_reports/GSE305372_external_application/`
+  - the original local dataset was deleted and is recoverable from GEO using
+    the archived source manifest

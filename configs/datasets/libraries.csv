@@ -1661,8 +1661,6 @@ GSE301528,GSM9084850,GSM9084850,10x 5',none,none,true,Bone marrow; genotype: hea
 GSE301528,GSM9084851,GSM9084851,10x 5',none,none,true,"Bone marrow, CD138 purified Plasmacells; genotype: healthy donor; genotype: healthy donor"
 GSE301528,GSM9084852,GSM9084852,10x 5',none,none,true,Bone marrow; genotype: healthy donor; genotype: healthy donor
 GSE301528,GSM9084853,GSM9084853,10x 5',none,none,true,"Bone marrow, CD138 purified Plasmacells; genotype: healthy donor; genotype: healthy donor"
-GSE305372,HIPC-1_LG-CD8-ALL,HIPC-1_LG-CD8-ALL,10x (unspecified),vdj,ab_only_in_processed_object,false,"Processed lung CD8 aggregate object; 33 GEX library identifiers are represented in the author metadata. External inference only."
-GSE305372,HIPC-1_LN-CD8-ALL,HIPC-1_LN-CD8-ALL,10x (unspecified),vdj,ab_only_in_processed_object,false,"Processed lung-associated lymph-node CD8 aggregate object; 6 GEX library identifiers are represented in the author metadata. External inference only."
 GSE308075,GSM9237523,GSM9237523,10x (unspecified),none,none,true,Blood
 GSE308075,GSM9237524,GSM9237524,10x (unspecified),none,none,true,Blood
 GSE308075,GSM9237525,GSM9237525,10x (unspecified),none,none,true,Blood

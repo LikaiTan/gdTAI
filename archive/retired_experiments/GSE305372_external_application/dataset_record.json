@@ -1,0 +1,13 @@
+{
+  "canonical_dataset_path": "data/datasets/GSE305372",
+  "current_h5ad": "",
+  "current_h5ad_target": "",
+  "dataset_id": "GSE305372",
+  "integration_role": "gdTAI_external_application",
+  "interim_path": "data/datasets/GSE305372/interim",
+  "legacy_raw_path": "",
+  "processed_path": "data/datasets/GSE305372/processed",
+  "raw_path": "data/datasets/GSE305372/raw",
+  "source_type": "GEO",
+  "status": "external_application_only"
+}

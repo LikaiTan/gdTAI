@@ -50,6 +50,10 @@
 
 ## Historical exceptions and notes
 
+- on 2026-08-06, the user explicitly approved permanent local deletion of
+  `GSE305372` as a one-time exception to the default registry-deactivation-only
+  removal rule; source URLs, byte sizes, SHA-256 checksums, archived code, and
+  Git rollback information were retained before deletion
 - a historical run-specific exception allowed Phase 2 internal QC to continue
   directly into Phase 3 on 2026-03-20
 - that exception is historical only and is not currently active

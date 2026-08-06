@@ -82,6 +82,13 @@
   - reconciled the 189-cell lung CD4 RDS/manuscript difference to unmapped
     author cluster IDs 6-8 and documented the partial lymph-node deposit
   - marked the earlier 157,846-cell CD8A package as superseded provenance
+- GSE305372 external application retired on 2026-08-06
+  - removed the cohort from active dataset, library, and file registries
+  - archived dataset-specific code, methodology, rendered reports, and local
+    result packages
+  - retained GEO URLs, byte sizes, SHA-256 checksums, and Git rollback commit
+  - deleted the 16,750,876,819-byte local dataset directory by explicit user
+    request
 
 ## Current working era
 

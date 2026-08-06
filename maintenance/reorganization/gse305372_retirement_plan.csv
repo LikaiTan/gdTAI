@@ -1,0 +1,21 @@
+old_path,new_path,action,reason
+workflows/intake/download_gse305372_all_t.sh,archive/retired_experiments/GSE305372_external_application/code/intake/download_gse305372_all_t.sh,archive,Dataset-specific acquisition code is retired with the excluded cohort
+workflows/intake/download_gse305372_cd8.sh,archive/retired_experiments/GSE305372_external_application/code/intake/download_gse305372_cd8.sh,archive,Superseded dataset-specific acquisition code is retired with the excluded cohort
+workflows/intake/export_gse305372_all_t_model_payload.R,archive/retired_experiments/GSE305372_external_application/code/intake/export_gse305372_all_t_model_payload.R,archive,Dataset-specific payload export code is retired with the excluded cohort
+workflows/intake/export_gse305372_cd8_model_payload.R,archive/retired_experiments/GSE305372_external_application/code/intake/export_gse305372_cd8_model_payload.R,archive,Superseded dataset-specific payload export code is retired with the excluded cohort
+workflows/gdtai/run_gdtai_gse305372_all_t.py,archive/retired_experiments/GSE305372_external_application/code/gdtai/run_gdtai_gse305372_all_t.py,archive,Dataset-specific inference code is retired with the excluded cohort
+workflows/gdtai/run_gdtai_gse305372_cd8.py,archive/retired_experiments/GSE305372_external_application/code/gdtai/run_gdtai_gse305372_cd8.py,archive,Superseded dataset-specific inference code is retired with the excluded cohort
+docs/GSE305372_GDTAI_ALL_T.md,archive/retired_experiments/GSE305372_external_application/docs/GSE305372_GDTAI_ALL_T.md,archive,Methodology is retained for provenance
+docs/GSE305372_GDTAI_CD8.md,archive/retired_experiments/GSE305372_external_application/docs/GSE305372_GDTAI_CD8.md,archive,Superseded methodology is retained for provenance
+reports/GSE305372_gdtai_all_t,archive/historical_reports/GSE305372_external_application/GSE305372_gdtai_all_t,archive,Rendered report is historical and no longer reader-facing
+reports/GSE305372_gdtai_cd8,archive/historical_reports/GSE305372_external_application/GSE305372_gdtai_cd8,archive,Superseded rendered report is historical and no longer reader-facing
+Integrated_dataset/tables/gdT_prediction/GSE305372_all_T,archive/retired_experiments/GSE305372_external_application/local_results/tables/GSE305372_all_T,archive_local,Generated tables are removed from the canonical output tree
+Integrated_dataset/tables/gdT_prediction/GSE305372,archive/retired_experiments/GSE305372_external_application/local_results/tables/GSE305372,archive_local,Superseded generated tables are removed from the canonical output tree
+Integrated_dataset/figures/gdT_prediction/GSE305372_all_T,archive/retired_experiments/GSE305372_external_application/local_results/figures/GSE305372_all_T,archive_local,Generated figures are removed from the canonical output tree
+Integrated_dataset/figures/gdT_prediction/GSE305372,archive/retired_experiments/GSE305372_external_application/local_results/figures/GSE305372,archive_local,Superseded generated figures are removed from the canonical output tree
+Integrated_dataset/logs/gdT_prediction/GSE305372_all_T,archive/retired_experiments/GSE305372_external_application/local_results/logs/GSE305372_all_T,archive_local,Run manifests and logs are retained locally for provenance
+Integrated_dataset/logs/gdT_prediction/GSE305372,archive/retired_experiments/GSE305372_external_application/local_results/logs/GSE305372,archive_local,Superseded run manifests and logs are retained locally for provenance
+configs/datasets/datasets.csv,,remove_registry_rows,Remove the excluded cohort from the active dataset registry
+configs/datasets/libraries.csv,,remove_registry_rows,Remove inactive GSE305372 library rows
+configs/datasets/files.csv,,remove_registry_rows,Remove paths to source files that will be deleted
+data/datasets/GSE305372,,delete,Delete the 16750876819-byte local dataset directory after preserving source checksums

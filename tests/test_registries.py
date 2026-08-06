@@ -13,7 +13,7 @@ class RegistryTests(unittest.TestCase):
     def test_dataset_registry_is_valid(self) -> None:
         result = validate_dataset_registry(REGISTRY / "datasets.csv", ROOT)
         self.assertTrue(result.ok)
-        self.assertEqual(result.dataset_count, 67)
+        self.assertEqual(result.dataset_count, 66)
         self.assertEqual(result.active_dataset_count, 33)
 
     def test_every_dataset_has_curated_library_rows(self) -> None:
@@ -81,23 +81,21 @@ class RegistryTests(unittest.TestCase):
         self.assertTrue(legacy_h5ad.is_symlink())
         self.assertEqual(legacy_h5ad.resolve(), artifact.resolve())
 
-    def test_gse305372_is_external_application_only(self) -> None:
-        datasets = {
-            row["dataset_id"]: row
-            for row in read_csv(REGISTRY / "datasets.csv")
-        }
-        row = datasets["GSE305372"]
-        self.assertEqual(row["integration_role"], "gdTAI_external_application")
-        self.assertEqual(row["status"], "external_application_only")
-        self.assertEqual(row["phase0_active"], "false")
-        self.assertEqual(row["current_milestone_active"], "false")
-        self.assertEqual(row["extended_atlas_active"], "false")
-        self.assertEqual(row["processed_h5ad_path"], "")
+    def test_gse305372_is_retired(self) -> None:
+        datasets = {row["dataset_id"] for row in read_csv(REGISTRY / "datasets.csv")}
+        libraries = read_csv(REGISTRY / "libraries.csv")
+        files = read_csv(REGISTRY / "files.csv")
 
-        libraries = [
-            item
-            for item in read_csv(REGISTRY / "libraries.csv")
-            if item["dataset_id"] == "GSE305372"
-        ]
-        self.assertEqual(len(libraries), 2)
-        self.assertTrue(all(item["active"] == "false" for item in libraries))
+        self.assertNotIn("GSE305372", datasets)
+        self.assertFalse(any(row["dataset_id"] == "GSE305372" for row in libraries))
+        self.assertFalse(any(row["dataset_id"] == "GSE305372" for row in files))
+        self.assertFalse((ROOT / "data" / "datasets" / "GSE305372").exists())
+        self.assertTrue(
+            (
+                ROOT
+                / "archive"
+                / "retired_experiments"
+                / "GSE305372_external_application"
+                / "deleted_source_files.csv"
+            ).is_file()
+        )
