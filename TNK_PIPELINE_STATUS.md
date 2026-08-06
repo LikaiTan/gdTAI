@@ -2,19 +2,24 @@
 
 ## Current milestone
 
-- Post-Phase 4 extension-cohort frozen-model review plus GEO metadata
-  reconciliation
+- Post-Phase 4 extension-cohort frozen-model and official-GEO metadata reviews
+  complete; additive metadata correction remains gated
 
 ## Next action
 
-- review the frozen-profile negative-control report and the delegated GEO
-  metadata reconciliation package
+- review the frozen-profile negative-control report and official-GEO metadata
+  reconciliation package
+- decide separately whether to approve additive corrected metadata fields for
+  GSE169246 and the other GEO-resolved rows
 - keep every extension cohort separate until merge and integration receive
   explicit approval
 
 ## Current blockers or review items
 
 - extension-cohort merge and integration are not approved
+- GSE169246 has a confirmed compartment-join error: all 239,418 retained `_b`
+  cells are official blood libraries, while current local tissue/specimen fields
+  include tumor sites or non-blood contexts; correction is not yet approved
 - frozen-model screening is complete, but these cohorts contain zero gdT-gold
   and zero gdT-silver cells under the project TCR rules; they cannot support
   new-cohort recall, F1, ROC-AUC, PR-AUC, or model promotion
@@ -74,6 +79,13 @@ Additional current state:
 - no model was selected or promoted; historical positive sensitivity still
   favors promoted V3 Round 14 over Round 12
 - all eight evaluation-source H5AD SHA-256 values remained unchanged
+- official-GEO reconciliation is complete for 58 grouped assertions across 8
+  cohorts and 10 accessions: 16 locally verified, 32 GEO-resolved but locally
+  unresolved, 6 partially ambiguous, and 4 unavailable in GEO
+- the GEO audit passed 10/10 accession-coverage checks and 8/8 read-only H5AD
+  file-state checks; it did not write metadata or mutate an H5AD
+- GSE169246 `_b` correction must use additive derived columns and retain the
+  original fields and full `_b`/`_t` compartment suffix
 - Tan et al. 2021 remains excluded as a duplicate of
   `GDT_2020AUG_woCOV`
 - the project reorganization is validated: active code is grouped under
@@ -130,6 +142,11 @@ Additional current state:
 
 ## Current review artifacts
 
+- extension official-GEO metadata reconciliation:
+  - `docs/EXTENSION_GEO_METADATA_RECONCILIATION.md`
+  - `configs/metadata/extension_geo_metadata_reconciliation.csv`
+  - `Integrated_dataset/logs/geo_metadata_reconciliation/extension_geo_metadata_reconciliation_audit.md`
+  - `Integrated_dataset/tables/geo_metadata_reconciliation/`
 - extension frozen gdTAI profile negative-control evaluation:
   - `gdT_prediction/gdtai_extension_evaluation/index.html`
   - `gdT_prediction/gdtai_extension_evaluation/gdtai_extension_evaluation_report.pdf`

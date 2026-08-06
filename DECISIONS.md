@@ -48,6 +48,14 @@
   distinguishes primary tumor, adjacent/non-tumor tissue, blood, and metastatic
   sites whenever source metadata provide that distinction; original metadata
   fields are not overwritten
+- official-GEO metadata reconciliation is evidence-only until separately
+  approved; supported corrections must be written to additive derived columns,
+  preserve original source values, and retain a provenance link to the exact
+  GEO record
+- GSE169246 library compartment suffixes are biologically meaningful: `_b`
+  denotes blood and `_t` denotes tumor. Any corrected specimen key must retain
+  this suffix, and the current `_b` tissue/specimen mismatch must be resolved
+  before extension merge or integration
 - the seven extension H5ADs remain standalone and unmerged after their Phase 0
   structural review until explicit user approval
 - GSE169246 remains fail-closed because the available local files are not

@@ -1,0 +1,50 @@
+cohort_id,accession,scope,field,local_column,local_scope_regex,observed_value,cell_count
+GSE114724,GSE114724,five selected GEX libraries,tissue,tissue,,breast_tumor,28652
+GSE114724,GSE114724,five selected tumor specimens,specimen_context_primary_vs_metastatic,specimen_context,,primary_tumor,28652
+GSE114724,GSE114724,selected cohort,tumor_type,diagnosis,,breast_cancer,28652
+GSE121636_GSE121637,GSE121636,cohort,tumor_type,diagnosis,,renal_clear_cell_carcinoma,18793
+GSE121636_GSE121637,GSE121636,renal tumor specimens,specimen_context_primary_vs_metastatic,specimen_context,,blood,9628
+GSE121636_GSE121637,GSE121636,renal tumor specimens,specimen_context_primary_vs_metastatic,specimen_context,,primary_tumor,9165
+GSE121636_GSE121637,GSE121636,six GEX specimens,tissue,tissue,,blood,9628
+GSE121636_GSE121637,GSE121636,six GEX specimens,tissue,tissue,,renal_tumor,9165
+GSE159251,GSE159251,blood and tumor samples,specimen_context,specimen_context,,blood,58455
+GSE159251,GSE159251,blood and tumor samples,specimen_context,specimen_context,,metastatic_tumor,10443
+GSE159251,GSE159251,cohort,tumor_type,diagnosis,,metastatic_melanoma,68898
+GSE159251,GSE159251,nine selected local libraries,tissue,tissue,,blood,58455
+GSE159251,GSE159251,nine selected local libraries,tissue,tissue,,lymph_node,5581
+GSE159251,GSE159251,nine selected local libraries,tissue,tissue,,subcutaneous_metastasis,4862
+GSE169246,GSE169246,all retained cells,timepoint_group,timepoint_group,,<blank>,118042
+GSE169246,GSE169246,all retained cells,timepoint_group,timepoint_group,,Post-treatment,110708
+GSE169246,GSE169246,all retained cells,timepoint_group,timepoint_group,,Pre-treatment,125623
+GSE169246,GSE169246,all retained cells,treatment,treatment,,<blank>,118042
+GSE169246,GSE169246,all retained cells,treatment,treatment,,PTX,110018
+GSE169246,GSE169246,all retained cells,treatment,treatment,,PTX+Anti-PD-L1,126313
+GSE169246,GSE169246,all retained cells,tumor_type,diagnosis,,triple_negative_breast_cancer,354373
+GSE169246,GSE169246,all retained libraries ending _b,specimen_context,specimen_context,.*_b$,metastatic_tumor,79119
+GSE169246,GSE169246,all retained libraries ending _b,specimen_context,specimen_context,.*_b$,other_tissue,111432
+GSE169246,GSE169246,all retained libraries ending _b,specimen_context,specimen_context,.*_b$,primary_tumor,48867
+GSE169246,GSE169246,all retained libraries ending _b,tissue,tissue,.*_b$,<blank>,111432
+GSE169246,GSE169246,all retained libraries ending _b,tissue,tissue,.*_b$,breast,48867
+GSE169246,GSE169246,all retained libraries ending _b,tissue,tissue,.*_b$,chest_wall,26544
+GSE169246,GSE169246,all retained libraries ending _b,tissue,tissue,.*_b$,liver,20791
+GSE169246,GSE169246,all retained libraries ending _b,tissue,tissue,.*_b$,lung,4901
+GSE169246,GSE169246,all retained libraries ending _b,tissue,tissue,.*_b$,lymph_node,26883
+GSE292700,GSE292700,all six biological specimens,tumor_type_and_disease,diagnosis,,lung_adenocarcinoma,78254
+GSE292700,GSE292700,six GEX libraries,tissue,tissue,,adjacent_tissue,32315
+GSE292700,GSE292700,six GEX libraries,tissue,tissue,,blood,21648
+GSE292700,GSE292700,six GEX libraries,tissue,tissue,,tumor,24291
+GSE292700,GSE292700,tumor libraries,specimen_context_primary_vs_metastatic,specimen_context,,adjacent_non_tumor,32315
+GSE292700,GSE292700,tumor libraries,specimen_context_primary_vs_metastatic,specimen_context,,blood,21648
+GSE292700,GSE292700,tumor libraries,specimen_context_primary_vs_metastatic,specimen_context,,primary_tumor,24291
+GSE294273_GSE294274,GSE294273,cohort,tumor_type,diagnosis,,melanoma,55744
+GSE294273_GSE294274,GSE294273,twelve GEX libraries,specimen_context,specimen_context,,metastatic_tumor,55744
+GSE294273_GSE294274,GSE294273,twelve GEX libraries,tissue,tissue,,lymph_node_metastasis,55744
+GSE296954,GSE296954,cohort,tumor_type,diagnosis,,head_and_neck_squamous_cell_carcinoma,86608
+GSE296954,GSE296954,tumor biopsies,specimen_context_primary_vs_metastatic,specimen_context,,primary_tumor,86608
+GSE296954,GSE296954,twenty-two GEX libraries,tissue,tissue,,tumor,86608
+GSE315928,GSE315928,B F1 and F2 suffixes,timepoint,timepoint,,B,20835
+GSE315928,GSE315928,B F1 and F2 suffixes,timepoint,timepoint,,F1,24342
+GSE315928,GSE315928,B F1 and F2 suffixes,timepoint,timepoint,,F2,21636
+GSE315928,GSE315928,all specimens,specimen_context,specimen_context,,primary_tumor,66813
+GSE315928,GSE315928,cohort,tumor_type,diagnosis,,gastric_cancer,66813
+GSE315928,GSE315928,ninety-four combined sample records,tissue,tissue,,tumor,66813

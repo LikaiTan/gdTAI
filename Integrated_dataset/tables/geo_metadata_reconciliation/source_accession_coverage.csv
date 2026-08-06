@@ -1,0 +1,11 @@
+cohort_id,accession,role,reconciliation_rows,library_config_rows,staged_metasheet_expected,staged_metasheet_rows,cell_level_accession_expected,cell_level_accession_observed,coverage_pass
+GSE114724,GSE114724,combined_gex_vdj,5,2,True,10,True,True,True
+GSE121636_GSE121637,GSE121636,gex,5,1,True,6,True,True,True
+GSE121636_GSE121637,GSE121637,vdj,3,1,True,6,False,False,True
+GSE159251,GSE159251,combined_gex_vdj_records,7,1,True,15,True,True,True
+GSE169246,GSE169246,combined_gex_vdj_plus_separate_atac,10,1,False,0,True,True,True
+GSE292700,GSE292700,gex_and_vdj_records,6,2,True,12,True,True,True
+GSE294273_GSE294274,GSE294273,gex,6,1,True,12,True,True,True
+GSE294273_GSE294274,GSE294274,vdj,2,1,True,12,False,False,True
+GSE296954,GSE296954,gex_and_vdj_records,7,2,True,44,True,True,True
+GSE315928,GSE315928,combined_gex_vdj_records,7,2,True,94,True,True,True

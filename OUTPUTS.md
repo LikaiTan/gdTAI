@@ -72,6 +72,11 @@
 
 ## Current review packages
 
+- extension official-GEO metadata reconciliation:
+  - `docs/EXTENSION_GEO_METADATA_RECONCILIATION.md`
+  - `configs/metadata/extension_geo_metadata_reconciliation.csv`
+  - `Integrated_dataset/logs/geo_metadata_reconciliation/`
+  - `Integrated_dataset/tables/geo_metadata_reconciliation/`
 - extension frozen gdTAI profile negative-control evaluation:
   - `gdT_prediction/gdtai_extension_evaluation/index.html`
   - `gdT_prediction/gdtai_extension_evaluation/gdtai_extension_evaluation_report.pdf`

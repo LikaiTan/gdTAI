@@ -1,0 +1,21 @@
+{
+  "accession_coverage_pass": true,
+  "ambiguous_rows": 6,
+  "cohorts": 8,
+  "config": "configs/metadata/extension_geo_metadata_reconciliation.csv",
+  "config_sha256": "839db27bb2f2bfec443adf1ff1fc5f8e832848cf1e246270ce07541d1cbc9314",
+  "geo_unavailable_rows": 4,
+  "h5ads_modified": false,
+  "h5ads_unchanged": true,
+  "input_sha256": {
+    "configs/datasets/extension_cohorts.csv": "b9612ed08d0dbca19c9fd974f933fcda8e5f91ffb23017acef38de43ed4c60f8",
+    "configs/datasets/extension_libraries.csv": "4956b97f87d64ba62bc3b8dd44b2336881d9e86806d02e091bcdbba520676aeb",
+    "data/interim/extension_intake/tnk_filtered_h5ads_manifest.csv": "114a7cafb1818e69e588f61d1236bdefaaef75cfe2f5896723a1bdf2cc497a3a"
+  },
+  "mode": "read_only",
+  "official_geo_accessions": 10,
+  "reconciliation_rows": 58,
+  "schema_version": 1,
+  "scoped_local_value_rows": 49,
+  "validation_issues": 0
+}

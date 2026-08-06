@@ -141,6 +141,18 @@
   - made no model selection or promotion because the extension cohorts contain
     no unbiased gdT positive truth set
   - retained merge and integration as blocked review gates
+- extension official-GEO metadata reconciliation completed on 2026-08-06
+  - reconciled 58 grouped metadata assertions across 8 extension cohorts and
+    10 official GEO accessions using direct NCBI evidence
+  - classified 16 rows as locally verified, 32 as GEO-resolved but locally
+    unresolved, 6 as partially ambiguous, and 4 as unavailable in GEO
+  - identified all 239,418 retained GSE169246 `_b` cells as blood libraries
+    whose current joined tissue/specimen fields are semantically incorrect
+  - validated full accession coverage and unchanged file state for all eight
+    filtered H5ADs without writing metadata
+  - emailed the reconciliation report, audit log, and evidence table to Likai
+  - left additive correction, merge, and integration blocked for explicit
+    review
 
 ## Current working era
 

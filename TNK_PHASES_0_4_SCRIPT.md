@@ -223,6 +223,52 @@ Gate semantics:
 - explicit user approval is required before merge, integration, or gdTAI
   evaluation
 
+## Extension official-GEO metadata reconciliation
+
+Objective:
+
+- compare unresolved or over-specific extension metadata against official GEO
+  series, sample, matrix, SOFT, and supplementary records
+- preserve local source fields while recording separately supported values and
+  unresolved ambiguities
+
+Phase or task:
+
+- read-only extension metadata evidence reconciliation
+
+Exact `.py` script:
+
+- `workflows/metadata/audit_extension_geo_metadata.py`
+
+Core input:
+
+- `configs/metadata/extension_geo_metadata_reconciliation.csv`
+- `data/interim/extension_intake/tnk_filtered_h5ads_manifest.csv`
+
+Core outputs:
+
+- `docs/EXTENSION_GEO_METADATA_RECONCILIATION.md`
+- `Integrated_dataset/tables/geo_metadata_reconciliation/`
+- `Integrated_dataset/logs/geo_metadata_reconciliation/extension_geo_metadata_reconciliation_audit.md`
+
+Standard behavior:
+
+- use only direct official NCBI GEO evidence URLs
+- validate all declared local values against backed read-only H5AD metadata
+- preserve GEO-supported, GEO-partial, and GEO-unavailable states separately
+- report scoped affected-cell counts without changing source metadata
+- verify source-accession coverage and unchanged H5AD size/mtime during audit
+- require additive derived columns for any later correction; never overwrite
+  original metadata
+
+Current gate semantics:
+
+- the audit is complete and read-only
+- GSE169246 `_b` libraries require a reviewed additive blood correction before
+  any extension merge or integration
+- metadata writeback, merge, and integration remain blocked pending explicit
+  user approval
+
 ## Extension frozen gdTAI negative-control screen
 
 Objective:
