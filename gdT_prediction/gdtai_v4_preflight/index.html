@@ -44,8 +44,8 @@ preflight checks</a></li>
 recall cost</a></li>
 <li><a href="#frozen-feature-coverage"
 id="toc-frozen-feature-coverage">Frozen feature coverage</a></li>
-<li><a href="#raw-count-audit" id="toc-raw-count-audit">Raw-count
-audit</a></li>
+<li><a href="#expression-input-audit"
+id="toc-expression-input-audit">Expression input audit</a></li>
 <li><a href="#ground-truth-audit"
 id="toc-ground-truth-audit">Ground-truth audit</a></li>
 <li><a href="#gse144469-join" id="toc-gse144469-join">GSE144469
@@ -62,8 +62,8 @@ id="toc-canonical-artifacts">Canonical artifacts</a></li>
 </nav>
 <h1 id="gdtai-v4-step-1-preflight-and-split-freeze">gdTAI V4 Step 1
 Preflight and Split Freeze</h1>
-<p><strong>Overall status:</strong> FAIL<br> <strong>Protocol:</strong>
-v1.1<br> <strong>Training started:</strong> No<br> <strong>Step 2
+<p><strong>Overall status:</strong> PASS<br> <strong>Protocol:</strong>
+v1.2<br> <strong>Training started:</strong> No<br> <strong>Step 2
 authorized:</strong> No; supervision approval is still required</p>
 <h2 id="decision">Decision</h2>
 <p>This workflow performed only the precommitted read-only input,
@@ -74,36 +74,7 @@ classifier.</p>
 frozen CD4/Treg thresholds were evaluated exactly as written and were
 not tuned.</p>
 <h3 id="blocking-failures">Blocking failures</h3>
-<table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr>
-<th>check_id</th>
-<th>observed</th>
-<th>required</th>
-<th>details</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>training_feature_coverage</td>
-<td>gdt_2020aug_wocov;maltegdt</td>
-<td>&gt;=0.9 and all critical genes</td>
-<td>Hard-gated development inputs</td>
-</tr>
-<tr>
-<td>raw_count_state</td>
-<td>hra005041</td>
-<td>all sparse values finite, nonnegative, integer-like</td>
-<td>Full sparse data-array scan</td>
-</tr>
-</tbody>
-</table>
+<p><em>No rows.</em></p>
 <h3 id="warnings">Warnings</h3>
 <p><em>No rows.</em></p>
 <h2 id="all-preflight-checks">All preflight checks</h2>
@@ -128,8 +99,8 @@ not tuned.</p>
 <tr>
 <td>protocol_version</td>
 <td>PASS</td>
-<td>1.1</td>
-<td>1.1</td>
+<td>1.2</td>
+<td>1.2</td>
 <td>Frozen protocol version</td>
 </tr>
 <tr>
@@ -141,17 +112,18 @@ not tuned.</p>
 </tr>
 <tr>
 <td>training_feature_coverage</td>
-<td>FAIL</td>
-<td>gdt_2020aug_wocov;maltegdt</td>
+<td>PASS</td>
+<td></td>
 <td>&gt;=0.9 and all critical genes</td>
 <td>Hard-gated development inputs</td>
 </tr>
 <tr>
-<td>raw_count_state</td>
-<td>FAIL</td>
-<td>hra005041</td>
-<td>all sparse values finite, nonnegative, integer-like</td>
-<td>Full sparse data-array scan</td>
+<td>expression_input_contract</td>
+<td>PASS</td>
+<td>[‘hra005041’]</td>
+<td>raw counts, except registered HRA005041 passing full log1p(CP10K)
+audit</td>
+<td>Full sparse data-array and inverse-library-size scan</td>
 </tr>
 <tr>
 <td>registered_hashes</td>
@@ -191,11 +163,11 @@ not tuned.</p>
 <td>Mutually exclusive primary labels</td>
 </tr>
 <tr>
-<td>silver_excluded_from_training</td>
+<td>sensitivity_excluded_from_training</td>
 <td>PASS</td>
 <td>0</td>
 <td>0</td>
-<td>Sensitivity-only silver cells</td>
+<td>Silver and all sorted cohorts are sensitivity-only</td>
 </tr>
 <tr>
 <td>cd4_treg_recall_ceiling</td>
@@ -390,21 +362,21 @@ alt="Feature coverage" />
 </tr>
 <tr>
 <td>gdt_2020aug_wocov</td>
-<td>sorted_training_supplement</td>
+<td>sorted_sensitivity_only</td>
 <td>163</td>
 <td>197</td>
 <td>0.8274</td>
 <td>0</td>
-<td>True</td>
+<td>False</td>
 </tr>
 <tr>
 <td>maltegdt</td>
-<td>sorted_training_supplement</td>
+<td>sorted_sensitivity_only</td>
 <td>82</td>
 <td>197</td>
 <td>0.4162</td>
 <td>0</td>
-<td>True</td>
+<td>False</td>
 </tr>
 <tr>
 <td>gdtlung</td>
@@ -489,23 +461,23 @@ alt="Feature coverage" />
 </tr>
 </tbody>
 </table>
-<h2 id="raw-count-audit">Raw-count audit</h2>
-<p>Every stored sparse value was scanned. Integer-like means its
-distance from the nearest integer was no greater than
-<code>1e-6</code>.</p>
-<p>The HRA005041 matrix is known <code>log1p(CP10K)</code> and is used
-here only to quantify exclusion cost. It remains ineligible for fitting
-because no raw-count layer is available.</p>
-<table>
+<h2 id="expression-input-audit">Expression input audit</h2>
+<p>Every stored sparse value was scanned. Raw inputs must be finite,
+nonnegative, and integer-like within <code>1e-6</code>.</p>
+<p>The registered HRA005041 exception must additionally reconstruct a
+per-cell library sum of 10,000 from <code>expm1(X)</code> within the
+frozen absolute tolerance.</p>
+<table style="width:100%;">
 <colgroup>
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 12%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
 </colgroup>
 <thead>
 <tr>
@@ -514,9 +486,10 @@ because no raw-count layer is available.</p>
 <th>configured_matrix_state</th>
 <th>n_obs</th>
 <th>nnz</th>
-<th>dtype</th>
-<th>fractional_values_gt_1e_6</th>
 <th>raw_count_pass</th>
+<th>transformed_max_abs_deviation</th>
+<th>transformed_rows_outside_tolerance</th>
+<th>expression_contract_pass</th>
 </tr>
 </thead>
 <tbody>
@@ -526,19 +499,21 @@ because no raw-count layer is available.</p>
 <td>raw_counts</td>
 <td>3705306</td>
 <td>5503996785</td>
-<td>float32</td>
+<td>True</td>
+<td></td>
 <td>0</td>
 <td>True</td>
 </tr>
 <tr>
 <td>hra005041</td>
 <td>X</td>
-<td>log1p_cp10k_recall_audit_only</td>
+<td>log1p_cp10k_registered</td>
 <td>766639</td>
 <td>1442826937</td>
-<td>float64</td>
-<td>1442826905</td>
 <td>False</td>
+<td>0.0000</td>
+<td>0</td>
+<td>True</td>
 </tr>
 <tr>
 <td>gse144469</td>
@@ -546,7 +521,8 @@ because no raw-count layer is available.</p>
 <td>raw_counts</td>
 <td>107068</td>
 <td>215368848</td>
-<td>float32</td>
+<td>True</td>
+<td></td>
 <td>0</td>
 <td>True</td>
 </tr>
@@ -556,7 +532,8 @@ because no raw-count layer is available.</p>
 <td>raw_counts</td>
 <td>46273</td>
 <td>125599864</td>
-<td>float32</td>
+<td>True</td>
+<td></td>
 <td>0</td>
 <td>True</td>
 </tr>
@@ -566,7 +543,8 @@ because no raw-count layer is available.</p>
 <td>raw_counts</td>
 <td>25904</td>
 <td>39050646</td>
-<td>int64</td>
+<td>True</td>
+<td></td>
 <td>0</td>
 <td>True</td>
 </tr>
@@ -576,7 +554,8 @@ because no raw-count layer is available.</p>
 <td>raw_counts</td>
 <td>7800</td>
 <td>12020698</td>
-<td>int64</td>
+<td>True</td>
+<td></td>
 <td>0</td>
 <td>True</td>
 </tr>
@@ -586,7 +565,8 @@ because no raw-count layer is available.</p>
 <td>raw_counts</td>
 <td>15175</td>
 <td>15468404</td>
-<td>int64</td>
+<td>True</td>
+<td></td>
 <td>0</td>
 <td>True</td>
 </tr>
@@ -596,7 +576,8 @@ because no raw-count layer is available.</p>
 <td>raw_counts</td>
 <td>28652</td>
 <td>50878640</td>
-<td>int64</td>
+<td>True</td>
+<td></td>
 <td>0</td>
 <td>True</td>
 </tr>
@@ -606,7 +587,8 @@ because no raw-count layer is available.</p>
 <td>raw_counts</td>
 <td>18793</td>
 <td>28893248</td>
-<td>int64</td>
+<td>True</td>
+<td></td>
 <td>0</td>
 <td>True</td>
 </tr>
@@ -616,7 +598,8 @@ because no raw-count layer is available.</p>
 <td>raw_counts</td>
 <td>68898</td>
 <td>81434083</td>
-<td>int64</td>
+<td>True</td>
+<td></td>
 <td>0</td>
 <td>True</td>
 </tr>
@@ -626,7 +609,8 @@ because no raw-count layer is available.</p>
 <td>raw_counts</td>
 <td>354373</td>
 <td>430559363</td>
-<td>int64</td>
+<td>True</td>
+<td></td>
 <td>0</td>
 <td>True</td>
 </tr>
@@ -636,7 +620,8 @@ because no raw-count layer is available.</p>
 <td>raw_counts</td>
 <td>78254</td>
 <td>127198003</td>
-<td>int64</td>
+<td>True</td>
+<td></td>
 <td>0</td>
 <td>True</td>
 </tr>
@@ -646,7 +631,8 @@ because no raw-count layer is available.</p>
 <td>raw_counts</td>
 <td>55744</td>
 <td>111603853</td>
-<td>int64</td>
+<td>True</td>
+<td></td>
 <td>0</td>
 <td>True</td>
 </tr>
@@ -656,7 +642,8 @@ because no raw-count layer is available.</p>
 <td>raw_counts</td>
 <td>86608</td>
 <td>122094020</td>
-<td>float32</td>
+<td>True</td>
+<td></td>
 <td>0</td>
 <td>True</td>
 </tr>
@@ -666,7 +653,8 @@ because no raw-count layer is available.</p>
 <td>raw_counts</td>
 <td>66813</td>
 <td>91568523</td>
-<td>float32</td>
+<td>True</td>
+<td></td>
 <td>0</td>
 <td>True</td>
 </tr>
@@ -719,7 +707,7 @@ alt="Label composition" />
 </tr>
 <tr>
 <td>GDT_2020AUG_woCOV</td>
-<td>sorted_gdT_weak</td>
+<td>sorted_sensitivity</td>
 <td>25904</td>
 </tr>
 <tr>
@@ -917,61 +905,61 @@ alt="Label composition" />
 <td>outer_0_HRA005041</td>
 <td>HRA005041</td>
 <td>stage1</td>
-<td>486115</td>
-<td>154286</td>
-<td>641989</td>
-<td>637038</td>
-<td>751</td>
+<td>437630</td>
+<td>105801</td>
+<td>634293</td>
+<td>629342</td>
+<td>741</td>
 </tr>
 <tr>
 <td>outer_0_HRA005041</td>
 <td>HRA005041</td>
 <td>stage2</td>
-<td>138621</td>
-<td>38740</td>
+<td>104917</td>
+<td>5036</td>
 <td>627813</td>
 <td>4894</td>
-<td>31</td>
-</tr>
-<tr>
-<td>outer_1_GSE144469</td>
-<td>GSE144469</td>
-<td>stage1</td>
-<td>1045613</td>
-<td>716637</td>
-<td>82491</td>
-<td>74687</td>
-<td>732</td>
-</tr>
-<tr>
-<td>outer_1_GSE144469</td>
-<td>GSE144469</td>
-<td>stage2</td>
-<td>698877</td>
-<td>39631</td>
-<td>67557</td>
-<td>4003</td>
 <td>28</td>
 </tr>
 <tr>
+<td>outer_1_GSE144469</td>
+<td>GSE144469</td>
+<td>stage1</td>
+<td>995704</td>
+<td>666728</td>
+<td>76219</td>
+<td>68415</td>
+<td>722</td>
+</tr>
+<tr>
+<td>outer_1_GSE144469</td>
+<td>GSE144469</td>
+<td>stage2</td>
+<td>665173</td>
+<td>5927</td>
+<td>67557</td>
+<td>4003</td>
+<td>25</td>
+</tr>
+<tr>
 <td>outer_2_BALF_BLOOD_COPD</td>
 <td>BALF_BLOOD_COPD</td>
 <td>stage1</td>
-<td>1087495</td>
-<td>750969</td>
-<td>40609</td>
-<td>40355</td>
-<td>764</td>
+<td>1034283</td>
+<td>697757</td>
+<td>37640</td>
+<td>37386</td>
+<td>754</td>
 </tr>
 <tr>
 <td>outer_2_BALF_BLOOD_COPD</td>
 <td>BALF_BLOOD_COPD</td>
 <td>stage2</td>
-<td>729074</td>
-<td>42601</td>
+<td>695370</td>
+<td>8897</td>
 <td>37360</td>
 <td>1033</td>
-<td>44</td>
+<td>41</td>
 </tr>
 </tbody>
 </table>
@@ -1031,14 +1019,14 @@ alt="Label composition" />
 </tr>
 <tr>
 <td>gdt_2020aug_wocov</td>
-<td>sorted_training_supplement</td>
+<td>sorted_sensitivity_only</td>
 <td>591495928</td>
 <td>650f583b85f05ede</td>
 <td>True</td>
 </tr>
 <tr>
 <td>maltegdt</td>
-<td>sorted_training_supplement</td>
+<td>sorted_sensitivity_only</td>
 <td>179862512</td>
 <td>bbd460ef153ce6b2</td>
 <td>True</td>

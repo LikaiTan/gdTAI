@@ -1,36 +1,36 @@
-2026-08-07 03:10:06,079 | INFO | Hashing integrated.h5ad: 19.6%
-2026-08-07 03:10:26,135 | INFO | Hashing integrated.h5ad: 39.3%
-2026-08-07 03:10:46,138 | INFO | Hashing integrated.h5ad: 59.4%
-2026-08-07 03:11:06,174 | INFO | Hashing integrated.h5ad: 79.6%
-2026-08-07 03:11:26,184 | INFO | Hashing integrated.h5ad: 97.3%
-2026-08-07 03:11:49,715 | INFO | Hashing integrated_plus6.h5ad: 53.1%
-2026-08-07 03:12:28,596 | INFO | Hashing HRA005041_T_cells_subset.h5ad: 78.6%
-2026-08-07 03:12:52,398 | INFO | Loading legacy metadata reference needed for TCR and GSE144469 joins
-2026-08-07 03:13:14,633 | INFO | Loading HRA005041 labels
-2026-08-07 03:13:23,737 | INFO | Loading and joining GSE144469
-2026-08-07 03:13:24,586 | INFO | Loading BALF_BLOOD_COPD labels
-2026-08-07 03:13:24,823 | INFO | Loading sorted source GDT_2020AUG_woCOV
-2026-08-07 03:13:25,025 | INFO | Loading sorted source MalteGDT
-2026-08-07 03:13:25,090 | INFO | Loading sorted source GDTlung2023july_7p
-2026-08-07 03:13:25,208 | INFO | Building strict supplemental NK pool from the current atlas
-2026-08-07 03:13:59,868 | INFO | Scanning raw-count matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/high_speed_temp/Integrated_dataset/integrated.h5ad [X]
-2026-08-07 03:14:20,267 | INFO | Matrix scan integrated.h5ad: 30.9% of nonzeros
-2026-08-07 03:14:40,641 | INFO | Matrix scan integrated.h5ad: 63.9% of nonzeros
-2026-08-07 03:15:00,880 | INFO | Matrix scan integrated.h5ad: 96.3% of nonzeros
-2026-08-07 03:15:03,413 | INFO | Scanning raw-count matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/downloads/per_gse_h5ad_with_metadata/HRA005041_T_cells_subset.h5ad [X]
-2026-08-07 03:15:23,990 | INFO | Matrix scan HRA005041_T_cells_subset.h5ad: 91.6% of nonzeros
-2026-08-07 03:15:25,958 | INFO | Scanning raw-count matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/datasets/GSE144469/raw/legacy_source/fastq/tnk_subset.h5ad [layers/counts]
-2026-08-07 03:15:33,600 | INFO | Scanning raw-count matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/datasets/BALF_BLOOD_COPD/processed/current.h5ad [layers/counts]
-2026-08-07 03:15:35,404 | INFO | Scanning raw-count matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/datasets/GDT_2020AUG_woCOV/processed/artifacts/GDT_2020AUG_woCOV_sorted_gdt.h5ad [X]
-2026-08-07 03:15:36,329 | INFO | Scanning raw-count matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/datasets/MalteGDT/processed/artifacts/MalteGDT_sorted_gdt.h5ad [X]
-2026-08-07 03:15:36,646 | INFO | Scanning raw-count matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/datasets/GDTlung2023july_7p/processed/artifacts/GDTlung2023july_7p_sorted_gdt.h5ad [X]
-2026-08-07 03:15:37,075 | INFO | Scanning raw-count matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/interim/extension_intake/tnk_filtered_h5ads/GSE114724.h5ad [X]
-2026-08-07 03:15:39,229 | INFO | Scanning raw-count matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/interim/extension_intake/tnk_filtered_h5ads/GSE121636_GSE121637.h5ad [X]
-2026-08-07 03:15:40,514 | INFO | Scanning raw-count matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/interim/extension_intake/tnk_filtered_h5ads/GSE159251.h5ad [X]
-2026-08-07 03:15:43,960 | INFO | Scanning raw-count matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/interim/extension_intake/tnk_filtered_h5ads/GSE169246.h5ad [X]
-2026-08-07 03:16:01,057 | INFO | Scanning raw-count matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/interim/extension_intake/tnk_filtered_h5ads/GSE292700.h5ad [X]
-2026-08-07 03:16:06,312 | INFO | Scanning raw-count matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/interim/extension_intake/tnk_filtered_h5ads/GSE294273_GSE294274.h5ad [X]
-2026-08-07 03:16:11,007 | INFO | Scanning raw-count matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/interim/extension_intake/tnk_filtered_h5ads/GSE296954.h5ad [X]
-2026-08-07 03:16:15,200 | INFO | Scanning raw-count matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/interim/extension_intake/tnk_filtered_h5ads/GSE315928.h5ad [X]
-2026-08-07 03:16:52,156 | INFO | Preflight complete: status=FAIL, failures=2, warnings=0
-2026-08-07 03:16:52,157 | INFO | Step 2 remains blocked pending supervision
+2026-08-07 03:31:38,960 | INFO | Hashing integrated.h5ad: 19.6%
+2026-08-07 03:31:59,039 | INFO | Hashing integrated.h5ad: 39.2%
+2026-08-07 03:32:19,088 | INFO | Hashing integrated.h5ad: 59.1%
+2026-08-07 03:32:39,129 | INFO | Hashing integrated.h5ad: 79.2%
+2026-08-07 03:32:59,137 | INFO | Hashing integrated.h5ad: 97.3%
+2026-08-07 03:33:22,376 | INFO | Hashing integrated_plus6.h5ad: 59.2%
+2026-08-07 03:33:56,826 | INFO | Hashing HRA005041_T_cells_subset.h5ad: 76.6%
+2026-08-07 03:34:20,211 | INFO | Loading legacy metadata reference needed for TCR and GSE144469 joins
+2026-08-07 03:34:41,842 | INFO | Loading HRA005041 labels
+2026-08-07 03:34:50,797 | INFO | Loading and joining GSE144469
+2026-08-07 03:34:51,641 | INFO | Loading BALF_BLOOD_COPD labels
+2026-08-07 03:34:51,875 | INFO | Loading sorted source GDT_2020AUG_woCOV
+2026-08-07 03:34:52,070 | INFO | Loading sorted source MalteGDT
+2026-08-07 03:34:52,133 | INFO | Loading sorted source GDTlung2023july_7p
+2026-08-07 03:34:52,247 | INFO | Building strict supplemental NK pool from the current atlas
+2026-08-07 03:35:26,157 | INFO | Scanning expression matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/high_speed_temp/Integrated_dataset/integrated.h5ad [X; raw_counts]
+2026-08-07 03:35:46,256 | INFO | Matrix scan integrated.h5ad: 30.9% of nonzeros
+2026-08-07 03:36:06,318 | INFO | Matrix scan integrated.h5ad: 63.3% of nonzeros
+2026-08-07 03:36:26,548 | INFO | Matrix scan integrated.h5ad: 95.6% of nonzeros
+2026-08-07 03:36:29,519 | INFO | Scanning expression matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/downloads/per_gse_h5ad_with_metadata/HRA005041_T_cells_subset.h5ad [X; log1p_cp10k_registered]
+2026-08-07 03:36:50,546 | INFO | Matrix scan HRA005041_T_cells_subset.h5ad: 55.8% of nonzeros
+2026-08-07 03:37:07,307 | INFO | Scanning expression matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/datasets/GSE144469/raw/legacy_source/fastq/tnk_subset.h5ad [layers/counts; raw_counts]
+2026-08-07 03:37:14,898 | INFO | Scanning expression matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/datasets/BALF_BLOOD_COPD/processed/current.h5ad [layers/counts; raw_counts]
+2026-08-07 03:37:16,466 | INFO | Scanning expression matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/datasets/GDT_2020AUG_woCOV/processed/artifacts/GDT_2020AUG_woCOV_sorted_gdt.h5ad [X; raw_counts]
+2026-08-07 03:37:17,360 | INFO | Scanning expression matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/datasets/MalteGDT/processed/artifacts/MalteGDT_sorted_gdt.h5ad [X; raw_counts]
+2026-08-07 03:37:17,667 | INFO | Scanning expression matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/datasets/GDTlung2023july_7p/processed/artifacts/GDTlung2023july_7p_sorted_gdt.h5ad [X; raw_counts]
+2026-08-07 03:37:18,082 | INFO | Scanning expression matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/interim/extension_intake/tnk_filtered_h5ads/GSE114724.h5ad [X; raw_counts]
+2026-08-07 03:37:20,236 | INFO | Scanning expression matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/interim/extension_intake/tnk_filtered_h5ads/GSE121636_GSE121637.h5ad [X; raw_counts]
+2026-08-07 03:37:21,518 | INFO | Scanning expression matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/interim/extension_intake/tnk_filtered_h5ads/GSE159251.h5ad [X; raw_counts]
+2026-08-07 03:37:24,943 | INFO | Scanning expression matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/interim/extension_intake/tnk_filtered_h5ads/GSE169246.h5ad [X; raw_counts]
+2026-08-07 03:37:42,059 | INFO | Scanning expression matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/interim/extension_intake/tnk_filtered_h5ads/GSE292700.h5ad [X; raw_counts]
+2026-08-07 03:37:47,319 | INFO | Scanning expression matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/interim/extension_intake/tnk_filtered_h5ads/GSE294273_GSE294274.h5ad [X; raw_counts]
+2026-08-07 03:37:52,025 | INFO | Scanning expression matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/interim/extension_intake/tnk_filtered_h5ads/GSE296954.h5ad [X; raw_counts]
+2026-08-07 03:37:56,193 | INFO | Scanning expression matrix /home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/interim/extension_intake/tnk_filtered_h5ads/GSE315928.h5ad [X; raw_counts]
+2026-08-07 03:38:32,651 | INFO | Preflight complete: status=PASS, failures=0, warnings=0
+2026-08-07 03:38:32,651 | INFO | Step 2 remains blocked pending supervision

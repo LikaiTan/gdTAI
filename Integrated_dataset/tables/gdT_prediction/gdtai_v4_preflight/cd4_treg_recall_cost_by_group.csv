@@ -64,9 +64,8 @@ gdT_silver,HRA005041,HRA005041::donor::F1,44,5,0,5,0.11363636363636363
 gdT_silver,HRA005041,HRA005041::donor::F16,37,1,0,1,0.02702702702702703
 gdT_silver,HRA005041,HRA005041::donor::F17,60,0,0,0,0.0
 gdT_silver,HRA005041,HRA005041::donor::F2,36,0,0,0,0.0
-sorted_gdT_weak,GDT_2020AUG_woCOV,GDT_2020AUG_woCOV::donor::donor1,8945,114,0,114,0.012744550027948574
-sorted_gdT_weak,GDT_2020AUG_woCOV,GDT_2020AUG_woCOV::donor::donor2,16959,119,10,128,0.007547614835780411
-sorted_gdT_weak,MalteGDT,MalteGDT::donor::MalteGDT,7800,1,0,1,0.0001282051282051282
+sorted_sensitivity,GDT_2020AUG_woCOV,GDT_2020AUG_woCOV::donor::donor1,8945,114,0,114,0.012744550027948574
+sorted_sensitivity,GDT_2020AUG_woCOV,GDT_2020AUG_woCOV::donor::donor2,16959,119,10,128,0.007547614835780411
 sorted_sensitivity,GDTlung2023july_7p,GDTlung2023july_7p::donor::p25,3262,2,1,3,0.0009196811771919068
 sorted_sensitivity,GDTlung2023july_7p,GDTlung2023july_7p::donor::p27,1014,4,0,4,0.0039447731755424065
 sorted_sensitivity,GDTlung2023july_7p,GDTlung2023july_7p::donor::p32,751,1,0,1,0.0013315579227696406
@@ -74,3 +73,4 @@ sorted_sensitivity,GDTlung2023july_7p,GDTlung2023july_7p::donor::p45,1713,3,0,3,
 sorted_sensitivity,GDTlung2023july_7p,GDTlung2023july_7p::donor::p71,1483,0,0,0,0.0
 sorted_sensitivity,GDTlung2023july_7p,GDTlung2023july_7p::donor::p73,918,6,1,7,0.007625272331154684
 sorted_sensitivity,GDTlung2023july_7p,GDTlung2023july_7p::donor::p77,6034,15,3,18,0.0029830957905203847
+sorted_sensitivity,MalteGDT,MalteGDT::donor::MalteGDT,7800,1,0,1,0.0001282051282051282

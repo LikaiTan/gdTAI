@@ -1,14 +1,14 @@
 check_id,status,observed,required,details
-protocol_version,PASS,1.1,1.1,Frozen protocol version
+protocol_version,PASS,1.2,1.2,Frozen protocol version
 feature_count,PASS,197,197,Frozen individual-gene universe
-training_feature_coverage,FAIL,gdt_2020aug_wocov;maltegdt,>=0.9 and all critical genes,Hard-gated development inputs
-raw_count_state,FAIL,hra005041,"all sparse values finite, nonnegative, integer-like",Full sparse data-array scan
+training_feature_coverage,PASS,,>=0.9 and all critical genes,Hard-gated development inputs
+expression_input_contract,PASS,['hra005041'],"raw counts, except registered HRA005041 passing full log1p(CP10K) audit",Full sparse data-array and inverse-library-size scan
 registered_hashes,PASS,,all available expected hashes match,Full SHA-256 unless explicitly skipped
 input_file_state,PASS,16,16,Size and mtime unchanged after read-only workflow
 gse144469_join,PASS,107068,107068 unique SRR + barcode mappings,Raw expression to canonical metadata
 primary_labels_nonempty,PASS,"{'abT_primary': {'BALF_BLOOD_COPD': 32404, 'GSE144469': 60175, 'HRA005041': 543028}, 'gdT_primary': {'BALF_BLOOD_COPD': 1033, 'GSE144469': 4003, 'HRA005041': 4894}}",both classes in each primary source,Expression-independent productive TCR rules
 primary_label_overlap,PASS,0,0,Mutually exclusive primary labels
-silver_excluded_from_training,PASS,0,0,Sensitivity-only silver cells
+sensitivity_excluded_from_training,PASS,0,0,Silver and all sorted cohorts are sensitivity-only
 cd4_treg_recall_ceiling,PASS,0.983805,macro >= 0.8; each source >= 0.7,Fixed post-model exclusions before Step 2
 group_leakage,PASS,1,1,No group appears in multiple inner folds
 outer_fold_nonempty,PASS,1,True,Every stage has train and held-out cells

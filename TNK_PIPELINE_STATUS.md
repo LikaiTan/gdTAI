@@ -2,15 +2,16 @@
 
 ## Current milestone
 
-- gdTAI V4 protocol v1.2 frozen before fitting to resolve the failed v1.1 input
-  contract; a fresh Step 1 preflight is pending and Step 2 remains blocked
+- gdTAI V4 protocol v1.2 Step 1 preflight passed with zero failures and zero
+  warnings; no model has been fitted and Step 2 remains blocked for explicit
+  supervision approval
 
 ## Next action
 
-- rerun the gdTAI V4 Step 1 input, label, recall-cost, and grouped-split
-  preflight under protocol v1.2
-- review the fresh Step 1 gate before authorizing nested evaluation; do not
-  proceed directly to Step 2
+- review the gdTAI V4 protocol v1.2 Step 1 PASS report and explicitly decide
+  whether to authorize Step 2 nested evaluation
+- do not proceed to fitting, calibration, threshold selection, comparison, or
+  promotion before that approval
 - do not promote or claim superiority for another gdTAI model before grouped
   resampling, expression-independent labels, and fold-local selection are in place
 - review the frozen-profile negative-control report and official-GEO metadata
@@ -22,12 +23,14 @@
 
 ## Current blockers or review items
 
-- the v1.1 Step 1 gate failed because HRA005041 has no raw-count layer and the
-  GDT2020/Malte supplements had inadequate feature coverage
-- protocol v1.2 resolves those design conflicts before fitting by permitting
-  only the registered HRA005041 `log1p(CP10K)` matrix after a full per-cell
-  inverse-library-size audit and making all sorted cohorts sensitivity-only
-- the v1.2 resolution remains unverified until the fresh Step 1 audit passes
+- protocol v1.2 Step 1 passed all frozen input, feature, truth-label,
+  exclusion-feasibility, grouped-split, hash, and file-state checks
+- the registered HRA005041 `log1p(CP10K)` matrix passed a full 766,639-cell
+  inverse-library-size audit: zero empty rows, zero rows outside the frozen
+  `1e-4` tolerance, and maximum absolute deviation
+  `7.275957614183426e-12` from 10,000
+- GDT_2020AUG_woCOV, MalteGDT, and GDTlung are sensitivity-only and have zero
+  training weight; their reduced feature coverage cannot affect fitting
 - the fixed CD4/Treg exclusions passed their feasibility guardrail with a
   source-macro primary-gdT recall ceiling of `98.38%`; those thresholds remain
   frozen and were not tuned
@@ -82,6 +85,10 @@ Additional current state:
   fitting stages; no fitting result informed this amendment
 - gdTAI V4 Step 1 created a checksum-pinned 1,137,739-cell label manifest and
   deterministic three-fold grouped split manifest without fitting a model
+- protocol v1.2 Step 1 completed with `PASS`, zero failures, and zero warnings;
+  its cell-label and grouped-split manifest SHA-256 values are
+  `8157cbebfedeb84fc34eba05429aa8a7a834c6f7ceba15bd4790b5dd06bf7e0c` and
+  `c84da2ca999676bab0ed180ae3d380e1e7d5b2e08da886ae2f6f912f9e0080a7`
 - all 16 declared preflight inputs matched registered hashes where available
   and retained identical size and nanosecond modification time
 - GSE144469 joined 107,068/107,068 raw-expression rows uniquely by the SRR and

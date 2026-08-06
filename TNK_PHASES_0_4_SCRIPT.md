@@ -436,11 +436,13 @@ Core outputs:
 
 Current gate result:
 
-- protocol v1.1 Step 1 completed with `FAIL`
-- protocol v1.2 is frozen and requires a fresh Step 1 run
-- the fixed CD4/Treg recall-ceiling audit passed; no cutoff was tuned
+- protocol v1.2 Step 1 completed with `PASS`, zero failures, and zero warnings
+- the registered HRA005041 transformed matrix passed the frozen full-cell
+  expression audit, and all sorted cohorts were verified as sensitivity-only
+- the fixed CD4/Treg recall-ceiling audit passed at `98.38%` source-macro
+  recall; no cutoff was tuned
 - no model fitting, calibration, threshold search, inference, or promotion ran
-- Step 2 requires a successful fresh preflight and supervision review
+- Step 2 remains unauthorized until explicit supervision approval
 
 ## Phase 1: Coarse T/NK extraction
 

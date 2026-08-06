@@ -5,7 +5,7 @@ BALF_BLOOD_COPD,gdT_primary,1033
 BALF_BLOOD_COPD,gdT_silver,31
 BALF_BLOOD_COPD,single_abT_weak,3923
 BALF_BLOOD_COPD,unlabeled,280
-GDT_2020AUG_woCOV,sorted_gdT_weak,25904
+GDT_2020AUG_woCOV,sorted_sensitivity,25904
 GDTlung2023july_7p,sorted_sensitivity,15175
 GSE125527,unlabeled,3797
 GSE144469,abT_primary,60175
@@ -44,4 +44,4 @@ HRA005041,gdT_primary,4894
 HRA005041,gdT_silver,1779
 HRA005041,single_abT_weak,79891
 HRA005041,unlabeled,6480
-MalteGDT,sorted_gdT_weak,7800
+MalteGDT,sorted_sensitivity,7800

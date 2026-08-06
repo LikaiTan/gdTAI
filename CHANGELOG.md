@@ -209,6 +209,17 @@
     enter Stage 1 fitting
   - regenerated and visually checked the protocol HTML/PDF; no fitting,
     threshold search, inference, or promotion was performed
+- gdTAI V4 protocol v1.2 Step 1 preflight passed on 2026-08-07
+  - passed all frozen input, feature, truth-label, exclusion-feasibility,
+    grouped-split, checksum, and file-state checks with zero warnings
+  - fully audited all 766,639 HRA005041 cells and found zero empty rows and zero
+    reconstructed-library sums outside the frozen `1e-4` tolerance
+  - froze the 1,137,739-cell label manifest and deterministic three-fold
+    grouped split with recorded SHA-256 values
+  - visually checked the 13-page A4 supervision report and verified its
+    artifact checksum inventory
+  - performed no fitting, calibration, threshold search, inference, or
+    promotion; Step 2 remains blocked for explicit supervision approval
 
 ## Current working era
 

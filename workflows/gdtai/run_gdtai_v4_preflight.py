@@ -299,7 +299,7 @@ def make_labeled_frame(
     dual = any_ab & any_gd
     single_abt = any_ab & (~pair_ab) & (~any_gd) & (~doublet)
     silver = trd_evidence & (~pair_gd) & (~any_ab) & (~doublet)
-    t_positive = (primary_gdt | primary_abt | single_abt) & (~doublet)
+    t_positive = (any_ab | any_gd) & (~silver) & (~dual) & (~doublet)
     nk_negative = nk_mask & (~any_ab) & (~any_gd) & (~doublet)
 
     truth = np.full(n_cells, "unlabeled", dtype=object)
