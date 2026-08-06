@@ -223,6 +223,63 @@ Gate semantics:
 - explicit user approval is required before merge, integration, or gdTAI
   evaluation
 
+## Extension frozen gdTAI negative-control screen
+
+Objective:
+
+- apply every registered V2/V3 operating profile to the independently filtered
+  extension cohorts without mutating or merging H5AD files
+- quantify alpha-beta T-cell and NK false positives without treating no-TCR
+  candidates as positive truth
+
+Phase or task:
+
+- checksum-pinned frozen-profile extension-cohort negative-control evaluation
+
+Exact `.py` script:
+
+- `workflows/gdtai/compare_frozen_gdtai_profiles.py`
+
+Execution command:
+
+```bash
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/compare_frozen_gdtai_profiles.py \
+  --stage screen --chunk-size 50000
+```
+
+Core inputs:
+
+- `data/interim/extension_intake/tnk_filtered_h5ads_manifest.csv`
+- `configs/models/gdtai/extension_evaluation.json`
+- `configs/models/gdtai/model_registry.csv`
+
+Core outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_extension_evaluation/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_extension_evaluation/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_extension_evaluation/`
+- `gdT_prediction/gdtai_extension_evaluation/index.html`
+- `gdT_prediction/gdtai_extension_evaluation/gdtai_extension_evaluation_report.pdf`
+
+Standard behavior:
+
+- verify every model artifact and input H5AD against its registered SHA-256
+- use `log1p(raw counts per 10,000)` in bounded chunks
+- accept productive single TRA or single TRB evidence as an alpha-beta
+  negative control when productive TRG/TRD evidence is absent
+- report paired and single-chain alpha-beta controls separately
+- define strict NK controls by NK annotation/expression plus absence of all
+  productive TRA/TRB/TRG/TRD evidence and doublet flags
+- report no-productive-TCR calls as unevaluable candidates, not true positives
+- calculate per-cohort, per-source, per-library, and per-donor rates with
+  Wilson 95% intervals and descriptive exact paired tests
+- run a feature-coverage sensitivity analysis that separates schema-warning
+  cohorts such as GSE169246
+- do not calculate new-cohort recall/F1/AUC or select/promote a model when the
+  screen contains no unbiased gdT positive truth cells
+- keep merge and integration blocked after the screen
+
 ## Phase 1: Coarse T/NK extraction
 
 Objective:

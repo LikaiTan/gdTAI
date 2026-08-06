@@ -2,19 +2,22 @@
 
 ## Current milestone
 
-- Post-Phase 4 review plus extension-cohort standalone Phase 1 T/NK review gate
+- Post-Phase 4 extension-cohort frozen-model review plus GEO metadata
+  reconciliation
 
 ## Next action
 
-- Await explicit user review and approval of the extension standalone T/NK
-  filter package
-- after approval, compare the frozen gdTAI V2/V3 profiles on the
-  cohort-separated T/NK outputs before any merge or integration
+- review the frozen-profile negative-control report and the delegated GEO
+  metadata reconciliation package
+- keep every extension cohort separate until merge and integration receive
+  explicit approval
 
 ## Current blockers or review items
 
-- extension-cohort merge, integration, and model-evaluation phase advancement
-  are not approved
+- extension-cohort merge and integration are not approved
+- frozen-model screening is complete, but these cohorts contain zero gdT-gold
+  and zero gdT-silver cells under the project TCR rules; they cannot support
+  new-cohort recall, F1, ROC-AUC, PR-AUC, or model promotion
 - the extension inputs used alpha-beta TCR assays rather than gdTCR assays;
   zero productive TRG/TRD is therefore expected, and these cohorts support
   alpha-beta T-cell and NK false-positive evaluation rather than independent
@@ -62,6 +65,15 @@ Additional current state:
 - GSE169246 metadata now distinguish 51 biological samples from 78 source
   libraries using the full barcode suffix; 76 libraries retain T/NK cells
 - source H5AD checksums were unchanged and no source H5AD was modified
+- all four frozen gdTAI profiles were applied read-only to all 758,135
+  extension T/NK cells using raw-count CP10K plus log1p normalization
+- V3 Round 12 high-purity had the lowest pooled alpha-beta TCR FPR (`0.227%`),
+  while V2 high-purity had the lowest strict-NK FPR (`0.725%`)
+- after excluding reduced-feature GSE169246 as a sensitivity analysis, V3
+  Round 12 high-purity had the lowest known-negative union FPR (`0.295%`)
+- no model was selected or promoted; historical positive sensitivity still
+  favors promoted V3 Round 14 over Round 12
+- all eight evaluation-source H5AD SHA-256 values remained unchanged
 - Tan et al. 2021 remains excluded as a duplicate of
   `GDT_2020AUG_woCOV`
 - the project reorganization is validated: active code is grouped under
@@ -118,6 +130,12 @@ Additional current state:
 
 ## Current review artifacts
 
+- extension frozen gdTAI profile negative-control evaluation:
+  - `gdT_prediction/gdtai_extension_evaluation/index.html`
+  - `gdT_prediction/gdtai_extension_evaluation/gdtai_extension_evaluation_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_extension_evaluation/gdtai_extension_evaluation_summary.md`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_extension_evaluation/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_extension_evaluation/`
 - extension standalone Phase 1 T/NK filter review:
   - `Integrated_dataset/logs/extension_intake/extension_tnk_filter_qc.md`
   - `Integrated_dataset/tables/extension_intake/tnk_filter/extension_tnk_filter_cohort_summary.csv`

@@ -72,6 +72,12 @@
 
 ## Current review packages
 
+- extension frozen gdTAI profile negative-control evaluation:
+  - `gdT_prediction/gdtai_extension_evaluation/index.html`
+  - `gdT_prediction/gdtai_extension_evaluation/gdtai_extension_evaluation_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_extension_evaluation/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_extension_evaluation/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_extension_evaluation/`
 - extension-cohort standalone Phase 1 T/NK filter:
   - `data/interim/extension_intake/tnk_filtered_h5ads_manifest.csv`
   - `data/interim/extension_intake/tnk_filtered_h5ads/`

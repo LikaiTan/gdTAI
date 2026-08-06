@@ -24,6 +24,14 @@
   checksum-pinned revalidation against Round 12 on 2026-07-15
 - gdTAI v3 Round 12 at threshold `0.5` is retained as the validated high-purity
   fallback and is not the canonical default
+- extension cohorts with alpha-beta-only TCR assays may evaluate frozen-model
+  false positives but may not drive recall/F1/AUC claims or model promotion
+  when they contain no unbiased gdT positive truth set
+- productive single TRA or single TRB evidence is accepted as alpha-beta
+  negative evidence when productive TRG/TRD evidence is absent; paired and
+  single-chain controls remain separately reported
+- no-productive-TCR extension predictions are candidates of unknown truth and
+  must not be counted as true positives
 - the independent BALF/PBMC COPD cohort is registered as
   `BALF_BLOOD_COPD`; its canonical H5AD is
   `data/datasets/BALF_BLOOD_COPD/processed/current.h5ad`

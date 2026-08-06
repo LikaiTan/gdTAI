@@ -125,6 +125,22 @@
   - verified source H5AD SHA-256 values were unchanged
   - left merge, integration, and gdTAI evaluation blocked pending explicit
     user review
+- extension frozen gdTAI profile screen completed on 2026-08-06
+  - applied V2 high-F1, V2 high-purity, V3 Round 14 balanced, and V3 Round 12
+    high-purity to all 758,135 independently filtered extension T/NK cells
+  - verified all frozen model artifacts and all eight source H5AD SHA-256
+    values; no H5AD was modified
+  - accepted productive single TRA or TRB cells as alpha-beta negative controls
+    and audited paired alpha-beta, single-chain alpha-beta, strict NK, donor,
+    library, source-GSE, and TRDC/TRDV failure-mode strata
+  - V3 Round 12 high-purity minimized pooled alpha-beta FPR (`0.227%`), while
+    V2 high-purity minimized strict-NK FPR (`0.725%`)
+  - complete-schema sensitivity excluding GSE169246 favored V3 Round 12 for
+    the known-negative union (`0.295%`), but historical positive sensitivity
+    continued to favor V3 Round 14
+  - made no model selection or promotion because the extension cohorts contain
+    no unbiased gdT positive truth set
+  - retained merge and integration as blocked review gates
 
 ## Current working era
 

@@ -1,0 +1,73 @@
+{
+  "stage": "screen",
+  "report": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/gdT_prediction/gdtai_extension_evaluation/index.html",
+  "pdf": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/gdT_prediction/gdtai_extension_evaluation/gdtai_extension_evaluation_report.pdf",
+  "input_manifest": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/data/interim/extension_intake/tnk_filtered_h5ads_manifest.csv",
+  "input_manifest_sha256": "114a7cafb1818e69e588f61d1236bdefaaef75cfe2f5896723a1bdf2cc497a3a",
+  "profile_identity": {
+    "v2_high_f1": {
+      "model_id": "gdtai_v2",
+      "mode": "high_f1",
+      "artifact": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v2.0/gdTAI_v2_model.pkl",
+      "sha256": "c7f6e7d1d1c0c8de9e7abbaa7c5b70c1070b43c964ccdb94e414bc5278e13c3e"
+    },
+    "v2_high_purity": {
+      "model_id": "gdtai_v2",
+      "mode": "high_purity",
+      "artifact": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v2.0/gdTAI_v2_model.pkl",
+      "sha256": "c7f6e7d1d1c0c8de9e7abbaa7c5b70c1070b43c964ccdb94e414bc5278e13c3e"
+    },
+    "v3_round14_balanced": {
+      "model_id": "gdtai_v3",
+      "mode": "fixed_threshold",
+      "artifact": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/gdTAI_v3_model.pkl",
+      "sha256": "16dedc0081da9b8487887341232bcf8c9c9403dd3bbd72e04cab43d4cd7b2e09"
+    },
+    "v3_round12_high_purity": {
+      "model_id": "gdtai_v3_round12",
+      "mode": "fixed_threshold",
+      "artifact": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/models/gdT_prediction_classifier/gdtai_v3_round12_vs_round14/round12_model.pkl",
+      "sha256": "7373e79350f7db190c415b376b9763e31652754438ee8c5afd3853beb7b2ebc4"
+    }
+  },
+  "datasets": [
+    "GSE114724",
+    "GSE121636_GSE121637",
+    "GSE159251",
+    "GSE169246",
+    "GSE292700",
+    "GSE294273_GSE294274",
+    "GSE296954",
+    "GSE315928"
+  ],
+  "prediction_files": [
+    "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/tables/gdT_prediction/gdtai_extension_evaluation/screen_GSE114724_predictions.csv.gz",
+    "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/tables/gdT_prediction/gdtai_extension_evaluation/screen_GSE121636_GSE121637_predictions.csv.gz",
+    "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/tables/gdT_prediction/gdtai_extension_evaluation/screen_GSE159251_predictions.csv.gz",
+    "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/tables/gdT_prediction/gdtai_extension_evaluation/screen_GSE169246_predictions.csv.gz",
+    "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/tables/gdT_prediction/gdtai_extension_evaluation/screen_GSE292700_predictions.csv.gz",
+    "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/tables/gdT_prediction/gdtai_extension_evaluation/screen_GSE294273_GSE294274_predictions.csv.gz",
+    "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/tables/gdT_prediction/gdtai_extension_evaluation/screen_GSE296954_predictions.csv.gz",
+    "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/tables/gdT_prediction/gdtai_extension_evaluation/screen_GSE315928_predictions.csv.gz"
+  ],
+  "scientific_summary": {
+    "n_cells": 758135,
+    "n_cohorts": 8,
+    "n_source_gse": 8,
+    "observed_gdT_gold": 0,
+    "observed_gdT_silver": 0,
+    "lowest_known_negative_fpr_profile": "v2_high_purity",
+    "lowest_known_negative_fpr": 0.0035007795751315534,
+    "lowest_abt_fpr_profile": "v3_round12_high_purity",
+    "lowest_abt_fpr": 0.002268921981032167,
+    "lowest_strict_nk_fpr_profile": "v2_high_purity",
+    "lowest_strict_nk_fpr": 0.007247977469144324,
+    "complete_schema_lowest_known_negative_fpr_profile": "v3_round12_high_purity",
+    "complete_schema_lowest_known_negative_fpr": 0.0029452119222697594,
+    "schema_warning_cohorts": [
+      "GSE169246"
+    ],
+    "decision": "No model selected or promoted: the new cohorts do not contain an unbiased gdT positive truth set."
+  },
+  "source_checksums_unchanged": true
+}

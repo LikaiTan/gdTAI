@@ -1,0 +1,5 @@
+profile_id,evaluation_frame,precision,recall,specificity,f1,source_file
+v2_high_f1,packaged V2 validation,0.9478444576483792,0.8700684806981395,0.9966265986292888,0.9072927199191102,Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v2.0/mode_metrics.csv
+v2_high_purity,packaged V2 validation,0.9514803181180244,0.8627961941700503,0.9968998868415996,0.904970760233918,Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v2.0/mode_metrics.csv
+v3_round12_high_purity,historical full-atlas primary gold,0.9822577018214528,0.7560405704790917,0.9986919826327124,0.8544295131349882,Integrated_dataset/tables/gdT_prediction/gdtai_v3_round12_vs_round14/full_atlas_performance.csv
+v3_round14_balanced,historical full-atlas primary gold,0.9752131916944288,0.8055940182774854,0.9980388028574128,0.8823256210723865,Integrated_dataset/tables/gdT_prediction/gdtai_v3_round12_vs_round14/full_atlas_performance.csv

@@ -2,6 +2,8 @@ import importlib.util
 import json
 from pathlib import Path
 import sys
+import tempfile
+from types import SimpleNamespace
 import unittest
 
 import numpy as np
@@ -36,6 +38,14 @@ class FrozenProfileEvaluationTests(unittest.TestCase):
         }
         truth = MODULE.truth_frame(obs, np.array(["CD8_T", "CD8_T", "GDT_CELL"], dtype=object))
         self.assertEqual(truth["truth_class"].tolist(), ["abT_gold", "abT_gold", "gdT_gold"])
+        self.assertEqual(truth["single_abT"].tolist(), [True, False, False])
+        self.assertEqual(truth["paired_abT"].tolist(), [False, True, False])
+
+    def test_truth_marks_no_tcr_cells_as_unevaluable_not_negative(self) -> None:
+        truth = MODULE.truth_frame({}, np.array(["OTHER", "NK_CELL"], dtype=object))
+        self.assertEqual(truth["no_productive_tcr"].tolist(), [True, True])
+        self.assertEqual(truth["known_negative_union"].tolist(), [False, True])
+        self.assertEqual(truth["truth_class"].tolist(), ["unlabeled_or_ambiguous", "strict_NK_negative"])
 
     def test_unrecognized_author_label_does_not_suppress_nk_fallback(self) -> None:
         genes = ["CD3D", "CD3E", "CD3G", "TYROBP", "FCER1G", "KLRD1", "NCAM1"]
@@ -123,6 +133,81 @@ class FrozenProfileEvaluationTests(unittest.TestCase):
         digest = MODULE.sha256_json(payload)
         self.assertEqual(digest, MODULE.sha256_json(payload))
         self.assertNotEqual(digest, MODULE.sha256_json({"a": 2, "b": [2, 3]}))
+
+    def test_screen_manifest_maps_tnk_filter_columns(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "manifest.csv"
+            pd.DataFrame(
+                {
+                    "cohort_id": ["GSEX"],
+                    "output_h5ad": ["/tmp/example.h5ad"],
+                    "output_sha256": ["abc123"],
+                }
+            ).to_csv(path, index=False)
+            manifest = MODULE.load_input_manifest(path, "screen")
+        self.assertEqual(manifest.loc[0, "dataset_id"], "GSEX")
+        self.assertEqual(manifest.loc[0, "h5ad_path"], "/tmp/example.h5ad")
+        self.assertEqual(manifest.loc[0, "expected_h5ad_sha256"], "abc123")
+        self.assertFalse(bool(manifest.loc[0, "sealed_holdout"]))
+
+    def test_screen_metrics_work_without_positive_truth(self) -> None:
+        predictions = pd.DataFrame(
+            {
+                "dataset_id": ["A", "A", "A", "A"],
+                "source_gse_id": ["GSEA"] * 4,
+                "evaluation_annotation": ["CD8_T", "CD8_T", "NK_CELL", "OTHER"],
+                "abT_gold": [True, True, False, False],
+                "paired_abT": [True, False, False, False],
+                "single_abT": [False, True, False, False],
+                "strict_NK": [False, False, True, False],
+                "author_NK": [False, False, True, False],
+                "known_negative_union": [True, True, True, False],
+                "no_productive_tcr": [False, False, True, True],
+                "p1_pred": [True, False, True, True],
+                "p2_pred": [False, False, False, True],
+            }
+        )
+        profiles = [SimpleNamespace(profile_id="p1"), SimpleNamespace(profile_id="p2")]
+        strata = MODULE.screen_strata(predictions, profiles)
+        pooled = strata[(strata["group_type"] == "pooled") & (strata["profile_id"] == "p1")]
+        known = pooled[pooled["stratum"] == "known_negative_union"].iloc[0]
+        self.assertEqual(int(known["n_cells"]), 3)
+        self.assertEqual(int(known["predicted_gdT"]), 2)
+        self.assertAlmostEqual(float(known["call_rate"]), 2 / 3)
+        self.assertNotIn("recall", strata.columns)
+
+    def test_wilson_interval_contains_observed_proportion(self) -> None:
+        low, high = MODULE.wilson_interval(5, 100)
+        self.assertLess(low, 0.05)
+        self.assertGreater(high, 0.05)
+        empty = MODULE.wilson_interval(0, 0)
+        self.assertTrue(np.isnan(empty[0]))
+
+    def test_schema_sensitivity_excludes_only_warning_cohort(self) -> None:
+        predictions = pd.DataFrame(
+            {
+                "dataset_id": ["complete", "warning"],
+                "source_gse_id": ["GSE1", "GSE2"],
+                "evaluation_annotation": ["CD8_T", "NK_CELL"],
+                "abT_gold": [True, False],
+                "paired_abT": [True, False],
+                "single_abT": [False, False],
+                "strict_NK": [False, True],
+                "author_NK": [False, True],
+                "known_negative_union": [True, True],
+                "no_productive_tcr": [False, True],
+                "p1_pred": [False, True],
+            }
+        )
+        profiles = [SimpleNamespace(profile_id="p1")]
+        result = MODULE.screen_schema_sensitivity(predictions, profiles, {"warning"})
+        compatible = result[
+            (result["scope"] == "complete_schema_sensitivity")
+            & (result["stratum"] == "known_negative_union")
+        ].iloc[0]
+        self.assertEqual(int(compatible["n_cohorts"]), 1)
+        self.assertEqual(int(compatible["n_cells"]), 1)
+        self.assertEqual(int(compatible["predicted_gdT"]), 0)
 
     def test_gse144469_legacy_tcr_flags_restore_both_classes(self) -> None:
         path = ROOT / "data/datasets/GSE144469/processed/artifacts/GSE144469_tnk_subset.h5ad"
