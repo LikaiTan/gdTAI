@@ -1,0 +1,152 @@
+:root {
+  color-scheme: light;
+  --ink: #17212b;
+  --muted: #596673;
+  --line: #cfd8dc;
+  --soft: #eef4f1;
+  --accent: #176b5b;
+  --accent-dark: #0f4d43;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: var(--ink);
+  background: #fff;
+}
+
+body {
+  width: min(1080px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 44px 0 72px;
+  line-height: 1.55;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--accent-dark);
+  page-break-after: avoid;
+}
+
+h1 {
+  margin: 0 0 18px;
+  padding-bottom: 14px;
+  border-bottom: 4px solid var(--accent);
+  font-size: 2.1rem;
+  line-height: 1.15;
+}
+
+h2 {
+  margin-top: 38px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--line);
+  font-size: 1.42rem;
+}
+
+h3 {
+  margin-top: 26px;
+  font-size: 1.1rem;
+}
+
+p,
+li {
+  orphans: 3;
+  widows: 3;
+}
+
+code {
+  overflow-wrap: anywhere;
+  color: #7a2f20;
+  background: #f6f7f8;
+  padding: 0.08em 0.24em;
+  border-radius: 2px;
+}
+
+table {
+  width: 100%;
+  margin: 18px 0 24px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 0.86rem;
+  page-break-inside: auto;
+}
+
+thead {
+  display: table-header-group;
+}
+
+tr {
+  page-break-inside: avoid;
+}
+
+th,
+td {
+  padding: 7px 8px;
+  border: 1px solid var(--line);
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+th {
+  color: #fff;
+  background: var(--accent);
+  text-align: left;
+}
+
+tbody tr:nth-child(even) {
+  background: var(--soft);
+}
+
+blockquote {
+  margin: 20px 0;
+  padding: 12px 18px;
+  border-left: 4px solid var(--accent);
+  color: var(--muted);
+  background: var(--soft);
+}
+
+@page {
+  size: A4;
+  margin: 14mm 13mm 16mm;
+}
+
+@media print {
+  html {
+    font-size: 10pt;
+  }
+
+  body {
+    width: auto;
+    margin: 0;
+    padding: 0;
+    line-height: 1.38;
+  }
+
+  h1 {
+    font-size: 20pt;
+  }
+
+  h2 {
+    margin-top: 20pt;
+    font-size: 14pt;
+  }
+
+  h3 {
+    margin-top: 13pt;
+    font-size: 11pt;
+  }
+
+  table {
+    font-size: 7.6pt;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}

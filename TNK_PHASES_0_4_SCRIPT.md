@@ -364,6 +364,35 @@ Standard behavior:
 - require nested leave-one-dataset-out evaluation with donor/library/clonotype
   grouping before the next model-selection or promotion decision
 
+## Post-Phase-4 gdTAI V4 protocol freeze
+
+Objective:
+
+- freeze the gdTAI V4 labels, features, nested grouped evaluation, operating
+  points, promotion rules, and supervision gates before any fitting
+
+Phase or task:
+
+- gdTAI V4 Step 0 precommitted training and validation protocol
+
+Exact `.py` script:
+
+- none; this is a documentation-only supervision gate rendered with Pandoc and
+  headless Chrome
+
+Core outputs:
+
+- `docs/GDTAI_V4_PRECOMMITTED_PLAN.md`
+- `gdT_prediction/gdtai_v4_precommit/index.html`
+- `gdT_prediction/gdtai_v4_precommit/gdtai_v4_precommitted_plan.pdf`
+
+Gate semantics:
+
+- no model fitting, calibration, threshold search, whole-atlas inference, or
+  promotion is authorized by Step 0
+- Step 1 is limited to input/label/feature preflight and checksum-pinned grouped
+  split-manifest construction after explicit supervision approval
+
 ## Phase 1: Coarse T/NK extraction
 
 Objective:

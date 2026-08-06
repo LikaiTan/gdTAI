@@ -172,6 +172,16 @@
   - corrected V2/V3 methodology and registry wording; retained Round 14 as the
     current promoted artifact pending a separately approved reevaluation
   - emailed the summary and comprehensive PDF audit report to Likai
+- gdTAI V4 Step 0 protocol frozen on 2026-08-07
+  - fixed expression-independent TCR truth rules and T/NK-only input contract
+  - froze a 197-gene feature universe with no Phase-4 scores and no B/myeloid
+    features
+  - precommitted nested leave-one-dataset-out evaluation with grouped inner
+    folds, fold-local calibration and thresholding, paired-abT/NK guardrails,
+    and a bootstrap-tested promotion rule
+  - rendered a print-safe seven-page HTML/PDF review package
+  - left all training, threshold search, whole-atlas inference, and model
+    promotion blocked for supervision
 
 ## Current working era
 

@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Precommitted gdTAI V4 Training and Validation Protocol</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="print.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Precommitted gdTAI V4 Training and Validation
+Protocol</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#precommitted-gdtai-v4-training-and-validation-protocol"
+id="toc-precommitted-gdtai-v4-training-and-validation-protocol">Precommitted
+gdTAI V4 Training and Validation Protocol</a>
+<ul>
+<li><a href="#purpose-and-governance" id="toc-purpose-and-governance">1.
+Purpose and governance</a></li>
+<li><a href="#fixed-analysis-population-and-data-contract"
+id="toc-fixed-analysis-population-and-data-contract">2. Fixed analysis
+population and data contract</a></li>
+<li><a href="#fixed-feature-policy" id="toc-fixed-feature-policy">3.
+Fixed feature policy</a></li>
+<li><a href="#model-architecture-and-negative-sampling"
+id="toc-model-architecture-and-negative-sampling">4. Model architecture
+and negative sampling</a></li>
+<li><a href="#nested-evaluation-and-operating-points"
+id="toc-nested-evaluation-and-operating-points">5. Nested evaluation and
+operating points</a></li>
+<li><a href="#comparators-metrics-and-statistics"
+id="toc-comparators-metrics-and-statistics">6. Comparators, metrics, and
+statistics</a></li>
+<li><a href="#full-atlas-inference-and-release-contract"
+id="toc-full-atlas-inference-and-release-contract">7. Full-atlas
+inference and release contract</a></li>
+<li><a href="#step-gates-and-required-artifacts"
+id="toc-step-gates-and-required-artifacts">8. Step gates and required
+artifacts</a></li>
+<li><a href="#mandatory-automated-checks"
+id="toc-mandatory-automated-checks">9. Mandatory automated
+checks</a></li>
+<li><a href="#appendix-a.-frozen-individual-tcr-genes-153"
+id="toc-appendix-a.-frozen-individual-tcr-genes-153">Appendix A. Frozen
+individual TCR genes (153)</a></li>
+<li><a href="#appendix-b.-precommit-record"
+id="toc-appendix-b.-precommit-record">Appendix B. Precommit
+record</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1
+id="precommitted-gdtai-v4-training-and-validation-protocol">Precommitted
+gdTAI V4 Training and Validation Protocol</h1>
+<ul>
+<li><strong>Protocol version:</strong> 1.0</li>
+<li><strong>Frozen:</strong> 2026-08-07</li>
+<li><strong>Status:</strong> supervision required; model fitting has not
+started</li>
+<li><strong>Primary objective:</strong> improve dataset-macro balanced
+F1 without relaxing the precommitted alpha-beta T-cell and NK
+false-positive guardrails</li>
+</ul>
+<h2 id="purpose-and-governance">1. Purpose and governance</h2>
+<p>This protocol freezes the next gdTAI development cycle before any new
+fitting, threshold search, or model comparison. It responds to the
+independent methodology audit by replacing cell-level train/tune splits
+with nested cross-dataset evaluation, using expression-independent TCR
+labels, and moving every feature decision, calibration step, and
+threshold choice inside grouped resampling.</p>
+<p>The current gdTAI v3 Round 14 model remains the promoted balanced
+default. Round 12 remains the validated high-purity fallback. The
+existing experimental V4 artifact is not promoted and must be archived
+before a new V4 candidate is written. No result from this protocol may
+be called independent external validation: all available positive
+cohorts have already influenced prior development or review.</p>
+<p>Training is blocked until this document, its rendered PDF, and the
+preflight audit are reviewed. A second supervision gate is required
+after nested evaluation and before any full-atlas inference or model
+promotion.</p>
+<h2 id="fixed-analysis-population-and-data-contract">2. Fixed analysis
+population and data contract</h2>
+<h3 id="input-population">2.1 Input population</h3>
+<ul>
+<li>The model accepts T/NK-filtered single-cell RNA-seq data only. It is
+not a pan-cell-type classifier.</li>
+<li>Input values must be raw non-negative integer counts. Features are
+transformed as
+<code>log1p(counts / total_counts_per_cell * 10000)</code> without
+densifying the full matrix.</li>
+<li>The canonical development atlas is
+<code>high_speed_temp/Integrated_dataset/integrated.h5ad</code>,
+currently containing 3,705,306 cells after the approved no-TCR-gene
+source carve-out.</li>
+<li>The GSE144469 expression matrix must come from the 107,068-cell
+raw-count object at
+<code>data/datasets/GSE144469/raw/legacy_source/fastq/tnk_subset.h5ad</code>.
+Its cells must be joined to canonical metadata by
+<code>SRR + barcode</code>; the join must be 100% unique and hashes of
+both source files must remain unchanged.</li>
+<li>BALF_BLOOD_COPD is a reused cross-study development benchmark, not
+an untouched test set. Its count layer is the only permitted expression
+source.</li>
+<li>H5AD inputs are read-only. Split assignments, labels, matrices, and
+predictions are written as separate tables or caches.</li>
+</ul>
+<h3 id="required-metadata">2.2 Required metadata</h3>
+<p>Every development row must provide a stable cell ID,
+<code>source_gse_id</code>, donor when available,
+<code>sample_id</code>, <code>library_id</code>, raw-count provenance,
+productive chain fields for TRA/TRB/TRG/TRD, canonical paired/any-chain
+flags, and doublet status when available. Clonotype IDs are required
+where TCR sequence permits them.</p>
+<h3 id="primary-truth-labels">2.3 Primary truth labels</h3>
+<p>Primary labels are assigned from productive TCR metadata only.
+Expression, annotations, Phase-4 scores, and model predictions cannot
+change these labels.</p>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 30%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Class</th>
+<th>Fixed rule</th>
+<th style="text-align: right;">Primary weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gdT_primary</code></td>
+<td>Productive paired TRG and TRD, with no productive TRA or TRB</td>
+<td style="text-align: right;">1.0</td>
+</tr>
+<tr>
+<td><code>abT_primary</code></td>
+<td>Productive paired TRA and TRB, with no productive TRG or TRD</td>
+<td style="text-align: right;">1.0</td>
+</tr>
+<tr>
+<td><code>dual_or_ambiguous</code></td>
+<td>Evidence for both receptor classes, conflicting flags, or incomplete
+contradictory metadata</td>
+<td style="text-align: right;">Excluded</td>
+</tr>
+<tr>
+<td><code>single_abT_weak</code></td>
+<td>Productive TRA or TRB, no productive TRG/TRD</td>
+<td style="text-align: right;">0.5, training only</td>
+</tr>
+<tr>
+<td><code>sorted_gdT_weak</code></td>
+<td>MalteGDT or eligible GDT_2020AUG_woCOV sorted cells without primary
+TCR truth</td>
+<td style="text-align: right;">0.25, training supplement only</td>
+</tr>
+<tr>
+<td><code>gdT_silver</code></td>
+<td>Project silver rule, including isolated productive TRD evidence</td>
+<td style="text-align: right;">Sensitivity only</td>
+</tr>
+</tbody>
+</table>
+<p>GDTlung2023july_7p is sensitivity-only because of its suboptimal
+library quality. Silver cells never enter feature selection, fitting,
+calibration, threshold selection, or promotion metrics. Sorted weak
+positives may supplement an outer-training partition, but never its
+held-out evaluation partition. TCR-confirmed CD4-like or Treg-like cells
+remain positive truth and count as false negatives if a post-model
+exclusion rejects them.</p>
+<h3 id="dataset-roles">2.4 Dataset roles</h3>
+<ul>
+<li>Primary nested evaluation sources: <code>HRA005041</code>,
+<code>GSE144469</code>, and <code>BALF_BLOOD_COPD</code>.</li>
+<li>Sorted sensitivity sources: <code>GDT_2020AUG_woCOV</code>,
+<code>MalteGDT</code>, and <code>GDTlung2023july_7p</code>.</li>
+<li>Negative stress source: <code>GSE254249</code>.</li>
+<li>Frozen extension negative-control cohorts: <code>GSE114724</code>,
+<code>GSE121636_GSE121637</code>, <code>GSE159251</code>,
+<code>GSE292700</code>, <code>GSE294273_GSE294274</code>,
+<code>GSE296954</code>, and <code>GSE315928</code>.</li>
+<li><code>GSE169246</code> is a reduced-feature schema-sensitivity
+cohort unless its feature coverage is repaired and separately approved.
+It cannot contribute a primary guardrail in its current form.</li>
+</ul>
+<p>The extension cohorts contain no gdT-gold or gdT-silver cells under
+project TCR rules. They can measure paired/single alpha-beta T-cell and
+strict-NK false-positive behavior, but not recall, F1, ROC-AUC, or
+PR-AUC.</p>
+<h2 id="fixed-feature-policy">3. Fixed feature policy</h2>
+<h3 id="exclusions">3.1 Exclusions</h3>
+<p>The classifier cannot use Phase-4 TRD, TRAB, or TRD-minus-TRAB
+scores; source IDs; sample, donor, or library IDs; annotations; UMAP or
+latent coordinates; TCR metadata; or doublet labels at inference. B-cell
+and myeloid genes, annotations, and program scores are excluded from
+training and inference. B/myeloid annotations may be reported only as
+out-of-scope contamination checks after predictions are frozen.</p>
+<h3 id="gene-universe">3.2 Gene universe</h3>
+<p>The feature universe is frozen at <strong>197 genes</strong>, below
+the 220-gene protocol cap and the user’s absolute 300-gene limit. All
+197 were confirmed present in the canonical atlas, BALF_BLOOD_COPD, and
+the GSE144469 raw-count object on 2026-08-07.</p>
+<ul>
+<li><strong>153 individual TCR genes:</strong> the cross-input
+intersection listed in Appendix A.</li>
+<li><strong>14 T-lineage genes:</strong> <code>CD3D</code>,
+<code>CD3E</code>, <code>CD3G</code>, <code>CD247</code>,
+<code>CD2</code>, <code>LCK</code>, <code>LAT</code>,
+<code>TRAT1</code>, <code>CD5</code>, <code>CD6</code>,
+<code>THEMIS</code>, <code>BCL11B</code>, <code>TCF7</code>,
+<code>LEF1</code>.</li>
+<li><strong>10 CD4/Treg-context genes:</strong> <code>CD4</code>,
+<code>IL7R</code>, <code>CCR7</code>, <code>SELL</code>,
+<code>LTB</code>, <code>MAL</code>, <code>FOXP3</code>,
+<code>IL2RA</code>, <code>CTLA4</code>, <code>TIGIT</code>.</li>
+<li><strong>14 NK/cytotoxic-context genes:</strong> <code>NKG7</code>,
+<code>GNLY</code>, <code>KLRD1</code>, <code>TYROBP</code>,
+<code>FCER1G</code>, <code>FCGR3A</code>, <code>KLRC1</code>,
+<code>KLRF1</code>, <code>PRF1</code>, <code>GZMB</code>,
+<code>CTSW</code>, <code>CCL5</code>, <code>EOMES</code>,
+<code>TBX21</code>.</li>
+<li><strong>6 T-cell-state genes:</strong> <code>CD8A</code>,
+<code>CD8B</code>, <code>KLRB1</code>, <code>ZNF683</code>,
+<code>RUNX3</code>, <code>IKZF2</code>.</li>
+</ul>
+<p>TRG genes are retained as individual weak evidence but receive no
+privileged rule or hard threshold. NK/cytotoxic genes are contextual
+features, not NK-specific vetoes, because bona fide gdT cells can
+express them strongly.</p>
+<p>Inside each training fold, a gene is removed only if absent,
+constant, or detected in fewer than 0.05% of that fold’s cells. No
+outcome-driven DEG screen is permitted before or outside the folds.
+Missing retained genes at inference are zero-filled only after coverage
+checks; the model must abstain when coverage is inadequate.</p>
+<h3 id="deterministic-derived-features">3.3 Deterministic derived
+features</h3>
+<p>Derived features are restricted to detection counts for the TRA, TRB,
+TRG, and TRD gene families; unweighted means of the fixed T-lineage,
+NK-context, CD4-helper, and Treg panels; and the Stage-1 out-of-fold
+T-lineage probability. These are computed only from the 197 genes. They
+are not the legacy Phase-4 module scores and use no matched control-gene
+sampling. An individual-gene-only ablation is mandatory.</p>
+<h2 id="model-architecture-and-negative-sampling">4. Model architecture
+and negative sampling</h2>
+<h3 id="stage-1-soft-t-lineage-gate">4.1 Stage 1: soft T-lineage
+gate</h3>
+<p>Stage 1 is an elastic-net logistic classifier that estimates
+T-lineage probability. It uses the non-TCR genes plus <code>TRAC</code>,
+<code>TRBC1</code>, <code>TRBC2</code>, <code>TRDC</code>,
+<code>TRGC1</code>, and <code>TRGC2</code>. TCR-defined alpha-beta and
+gamma-delta T cells are positive. NK negatives require an NK annotation,
+no productive TRA/TRB/TRG/TRD evidence, and no doublet flag. When two
+independent annotation fields are available they must agree; a single
+available NK annotation is retained at weight 0.5.</p>
+<p>The NK training sample is dataset-balanced and fixed as 60%
+representative NK, 20% T-like hard NK, and 20%
+gdT-like/TRDC-positive-TRDV-negative NK. The hard strata alter sampling
+only; they do not create NK truth labels. Stage 1 must achieve at least
+99% recall for TCR-defined gdT cells and 98% recall for productive
+alpha-beta T cells in every primary outer evaluation source at its
+inner-fold-selected operating point.</p>
+<p>Stage 1 is soft: all T/NK-input cells continue to Stage 2, and the
+out-of-fold Stage-1 probability is a Stage-2 feature. No single marker
+can hard-remove a cell before Stage 2.</p>
+<p>Stage-1 hyperparameters are frozen to:</p>
+<ul>
+<li><code>C</code>: 0.03, 0.1, 0.3, 1.0</li>
+<li><code>l1_ratio</code>: 0.0, 0.25, 0.5, 0.75</li>
+<li>solver: <code>saga</code>; maximum iterations: 5,000; tolerance:
+1e-4</li>
+</ul>
+<h3 id="stage-2-gdt-classifier">4.2 Stage 2: gdT classifier</h3>
+<p>Two candidate families are compared under identical folds and
+weights:</p>
+<ol type="1">
+<li>Elastic-net logistic regression using the 197 genes, allowed derived
+features, and Stage-1 out-of-fold probability. Grid: <code>C</code> =
+0.01, 0.03, 0.1, 0.3, 1.0; <code>l1_ratio</code> = 0.0, 0.25, 0.5, 0.75,
+1.0; <code>saga</code>, 5,000 iterations, tolerance 1e-4.</li>
+<li>Histogram gradient boosting with <code>learning_rate</code> = 0.03
+or 0.07, <code>max_leaf_nodes</code> = 7 or 15,
+<code>min_samples_leaf</code> = 100 or 500,
+<code>l2_regularization</code> = 1 or 10, <code>max_iter</code> = 250,
+and early stopping disabled so validation folds cannot leak into
+fitting.</li>
+</ol>
+<p>No additional candidate family or grid point may be introduced after
+results are seen. Any later change starts a separately named, separately
+precommitted experiment.</p>
+<h3 id="weighting">4.3 Weighting</h3>
+<p>Training weights are the product of truth reliability, inverse
+dataset frequency within class, and inverse class frequency within
+dataset. Weights are normalized to mean 1 in each training fold. No cell
+is duplicated. Donor/library groups cannot be split between train and
+validation. Sorted weak positives and single-chain weak negatives use
+the fixed reliability weights in Section 2.3.</p>
+<h2 id="nested-evaluation-and-operating-points">5. Nested evaluation and
+operating points</h2>
+<h3 id="outer-and-inner-splits">5.1 Outer and inner splits</h3>
+<ul>
+<li>Outer evaluation is leave-one-dataset-out across HRA005041,
+GSE144469, and BALF_BLOOD_COPD. The held-out source is absent from both
+model stages, feature filtering, calibration, and threshold
+selection.</li>
+<li>Each outer-training partition uses three-fold
+<code>StratifiedGroupKFold</code> for tuning.</li>
+<li>The group key is donor when available, otherwise sample, otherwise
+library. If donor is unavailable and a clonotype spans multiple fallback
+groups, the entire clonotype is assigned to one fold.</li>
+<li>Split manifests are generated once from a fixed seed
+(<code>20260807</code>), checksum-pinned, and reused by every candidate
+and comparator.</li>
+<li>Every feature filter, scaler, derived feature, Stage-1 prediction,
+hyperparameter decision, sigmoid calibrator, and operating threshold is
+fitted using inner-training data only. Isotonic calibration is
+sensitivity-only and cannot select a model.</li>
+</ul>
+<h3 id="threshold-selection">5.2 Threshold selection</h3>
+<p>Threshold candidates are the sorted unique inner out-of-fold
+calibrated probabilities plus 0 and 1. Ties are resolved by lower
+strict-NK FPR, then lower paired-abT FPR, then fewer retained genes,
+then lexical candidate ID.</p>
+<ul>
+<li><strong>Balanced mode:</strong> maximize dataset-macro F1 subject to
+macro recall at least 0.80, paired-abT FPR at most 0.20%, and strict-NK
+FPR at most 1.00%.</li>
+<li><strong>High-purity mode:</strong> maximize dataset-macro F0.5
+subject to macro recall at least 0.70, paired-abT FPR at most 0.10%, and
+strict-NK FPR at most 0.50%.</li>
+</ul>
+<p>If no threshold satisfies a mode’s guardrails, that mode fails for
+the candidate; the constraints cannot be relaxed. The final deployment
+thresholds are selected from cross-dataset out-of-fold predictions only
+after the candidate family is frozen. The resulting deployment
+thresholds are not reported as independently validated estimates.</p>
+<h3 id="cd4treg-exclusions-and-vdj-aware-rescue">5.3 CD4/Treg exclusions
+and VDJ-aware rescue</h3>
+<p>Both RNA operating modes reject coherent CD4-helper-like and
+Treg-like predictions after probability thresholding:</p>
+<ul>
+<li>CD4-helper exclusion: <code>CD4 &gt; 0</code>, at least two of
+<code>IL7R</code>, <code>CCR7</code>, <code>SELL</code>,
+<code>LTB</code>, <code>MAL</code> are detected, and their six-gene mean
+is at least 0.5.</li>
+<li>Treg exclusion: <code>FOXP3 &gt; 0</code>, at least one of
+<code>IL2RA</code>, <code>CTLA4</code>, <code>TIGIT</code> is detected,
+and their four-gene mean is at least 0.5.</li>
+</ul>
+<p>These rules operate on log1p(CP10K) values and never alter truth
+labels. A separate, optional VDJ-aware output may rescue rejected cells
+with productive paired TRG/TRD and no productive TRA/TRB. Rescued calls
+are reported separately and never enter TCR-defined validation metrics,
+avoiding use of the truth fields to inflate model performance.</p>
+<h2 id="comparators-metrics-and-statistics">6. Comparators, metrics, and
+statistics</h2>
+<h3 id="fair-retrained-comparators">6.1 Fair retrained comparators</h3>
+<p>Every comparator uses the same outer and inner partitions:</p>
+<ol type="1">
+<li>Legacy TRD-minus-TRAB score with a fold-selected threshold.</li>
+<li>Compact logistic model using <code>TRDC</code>, <code>TRDV1</code>,
+<code>TRDV2</code>, <code>TRDV3</code>, <code>TRAC</code>,
+<code>TRBC1</code>, and <code>TRBC2</code>.</li>
+<li>V2-like single-stage elastic-net logistic regression using the fixed
+individual TCR genes only.</li>
+</ol>
+<p>Frozen gdTAI V2 high-purity, V3 Round 12, and V3 Round 14 are
+descriptive reference profiles only because they cannot be fairly
+retrained from one coherent recorded build.</p>
+<h3 id="primary-reporting">6.2 Primary reporting</h3>
+<p>For each outer dataset and the unweighted dataset macro-average,
+report ROC-AUC, PR-AUC, precision, recall, specificity, F1, F0.5,
+balanced accuracy, MCC, confusion counts, paired-abT FPR, strict-NK FPR,
+and calibration intercept/slope, Brier score, and expected calibration
+error. Also report silver recall, sorted-source sensitivity, CD4/Treg
+exclusion losses, TRDC-positive/TRDV-negative behavior, feature
+coverage, abstention, and PPV/FDR at gdT prevalences of 0.1%, 0.5%, 1%,
+2%, and 5%.</p>
+<p>Use 2,000 paired hierarchical bootstrap replicates, resampling
+datasets and then donors, or libraries when donor is absent. Report
+percentile 95% confidence intervals for each metric and paired
+candidate-minus-comparator differences. Dataset-level and worst-dataset
+results are primary; pooled cell-level results are secondary.</p>
+<h3 id="promotion-rule">6.3 Promotion rule</h3>
+<p>V4 is promoted only if all conditions hold for the balanced mode:</p>
+<ol type="1">
+<li>Dataset-macro F1 exceeds the strongest fairly retrained comparator
+by at least 0.01.</li>
+<li>The 95% paired hierarchical-bootstrap lower confidence bound for
+that F1 difference is greater than 0.</li>
+<li>Recall is at least 0.70 in every primary outer dataset.</li>
+<li>All balanced paired-abT and strict-NK guardrails pass in every
+primary outer dataset and in the seven complete-feature extension
+negative-control cohorts.</li>
+<li>Feature coefficients or permutation ranks are directionally stable
+in at least two of three outer folds, and no single dataset accounts for
+more than 50% of aggregate feature importance.</li>
+<li>The release bundle passes semantic and checksum consistency
+tests.</li>
+</ol>
+<p>Failure of any condition retains V3 Round 14 as the promoted default
+and publishes V4 as an experimental negative result. High-purity mode
+may be distributed only when its own guardrails pass; it cannot rescue a
+failed balanced-mode promotion.</p>
+<h2 id="full-atlas-inference-and-release-contract">7. Full-atlas
+inference and release contract</h2>
+<p>Whole-atlas inference is blocked until the nested report is reviewed
+and promotion is explicitly authorized. After authorization, score the
+current 3,705,306-cell atlas once with the frozen final fit. Each output
+row must contain:</p>
+<ul>
+<li>calibrated Stage-1 T-lineage probability</li>
+<li>calibrated Stage-2 gdT probability</li>
+<li>balanced and high-purity RNA calls</li>
+<li>CD4-helper and Treg exclusion flags</li>
+<li>feature coverage and schema-abstention flag</li>
+<li>optional VDJ-aware rescued call</li>
+<li>deterministic decision reason</li>
+<li>model ID, artifact SHA-256, Git commit, and split-manifest ID</li>
+</ul>
+<p>The model abstains when any critical gene (<code>CD3D</code>,
+<code>CD3E</code>, <code>TRAC</code>, <code>TRBC1</code>,
+<code>TRBC2</code>, <code>TRDC</code>, <code>TRDV1</code>,
+<code>TRDV2</code>, <code>TRDV3</code>) is absent or when retained
+model-gene coverage is below 90%. An immutable release bundle must
+include the model, feature order, coefficients or importances,
+normalizer, calibrators, thresholds, input hashes, split IDs,
+environment lock, command, random seeds, metrics, model card, inference
+example, and a manifest whose semantics agree with the serialized
+artifact and registry.</p>
+<h2 id="step-gates-and-required-artifacts">8. Step gates and required
+artifacts</h2>
+<h3 id="step-0-protocol-freeze-this-document">Step 0: protocol freeze
+(this document)</h3>
+<ul>
+<li>Commit this Markdown protocol, reader HTML, and PDF before any
+fitting.</li>
+<li>Email the PDF and commit SHA to Likai with supervision status and
+exact paths.</li>
+<li>Stop. No training or threshold search is authorized by completion of
+Step 0.</li>
+</ul>
+<h3 id="step-1-preflight-and-split-freeze">Step 1: preflight and split
+freeze</h3>
+<ul>
+<li>Archive the existing experimental V4 artifact without overwriting
+it.</li>
+<li>Verify raw-count state, hashes, required metadata, label conflicts,
+class counts, feature coverage, and the GSE144469
+<code>SRR + barcode</code> join.</li>
+<li>Emit checksum-pinned cell-label and grouped-split manifests plus a
+preflight report.</li>
+<li>Email Likai and stop for approval.</li>
+</ul>
+<h3 id="step-2-nested-evaluation">Step 2: nested evaluation</h3>
+<ul>
+<li>Run both stages, ablations, and fair comparators under the frozen
+folds.</li>
+<li>Emit per-fold predictions, metrics, calibration, feature stability,
+bootstrap results, extension negative controls, HTML, and a print-safe
+PDF.</li>
+<li>Email Likai and stop for model-selection review.</li>
+</ul>
+<h3 id="step-3-final-fit-and-decision">Step 3: final fit and
+decision</h3>
+<ul>
+<li>Only after approval, fit the selected family on all development
+data, select final cross-validated operating thresholds, run stress
+cohorts, and apply the promotion rule.</li>
+<li>Publish either an immutable promoted V4 release or an experimental
+failure record.</li>
+<li>Whole-atlas inference requires separate explicit approval.</li>
+</ul>
+<h2 id="mandatory-automated-checks">9. Mandatory automated checks</h2>
+<p>Before any candidate can run, tests must prove:</p>
+<ol type="1">
+<li>All expression inputs are raw counts and remain unchanged by size,
+mtime, and SHA-256.</li>
+<li>Primary positive and negative labels are nonempty, mutually
+exclusive, and independent of expression and annotations; silver cells
+are absent from fitting and selection.</li>
+<li>GSE144469 maps 107,068 of 107,068 cells uniquely by
+<code>SRR + barcode</code>.</li>
+<li>The gene universe contains exactly 197 genes, no Phase-4 score, no
+metadata feature, and no B/myeloid feature; every fold retains at most
+220 genes.</li>
+<li>No donor, fallback sample/library, or protected clonotype crosses a
+fold boundary.</li>
+<li>Feature filtering, Stage-1 probabilities, scaling, calibration,
+model selection, and thresholds are fold-local.</li>
+<li>CD4/Treg exclusions and VDJ rescue are deterministic and rescue
+never changes the RNA metric frame.</li>
+<li>Missing critical genes or less than 90% coverage causes
+abstention.</li>
+<li>Two runs with the same seed produce identical split manifests,
+predictions, and model hashes, or a documented deterministic numerical
+tolerance where the estimator cannot be bitwise stable.</li>
+<li>Serialized model, manifest, registry, report, and example inference
+outputs agree on feature order, thresholds, version, normalization, and
+checksums.</li>
+</ol>
+<h2 id="appendix-a.-frozen-individual-tcr-genes-153">Appendix A. Frozen
+individual TCR genes (153)</h2>
+<p><code>TRAC</code>, <code>TRAJ10</code>, <code>TRAJ12</code>,
+<code>TRAJ13</code>, <code>TRAJ16</code>, <code>TRAJ18</code>,
+<code>TRAJ22</code>, <code>TRAJ23</code>, <code>TRAJ27</code>,
+<code>TRAJ28</code>, <code>TRAJ32</code>, <code>TRAJ34</code>,
+<code>TRAJ37</code>, <code>TRAJ38</code>, <code>TRAJ39</code>,
+<code>TRAJ42</code>, <code>TRAJ43</code>, <code>TRAJ44</code>,
+<code>TRAJ45</code>, <code>TRAJ46</code>, <code>TRAJ47</code>,
+<code>TRAJ49</code>, <code>TRAJ5</code>, <code>TRAJ6</code>,
+<code>TRAJ9</code>, <code>TRAV1-1</code>, <code>TRAV1-2</code>,
+<code>TRAV10</code>, <code>TRAV12-1</code>, <code>TRAV12-2</code>,
+<code>TRAV12-3</code>, <code>TRAV13-1</code>, <code>TRAV13-2</code>,
+<code>TRAV14DV4</code>, <code>TRAV15</code>, <code>TRAV16</code>,
+<code>TRAV17</code>, <code>TRAV18</code>, <code>TRAV19</code>,
+<code>TRAV2</code>, <code>TRAV20</code>, <code>TRAV21</code>,
+<code>TRAV22</code>, <code>TRAV23DV6</code>, <code>TRAV24</code>,
+<code>TRAV25</code>, <code>TRAV26-1</code>, <code>TRAV26-2</code>,
+<code>TRAV27</code>, <code>TRAV29DV5</code>, <code>TRAV3</code>,
+<code>TRAV30</code>, <code>TRAV34</code>, <code>TRAV35</code>,
+<code>TRAV36DV7</code>, <code>TRAV38-1</code>, <code>TRAV38-2DV8</code>,
+<code>TRAV39</code>, <code>TRAV4</code>, <code>TRAV40</code>,
+<code>TRAV41</code>, <code>TRAV5</code>, <code>TRAV6</code>,
+<code>TRAV8-1</code>, <code>TRAV8-2</code>, <code>TRAV8-3</code>,
+<code>TRAV8-4</code>, <code>TRAV8-5</code>, <code>TRAV8-6</code>,
+<code>TRAV9-2</code>, <code>TRBC1</code>, <code>TRBC2</code>,
+<code>TRBJ1-1</code>, <code>TRBJ1-2</code>, <code>TRBJ1-4</code>,
+<code>TRBJ1-5</code>, <code>TRBJ1-6</code>, <code>TRBJ2-1</code>,
+<code>TRBJ2-2</code>, <code>TRBJ2-2P</code>, <code>TRBJ2-3</code>,
+<code>TRBJ2-4</code>, <code>TRBJ2-5</code>, <code>TRBJ2-6</code>,
+<code>TRBJ2-7</code>, <code>TRBV1</code>, <code>TRBV10-1</code>,
+<code>TRBV10-2</code>, <code>TRBV10-3</code>, <code>TRBV11-1</code>,
+<code>TRBV11-2</code>, <code>TRBV11-3</code>, <code>TRBV12-2</code>,
+<code>TRBV12-3</code>, <code>TRBV12-4</code>, <code>TRBV12-5</code>,
+<code>TRBV13</code>, <code>TRBV14</code>, <code>TRBV15</code>,
+<code>TRBV16</code>, <code>TRBV18</code>, <code>TRBV19</code>,
+<code>TRBV2</code>, <code>TRBV20-1</code>, <code>TRBV21-1</code>,
+<code>TRBV23-1</code>, <code>TRBV24-1</code>, <code>TRBV25-1</code>,
+<code>TRBV27</code>, <code>TRBV28</code>, <code>TRBV29-1</code>,
+<code>TRBV3-1</code>, <code>TRBV30</code>, <code>TRBV4-1</code>,
+<code>TRBV4-2</code>, <code>TRBV5-1</code>, <code>TRBV5-3</code>,
+<code>TRBV5-4</code>, <code>TRBV5-5</code>, <code>TRBV5-6</code>,
+<code>TRBV6-1</code>, <code>TRBV6-2</code>, <code>TRBV6-4</code>,
+<code>TRBV6-5</code>, <code>TRBV6-6</code>, <code>TRBV7-2</code>,
+<code>TRBV7-3</code>, <code>TRBV7-4</code>, <code>TRBV7-5</code>,
+<code>TRBV7-6</code>, <code>TRBV7-7</code>, <code>TRBV7-9</code>,
+<code>TRBV9</code>, <code>TRDC</code>, <code>TRDJ1</code>,
+<code>TRDJ2</code>, <code>TRDJ3</code>, <code>TRDV1</code>,
+<code>TRDV2</code>, <code>TRDV3</code>, <code>TRGC1</code>,
+<code>TRGC2</code>, <code>TRGV1</code>, <code>TRGV10</code>,
+<code>TRGV11</code>, <code>TRGV2</code>, <code>TRGV3</code>,
+<code>TRGV4</code>, <code>TRGV5</code>, <code>TRGV5P</code>,
+<code>TRGV7</code>, <code>TRGV8</code>, <code>TRGV9</code>.</p>
+<h2 id="appendix-b.-precommit-record">Appendix B. Precommit record</h2>
+<ul>
+<li>Canonical environment: <code>rapids_sc_py310</code></li>
+<li>Random seed: <code>20260807</code></li>
+<li>Resource design limit: 80 CPU cores and 400 GB RAM; the active
+runbook permits up to 800 GB, but the workflow cannot require it.</li>
+<li>Current promoted comparator: gdTAI v3 Round 14, threshold 0.936</li>
+<li>High-purity fallback: gdTAI v3 Round 12, threshold 0.5</li>
+<li>Existing experimental V4: not promoted; archive before Step 1</li>
+<li>No training, calibration, threshold search, full-atlas inference, or
+model promotion was performed as part of Step 0.</li>
+</ul>
+</body>
+</html>

@@ -2,14 +2,13 @@
 
 ## Current milestone
 
-- Post-Phase 4 independent gdTAI methodology audit, extension-cohort frozen-model
-  screen, and official-GEO metadata reviews complete; retraining and additive
-  metadata correction remain gated
+- gdTAI V4 training and validation protocol frozen before fitting; Step 1
+  preflight, retraining, and additive metadata correction remain gated
 
 ## Next action
 
-- review the gdTAI methodology audit and decide whether to authorize the
-  precommitted nested leave-one-dataset-out re-evaluation
+- review the precommitted gdTAI V4 protocol and decide whether to authorize
+  Step 1 preflight and grouped split-manifest construction
 - do not promote or claim superiority for another gdTAI model before grouped
   resampling, expression-independent labels, and fold-local selection are in place
 - review the frozen-profile negative-control report and official-GEO metadata
@@ -159,6 +158,10 @@ Additional current state:
 
 ## Current review artifacts
 
+- precommitted gdTAI V4 training and validation protocol:
+  - `docs/GDTAI_V4_PRECOMMITTED_PLAN.md`
+  - `gdT_prediction/gdtai_v4_precommit/index.html`
+  - `gdT_prediction/gdtai_v4_precommit/gdtai_v4_precommitted_plan.pdf`
 - independent gdTAI training and evaluation audit:
   - `docs/GDTAI_METHODOLOGY_AUDIT.md`
   - `gdT_prediction/gdtai_methodology_audit/index.html`
