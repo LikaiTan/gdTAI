@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>External Review of the gdTAI Training Program</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="report_style.css" />
+</head>
+<body>
+<h1 id="external-review-of-the-gdtai-training-program">External Review
+of the gdTAI Training Program</h1>
+<p><strong>Independent methodological review of data preparation,
+model/algorithm selection, training, and evaluation of the gdTAI
+γδT-cell classifier</strong></p>
+<ul>
+<li><strong>Review date:</strong> 2026-08-06</li>
+<li><strong>Reviewer role:</strong> external methodological reviewer
+(commissioned audit)</li>
+<li><strong>Project:</strong> gdTAI v1–v4 γδT classifier series, trained
+on the 5,128,904-cell integrated T/NK atlas</li>
+<li><strong>Reviewed model of record:</strong> gdTAI v3.0
+(<code>gdtai_v3</code>, promoted default,
+<code>balanced_fixed_0p936</code> operating mode), with v3 Round 12 as
+validated high-purity fallback, v2.0 as reference release, v4.0 as
+experimental</li>
+<li><strong>Constraint accepted for this review:</strong> no additional
+datasets can be obtained; all recommendations are executable with the
+data already in the project.</li>
+</ul>
+<hr />
+<h2 id="executive-summary">1. Executive summary</h2>
+<p>gdTAI is an unusually well-instrumented single-cell classifier
+project: artifacts are SHA-256-pinned, every candidate lane emits
+versioned reports, negative-control cohorts are screened under explicit
+frozen-profile protocols, and failure modes are audited rather than
+hidden. The promoted v3.0 model reaches recall ≈ 0.86 at specificity ≈
+0.999 on the one truly independent cohort (BALF_BLOOD_COPD), which is a
+credible result.</p>
+<p>The review nevertheless finds that <strong>the evidentiary basis for
+the headline performance numbers is weaker than the numbers
+suggest</strong>, for three structural reasons:</p>
+<ol type="1">
+<li><strong>Leakage-prone evaluation design.</strong> Train/tune splits
+are made at the cell level, so donors, libraries, and batches straddle
+train and tune; feature lists were selected on the full object before
+splitting; and the full-atlas metrics used for final model selection are
+computed on the same cells used to report performance. The one clean
+whole-dataset holdout (GSE144469 in v2) was moved into training in
+v3.</li>
+<li><strong>Adaptive, post-hoc model selection.</strong> Roughly 38 v3
+candidate rounds plus at least six separate candidate lanes (v1/v2
+strategies, NK-guard, multi-guard, transcriptome-gate,
+annotation-specific cascade, v4) were screened against the same
+validation cohorts, with selection criteria tightened after results were
+inspected (target recall 0.75 during training → 0.80 guardrail later), a
+promoted model (Round 12) subsequently replaced by a retrospectively
+renamed Round 14, and the “final-test-only” external cohort used inside
+the promotion and selection rules. This is a textbook
+garden-of-forking-paths pattern; the external cohort is no longer
+untouched.</li>
+<li><strong>No replicated external positive-truth validation.</strong>
+The 8-cohort extension screen (758,135 cells) contains zero
+gdT-gold/silver cells and can only measure false-positive rates. A
+single external cohort (948 gdT positives) carries the entire external
+recall claim, and its primary evaluation excludes ambiguous cells.</li>
+</ol>
+<p><strong>Overall verdict:</strong> the gdTAI v3.0 artifact is usable
+for atlas-internal, high-specificity γδT candidate calling, and the
+project’s negative-control discipline is genuinely good practice.
+However, the promoted model’s reported recall/precision should be
+treated as optimistic internal estimates rather than validated external
+performance, the model registry and selection history need
+consolidation, and the program should shift from “more rounds” to
+<strong>honest uncertainty quantification, prespecification,
+calibration, and robustness analysis</strong> — all achievable without
+new data.</p>
+<p><strong>Highest-priority recommendations (full list in
+§6):</strong></p>
+<ul>
+<li><strong>R1.</strong> Freeze the evaluation protocol: declare
+BALF_BLOOD_COPD and the two sealed extension holdouts (GSE315928,
+GSE121636) as never-touch test sets; stop adaptive iteration against
+them; document the Round 12→Round 14 replacement openly.</li>
+<li><strong>R2.</strong> Quantify split optimism with
+leave-one-dataset-out cross-validation across the labeled sources and
+donor/library-cluster bootstrap confidence intervals on every headline
+metric.</li>
+<li><strong>R3.</strong> Add calibration analysis (reliability curves,
+isotonic recalibration on tune) and prevalence-linked operating-point
+guidance to the reporting.</li>
+<li><strong>R6.</strong> Make per-dataset metrics the primary reporting
+frame (pooled metrics currently mask source-level FP fractions ranging
+from ~0.5% to ~24%).</li>
+</ul>
+<hr />
+<h2 id="scope-materials-and-method">2. Scope, materials, and method</h2>
+<p>The review covered the complete gdTAI lineage and its evaluation
+machinery:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Primary materials reviewed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Label construction</td>
+<td><code>workflows/gdtai/run_gdt_prediction_package_evaluation.py</code>
+(gold/silver rules, GSE144469 boolean repair, sublibrary evidence);
+<code>Integrated_dataset/tables/gdT_prediction/ground_truth_*.csv</code></td>
+</tr>
+<tr>
+<td>Training</td>
+<td><code>workflows/gdtai/run_gdt_deg_tcr_classifier_training.py</code>
+(v1/v2), <code>run_gdt_gse144469_holdout_tcrgene_classifier.py</code>
+(v2 holdout), <code>run_gdtai_v3_trdc_nk_guard_classifier.py</code>
+(v3), <code>run_gdtai_v4_tcell_gate_classifier.py</code> (v4),
+<code>run_gdtai_nkguard_classifier.py</code>,
+<code>run_gdtai_multiguard_classifier.py</code>,
+<code>run_gdtai_transcriptome_gate_cascade.py</code>,
+<code>run_gdtai_annotation_specific_cascade.py</code></td>
+</tr>
+<tr>
+<td>Evaluation</td>
+<td><code>workflows/gdtai/compare_gdtai_v3_round12_vs_round14.py</code>,
+<code>compare_frozen_gdtai_profiles.py</code>,
+<code>compare_gdtai_latest_vs_v2_high_purity.py</code>, failure-audit
+scripts; reports and tables under
+<code>Integrated_dataset/logs/tables/figures/gdT_prediction/**</code></td>
+</tr>
+<tr>
+<td>Governance</td>
+<td><code>configs/models/gdtai/model_registry.csv</code>,
+<code>configs/models/gdtai/README.md</code>,
+<code>configs/models/gdtai/extension_evaluation.json</code>,
+<code>gdT_prediction/gdT_classifier_local_handoff_plan.md</code></td>
+</tr>
+</tbody>
+</table>
+<p>Method: independent read-through of the executable scripts and their
+emitted tables/logs/reports; headline numbers cross-checked against
+source CSV/JSON artifacts (label counts, split sizes, filter counts, and
+Round 12/14 metrics were re-verified against
+<code>ground_truth_class_counts.csv</code>,
+<code>split_overall.csv</code>,
+<code>hard_negative_expression_filter_summary.csv</code>, and
+<code>gdtai_v3_round12_vs_round14_summary.json</code> during this
+review). No pipeline code, H5AD, model artifact, or registry entry was
+modified.</p>
+<h3 id="ground-truth-label-system-as-found">2.1 Ground-truth label
+system (as found)</h3>
+<p>Labels are built from TCR metadata in
+<code>run_gdt_prediction_package_evaluation.py</code>:</p>
+<ul>
+<li><strong>gdT_gold (57,776 cells, 1.13% of atlas):</strong> every cell
+of the three sorted-γδT cohorts (GDT_2020AUG_woCOV 25,904;
+GDTlung2023july_7p 15,175; MalteGDT 7,800) <strong>regardless of TCR
+evidence</strong>, plus HRA005041/GSE144469 cells in gdTCR-sequenced
+sublibraries with paired TRG/TRD and no αβ TCR (8,897 cells).</li>
+<li><strong>abT_gold (603,203 cells):</strong> paired TRA/TRB, no γδ TCR
+— but only in HRA005041 and GSE144469, the two
+<code>TCR_EVALUATION_SOURCES</code>.</li>
+<li><strong>gdT_silver (2,194 cells):</strong> TRD-only, sensitivity
+analyses only.</li>
+<li><strong>unlabeled_or_ambiguous (4,465,731 cells, 87.1%):</strong>
+everything else, including all TRAB-sequenced cells from the other ~60
+datasets.</li>
+</ul>
+<p>A sublibrary is flagged “gdTCR-sequenced” if <strong>any</strong>
+cell in it has γδ TCR evidence (<code>build_sublibrary_labels</code>,
+script lines 469–506): in HRA005041 only 8 of 321 sublibraries
+qualify.</p>
+<hr />
+<h2 id="strengths-of-the-current-process">3. Strengths of the current
+process</h2>
+<p>Credit is due — several practices here exceed typical single-cell
+classifier work:</p>
+<ol type="1">
+<li><strong>Artifact integrity.</strong> SHA-256 pinning of model
+artifacts and input H5ADs, verified before use
+(<code>compare_gdtai_v3_round12_vs_round14.py:184-200</code>);
+registry-stored hashes.</li>
+<li><strong>Explicit negative-control discipline.</strong> The extension
+screen is honest about what it can measure: “these studies used
+alpha-beta TCR assays and contributed 0 gdT-gold and 0 gdT-silver cells…
+this report estimates false-positive behavior and prediction burden
+only” (<code>compare_frozen_gdtai_profiles.py:1737</code>). Sealed
+holdouts (GSE315928, GSE121636) are registered in
+<code>extension_evaluation.json</code>.</li>
+<li><strong>Failure-mode auditing as a first-class artifact.</strong>
+Three separate failure audits (v3 TRDC/NK, annotation-specific TP/FN,
+GSE144469 holdout) quantify NK contamination, TRDC+TRDV− ambiguity, and
+per-tissue/per-annotation FN structure rather than burying it.</li>
+<li><strong>Statistical texture.</strong> Wilson intervals on rates,
+donor-cluster bootstrap in the extension screen, McNemar tests
+explicitly flagged as descriptive because of intra-donor correlation,
+and prevalence-aware PPV tables (PPV ≈ 0.205 at 0.1% prevalence vs 0.948
+at the 6.58% validation prevalence).</li>
+<li><strong>Reproducible randomness.</strong> Fixed seeds throughout
+(<code>RANDOM_SEED = 20260501</code>), offset RNG streams for splits and
+subsampling.</li>
+<li><strong>Documented fallback policy.</strong> Round 12 is retained as
+a validated high-purity fallback rather than silently deleted; v4 is
+explicitly marked experimental-not-promoted.</li>
+</ol>
+<p>These strengths mean the recommendations below are about <em>locking
+in</em> rigor, not rebuilding the project.</p>
+<hr />
+<h2 id="findings-data-preparation-and-labeling">4. Findings: data
+preparation and labeling</h2>
+<h3
+id="f1-critical-cell-level-splits-leak-donorlibrarybatch-structure-into-tuning">F1
+(Critical) — Cell-level splits leak donor/library/batch structure into
+tuning</h3>
+<p>All three training scripts split <strong>cells</strong> within
+<code>(source_gse_id, label)</code> strata (v3:
+<code>split_by_source_label</code>,
+<code>run_gdtai_v3_trdc_nk_guard_classifier.py:635-653</code>; v1/v2:
+<code>make_gold_splits</code>,
+<code>run_gdt_deg_tcr_classifier_training.py:737-827</code>). Cells from
+the same donor, library, 10x channel, and batch therefore appear in both
+train and tune. Single-cell expression is strongly donor- and
+batch-correlated, so tune-set metrics — used for threshold and candidate
+selection — are optimistically biased. Only the v2 holdout script
+isolates an entire dataset (GSE144469) before training, and that dataset
+was moved into v3 train/tune
+(<code>GSE144469_primary_in_train_tune = 63,764 cells</code>, v3
+<code>split_overall.csv</code>).</p>
+<h3
+id="f2-critical-labelfeature-circularity-through-the-tcr-pipeline">F2
+(Critical) — Label–feature circularity through the TCR pipeline</h3>
+<p>Gold labels are TCR-metadata-derived, and the deployable feature
+space is dominated by TCR gene expression, which carries essentially the
+same information. The project’s own “diagnostic” strategies prove
+recoverability: v1 strategy B (TCR metadata as features) reaches perfect
+validation precision/recall
+(<code>classifier_training/classifier_metrics_validation.csv</code>).
+This is not fatal — a classifier that reproduces TCR calls from RNA
+alone has real utility where VDJ data are absent — but it means reported
+metrics measure <em>TCR-pipeline reproduction fidelity</em>, bounded by
+the noisiness of RNA-level TCR detection, not biological γδT
+identification accuracy. Reports should state this framing
+explicitly.</p>
+<h3 id="f3-major-feature-selection-leakage-and-a-deg-feedback-loop">F3
+(Major) — Feature-selection leakage and a DEG feedback loop</h3>
+<ul>
+<li>The v1/v2 DEG feature list was computed on the <strong>full</strong>
+object before splitting (<code>select_deg_features</code>,
+<code>run_gdt_deg_tcr_classifier_training.py:399-436</code>), so
+validation cells influenced feature choice.</li>
+<li>Those DEGs were defined by contrasting the previous classifier’s
+TN/FN cells
+(<code>run_tn_fn_trd_gt0p1_deg_reproducibility.py:263-275</code>) — the
+next model’s features are derived from the last model’s errors, a closed
+feedback loop.</li>
+<li>Phase-4 module scores (themselves model outputs on the same object)
+enter v1/v2 as features.</li>
+</ul>
+<h3
+id="f4-major-post-hoc-label-repair-on-a-dataset-later-used-for-training">F4
+(Major) — Post-hoc label repair on a dataset later used for
+training</h3>
+<p>GSE144469 required a source-specific boolean repair because the
+upstream harmonizer treated literal <code>"NA"</code> strings as
+non-empty TRD calls (<code>build_corrected_tcr_evidence</code>,
+<code>run_gdt_prediction_package_evaluation.py:414-466</code>; audit
+table <code>tcr_evidence_correction_audit.csv</code>). v3 then trains on
+these post-hoc-repaired labels.</p>
+<h3
+id="f5-major-sorted-γδt-cohorts-assumed-100-positive-without-tcr-evidence">F5
+(Major) — Sorted-γδT cohorts assumed 100% positive without TCR
+evidence</h3>
+<p>All 48,879 cells of the three sorted cohorts are labeled gdT_gold
+unconditionally (<code>gdt_gold_rule_sorted = sorted_gdt</code>,
+<code>make_truth_labels</code>). GDTlung2023july_7p (15,175 cells) is
+acknowledged as suboptimal library quality and excluded from some
+training lanes, yet remains in the global gold count and in sensitivity
+frames. Sorting purity is not verified by TCR within these cohorts.</p>
+<h3
+id="f6-major-negative-set-construction-is-unrepresentative-in-both-directions">F6
+(Major) — Negative-set construction is unrepresentative in both
+directions</h3>
+<ul>
+<li><strong>NK hard negatives are filtered to the rare TRDC+TRDV−
+pattern:</strong> of 110,149 prefilter NK-annotated cells, 105,266
+(95.6%) were discarded
+(<code>hard_negative_expression_filter_summary.csv</code>). The model
+never sees representative NK negatives, while 96% of retained NK
+negatives are exactly the ambiguous pattern.</li>
+<li><strong>Weak-TRDC negatives are pre-selected by the phase-4 TRD
+score</strong> (top quartile), i.e. cells that already look γδ-like are
+declared negative — easing the discrimination task and potentially
+suppressing recall on genuine γδT in that score region.</li>
+<li><strong>abT_gold negatives exist for only 2 of ~60 datasets</strong>
+(HRA005041, GSE144469); paired-TCR cells elsewhere (e.g., GSE254249) are
+class-code 0 proxies, so the negative class is a mixture of true gold
+and unlabeled proxy.</li>
+</ul>
+<h3
+id="f7-major-87-of-the-atlas-is-unlabeled-and-excluded-from-evaluation">F7
+(Major) — 87% of the atlas is unlabeled and excluded from
+evaluation</h3>
+<p>4,465,731 of 5,128,904 cells are <code>unlabeled_or_ambiguous</code>.
+Atlas-wide FP burden is <strong>extrapolated</strong>: the paired-TCRAB
+call rate in TCR-sequenced sources is multiplied onto non-TCR-sequenced
+sources
+(<code>run_gdtai_v3_trdc_nk_guard_classifier.py:2091-2099</code>),
+assuming equal FP rates across sources with different chemistries,
+tissues, and disease states. The estimated FP fraction (0.0406 for Round
+14) is therefore a model-based estimate, not a measurement, and its
+uncertainty is unquantified.</p>
+<h3 id="f8-minor-no-batch-correction-in-the-classifier-feature-space">F8
+(Minor) — No batch correction in the classifier feature space</h3>
+<p>Features are per-cell log1p(CP10K) values with no batch handling;
+cross-GSE chemistry and sequencing-depth differences enter the model
+directly. This is partially mitigated by the TCR-gene-focused feature
+set, but library-chemistry effects (5′ vs 3′, VDJ enrichment efficiency)
+are only discussed qualitatively.</p>
+<hr />
+<h2 id="findings-modelalgorithm-selection-training-and-evaluation">5.
+Findings: model/algorithm selection, training, and evaluation</h2>
+<h3
+id="f9-critical-adaptive-multi-round-selection-against-the-same-validation-cohorts">F9
+(Critical) — Adaptive, multi-round selection against the same validation
+cohorts</h3>
+<p>The v3 lane alone enumerates ~38 candidate rounds (model families ×
+post-hoc gates × threshold grids;
+<code>gdtai_v3_trdc_nk_guard_report.md</code> candidate table),
+alongside six further one-off lanes (v1/v2 strategies, NK-guard,
+multi-guard, transcriptome-gate cascade, annotation-specific cascade,
+v4). There is <strong>no formal hyperparameter search</strong> (all
+hyperparameters are hard-coded single values), but the effective search
+over families, gates, and thresholds is large, and every branch is
+scored on the same tune/validation frames. The cascade wrappers add
+further post-hoc threshold grids
+(<code>run_gdtai_transcriptome_gate_cascade.py:512-518</code>;
+<code>run_gdtai_annotation_specific_cascade.py:251-261</code>). Without
+a prespecified primary candidate and a multiplicity-aware selection
+rule, the winner’s measured advantage over runners-up is not
+interpretable at face value.</p>
+<h3
+id="f10-critical-selection-criteria-changed-after-results-were-seen">F10
+(Critical) — Selection criteria changed after results were seen</h3>
+<ul>
+<li>The v3 script defaults to <code>--target-recall 0.80</code>, but the
+reported run used <strong>0.75</strong> (internal tune table,
+<code>target_recall=0.75</code>). Round 12’s full-atlas recall (0.7560)
+passes 0.75 and fails 0.80.</li>
+<li>Round 12 was promoted as gdTAI v3.0
+(<code>gdtai_v3_trdc_nk_guard_summary.json</code>); a later comparison
+applied a <strong>0.80 recall guardrail</strong>, found Round 12 failing
+(0.7560 vs required ≥0.80), and promoted Round 14
+(<code>compare_gdtai_v3_round12_vs_round14.py:831-914</code>).</li>
+<li>The promoted “Round 14” was originally
+<strong><code>v3_round20</code></strong> in the training script’s own
+numbering and was retrospectively renamed by the comparison script; the
+registry README warns of a stale Round 12 override at the canonical path
+(<code>configs/models/gdtai/README.md:11-15</code>). The 0.80 floor’s
+timing — after Round 12 was known to fall short — is exactly the kind of
+criterion drift prespecification exists to prevent.</li>
+</ul>
+<h3
+id="f11-critical-the-external-cohort-is-used-for-selection-not-only-final-testing">F11
+(Critical) — The external cohort is used for selection, not only final
+testing</h3>
+<p>The v3 script states the independent external H5AD is “used only for
+final testing”
+(<code>run_gdtai_v3_trdc_nk_guard_classifier.py:7-8</code>), yet: (a) v3
+promotion gates compare external NK FP, TRDC+TRDV− burden, F1, and
+cytotoxic recall against v2-high-purity
+(<code>promotion_acceptance</code>, lines 2522–2575); and (b) the Round
+12-vs-14 selection maximizes <strong>mean F1 across full-atlas,
+atlas-held-out, and the independent external evaluation</strong>
+(<code>compare_gdtai_v3_round12_vs_round14.py:891-909</code>).
+BALF_BLOOD_COPD has therefore directly influenced which model is the
+default. It remains independent of <em>fitting</em>, but it is no longer
+an untouched test set, and future “external validation” claims must
+account for this. Compounding this, the external primary evaluation
+excludes ambiguous cells (<code>stress_ambiguous</code> group;
+<code>external_truth</code>, lines 1676–1717), so the 38,995-cell
+primary frame (948 positives) is cleaner than real deployment.</p>
+<h3
+id="f12-major-full-atlas-metrics-serve-both-selection-and-reporting">F12
+(Major) — Full-atlas metrics serve both selection and reporting</h3>
+<p><code>select_candidate_from_full_atlas</code>
+(<code>run_gdtai_v3_trdc_nk_guard_classifier.py:2188-2255</code>) picks
+the final candidate using full-atlas recall and the extrapolated FP
+fraction — the same full-atlas numbers then reported as performance. The
+atlas includes train/tune cells, so these are training-set-adjacent
+metrics.</p>
+<h3
+id="f13-major-single-unreplicated-external-positive-truth-cohort-pooled-metrics-mask-heterogeneity">F13
+(Major) — Single, unreplicated external positive-truth cohort; pooled
+metrics mask heterogeneity</h3>
+<ul>
+<li>The only external recall/precision measurement rests on one cohort
+of 948 positives; the 8-cohort extension screen contains
+<strong>zero</strong> gdT-gold/silver cells
+(<code>gdtai_extension_evaluation_summary.md</code>) and supports FPR
+claims only.</li>
+<li>Per-dataset behavior varies dramatically: known-FP fraction by
+source ranges from ~0.5% (GSE287301) to ~24% (GSE243572) for the v2
+selected model (<code>gse144469_holdout_tcrgene_report.md</code>
+per-source table); annotation-specific FN rates reach 62.5% (colon
+tissue) and 100% (Treg-annotated cells)
+(<code>gdtai_annotation_specific_tp_fn_audit_report.md</code>). Pooled
+headline metrics do not convey this deployment-relevant variance.</li>
+<li>No multiplicity correction is applied across the dozens of model ×
+cohort × stratum comparisons.</li>
+</ul>
+<h3 id="f14-major-no-calibration-analysis-at-the-operating-point">F14
+(Major) — No calibration analysis at the operating point</h3>
+<p>The promoted model applies a hard 0.936 threshold to a
+Platt-calibrated score, but no reliability curve or calibration error is
+reported at or around the operating point, and no decision-curve
+analysis links the threshold to a declared target prevalence — despite
+the project’s own PPV tables showing PPV swings from 0.205 to 0.948
+across plausible prevalences. Users cannot currently choose an operating
+point rationally for their sample composition.</p>
+<h3 id="f15-minor-reproducibility-and-registry-hygiene-gaps">F15 (Minor)
+— Reproducibility and registry hygiene gaps</h3>
+<ul>
+<li>No environment lock file (<code>pyproject.toml</code> declares only
+Python ≥3.10); LightGBM is an optional dependency absent from the
+reported run; exact package versions unpinned.</li>
+<li>The registry tracks four releases, but the many experimental
+variants and wrapper artifacts (<code>best_candidate_model.pkl</code>,
+<code>selected_model.pkl</code> in overlapping directories) are
+unregistered, and the Round 12/Round 14 override history is recoverable
+only by reading three files side by side.</li>
+<li>Deterministic seeds are set, but threaded histogram boosting and
+RNG-dependent negative subsampling make bitwise reruns fragile without a
+locked environment.</li>
+</ul>
+<hr />
+<h2 id="recommendations-all-executable-without-new-data">6.
+Recommendations (all executable without new data)</h2>
+<p>Ordered by priority. R1–R3 should be done before any further model
+iteration.</p>
+<p><strong>R1 — Prespecify and freeze the evaluation protocol.</strong>
+Write a one-page analysis plan that (a) declares BALF_BLOOD_COPD,
+GSE315928, and GSE121636 as never-touch test sets for any future model
+change; (b) freezes the selection rule and guardrails <em>before</em>
+the next comparison run; (c) documents the Round 12→Round 14 history,
+including the round-20 renaming and the 0.75→0.80 criterion change, in
+<code>DECISIONS.md</code>. From this point, any candidate evaluated
+against the sealed sets more than once is declared exploratory.</p>
+<p><strong>R2 — Quantify split optimism with grouped
+resampling.</strong> (a) Run leave-one-dataset-out cross-validation
+across the labeled sources (train on HRA005041 + sorted cohorts, test on
+GSE144469, and permutations) to get an honest cross-dataset
+generalization estimate; (b) recompute all headline metrics with
+donor/library-cluster bootstrap CIs (the extension screen already
+implements donor-cluster bootstrap — reuse it); (c) report a donor-level
+split sensitivity analysis for v3 to bound the optimism in the current
+tune numbers. Expected cost: a few training reruns of the
+already-scripted v3 lane.</p>
+<p><strong>R3 — Add calibration and prevalence-linked operating-point
+reporting.</strong> Reliability curves and expected calibration error
+for the promoted model on tune and on BALF_BLOOD_COPD; isotonic
+recalibration on the tune split if miscalibrated; decision-curve
+analysis across the prevalence scenarios already tabulated; a documented
+recommended operating point per declared prevalence band (screening vs
+confirmation use).</p>
+<p><strong>R4 — Stress-test the two load-bearing estimates.</strong> (a)
+Label-noise sensitivity: perturb gold labels at rates consistent with
+TCR-pipeline error (e.g., 1–5% symmetric flips, TRD-dropout simulation
+for silver→negative) and report metric stability; (b) FP-extrapolation
+sensitivity: recompute the atlas FP fraction under source-stratified and
+worst-case rate assumptions instead of the single equal-rate assumption,
+and report a plausible range rather than a point value.</p>
+<p><strong>R5 — Ship a three-zone output instead of forcing binary
+calls.</strong> Positive / negative / abstain (indeterminate) zones,
+with the TRDC+TRDV− quadrant routed to abstain by default; report the
+coverage–error tradeoff. This directly addresses the unresolved
+TRDC+TRDV− ambiguity (finding in all three failure audits) without
+pretending it is resolved.</p>
+<p><strong>R6 — Make per-dataset and per-stratum metrics the primary
+frame.</strong> Promote the existing per-source tables to the headline
+report; apply FDR control within each comparison family; treat pooled
+metrics as secondary. A model that is excellent on average but has a 24%
+FP fraction in one source is not uniformly deployable.</p>
+<p><strong>R7 — Consolidate governance artifacts.</strong> Register or
+delete the experimental variants; resolve the Round 12 override at the
+canonical path; export a locked environment
+(<code>conda env export</code>) and pin it in the model package; extend
+the existing <code>USAGE_PROTOCOL.md</code> model-card pattern to v3.0
+with intended use, prevalence guidance, known failure modes, and the
+selection history.</p>
+<p><strong>R8 — Chemistry and dropout robustness suite.</strong>
+Stratify all metrics by 5′ vs 3′ chemistry and VDJ-enrichment status
+(metadata already in the registry); run gene-detection downsampling and
+GSE169246-style missing-feature stress tests on the frozen model to
+quantify robustness to assay differences — the extension screen already
+flags this cohort class but does not propagate its effect
+quantitatively.</p>
+<p><strong>R9 — Demonstrate added value over simple baselines on
+identical frames.</strong> Benchmark the promoted model against the
+TRD−TRAB module score, TRDC alone, and a small marker panel on exactly
+the same evaluation cells, with cluster-bootstrap CIs on the
+differences. If the margin over a 5-marker logistic rule is small,
+prefer the simpler deployable model.</p>
+<p><strong>R10 — Resolve TRDC+TRDV− using existing atlas
+evidence.</strong> Before any new data: examine TRG-family expression,
+cytotoxic programs, scVI cluster membership, and the existing
+annotation-evidence-review outputs for these cells across sources;
+classify them as NK-contaminant vs γδ-lineage-consistent and encode the
+conclusion as an explicit policy (R5’s abstain zone or a retraining
+decision).</p>
+<hr />
+<h2 id="limitations-of-this-review">7. Limitations of this review</h2>
+<ul>
+<li>The review is code-and-artifact based; no models were retrained and
+no metrics recomputed beyond cross-checking emitted tables against their
+source CSV/JSON files (all spot-checked headline numbers matched).</li>
+<li>Judgments about criterion drift (F10) are based on file timestamps,
+defaults vs reported run parameters, and artifact naming history as
+committed; the reviewers did not interview the development team.</li>
+<li>“No more data” was accepted as a hard constraint; several issues
+(single external positive-truth cohort, zero-positive extension cohorts)
+are fundamentally only fixable with new gdTCR-sequenced data and are
+noted as residual risks rather than actionable findings.</li>
+</ul>
+<hr />
+<h2
+id="appendix-a.-verified-headline-numbers-cross-checked-2026-08-06">Appendix
+A. Verified headline numbers (cross-checked 2026-08-06)</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Quantity</th>
+<th>Value</th>
+<th>Source artifact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Atlas cells / gdT_gold / abT_gold / silver / unlabeled</td>
+<td>5,128,904 / 57,776 / 603,203 / 2,194 / 4,465,731</td>
+<td><code>Integrated_dataset/tables/gdT_prediction/ground_truth_class_counts.csv</code></td>
+</tr>
+<tr>
+<td>v3 train/tune primary</td>
+<td>505,640 / 126,410 cells (24,082 / 6,021 gdT_gold)</td>
+<td><code>.../gdtai_v3_trdc_nk_guard/split_overall.csv</code></td>
+</tr>
+<tr>
+<td>NK hard-negative discard</td>
+<td>105,266 of 110,149 prefilter NK cells excluded (train)</td>
+<td><code>.../hard_negative_expression_filter_summary.csv</code></td>
+</tr>
+<tr>
+<td>Round 12 full-atlas precision / recall / F1 / est. FP frac</td>
+<td>0.9823 / 0.7560 / 0.8544 / 0.0247</td>
+<td><code>.../gdtai_v3_round12_vs_round14_summary.json</code></td>
+</tr>
+<tr>
+<td>Round 14 full-atlas precision / recall / F1 / est. FP frac</td>
+<td>0.9752 / 0.8056 / 0.8823 / 0.0406</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Round 12 vs 14 atlas-held-out recall</td>
+<td>0.6751 / 0.8530</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Round 12 vs 14 external precision / recall / specificity</td>
+<td>0.9690 / 0.8576 / 0.99932 vs 0.9509 / 0.8586 / 0.99890</td>
+<td>same (948 positives)</td>
+</tr>
+<tr>
+<td>Extension screen positive truth</td>
+<td>0 gold, 0 silver across 758,135 cells (8 cohorts)</td>
+<td><code>.../gdtai_extension_evaluation_summary.md</code></td>
+</tr>
+<tr>
+<td>Prevalence-dependent PPV</td>
+<td>0.205 @ 0.1% prevalence; 0.948 @ 6.58%</td>
+<td><code>.../gse144469_holdout_tcrgene_report.md</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="appendix-b.-key-file-inventory">Appendix B. Key file
+inventory</h2>
+<p>Training:
+<code>workflows/gdtai/run_gdt_prediction_package_evaluation.py</code>,
+<code>run_gdt_deg_tcr_classifier_training.py</code>,
+<code>run_gdt_gse144469_holdout_tcrgene_classifier.py</code>,
+<code>run_gdtai_v3_trdc_nk_guard_classifier.py</code>,
+<code>run_gdtai_v4_tcell_gate_classifier.py</code>,
+<code>run_gdtai_nkguard_classifier.py</code>,
+<code>run_gdtai_multiguard_classifier.py</code>,
+<code>run_gdtai_transcriptome_gate_cascade.py</code>,
+<code>run_gdtai_annotation_specific_cascade.py</code>. Evaluation:
+<code>workflows/gdtai/compare_gdtai_v3_round12_vs_round14.py</code>,
+<code>compare_frozen_gdtai_profiles.py</code>,
+<code>compare_gdtai_latest_vs_v2_high_purity.py</code>,
+<code>run_gdtai_v3_trdc_nk_failure_audit.py</code>,
+<code>run_gdt_classifier_failure_mode_audit.py</code>. Governance:
+<code>configs/models/gdtai/model_registry.csv</code>,
+<code>configs/models/gdtai/README.md</code>,
+<code>configs/models/gdtai/extension_evaluation.json</code>,
+<code>gdT_prediction/gdT_classifier_local_handoff_plan.md</code>.
+Reports/tables:
+<code>Integrated_dataset/logs|tables|figures/gdT_prediction/**</code>.</p>
+</body>
+</html>

@@ -143,6 +143,10 @@ Additional current state:
 
 ## Current review artifacts
 
+- gdTAI external methodological review:
+  - `Integrated_dataset/logs/gdT_prediction/external_review/gdtai_external_review_report.md`
+  - `gdT_prediction/external_review/gdtai_external_review_report.html`
+  - `gdT_prediction/external_review/gdtai_external_review_report.pdf`
 - extension official-GEO metadata reconciliation:
   - `docs/EXTENSION_GEO_METADATA_RECONCILIATION.md`
   - `configs/metadata/extension_geo_metadata_reconciliation.csv`
