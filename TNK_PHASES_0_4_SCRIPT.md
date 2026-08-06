@@ -390,8 +390,11 @@ Gate semantics:
 
 - no model fitting, calibration, threshold search, whole-atlas inference, or
   promotion is authorized by Step 0
-- Step 1 is limited to input/label/feature preflight and checksum-pinned grouped
-  split-manifest construction after explicit supervision approval
+- Step 1 is limited to input/label/feature preflight, a per-source CD4/Treg
+  exclusion-imposed recall-ceiling audit, and checksum-pinned grouped split
+  construction after explicit supervision approval
+- CD4/Treg cutoffs cannot be changed after Step 2 begins; any later change
+  requires a new precommitted protocol version and fresh preflight
 
 ## Phase 1: Coarse T/NK extraction
 

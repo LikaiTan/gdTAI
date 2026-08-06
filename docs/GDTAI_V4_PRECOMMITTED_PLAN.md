@@ -1,7 +1,8 @@
 # Precommitted gdTAI V4 Training and Validation Protocol
 
-- **Protocol version:** 1.0
+- **Protocol version:** 1.1
 - **Frozen:** 2026-08-07
+- **Amendment:** M4 CD4/Treg exclusion recall-cost preflight, added before fitting
 - **Status:** supervision required; model fitting has not started
 - **Primary objective:** improve dataset-macro balanced F1 without relaxing the
   precommitted alpha-beta T-cell and NK false-positive guardrails
@@ -229,6 +230,25 @@ optional VDJ-aware output may rescue rejected cells with productive paired TRG/T
 no productive TRA/TRB. Rescued calls are reported separately and never enter TCR-defined
 validation metrics, avoiding use of the truth fields to inflate model performance.
 
+Before Step 2, the preflight must apply both exclusions directly to every
+`gdT_primary` cell and report, for each primary source and the unweighted source-macro
+summary: total primary positives; CD4-helper-only, Treg-only, overlapping, and union
+exclusion counts and proportions; Wilson 95% intervals; donor/library concentration; and
+the **exclusion-imposed recall ceiling** `1 - union_excluded / gdT_primary`. This ceiling
+is the best recall any RNA classifier can achieve after the fixed exclusions, even if its
+pre-exclusion recall were perfect. Report the corresponding absolute and percentage-point
+margin above the 0.80 macro-recall selection guardrail and the 0.70 per-source promotion
+floor. Sorted weak positives and silver cells receive the same descriptive audit but
+cannot alter feasibility or selection.
+
+Preflight fails and training remains blocked if the source-macro ceiling is below 0.80 or
+any primary source ceiling is below 0.70. A ceiling within 0.05 of either applicable floor
+is a supervision warning requiring explicit approval before Step 2. The cutoffs in this
+section are immutable once Step 2 begins or any Step-2 result is generated. They must
+never be re-tuned in response to nested-evaluation results. A later cutoff change requires
+a new protocol version and commit, a fresh preflight, and a new supervision approval; it
+cannot be used to rescue or reinterpret the current V4 experiment.
+
 ## 6. Comparators, metrics, and statistics
 
 ### 6.1 Fair retrained comparators
@@ -312,6 +332,9 @@ semantics agree with the serialized artifact and registry.
 - Archive the existing experimental V4 artifact without overwriting it.
 - Verify raw-count state, hashes, required metadata, label conflicts, class counts,
   feature coverage, and the GSE144469 `SRR + barcode` join.
+- Quantify the fixed CD4/Treg exclusions on primary positives and report their per-source
+  and source-macro recall ceilings, guardrail margins, overlap, and donor/library
+  concentration using the rules in Section 5.3.
 - Emit checksum-pinned cell-label and grouped-split manifests plus a preflight report.
 - Email Likai and stop for approval.
 
@@ -342,13 +365,16 @@ Before any candidate can run, tests must prove:
 5. No donor, fallback sample/library, or protected clonotype crosses a fold boundary.
 6. Feature filtering, Stage-1 probabilities, scaling, calibration, model selection, and
    thresholds are fold-local.
-7. CD4/Treg exclusions and VDJ rescue are deterministic and rescue never changes the RNA
-   metric frame.
-8. Missing critical genes or less than 90% coverage causes abstention.
-9. Two runs with the same seed produce identical split manifests, predictions, and model
+7. CD4/Treg exclusions and VDJ rescue are deterministic; rescue never changes the RNA
+   metric frame; and preflight emits exact per-source/union counts, recall ceilings, and
+   guardrail margins for primary positives.
+8. The recorded CD4/Treg rule hash matches the Step-2 implementation and cannot change
+   after nested evaluation begins.
+9. Missing critical genes or less than 90% coverage causes abstention.
+10. Two runs with the same seed produce identical split manifests, predictions, and model
    hashes, or a documented deterministic numerical tolerance where the estimator cannot
    be bitwise stable.
-10. Serialized model, manifest, registry, report, and example inference outputs agree on
+11. Serialized model, manifest, registry, report, and example inference outputs agree on
     feature order, thresholds, version, normalization, and checksums.
 
 ## Appendix A. Frozen individual TCR genes (153)
@@ -384,5 +410,6 @@ Before any candidate can run, tests must prove:
 - Current promoted comparator: gdTAI v3 Round 14, threshold 0.936
 - High-purity fallback: gdTAI v3 Round 12, threshold 0.5
 - Existing experimental V4: not promoted; archive before Step 1
+- CD4/Treg exclusion values: fixed in protocol v1.1; no retuning after Step 2 begins
 - No training, calibration, threshold search, full-atlas inference, or model promotion was
   performed as part of Step 0.

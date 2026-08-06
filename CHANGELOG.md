@@ -180,6 +180,8 @@
     folds, fold-local calibration and thresholding, paired-abT/NK guardrails,
     and a bootstrap-tested promotion rule
   - rendered a print-safe seven-page HTML/PDF review package
+  - amended the protocol to require a pre-training CD4/Treg exclusion recall-
+    ceiling audit and to prohibit cutoff retuning after Step 2 begins
   - left all training, threshold search, whole-atlas inference, and model
     promotion blocked for supervision
 

@@ -2,13 +2,14 @@
 
 ## Current milestone
 
-- gdTAI V4 training and validation protocol frozen before fitting; Step 1
-  preflight, retraining, and additive metadata correction remain gated
+- gdTAI V4 protocol v1.1 frozen before fitting with a required CD4/Treg
+  exclusion recall-cost preflight; Step 1, retraining, and additive metadata
+  correction remain gated
 
 ## Next action
 
-- review the precommitted gdTAI V4 protocol and decide whether to authorize
-  Step 1 preflight and grouped split-manifest construction
+- review the amended precommitted gdTAI V4 protocol and decide whether to
+  authorize Step 1 recall-cost/input preflight and grouped split construction
 - do not promote or claim superiority for another gdTAI model before grouped
   resampling, expression-independent labels, and fold-local selection are in place
 - review the frozen-profile negative-control report and official-GEO metadata
