@@ -1,0 +1,9 @@
+stage,n_cells
+scanvi_NK_candidates_nonprimary,330397
+mapped_to_legacy_TCR_metadata,330397
+mapped_no_productive_TCR,326774
+author_annotation_not_T_conflict,324875
+valid_donor_sample_or_library_group,323771
+strict_supplemental_NK_final,323771
+consensus_NK_final,21054
+single_annotation_NK_final,302717

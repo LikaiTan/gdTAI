@@ -1,0 +1,162 @@
+{
+  "protocol_version": "1.1",
+  "protocol_path": "docs/GDTAI_V4_PRECOMMITTED_PLAN.md",
+  "random_seed": 20260807,
+  "expected_tcr_gene_count": 153,
+  "expected_non_tcr_gene_count": 44,
+  "expected_total_gene_count": 197,
+  "minimum_feature_coverage": 0.9,
+  "primary_sources": [
+    "HRA005041",
+    "GSE144469",
+    "BALF_BLOOD_COPD"
+  ],
+  "paths": {
+    "current_atlas": "high_speed_temp/Integrated_dataset/integrated.h5ad",
+    "legacy_metadata_reference": "high_speed_temp/Integrated_dataset/integrated_plus6.h5ad",
+    "hra005041": "downloads/per_gse_h5ad_with_metadata/HRA005041_T_cells_subset.h5ad",
+    "gse144469": "data/datasets/GSE144469/raw/legacy_source/fastq/tnk_subset.h5ad",
+    "balf_blood_copd": "data/datasets/BALF_BLOOD_COPD/processed/current.h5ad",
+    "gdt_2020aug_wocov": "data/datasets/GDT_2020AUG_woCOV/processed/artifacts/GDT_2020AUG_woCOV_sorted_gdt.h5ad",
+    "maltegdt": "data/datasets/MalteGDT/processed/artifacts/MalteGDT_sorted_gdt.h5ad",
+    "gdtlung": "data/datasets/GDTlung2023july_7p/processed/artifacts/GDTlung2023july_7p_sorted_gdt.h5ad",
+    "extension_manifest": "data/interim/extension_intake/tnk_filtered_h5ads_manifest.csv"
+  },
+  "matrix_keys": {
+    "current_atlas": "X",
+    "hra005041": "X",
+    "gse144469": "layers/counts",
+    "balf_blood_copd": "layers/counts",
+    "gdt_2020aug_wocov": "X",
+    "maltegdt": "X",
+    "gdtlung": "X"
+  },
+  "matrix_states": {
+    "current_atlas": "raw_counts",
+    "hra005041": "log1p_cp10k_recall_audit_only",
+    "gse144469": "raw_counts",
+    "balf_blood_copd": "raw_counts",
+    "gdt_2020aug_wocov": "raw_counts",
+    "maltegdt": "raw_counts",
+    "gdtlung": "raw_counts"
+  },
+  "expected_sha256": {
+    "gse144469": "456b2da064c9ad601294878d23102836bf01717e9c21493aeb651ecb7f537926"
+  },
+  "critical_genes": [
+    "CD3D",
+    "CD3E",
+    "TRAC",
+    "TRBC1",
+    "TRBC2",
+    "TRDC",
+    "TRDV1",
+    "TRDV2",
+    "TRDV3"
+  ],
+  "t_lineage_genes": [
+    "CD3D",
+    "CD3E",
+    "CD3G",
+    "CD247",
+    "CD2",
+    "LCK",
+    "LAT",
+    "TRAT1",
+    "CD5",
+    "CD6",
+    "THEMIS",
+    "BCL11B",
+    "TCF7",
+    "LEF1"
+  ],
+  "cd4_helper_genes": [
+    "CD4",
+    "IL7R",
+    "CCR7",
+    "SELL",
+    "LTB",
+    "MAL"
+  ],
+  "treg_genes": [
+    "FOXP3",
+    "IL2RA",
+    "CTLA4",
+    "TIGIT"
+  ],
+  "trdv_genes": [
+    "TRDV1",
+    "TRDV2",
+    "TRDV3"
+  ],
+  "non_tcr_genes": [
+    "CD3D",
+    "CD3E",
+    "CD3G",
+    "CD247",
+    "CD2",
+    "LCK",
+    "LAT",
+    "TRAT1",
+    "CD5",
+    "CD6",
+    "THEMIS",
+    "BCL11B",
+    "TCF7",
+    "LEF1",
+    "CD4",
+    "IL7R",
+    "CCR7",
+    "SELL",
+    "LTB",
+    "MAL",
+    "FOXP3",
+    "IL2RA",
+    "CTLA4",
+    "TIGIT",
+    "NKG7",
+    "GNLY",
+    "KLRD1",
+    "TYROBP",
+    "FCER1G",
+    "FCGR3A",
+    "KLRC1",
+    "KLRF1",
+    "PRF1",
+    "GZMB",
+    "CTSW",
+    "CCL5",
+    "EOMES",
+    "TBX21",
+    "CD8A",
+    "CD8B",
+    "KLRB1",
+    "ZNF683",
+    "RUNX3",
+    "IKZF2"
+  ],
+  "cd4_helper_rule": {
+    "cd4_min": 0.0,
+    "support_detected_min": 2,
+    "program_mean_min": 0.5
+  },
+  "treg_rule": {
+    "foxp3_min": 0.0,
+    "support_detected_min": 1,
+    "program_mean_min": 0.5
+  },
+  "recall_guards": {
+    "macro_floor": 0.8,
+    "per_source_floor": 0.7,
+    "warning_margin": 0.05
+  },
+  "nk_sampling": {
+    "representative_fraction": 0.6,
+    "t_like_fraction": 0.2,
+    "gdt_like_fraction": 0.2
+  },
+  "inner_folds": 3,
+  "gzip_mtime": 0,
+  "matrix_scan_data_chunk": 5000000,
+  "matrix_scan_row_chunk": 20000
+}

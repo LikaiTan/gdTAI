@@ -1,0 +1,45 @@
+{
+  "version": "gdTAI_v4.0",
+  "model": "two_stage_tcell_gate_dropout_tolerant_gdt_classifier",
+  "normalization": "log1p(counts per 10000)",
+  "n_gene_features": 229,
+  "n_engineered_features": 24,
+  "n_total_features_stage1": 253,
+  "n_total_features_stage2": 254,
+  "tcell_threshold": 0.0028288569301366806,
+  "operating_modes": {
+    "high_f1": 0.9233753681182861,
+    "high_purity": 0.9778469800949097
+  },
+  "input_h5ad": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/high_speed_temp/Integrated_dataset/integrated_plus6.h5ad",
+  "paths": {
+    "model": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v4.0/gdTAI_v4_model.pkl",
+    "feature_table": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v4.0/feature_genes.csv",
+    "tables": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/tables/gdT_prediction/gdtai_v4_tcell_gate",
+    "report_html": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/gdT_prediction/gdtai_v4_tcell_gate_report.html",
+    "report_pdf": null
+  },
+  "accepted_for_promotion": false,
+  "promotion_decision": "experimental_candidate_not_promoted",
+  "promotion_reason": "v4 high_f1 improves v3 sorted-gdT and TRDC+TRDV- recall and reduces NK predicted burden, but remains below v2 high-purity recall on sorted cord-blood gdT and needs additional iteration before replacing the current promoted model.",
+  "external": {
+    "v4_high_f1": {
+      "n_cells": 38995,
+      "predicted_positive": 872,
+      "precision": 0.9552752293577982,
+      "recall": 0.8786919831223629,
+      "specificity": 0.9989749520330118,
+      "f1": 0.9153846153846154,
+      "fp": 39
+    },
+    "v4_high_purity": {
+      "n_cells": 38995,
+      "predicted_positive": 787,
+      "precision": 0.9758576874205844,
+      "recall": 0.810126582278481,
+      "specificity": 0.9995006176571084,
+      "f1": 0.8853025936599423,
+      "fp": 19
+    }
+  }
+}

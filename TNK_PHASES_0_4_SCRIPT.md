@@ -396,6 +396,51 @@ Gate semantics:
 - CD4/Treg cutoffs cannot be changed after Step 2 begins; any later change
   requires a new precommitted protocol version and fresh preflight
 
+## Post-Phase-4 gdTAI V4 Step 1 preflight
+
+Objective:
+
+- verify the frozen V4 input, label, feature, exclusion, and grouped-split
+  contract without fitting a model
+
+Phase or task:
+
+- gdTAI V4 Step 1 preflight and grouped split freeze
+
+Exact `.py` script:
+
+- `workflows/gdtai/run_gdtai_v4_preflight.py`
+
+Execution command:
+
+```bash
+MPLCONFIGDIR=/tmp/matplotlib-gdtai-v4 \
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/run_gdtai_v4_preflight.py --log-level INFO
+```
+
+Core configuration:
+
+- `configs/models/gdtai/v4_preflight.json`
+
+Core outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_preflight/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v4_preflight/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_preflight/`
+- `gdT_prediction/gdtai_v4_preflight/index.html`
+- `gdT_prediction/gdtai_v4_preflight/gdtai_v4_preflight_report.pdf`
+
+Current gate result:
+
+- Step 1 completed with `FAIL`
+- HRA005041 has no raw-count matrix, and the two sorted training supplements
+  fail the frozen 90% feature-coverage floor
+- the fixed CD4/Treg recall-ceiling audit passed; no cutoff was tuned
+- no model fitting, calibration, threshold search, inference, or promotion ran
+- Step 2 requires a reviewed input or protocol resolution and successful fresh
+  preflight
+
 ## Phase 1: Coarse T/NK extraction
 
 Objective:

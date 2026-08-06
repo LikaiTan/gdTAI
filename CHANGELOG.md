@@ -184,6 +184,20 @@
     ceiling audit and to prohibit cutoff retuning after Step 2 begins
   - left all training, threshold search, whole-atlas inference, and model
     promotion blocked for supervision
+- gdTAI V4 Step 1 preflight and grouped split freeze completed on 2026-08-07
+  - archived the earlier experimental V4 bundle intact with verified SHA-256
+  - froze a 1,137,739-cell expression-independent label manifest and
+    deterministic grouped inner-split manifest
+  - mapped all 107,068 GSE144469 cells uniquely by cell-ID SRR plus barcode and
+    corrected its raw expression source to `layers/counts`
+  - passed fixed CD4/Treg feasibility with a 98.38% source-macro primary-gdT
+    recall ceiling, well above the 80% guardrail
+  - failed the training gate because HRA005041 has no raw-count layer and the
+    GDT2020/Malte supplements cover only 82.7%/41.6% of frozen features
+  - verified all 16 input files remained unchanged and all registered hashes
+    matched; performed no fitting, threshold search, inference, or promotion
+  - published and visually checked the HTML/PDF supervision package; Step 2
+    remains blocked
 
 ## Current working era
 

@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>gdTAI V4 Step 1 Preflight and Split Freeze</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="../gdtai_v4_precommit/print.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">gdTAI V4 Step 1 Preflight and Split Freeze</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#gdtai-v4-step-1-preflight-and-split-freeze"
+id="toc-gdtai-v4-step-1-preflight-and-split-freeze">gdTAI V4 Step 1
+Preflight and Split Freeze</a>
+<ul>
+<li><a href="#decision" id="toc-decision">Decision</a></li>
+<li><a href="#all-preflight-checks" id="toc-all-preflight-checks">All
+preflight checks</a></li>
+<li><a href="#cd4treg-recall-cost" id="toc-cd4treg-recall-cost">CD4/Treg
+recall cost</a></li>
+<li><a href="#frozen-feature-coverage"
+id="toc-frozen-feature-coverage">Frozen feature coverage</a></li>
+<li><a href="#raw-count-audit" id="toc-raw-count-audit">Raw-count
+audit</a></li>
+<li><a href="#ground-truth-audit"
+id="toc-ground-truth-audit">Ground-truth audit</a></li>
+<li><a href="#gse144469-join" id="toc-gse144469-join">GSE144469
+join</a></li>
+<li><a href="#frozen-outer-folds" id="toc-frozen-outer-folds">Frozen
+outer folds</a></li>
+<li><a href="#input-identity" id="toc-input-identity">Input
+identity</a></li>
+<li><a href="#canonical-artifacts"
+id="toc-canonical-artifacts">Canonical artifacts</a></li>
+<li><a href="#gate" id="toc-gate">Gate</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="gdtai-v4-step-1-preflight-and-split-freeze">gdTAI V4 Step 1
+Preflight and Split Freeze</h1>
+<p><strong>Overall status:</strong> FAIL<br> <strong>Protocol:</strong>
+v1.1<br> <strong>Training started:</strong> No<br> <strong>Step 2
+authorized:</strong> No; supervision approval is still required</p>
+<h2 id="decision">Decision</h2>
+<p>This workflow performed only the precommitted read-only input,
+truth-label, feature, exclusion-feasibility, and grouped-split checks.
+It did not fit, calibrate, threshold, compare, or promote a
+classifier.</p>
+<p>Failures block Step 2. Warnings require explicit supervision. The
+frozen CD4/Treg thresholds were evaluated exactly as written and were
+not tuned.</p>
+<h3 id="blocking-failures">Blocking failures</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>check_id</th>
+<th>observed</th>
+<th>required</th>
+<th>details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>training_feature_coverage</td>
+<td>gdt_2020aug_wocov;maltegdt</td>
+<td>&gt;=0.9 and all critical genes</td>
+<td>Hard-gated development inputs</td>
+</tr>
+<tr>
+<td>raw_count_state</td>
+<td>hra005041</td>
+<td>all sparse values finite, nonnegative, integer-like</td>
+<td>Full sparse data-array scan</td>
+</tr>
+</tbody>
+</table>
+<h3 id="warnings">Warnings</h3>
+<p><em>No rows.</em></p>
+<h2 id="all-preflight-checks">All preflight checks</h2>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>check_id</th>
+<th>status</th>
+<th>observed</th>
+<th>required</th>
+<th>details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>protocol_version</td>
+<td>PASS</td>
+<td>1.1</td>
+<td>1.1</td>
+<td>Frozen protocol version</td>
+</tr>
+<tr>
+<td>feature_count</td>
+<td>PASS</td>
+<td>197</td>
+<td>197</td>
+<td>Frozen individual-gene universe</td>
+</tr>
+<tr>
+<td>training_feature_coverage</td>
+<td>FAIL</td>
+<td>gdt_2020aug_wocov;maltegdt</td>
+<td>&gt;=0.9 and all critical genes</td>
+<td>Hard-gated development inputs</td>
+</tr>
+<tr>
+<td>raw_count_state</td>
+<td>FAIL</td>
+<td>hra005041</td>
+<td>all sparse values finite, nonnegative, integer-like</td>
+<td>Full sparse data-array scan</td>
+</tr>
+<tr>
+<td>registered_hashes</td>
+<td>PASS</td>
+<td></td>
+<td>all available expected hashes match</td>
+<td>Full SHA-256 unless explicitly skipped</td>
+</tr>
+<tr>
+<td>input_file_state</td>
+<td>PASS</td>
+<td>16</td>
+<td>16</td>
+<td>Size and mtime unchanged after read-only workflow</td>
+</tr>
+<tr>
+<td>gse144469_join</td>
+<td>PASS</td>
+<td>107068</td>
+<td>107068 unique SRR + barcode mappings</td>
+<td>Raw expression to canonical metadata</td>
+</tr>
+<tr>
+<td>primary_labels_nonempty</td>
+<td>PASS</td>
+<td>{‘abT_primary’: {‘BALF_BLOOD_COPD’: 32404, ‘GSE144469’: 60175,
+‘HRA005041’: 543028}, ‘gdT_primary’: {‘BALF_BLOOD_COPD’: 1033,
+‘GSE144469’: 4003, ‘HRA005041’: 4894}}</td>
+<td>both classes in each primary source</td>
+<td>Expression-independent productive TCR rules</td>
+</tr>
+<tr>
+<td>primary_label_overlap</td>
+<td>PASS</td>
+<td>0</td>
+<td>0</td>
+<td>Mutually exclusive primary labels</td>
+</tr>
+<tr>
+<td>silver_excluded_from_training</td>
+<td>PASS</td>
+<td>0</td>
+<td>0</td>
+<td>Sensitivity-only silver cells</td>
+</tr>
+<tr>
+<td>cd4_treg_recall_ceiling</td>
+<td>PASS</td>
+<td>0.983805</td>
+<td>macro &gt;= 0.8; each source &gt;= 0.7</td>
+<td>Fixed post-model exclusions before Step 2</td>
+</tr>
+<tr>
+<td>group_leakage</td>
+<td>PASS</td>
+<td>1</td>
+<td>1</td>
+<td>No group appears in multiple inner folds</td>
+</tr>
+<tr>
+<td>outer_fold_nonempty</td>
+<td>PASS</td>
+<td>1</td>
+<td>True</td>
+<td>Every stage has train and held-out cells</td>
+</tr>
+<tr>
+<td>nk_stratum_composition</td>
+<td>PASS</td>
+<td>{‘representative’: 0.6, ‘gdt_like_TRDCpos_TRDVneg’: 0.2,
+‘t_like_hard’: 0.2}</td>
+<td>{‘representative_fraction’: 0.6, ‘t_like_fraction’: 0.2,
+‘gdt_like_fraction’: 0.2}</td>
+<td>All strict NK negatives assigned once</td>
+</tr>
+<tr>
+<td>supplemental_nk_pool</td>
+<td>PASS</td>
+<td>323771</td>
+<td>&gt;0</td>
+<td>Mapped, no-productive-TCR atlas NK negatives</td>
+</tr>
+<tr>
+<td>legacy_v4_archived</td>
+<td>PASS</td>
+<td>True</td>
+<td>True</td>
+<td>No overwrite of the earlier experimental artifact</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cd4treg-recall-cost">CD4/Treg recall cost</h2>
+<p>The recall ceiling is <code>1 - union_excluded / gdT_primary</code>.
+It is the maximum post-exclusion recall even for a perfect pre-exclusion
+classifier.</p>
+<figure>
+<img src="assets/cd4_treg_recall_ceiling_by_source.png"
+alt="Recall ceiling" />
+<figcaption aria-hidden="true">Recall ceiling</figcaption>
+</figure>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr>
+<th>source_gse_id</th>
+<th>n_cells</th>
+<th>cd4_helper_only</th>
+<th>treg_only</th>
+<th>overlap</th>
+<th>union_excluded</th>
+<th>recall_ceiling</th>
+<th>applicable_floor</th>
+<th>margin_above_floor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BALF_BLOOD_COPD</td>
+<td>1033</td>
+<td>22</td>
+<td>1</td>
+<td>0</td>
+<td>23</td>
+<td>0.9777</td>
+<td>0.7000</td>
+<td>0.2777</td>
+</tr>
+<tr>
+<td>GSE144469</td>
+<td>4003</td>
+<td>65</td>
+<td>6</td>
+<td>18</td>
+<td>89</td>
+<td>0.9778</td>
+<td>0.7000</td>
+<td>0.2778</td>
+</tr>
+<tr>
+<td>HRA005041</td>
+<td>4894</td>
+<td>20</td>
+<td>0</td>
+<td>0</td>
+<td>20</td>
+<td>0.9959</td>
+<td>0.7000</td>
+<td>0.2959</td>
+</tr>
+<tr>
+<td>SOURCE_MACRO</td>
+<td>9930</td>
+<td>107</td>
+<td>7</td>
+<td>18</td>
+<td>132</td>
+<td>0.9838</td>
+<td>0.8000</td>
+<td>0.1838</td>
+</tr>
+</tbody>
+</table>
+<h2 id="frozen-feature-coverage">Frozen feature coverage</h2>
+<figure>
+<img src="assets/feature_coverage_by_input.png"
+alt="Feature coverage" />
+<figcaption aria-hidden="true">Feature coverage</figcaption>
+</figure>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>input_id</th>
+<th>role</th>
+<th>features_present</th>
+<th>features_expected</th>
+<th>feature_coverage</th>
+<th>missing_critical_count</th>
+<th>hard_feature_gate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>current_atlas</td>
+<td>stage1_NK_expression_and_future_atlas_inference</td>
+<td>197</td>
+<td>197</td>
+<td>1.0000</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>hra005041</td>
+<td>primary_development</td>
+<td>197</td>
+<td>197</td>
+<td>1.0000</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>gse144469</td>
+<td>primary_development</td>
+<td>197</td>
+<td>197</td>
+<td>1.0000</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>balf_blood_copd</td>
+<td>primary_development_reused_benchmark</td>
+<td>197</td>
+<td>197</td>
+<td>1.0000</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>gdt_2020aug_wocov</td>
+<td>sorted_training_supplement</td>
+<td>163</td>
+<td>197</td>
+<td>0.8274</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>maltegdt</td>
+<td>sorted_training_supplement</td>
+<td>82</td>
+<td>197</td>
+<td>0.4162</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>gdtlung</td>
+<td>sorted_sensitivity_only</td>
+<td>197</td>
+<td>197</td>
+<td>1.0000</td>
+<td>0</td>
+<td>False</td>
+</tr>
+<tr>
+<td>extension_GSE114724</td>
+<td>frozen_negative_stress</td>
+<td>197</td>
+<td>197</td>
+<td>1.0000</td>
+<td>0</td>
+<td>False</td>
+</tr>
+<tr>
+<td>extension_GSE121636_GSE121637</td>
+<td>frozen_negative_stress</td>
+<td>197</td>
+<td>197</td>
+<td>1.0000</td>
+<td>0</td>
+<td>False</td>
+</tr>
+<tr>
+<td>extension_GSE159251</td>
+<td>frozen_negative_stress</td>
+<td>188</td>
+<td>197</td>
+<td>0.9543</td>
+<td>0</td>
+<td>False</td>
+</tr>
+<tr>
+<td>extension_GSE169246</td>
+<td>reduced_feature_schema_sensitivity</td>
+<td>145</td>
+<td>197</td>
+<td>0.7360</td>
+<td>0</td>
+<td>False</td>
+</tr>
+<tr>
+<td>extension_GSE292700</td>
+<td>frozen_negative_stress</td>
+<td>197</td>
+<td>197</td>
+<td>1.0000</td>
+<td>0</td>
+<td>False</td>
+</tr>
+<tr>
+<td>extension_GSE294273_GSE294274</td>
+<td>frozen_negative_stress</td>
+<td>197</td>
+<td>197</td>
+<td>1.0000</td>
+<td>0</td>
+<td>False</td>
+</tr>
+<tr>
+<td>extension_GSE296954</td>
+<td>frozen_negative_stress</td>
+<td>197</td>
+<td>197</td>
+<td>1.0000</td>
+<td>0</td>
+<td>False</td>
+</tr>
+<tr>
+<td>extension_GSE315928</td>
+<td>frozen_negative_stress</td>
+<td>197</td>
+<td>197</td>
+<td>1.0000</td>
+<td>0</td>
+<td>False</td>
+</tr>
+</tbody>
+</table>
+<h2 id="raw-count-audit">Raw-count audit</h2>
+<p>Every stored sparse value was scanned. Integer-like means its
+distance from the nearest integer was no greater than
+<code>1e-6</code>.</p>
+<p>The HRA005041 matrix is known <code>log1p(CP10K)</code> and is used
+here only to quantify exclusion cost. It remains ineligible for fitting
+because no raw-count layer is available.</p>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr>
+<th>input_id</th>
+<th>matrix_key</th>
+<th>configured_matrix_state</th>
+<th>n_obs</th>
+<th>nnz</th>
+<th>dtype</th>
+<th>fractional_values_gt_1e_6</th>
+<th>raw_count_pass</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>current_atlas</td>
+<td>X</td>
+<td>raw_counts</td>
+<td>3705306</td>
+<td>5503996785</td>
+<td>float32</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>hra005041</td>
+<td>X</td>
+<td>log1p_cp10k_recall_audit_only</td>
+<td>766639</td>
+<td>1442826937</td>
+<td>float64</td>
+<td>1442826905</td>
+<td>False</td>
+</tr>
+<tr>
+<td>gse144469</td>
+<td>layers/counts</td>
+<td>raw_counts</td>
+<td>107068</td>
+<td>215368848</td>
+<td>float32</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>balf_blood_copd</td>
+<td>layers/counts</td>
+<td>raw_counts</td>
+<td>46273</td>
+<td>125599864</td>
+<td>float32</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>gdt_2020aug_wocov</td>
+<td>X</td>
+<td>raw_counts</td>
+<td>25904</td>
+<td>39050646</td>
+<td>int64</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>maltegdt</td>
+<td>X</td>
+<td>raw_counts</td>
+<td>7800</td>
+<td>12020698</td>
+<td>int64</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>gdtlung</td>
+<td>X</td>
+<td>raw_counts</td>
+<td>15175</td>
+<td>15468404</td>
+<td>int64</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>extension_GSE114724</td>
+<td>X</td>
+<td>raw_counts</td>
+<td>28652</td>
+<td>50878640</td>
+<td>int64</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>extension_GSE121636_GSE121637</td>
+<td>X</td>
+<td>raw_counts</td>
+<td>18793</td>
+<td>28893248</td>
+<td>int64</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>extension_GSE159251</td>
+<td>X</td>
+<td>raw_counts</td>
+<td>68898</td>
+<td>81434083</td>
+<td>int64</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>extension_GSE169246</td>
+<td>X</td>
+<td>raw_counts</td>
+<td>354373</td>
+<td>430559363</td>
+<td>int64</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>extension_GSE292700</td>
+<td>X</td>
+<td>raw_counts</td>
+<td>78254</td>
+<td>127198003</td>
+<td>int64</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>extension_GSE294273_GSE294274</td>
+<td>X</td>
+<td>raw_counts</td>
+<td>55744</td>
+<td>111603853</td>
+<td>int64</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>extension_GSE296954</td>
+<td>X</td>
+<td>raw_counts</td>
+<td>86608</td>
+<td>122094020</td>
+<td>float32</td>
+<td>0</td>
+<td>True</td>
+</tr>
+<tr>
+<td>extension_GSE315928</td>
+<td>X</td>
+<td>raw_counts</td>
+<td>66813</td>
+<td>91568523</td>
+<td>float32</td>
+<td>0</td>
+<td>True</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ground-truth-audit">Ground-truth audit</h2>
+<figure>
+<img src="assets/label_composition_by_source.png"
+alt="Label composition" />
+<figcaption aria-hidden="true">Label composition</figcaption>
+</figure>
+<table>
+<thead>
+<tr>
+<th>source_gse_id</th>
+<th>truth_class</th>
+<th>n_cells</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BALF_BLOOD_COPD</td>
+<td>abT_primary</td>
+<td>32404</td>
+</tr>
+<tr>
+<td>BALF_BLOOD_COPD</td>
+<td>dual_or_ambiguous</td>
+<td>2938</td>
+</tr>
+<tr>
+<td>BALF_BLOOD_COPD</td>
+<td>gdT_primary</td>
+<td>1033</td>
+</tr>
+<tr>
+<td>BALF_BLOOD_COPD</td>
+<td>gdT_silver</td>
+<td>31</td>
+</tr>
+<tr>
+<td>BALF_BLOOD_COPD</td>
+<td>single_abT_weak</td>
+<td>3923</td>
+</tr>
+<tr>
+<td>BALF_BLOOD_COPD</td>
+<td>unlabeled</td>
+<td>280</td>
+</tr>
+<tr>
+<td>GDT_2020AUG_woCOV</td>
+<td>sorted_gdT_weak</td>
+<td>25904</td>
+</tr>
+<tr>
+<td>GDTlung2023july_7p</td>
+<td>sorted_sensitivity</td>
+<td>15175</td>
+</tr>
+<tr>
+<td>GSE125527</td>
+<td>unlabeled</td>
+<td>3797</td>
+</tr>
+<tr>
+<td>GSE144469</td>
+<td>abT_primary</td>
+<td>60175</td>
+</tr>
+<tr>
+<td>GSE144469</td>
+<td>dual_or_ambiguous</td>
+<td>5857</td>
+</tr>
+<tr>
+<td>GSE144469</td>
+<td>gdT_primary</td>
+<td>4003</td>
+</tr>
+<tr>
+<td>GSE144469</td>
+<td>gdT_silver</td>
+<td>415</td>
+</tr>
+<tr>
+<td>GSE144469</td>
+<td>single_abT_weak</td>
+<td>3379</td>
+</tr>
+<tr>
+<td>GSE144469</td>
+<td>unlabeled</td>
+<td>8662</td>
+</tr>
+<tr>
+<td>GSE145926</td>
+<td>unlabeled</td>
+<td>361</td>
+</tr>
+<tr>
+<td>GSE162498</td>
+<td>unlabeled</td>
+<td>129</td>
+</tr>
+<tr>
+<td>GSE171037</td>
+<td>unlabeled</td>
+<td>225</td>
+</tr>
+<tr>
+<td>GSE178882</td>
+<td>unlabeled</td>
+<td>5493</td>
+</tr>
+<tr>
+<td>GSE188620</td>
+<td>unlabeled</td>
+<td>20162</td>
+</tr>
+<tr>
+<td>GSE190870</td>
+<td>unlabeled</td>
+<td>1</td>
+</tr>
+<tr>
+<td>GSE211504</td>
+<td>unlabeled</td>
+<td>303</td>
+</tr>
+<tr>
+<td>GSE212217</td>
+<td>unlabeled</td>
+<td>25627</td>
+</tr>
+<tr>
+<td>GSE228597</td>
+<td>unlabeled</td>
+<td>17507</td>
+</tr>
+<tr>
+<td>GSE234069</td>
+<td>unlabeled</td>
+<td>136</td>
+</tr>
+<tr>
+<td>GSE235863</td>
+<td>unlabeled</td>
+<td>18132</td>
+</tr>
+<tr>
+<td>GSE240865</td>
+<td>unlabeled</td>
+<td>364</td>
+</tr>
+<tr>
+<td>GSE243013</td>
+<td>unlabeled</td>
+<td>42490</td>
+</tr>
+<tr>
+<td>GSE243572</td>
+<td>unlabeled</td>
+<td>17075</td>
+</tr>
+<tr>
+<td>GSE243905</td>
+<td>unlabeled</td>
+<td>18659</td>
+</tr>
+</tbody>
+</table>
+<h2 id="gse144469-join">GSE144469 join</h2>
+<table>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr>
+<th>source_gse_id</th>
+<th>source_cells</th>
+<th>source_unique_keys</th>
+<th>canonical_cells</th>
+<th>canonical_unique_keys</th>
+<th>mapped_cells</th>
+<th>unmapped_cells</th>
+<th>mapping_fraction</th>
+<th>source_duplicate_keys</th>
+<th>canonical_duplicate_keys</th>
+<th>obs_sample_disagrees_with_id_srr</th>
+<th>obs_sample_barcode_unique_keys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GSE144469</td>
+<td>107068</td>
+<td>107068</td>
+<td>107068</td>
+<td>107068</td>
+<td>107068</td>
+<td>0</td>
+<td>1.0000</td>
+<td>0</td>
+<td>0</td>
+<td>16851</td>
+<td>90217</td>
+</tr>
+</tbody>
+</table>
+<h2 id="frozen-outer-folds">Frozen outer folds</h2>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr>
+<th>outer_fold_id</th>
+<th>heldout_source</th>
+<th>stage</th>
+<th>outer_train_cells</th>
+<th>outer_train_positive</th>
+<th>outer_eval_cells</th>
+<th>outer_eval_positive</th>
+<th>outer_train_groups</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>outer_0_HRA005041</td>
+<td>HRA005041</td>
+<td>stage1</td>
+<td>486115</td>
+<td>154286</td>
+<td>641989</td>
+<td>637038</td>
+<td>751</td>
+</tr>
+<tr>
+<td>outer_0_HRA005041</td>
+<td>HRA005041</td>
+<td>stage2</td>
+<td>138621</td>
+<td>38740</td>
+<td>627813</td>
+<td>4894</td>
+<td>31</td>
+</tr>
+<tr>
+<td>outer_1_GSE144469</td>
+<td>GSE144469</td>
+<td>stage1</td>
+<td>1045613</td>
+<td>716637</td>
+<td>82491</td>
+<td>74687</td>
+<td>732</td>
+</tr>
+<tr>
+<td>outer_1_GSE144469</td>
+<td>GSE144469</td>
+<td>stage2</td>
+<td>698877</td>
+<td>39631</td>
+<td>67557</td>
+<td>4003</td>
+<td>28</td>
+</tr>
+<tr>
+<td>outer_2_BALF_BLOOD_COPD</td>
+<td>BALF_BLOOD_COPD</td>
+<td>stage1</td>
+<td>1087495</td>
+<td>750969</td>
+<td>40609</td>
+<td>40355</td>
+<td>764</td>
+</tr>
+<tr>
+<td>outer_2_BALF_BLOOD_COPD</td>
+<td>BALF_BLOOD_COPD</td>
+<td>stage2</td>
+<td>729074</td>
+<td>42601</td>
+<td>37360</td>
+<td>1033</td>
+<td>44</td>
+</tr>
+</tbody>
+</table>
+<h2 id="input-identity">Input identity</h2>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>input_id</th>
+<th>role</th>
+<th>size_bytes</th>
+<th>sha256</th>
+<th>expected_hash_match</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>current_atlas</td>
+<td>stage1_NK_expression_and_future_atlas_inference</td>
+<td>73350311676</td>
+<td>9060920d6fe19bdb</td>
+<td>True</td>
+</tr>
+<tr>
+<td>legacy_metadata_reference</td>
+<td>read_only_TCR_and_GSE144469_metadata_reference</td>
+<td>24383355208</td>
+<td>f44bd4941a7b8c8d</td>
+<td>True</td>
+</tr>
+<tr>
+<td>hra005041</td>
+<td>primary_development</td>
+<td>19626113528</td>
+<td>fc9ead68c3d85232</td>
+<td>True</td>
+</tr>
+<tr>
+<td>gse144469</td>
+<td>primary_development</td>
+<td>1536829723</td>
+<td>456b2da064c9ad60</td>
+<td>True</td>
+</tr>
+<tr>
+<td>balf_blood_copd</td>
+<td>primary_development_reused_benchmark</td>
+<td>2110825599</td>
+<td>acf33fcc3851f77c</td>
+<td>True</td>
+</tr>
+<tr>
+<td>gdt_2020aug_wocov</td>
+<td>sorted_training_supplement</td>
+<td>591495928</td>
+<td>650f583b85f05ede</td>
+<td>True</td>
+</tr>
+<tr>
+<td>maltegdt</td>
+<td>sorted_training_supplement</td>
+<td>179862512</td>
+<td>bbd460ef153ce6b2</td>
+<td>True</td>
+</tr>
+<tr>
+<td>gdtlung</td>
+<td>sorted_sensitivity_only</td>
+<td>276869875</td>
+<td>d5915e6b50241ff8</td>
+<td>True</td>
+</tr>
+<tr>
+<td>extension_GSE114724</td>
+<td>frozen_negative_stress</td>
+<td>131909269</td>
+<td>394425c7937432ac</td>
+<td>True</td>
+</tr>
+<tr>
+<td>extension_GSE121636_GSE121637</td>
+<td>frozen_negative_stress</td>
+<td>77281297</td>
+<td>b7182274cab834f1</td>
+<td>True</td>
+</tr>
+<tr>
+<td>extension_GSE159251</td>
+<td>frozen_negative_stress</td>
+<td>223142214</td>
+<td>abe6502b3a15a3ba</td>
+<td>True</td>
+</tr>
+<tr>
+<td>extension_GSE169246</td>
+<td>reduced_feature_schema_sensitivity</td>
+<td>2176683186</td>
+<td>f251382c62109a48</td>
+<td>True</td>
+</tr>
+<tr>
+<td>extension_GSE292700</td>
+<td>frozen_negative_stress</td>
+<td>326784213</td>
+<td>78c9ada980a21592</td>
+<td>True</td>
+</tr>
+<tr>
+<td>extension_GSE294273_GSE294274</td>
+<td>frozen_negative_stress</td>
+<td>289243072</td>
+<td>6a20d61544c7cd33</td>
+<td>True</td>
+</tr>
+<tr>
+<td>extension_GSE296954</td>
+<td>frozen_negative_stress</td>
+<td>304970784</td>
+<td>f3484482e35b49d3</td>
+<td>True</td>
+</tr>
+<tr>
+<td>extension_GSE315928</td>
+<td>frozen_negative_stress</td>
+<td>253771849</td>
+<td>2fe674761db67aa3</td>
+<td>True</td>
+</tr>
+</tbody>
+</table>
+<h2 id="canonical-artifacts">Canonical artifacts</h2>
+<ul>
+<li>Cell-label manifest:
+<code>Integrated_dataset/tables/gdT_prediction/gdtai_v4_preflight/cell_label_manifest.csv.gz</code></li>
+<li>Inner group assignments:
+<code>Integrated_dataset/tables/gdT_prediction/gdtai_v4_preflight/inner_group_split_manifest.csv.gz</code></li>
+<li>Full checks:
+<code>Integrated_dataset/tables/gdT_prediction/gdtai_v4_preflight/preflight_checks.csv</code></li>
+<li>Machine summary:
+<code>Integrated_dataset/logs/gdT_prediction/gdtai_v4_preflight/preflight_summary.json</code></li>
+<li>Reader HTML:
+<code>gdT_prediction/gdtai_v4_preflight/index.html</code></li>
+<li>PDF:
+<code>gdT_prediction/gdtai_v4_preflight/gdtai_v4_preflight_report.pdf</code></li>
+</ul>
+<h2 id="gate">Gate</h2>
+<p>Stop before Step 2. No model fitting is permitted until the user
+reviews this package and explicitly approves the next gate.</p>
+</body>
+</html>

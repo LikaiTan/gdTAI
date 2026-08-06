@@ -72,6 +72,12 @@
 
 ## Current review packages
 
+- gdTAI V4 Step 1 preflight and grouped split freeze:
+  - `gdT_prediction/gdtai_v4_preflight/index.html`
+  - `gdT_prediction/gdtai_v4_preflight/gdtai_v4_preflight_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_preflight/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_preflight/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_preflight/`
 - independent gdTAI training and evaluation audit:
   - `docs/GDTAI_METHODOLOGY_AUDIT.md`
   - `gdT_prediction/gdtai_methodology_audit/index.html`

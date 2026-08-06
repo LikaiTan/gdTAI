@@ -2,14 +2,15 @@
 
 ## Current milestone
 
-- gdTAI V4 protocol v1.1 frozen before fitting with a required CD4/Treg
-  exclusion recall-cost preflight; Step 1, retraining, and additive metadata
-  correction remain gated
+- gdTAI V4 Step 1 preflight and grouped split freeze completed with a failed
+  QC gate; no model fitting has started and Step 2 remains blocked
 
 ## Next action
 
-- review the amended precommitted gdTAI V4 protocol and decide whether to
-  authorize Step 1 recall-cost/input preflight and grouped split construction
+- review the gdTAI V4 Step 1 report and decide whether to locate compliant
+  raw/high-coverage inputs or issue a new precommitted protocol version
+- rerun Step 1 under any approved replacement protocol before authorizing
+  nested evaluation; do not proceed directly to Step 2
 - do not promote or claim superiority for another gdTAI model before grouped
   resampling, expression-independent labels, and fold-local selection are in place
 - review the frozen-profile negative-control report and official-GEO metadata
@@ -21,6 +22,13 @@
 
 ## Current blockers or review items
 
+- gdTAI V4 Step 1 failed because HRA005041 provides only a normalized
+  `log1p(CP10K)` matrix and no raw-count layer
+- `GDT_2020AUG_woCOV` and `MalteGDT` cover only `82.7%` and `41.6%` of the
+  frozen 197-gene feature set, below the `90%` training-input floor
+- the fixed CD4/Treg exclusions passed their feasibility guardrail with a
+  source-macro primary-gdT recall ceiling of `98.38%`; those thresholds remain
+  frozen and were not tuned
 - no unused gdT-positive cohort remains after adaptive model iteration;
   `BALF_BLOOD_COPD` and screened extension cohorts are development/stress
   benchmarks, not independent or prospective holdouts
@@ -66,6 +74,14 @@
 
 Additional current state:
 
+- gdTAI V4 Step 1 created a checksum-pinned 1,137,739-cell label manifest and
+  deterministic three-fold grouped split manifest without fitting a model
+- all 16 declared preflight inputs matched registered hashes where available
+  and retained identical size and nanosecond modification time
+- GSE144469 joined 107,068/107,068 raw-expression rows uniquely by the SRR and
+  barcode encoded in cell IDs; its valid raw matrix is `layers/counts`
+- the earlier experimental V4 bundle was archived intact under
+  `archive/retired_experiments/gdTAI_v4_experimental_precommit_20260807/`
 - seven extension H5ADs containing 498,901 cells and 154 libraries were built
   under `data/interim/extension_intake/built_h5ads/`
 - all seven extension H5ADs passed sparse raw-count, metadata, TCR-schema,
@@ -159,6 +175,12 @@ Additional current state:
 
 ## Current review artifacts
 
+- gdTAI V4 Step 1 preflight and split freeze:
+  - `gdT_prediction/gdtai_v4_preflight/index.html`
+  - `gdT_prediction/gdtai_v4_preflight/gdtai_v4_preflight_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_preflight/gdtai_v4_preflight_summary.md`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_preflight/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_preflight/`
 - precommitted gdTAI V4 training and validation protocol:
   - `docs/GDTAI_V4_PRECOMMITTED_PLAN.md`
   - `gdT_prediction/gdtai_v4_precommit/index.html`
