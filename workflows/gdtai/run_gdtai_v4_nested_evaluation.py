@@ -91,6 +91,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--outer-fold", action="append", default=[], help="Optional held-out source filter")
     parser.add_argument("--candidate-jobs", type=int, default=1)
+    parser.add_argument("--fold-jobs", type=int, default=3)
     parser.add_argument("--matrix-row-chunk", type=int, default=20000)
     parser.add_argument("--skip-source-hashes", action="store_true", help="Development only; evaluate refuses this")
     parser.add_argument("--force-cache", action="store_true")
@@ -609,6 +610,8 @@ class CrossfitResult:
     fold_models: list[FittedBinaryEstimator]
     retained_feature_counts: list[int]
     retained_gene_counts: list[int]
+    fold_iterations: list[int]
+    fold_converged: list[bool]
 
 
 def inner_assignments(
@@ -656,12 +659,7 @@ def crossfit_candidate(
     if not (train_rows.shape == assignments.shape == y.shape == source.shape == rel.shape):
         raise ValueError("Cross-fitting arrays have inconsistent shapes")
     model_id = candidate_id(family, parameters)
-    raw_oof = np.full(train_rows.size, np.nan, dtype=np.float64)
-    raw_control = np.zeros(control_rows.size, dtype=np.float64)
-    fold_models: list[FittedBinaryEstimator] = []
-    retained_features: list[int] = []
-    retained_genes: list[int] = []
-    for fold in (0, 1, 2):
+    def fit_fold(fold: int) -> tuple[int, np.ndarray, np.ndarray, np.ndarray, FittedBinaryEstimator]:
         training = assignments != fold
         validation = assignments == fold
         fit_rows = train_rows[training]
@@ -679,12 +677,39 @@ def crossfit_candidate(
             int(config["feature_policy"]["maximum_retained_genes"]),
             stable_seed(int(config["random_seed"]), *seed_tokens, model_id, fold),
         )
-        raw_oof[validation] = model.predict_probability(np.asarray(matrix[validation_rows]))
+        validation_probability = model.predict_probability(np.asarray(matrix[validation_rows]))
+        control_probability = (
+            model.predict_probability(np.asarray(matrix[control_rows]))
+            if control_rows.size
+            else np.asarray([], dtype=np.float64)
+        )
+        return fold, validation, validation_probability, control_probability, model
+
+    fold_jobs = min(3, int(config.get("_fold_jobs", 1)))
+    if fold_jobs > 1:
+        with parallel_config(backend="threading"):
+            fitted_folds = Parallel(n_jobs=fold_jobs, prefer="threads")(
+                delayed(fit_fold)(fold) for fold in (0, 1, 2)
+            )
+    else:
+        fitted_folds = [fit_fold(fold) for fold in (0, 1, 2)]
+
+    raw_oof = np.full(train_rows.size, np.nan, dtype=np.float64)
+    raw_control = np.zeros(control_rows.size, dtype=np.float64)
+    fold_models: list[FittedBinaryEstimator] = []
+    retained_features: list[int] = []
+    retained_genes: list[int] = []
+    fold_iterations: list[int] = []
+    fold_converged: list[bool] = []
+    for _, validation, validation_probability, control_probability, model in sorted(fitted_folds):
+        raw_oof[validation] = validation_probability
         if control_rows.size:
-            raw_control += model.predict_probability(np.asarray(matrix[control_rows])) / 3.0
+            raw_control += control_probability / 3.0
         fold_models.append(model)
         retained_features.append(len(model.selected_feature_names))
         retained_genes.append(int((model.selected_columns < gene_feature_count).sum()))
+        fold_iterations.append(model.n_iter)
+        fold_converged.append(model.converged)
     if not np.isfinite(raw_oof).all():
         raise RuntimeError(f"Incomplete OOF predictions for {model_id}")
     outer_weights = balanced_training_weights(y, source, rel)
@@ -705,6 +730,8 @@ def crossfit_candidate(
         fold_models=fold_models,
         retained_feature_counts=retained_features,
         retained_gene_counts=retained_genes,
+        fold_iterations=fold_iterations,
+        fold_converged=fold_converged,
     )
 
 
@@ -828,6 +855,9 @@ def candidate_record(
         "min_retained_features": int(min(result.retained_feature_counts)),
         "max_retained_features": int(max(result.retained_feature_counts)),
         "mean_retained_genes": float(np.mean(result.retained_gene_counts)),
+        "all_folds_converged": bool(all(result.fold_converged)),
+        "converged_fold_count": int(sum(result.fold_converged)),
+        "maximum_fold_iterations": int(max(result.fold_iterations)),
         "calibrator_intercept": result.calibrator.intercept,
         "calibrator_slope": result.calibrator.slope,
     }
@@ -897,6 +927,12 @@ def evaluate_stage1_outer(
 
     candidates = stage1_candidates(config)
     jobs = int(config.get("_candidate_jobs", 1))
+    logging.info(
+        "Stage 1 grid: %d candidates, %d candidate workers, %d fold workers",
+        len(candidates),
+        jobs,
+        int(config.get("_fold_jobs", 1)),
+    )
     with parallel_config(backend="loky", inner_max_num_threads=1):
         fitted = Parallel(n_jobs=jobs)(delayed(fit_one)(family, parameters) for family, parameters in candidates)
     results = [row for row, _ in fitted]
@@ -1001,6 +1037,13 @@ def evaluate_stage2_candidate_grid(
         return record, result
 
     jobs = int(config.get("_candidate_jobs", 1))
+    logging.info(
+        "%s grid: %d candidates, %d candidate workers, %d fold workers",
+        stage_name,
+        len(candidates),
+        jobs,
+        int(config.get("_fold_jobs", 1)),
+    )
     with parallel_config(backend="loky", inner_max_num_threads=1):
         fitted = Parallel(n_jobs=jobs)(delayed(fit_one)(family, parameters) for family, parameters in candidates)
     records = [record for record, _ in fitted]
@@ -2402,6 +2445,10 @@ def main() -> None:
     config = load_json(config_path)
     if not 1 <= int(args.candidate_jobs) <= 80:
         raise ValueError("--candidate-jobs must be between 1 and 80")
+    if not 1 <= int(args.fold_jobs) <= 3:
+        raise ValueError("--fold-jobs must be between 1 and 3")
+    if int(args.candidate_jobs) * int(args.fold_jobs) > 80:
+        raise ValueError("--candidate-jobs times --fold-jobs cannot exceed 80")
     log_dir = resolve(config["outputs"]["log_dir"])
     setup_logging(log_dir, args.log_level)
     logging.info("gdTAI V4 protocol %s, requested stage %s", config["protocol_version"], args.stage)
@@ -2420,6 +2467,7 @@ def main() -> None:
     logging.info("Step-2 approval accepted: %s at %s", approval["approved_by"], approval["approved_at"])
     runtime_config = dict(config)
     runtime_config["_candidate_jobs"] = int(args.candidate_jobs)
+    runtime_config["_fold_jobs"] = int(args.fold_jobs)
     if args.stage in {"cache", "all"}:
         extract_feature_cache(runtime_config, args.matrix_row_chunk, args.force_cache)
     if args.stage in {"evaluate", "all"}:

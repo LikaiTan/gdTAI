@@ -477,7 +477,7 @@ MPLCONFIGDIR=/tmp/matplotlib-gdtai-v4 \
 MPLCONFIGDIR=/tmp/matplotlib-gdtai-v4 \
 /home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
   workflows/gdtai/run_gdtai_v4_nested_evaluation.py \
-  --stage all --candidate-jobs 16 --matrix-row-chunk 20000
+  --stage all --candidate-jobs 16 --fold-jobs 3 --matrix-row-chunk 20000
 ```
 
 Core outputs:

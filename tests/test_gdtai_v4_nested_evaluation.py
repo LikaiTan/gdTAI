@@ -159,6 +159,9 @@ class GdtaiV4NestedEvaluationTests(unittest.TestCase):
         cal_first = fit_platt_calibrator(raw_first, y, w, 17)
         cal_second = fit_platt_calibrator(raw_second, y, w, 17)
         np.testing.assert_allclose(cal_first.predict(raw_first), cal_second.predict(raw_second), rtol=0, atol=1e-12)
+        self.assertEqual(first.n_iter, second.n_iter)
+        self.assertEqual(first.converged, second.converged)
+        self.assertTrue(first.convergence_applicable)
 
     def test_stage1_threshold_enforces_each_training_source(self) -> None:
         score = np.array([0.95, 0.92, 0.91, 0.90, 0.10, 0.20])
@@ -432,6 +435,7 @@ class GdtaiV4NestedEvaluationTests(unittest.TestCase):
     def test_end_to_end_synthetic_outer_fold_runs_every_comparator(self) -> None:
         config = copy.deepcopy(self.config)
         config["_candidate_jobs"] = 2
+        config["_fold_jobs"] = 2
         config["models"]["stage1_elastic_net"].update(
             {"C": [0.3], "l1_ratio": [0.0], "max_iter": 500, "tolerance": 1e-4}
         )
@@ -554,6 +558,7 @@ class GdtaiV4NestedEvaluationTests(unittest.TestCase):
             row for row in result["metrics"] if row["model_id"] == "v4_nested_selected" and row["mode"] == "balanced"
         ][0]
         self.assertEqual(balanced_v4["f1"], 1.0)
+        self.assertIn("all_folds_converged", result["stage1_candidate_table"].columns)
 
 
 if __name__ == "__main__":

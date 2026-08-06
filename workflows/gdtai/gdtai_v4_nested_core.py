@@ -239,6 +239,9 @@ class FittedBinaryEstimator:
     selected_feature_names: list[str]
     scaler: StandardScaler | None
     estimator: Any
+    n_iter: int
+    converged: bool
+    convergence_applicable: bool
 
     def predict_probability(self, matrix: np.ndarray) -> np.ndarray:
         x = np.asarray(matrix)[:, self.selected_columns]
@@ -296,6 +299,14 @@ def fit_binary_estimator(
     else:
         raise ValueError(f"Unknown model family: {family}")
     estimator.fit(selected_x, y, sample_weight=weight)
+    if family in {"elastic_net", "compact_logistic", "tcr_logistic"}:
+        n_iter = int(np.max(estimator.n_iter_))
+        converged = n_iter < int(parameters["max_iter"])
+        convergence_applicable = True
+    else:
+        n_iter = int(estimator.n_iter_)
+        converged = True
+        convergence_applicable = False
     return FittedBinaryEstimator(
         family=family,
         parameters=dict(parameters),
@@ -303,6 +314,9 @@ def fit_binary_estimator(
         selected_feature_names=[str(feature_names[index]) for index in selected],
         scaler=scaler,
         estimator=estimator,
+        n_iter=n_iter,
+        converged=converged,
+        convergence_applicable=convergence_applicable,
     )
 
 

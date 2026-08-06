@@ -232,6 +232,9 @@
   - corrected the cache exclusion audit to reproduce the exact Step 1 scope
     before applying the unchanged frozen CD4/Treg rules to all evaluation rows;
     the initial cache attempt stopped at this audit before any fitting
+  - after an incomplete timing run produced no outer-fold result, added
+    deterministic fold-level parallelism and explicit iteration/convergence
+    provenance without changing the frozen model or selection contract
   - this is an implementation checkpoint only; no project-data model had been
     fitted and no V4 model had been promoted at this checkpoint
 

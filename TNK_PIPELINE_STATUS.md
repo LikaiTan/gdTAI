@@ -32,14 +32,18 @@
   hierarchical bootstrap, sparse extraction, and print-safe reporting
 - the pinned Step 2 evaluation config, runner, and core SHA-256 values are
   `de930d4484a57a8ba77d4df79da2d2018c1b35e7095da5f6bdb6db8279082b32`,
-  `1180b30d0756db0f3c0349ff30a72b22ceb253ad4330e2aaa0397ab3904566e3`, and
-  `1d81f817fa22e799f9721d05d2e849556ab9ad6d9033dd7ad5587fccc273722e`
+  `9102b8ebfe617df8c218bbd34a58a5e5ac31873a938de969f74f413913d85a07`, and
+  `eaf08999a6cffe2389c3deb73669b0591c6847d7fd6aa372b32c3368919fac7e`
 - the first authorized cache attempt verified all source hashes and extracted
   all rows, then stopped before fitting because the cache audit compared
   all-cell exclusions against Step 1 flags that were intentionally populated
   only for positive/sensitivity and sampled-NK rows; the evaluator now requires
   exact reproduction on that frozen scope and applies the unchanged rules to
   every cell in memory
+- an incomplete timing run was stopped before any outer-fold result after the
+  serial fold implementation proved inefficient and emitted unrecorded SAGA
+  convergence warnings; the evaluator now runs the same frozen folds in
+  deterministic parallel and records iteration/convergence provenance
 - the registered HRA005041 `log1p(CP10K)` matrix passed a full 766,639-cell
   inverse-library-size audit: zero empty rows, zero rows outside the frozen
   `1e-4` tolerance, and maximum absolute deviation
