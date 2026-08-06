@@ -58,9 +58,10 @@ Additional current state:
   under `data/interim/extension_intake/built_h5ads/`
 - all seven extension H5ADs passed sparse raw-count, metadata, TCR-schema,
   logical-flag, and sample-plus-barcode Phase 0 structural QC
-- extension tumor-project specimen context passed for all 498,901 cells with
-  zero unresolved rows and zero violations; original tissue and diagnosis
-  fields were not modified
+- extension tumor-project specimen context initially passed the rule-based
+  structural gate for all 498,901 cells with zero blank/format violations;
+  later official-GEO review exposed a semantic compartment error in GSE169246,
+  and original tissue and diagnosis fields remain unmodified
 - all eight new inputs were independently filtered to `758,135` T/NK
   candidates from `893,126` cells; all `338,046` productive-TCR cells were
   retained
