@@ -326,6 +326,44 @@ Standard behavior:
   screen contains no unbiased gdT positive truth cells
 - keep merge and integration blocked after the screen
 
+## Post-Phase-4 gdTAI methodology audit
+
+Objective:
+
+- independently review data preparation, ground truth, features, algorithms,
+  splitting, tuning, evaluation, deployment claims, and release provenance
+- re-evaluate retained cross-study predictions with expression-independent
+  TCR-only labels
+- define the strongest defensible next program without adding data
+
+Phase or task:
+
+- read-only independent gdTAI training and evaluation audit
+
+Exact `.py` script:
+
+- `workflows/gdtai/build_gdtai_methodology_audit.py`
+
+Core outputs:
+
+- `docs/GDTAI_METHODOLOGY_AUDIT.md`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_methodology_audit/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_methodology_audit/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_methodology_audit/`
+- `gdT_prediction/gdtai_methodology_audit/index.html`
+- `gdT_prediction/gdtai_methodology_audit/gdtai_methodology_audit_report.pdf`
+
+Standard behavior:
+
+- do not open or mutate an H5AD
+- verify registered model checksums and semantic agreement among pickle,
+  manifest, registry, and run summary
+- treat all inspected cohorts as development or stress benchmarks
+- use paired productive TCR-only labels for the corrected primary benchmark;
+  keep CD4/NK/low-CD3 expression as stress strata rather than truth rules
+- require nested leave-one-dataset-out evaluation with donor/library/clonotype
+  grouping before the next model-selection or promotion decision
+
 ## Phase 1: Coarse T/NK extraction
 
 Objective:
@@ -818,7 +856,7 @@ Core outputs:
 
 Phase or task:
 
-- Post-Phase-4 gdTAI v3 TRDC/NK-guard classifier training, external testing, and failure audit
+- Post-Phase-4 gdTAI v3 TRDC/NK-guard classifier training, cross-study benchmark testing, and failure audit
 
 Exact `.py` scripts:
 
@@ -840,11 +878,13 @@ Standard behavior:
 
 - include `GSE144469` primary gold cells in atlas train/tune splits
 - keep the non-GSE144469 validation cohorts from the prior multi-cohort validation lane: `GSE254249` paired-TCRAB/no-gdTCR negatives and `GDT_2020AUG_woCOV` cord-blood gdT positives
-- keep the independent external H5AD out of fitting, threshold tuning, and model selection
+- keep the cross-study H5AD out of coefficient fitting; historical candidate
+  and promotion workflows later inspected it for selection, so it is not an
+  independent external test
 - after training, apply the selected v3 candidate and reference strategies to the full atlas input H5AD and write whole-atlas source/tissue/annotation summaries plus selected predicted cells
 - run at least five iteration rounds unless the recall/estimated-FP target is already reached; candidate families are not restricted to XGBoost
 - select the final review candidate from full-atlas target metrics using recall `> 0.8` and estimated FP fraction `< 5%` of predictions, estimating hidden abT FP from paired-TCRAB rates in TCR-sequenced sources
-- require independent external H5AD inference from `layers["counts"]` and fail rather than using normalized `X`
+- require cross-study H5AD inference from `layers["counts"]` and fail rather than using normalized `X`
 - exclude NK+TCRAB-overlap cells from negative train/tune labels and explicit hard-negative construction
 - restrict explicit NK hard negatives to expression `TRDC+TRDV-`; non-NK TCRAB hard negatives remain a separate guard set
 - report ambiguous/mixed/partial external TCR labels as stress groups outside primary binary metrics
@@ -1057,14 +1097,16 @@ Core outputs:
 Standard behavior:
 
 - require exact Round 12 and Round 14 SHA256 identities
-- rerun both artifacts directly on the independent external H5AD
+- rerun both artifacts directly on the reused BALF_BLOOD_COPD cross-study benchmark
 - verify direct predictions against the validated external cache and a
   deterministic full-atlas cache sample
 - compare raw full-atlas calls, gold and silver recovery, paired-TCRAB and NK
   burdens, held-out cord-blood positives, and held-out GSE254249 negatives
 - run descriptive exact paired tests and report every dataset separately
-- select the model that passes all guardrails, then maximize mean F1 across
-  full-atlas gold, atlas-held-out, and independent-external evaluations
+- historical selection passed guardrails and then maximized mean F1 across
+  full-atlas gold, atlas-held-out, and the reused cross-study benchmark; this
+  use exhausted benchmark independence and must not be presented as external
+  validation
 - preserve Round 12 as the high-purity fallback when Round 14 is promoted
 
 ## Post-Phase-4 gdTAI v4 two-stage retraining
@@ -1130,12 +1172,12 @@ Standard behavior:
 - run `finalize --confirm` only after all physical moves validate
 - retain a registry snapshot and reverse journal for `rollback --confirm`
 
-## Local external cohort intake: BALF_BLOOD_COPD
+## Local cross-study benchmark intake: BALF_BLOOD_COPD
 
 Objective:
 
-- register the four-library BALF/PBMC study used for independent gdTAI
-  validation as dataset `BALF_BLOOD_COPD`
+- register the four-library BALF/PBMC study used as the gdTAI cross-study
+  benchmark under dataset `BALF_BLOOD_COPD`
 - retain the complete raw/interim study workspace at its original path
 - store only the selected validation H5AD physically inside the project
 - keep the cohort validation-only unless atlas integration is separately
@@ -1143,7 +1185,7 @@ Objective:
 
 Phase or task:
 
-- Dataset-centered intake of the independent BALF/PBMC COPD validation cohort
+- Dataset-centered intake of the BALF/PBMC COPD cross-study benchmark
 
 Exact `.py` scripts:
 

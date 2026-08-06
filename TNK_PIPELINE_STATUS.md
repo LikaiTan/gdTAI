@@ -2,11 +2,16 @@
 
 ## Current milestone
 
-- Post-Phase 4 extension-cohort frozen-model and official-GEO metadata reviews
-  complete; additive metadata correction remains gated
+- Post-Phase 4 independent gdTAI methodology audit, extension-cohort frozen-model
+  screen, and official-GEO metadata reviews complete; retraining and additive
+  metadata correction remain gated
 
 ## Next action
 
+- review the gdTAI methodology audit and decide whether to authorize the
+  precommitted nested leave-one-dataset-out re-evaluation
+- do not promote or claim superiority for another gdTAI model before grouped
+  resampling, expression-independent labels, and fold-local selection are in place
 - review the frozen-profile negative-control report and official-GEO metadata
   reconciliation package
 - decide separately whether to approve additive corrected metadata fields for
@@ -16,6 +21,13 @@
 
 ## Current blockers or review items
 
+- no unused gdT-positive cohort remains after adaptive model iteration;
+  `BALF_BLOOD_COPD` and screened extension cohorts are development/stress
+  benchmarks, not independent or prospective holdouts
+- V2 validation metrics and V3 BALF metrics are model-selection estimates
+- the promoted V3 artifact checksum is valid, but its pickle, manifest,
+  completed-run summary, and documented training composition do not describe
+  one coherent build record
 - extension-cohort merge and integration are not approved
 - GSE169246 has a confirmed compartment-join error: all 239,418 retained `_b`
   cells are official blood libraries, while current local tissue/specimen fields
@@ -94,8 +106,8 @@ Additional current state:
   data are dataset-centered under `data/datasets/<dataset_id>/`
 - the base dataset-centered storage migration completed with 191
   same-filesystem rename operations
-- the independent `BALF_BLOOD_COPD` validation cohort was subsequently
-  registered; its storage was refined so the approximately 949 GB raw/interim
+- the `BALF_BLOOD_COPD` cross-study benchmark was subsequently registered; its
+  storage was refined so the approximately 949 GB raw/interim
   workspace remains at its original location and only the 2,110,825,599-byte
   validation H5AD is physically stored in the project
 - the current storage view has 66 dataset directories, 45 promoted
@@ -109,9 +121,11 @@ Additional current state:
   `data/datasets/BALF_BLOOD_COPD/processed/artifacts/phase4_final_annotated.h5ad`
 - the dataset registry currently contains 67 datasets and 1,790 library rows;
   all 33 Phase 0 active datasets pass strict path and library validation
-- `BALF_BLOOD_COPD` is registered as
-  `gdTAI_independent_external_validation` and remains inactive for Phase 0,
-  current-milestone integration, and extended-atlas integration
+- `BALF_BLOOD_COPD` retains the legacy registry role string
+  `gdTAI_independent_external_validation`, but it was reused in Round 12 versus
+  Round 14 promotion and is scientifically classified as a reused cross-study
+  benchmark; it remains inactive for Phase 0, current-milestone integration,
+  and extended-atlas integration
 - `obs["tissue_corrected"]` is already written into the current integrated
   milestone
 - `HRA005041` intake H5AD was rebuilt with harmonized metadata plus productive
@@ -136,13 +150,21 @@ Additional current state:
 - gdTAI v3 Round 12 and Round 14 were revalidated on identical cohorts with
   checksum-pinned artifacts; Round 14 at threshold `0.936` is the promoted
   balanced default, while Round 12 at threshold `0.5` is preserved as the
-  validated high-purity fallback
+  validated high-purity fallback; the 2026-08-06 audit found that their
+  corrected TCR-only F1 values are effectively tied and that the reused
+  benchmark cannot establish Round 14 superiority
 - `GSE305372` was excluded and retired on 2026-08-06; it has no active registry
   rows, its local scientific data were deleted, and its code, reports, source
   checksums, and historical results were moved under `archive/`
 
 ## Current review artifacts
 
+- independent gdTAI training and evaluation audit:
+  - `docs/GDTAI_METHODOLOGY_AUDIT.md`
+  - `gdT_prediction/gdtai_methodology_audit/index.html`
+  - `gdT_prediction/gdtai_methodology_audit/gdtai_methodology_audit_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_methodology_audit/gdtai_methodology_audit_summary.md`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_methodology_audit/`
 - gdTAI external methodological review:
   - `Integrated_dataset/logs/gdT_prediction/external_review/gdtai_external_review_report.md`
   - `gdT_prediction/external_review/gdtai_external_review_report.html`
@@ -185,7 +207,7 @@ Additional current state:
   - `data/registry/migrations/dataset_centered_20260716/validation.json`
   - `data/registry/snapshots/post_dataset_centered_migration_20260716/`
   - `Integrated_dataset/logs/project_reorganization/checkpoints/pre_dataset_centered_migration_20260716/`
-- `BALF_BLOOD_COPD` independent-validation intake:
+- `BALF_BLOOD_COPD` cross-study benchmark intake:
   - `docs/BALF_BLOOD_COPD_INTAKE.md`
   - `data/registry/migrations/balf_blood_copd_20260716/validation.json`
   - `data/registry/snapshots/post_balf_blood_copd_intake_20260716/`

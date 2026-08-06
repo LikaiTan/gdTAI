@@ -1,0 +1,2 @@
+n_features,n_nonzero_coefficients,minimum_coefficient,maximum_coefficient,maximum_absolute_coefficient,l1_norm,uses_standard_scaler,interpretation
+187,181,-1.7760727727447638,1.2017442076832974,1.7760727727447638,70.32164456910002,True,Magnitude is not intrinsically excessive after standardization; split and selection design dominate overfitting risk.

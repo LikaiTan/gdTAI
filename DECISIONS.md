@@ -21,7 +21,10 @@
 - `configs/models/gdtai/model_registry.csv` is authoritative for model release
   status; a directory or version-like filename alone does not imply promotion
 - gdTAI v3 Round 14 at threshold `0.936` is the promoted balanced default after
-  checksum-pinned revalidation against Round 12 on 2026-07-15
+  checksum-pinned revalidation against Round 12 on 2026-07-15; the 2026-08-06
+  audit established that the reused benchmark influenced promotion, so this
+  status is an operational release choice rather than independent proof of
+  superiority
 - gdTAI v3 Round 12 at threshold `0.5` is retained as the validated high-purity
   fallback and is not the canonical default
 - extension cohorts with alpha-beta-only TCR assays may evaluate frozen-model
@@ -32,10 +35,12 @@
   single-chain controls remain separately reported
 - no-productive-TCR extension predictions are candidates of unknown truth and
   must not be counted as true positives
-- the independent BALF/PBMC COPD cohort is registered as
-  `BALF_BLOOD_COPD`; its canonical H5AD is
+- the BALF/PBMC COPD cohort is registered as `BALF_BLOOD_COPD`; its canonical H5AD is
   `data/datasets/BALF_BLOOD_COPD/processed/current.h5ad`
-- `BALF_BLOOD_COPD` is validation-only and must remain inactive for Phase 0,
+- `BALF_BLOOD_COPD` was reused in Round 12 versus Round 14 promotion and must
+  be described as a cross-study development benchmark, not an independent
+  external test
+- `BALF_BLOOD_COPD` is benchmark-only and must remain inactive for Phase 0,
   milestone integration, and extended-atlas integration unless the user
   separately approves a role change
 - `BALF_BLOOD_COPD` raw and interim files remain physically under
@@ -44,6 +49,15 @@
 - the historical external H5AD path remains a supported compatibility link to
   the project-managed artifact so the cohort's original scripts and RStudio
   project paths continue to work
+- future gdTAI selection requires a precommitted nested leave-one-dataset-out
+  design with donor/library/clonotype grouping, expression-independent primary
+  labels, dataset-balanced fitting, fold-local feature selection/calibration,
+  and dataset-macro plus worst-dataset metrics
+- any cohort inspected for algorithm, threshold, guardrail, or promotion
+  decisions is a development benchmark and cannot later be called independent
+  or sealed
+- gdTAI inference must abstain or clearly warn when critical genes or adequate
+  model-gene coverage are missing
 - tumor-related projects must preserve disease-aware specimen context that
   distinguishes primary tumor, adjacent/non-tumor tissue, blood, and metastatic
   sites whenever source metadata provide that distinction; original metadata

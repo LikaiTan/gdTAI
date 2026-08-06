@@ -1,0 +1,86 @@
+{
+  "generated_at": "2026-08-06T22:15:29.913562+08:00",
+  "workflow": "workflows/gdtai/build_gdtai_methodology_audit.py",
+  "read_only_no_h5ad": true,
+  "inputs": {
+    "configs/models/gdtai/model_registry.csv": {
+      "sha256": "3c9187bbf9a417d376bcc0da67d865e388f23afd9b8cdfb415ddd5b724c6ef95",
+      "size_bytes": 2506
+    },
+    "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v2.0/gdTAI_v2_model.pkl": {
+      "sha256": "c7f6e7d1d1c0c8de9e7abbaa7c5b70c1070b43c964ccdb94e414bc5278e13c3e",
+      "size_bytes": 16002
+    },
+    "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/gdTAI_v3_model.pkl": {
+      "sha256": "16dedc0081da9b8487887341232bcf8c9c9403dd3bbd72e04cab43d4cd7b2e09",
+      "size_bytes": 15532
+    },
+    "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v3.0/model_manifest.json": {
+      "sha256": "bc1f76c332fb4834ddfe2125a996acdd180956d6139e5f87c49dcbce33629682",
+      "size_bytes": 3224
+    },
+    "Integrated_dataset/logs/gdT_prediction/gdtai_v3_trdc_nk_guard/gdtai_v3_trdc_nk_guard_summary.json": {
+      "sha256": "23e6e0a0e4a7bc426e10e76f221c7385276b4add0de9f128304fc4bd4899f830",
+      "size_bytes": 2487
+    },
+    "Integrated_dataset/tables/gdT_prediction/gdtai_v3_trdc_nk_guard/training_sample_composition.csv": {
+      "sha256": "e9453f0af33c2cb4c682aafe5ee478b95c2d48863b02a0981d41399a795b5df1",
+      "size_bytes": 85
+    },
+    "Integrated_dataset/tables/gdT_prediction/gse144469_holdout_tcrgene/train_tune_split_by_source_label.csv": {
+      "sha256": "434c05c9460550c66237845f41de37c3a7b7acd1f6cbae722c1dc8e5fe91d1bf",
+      "size_bytes": 189
+    },
+    "Integrated_dataset/tables/gdT_prediction/gse144469_holdout_tcrgene/validation_metrics.csv": {
+      "sha256": "cabeb58be4ea8ca0ab658b54a83544536b530139547f4d79096e88e11d9cf2f3",
+      "size_bytes": 2190
+    },
+    "Integrated_dataset/tables/gdT_prediction/gdtai_v3_round12_vs_round14/promotion_guardrails.csv": {
+      "sha256": "de01894a3bb4a1f16a6bcc84bd4788eb5983b89b710ccf09c351de8422eeadc6",
+      "size_bytes": 497
+    },
+    "Integrated_dataset/tables/gdT_prediction/gdtai_v3_trdc_nk_guard/external_predictions_wide.csv.gz": {
+      "sha256": "e175e03cbad58a8dd31c61fc8b4ce39266ae0f51c8f2e3938e70ee5ddc64db77",
+      "size_bytes": 8127825
+    },
+    "Integrated_dataset/tables/gdT_prediction/gdtai_extension_evaluation/screen_cohort_summary.csv": {
+      "sha256": "a01542b0411ad95d1050549036a0de274c635e6eebd85cd580f9c5a5fa6ca995",
+      "size_bytes": 5932
+    }
+  },
+  "registered_artifacts_verified": [
+    {
+      "model_id": "gdtai_v2",
+      "actual_sha256": "c7f6e7d1d1c0c8de9e7abbaa7c5b70c1070b43c964ccdb94e414bc5278e13c3e",
+      "checksum_match": true
+    },
+    {
+      "model_id": "gdtai_v3",
+      "actual_sha256": "16dedc0081da9b8487887341232bcf8c9c9403dd3bbd72e04cab43d4cd7b2e09",
+      "checksum_match": true
+    },
+    {
+      "model_id": "gdtai_v3_round12",
+      "actual_sha256": "7373e79350f7db190c415b376b9763e31652754438ee8c5afd3853beb7b2ebc4",
+      "checksum_match": true
+    },
+    {
+      "model_id": "gdtai_v4",
+      "actual_sha256": "f7e26ae41c95d3d9970658643fbb74603b3e748c3d556edc1c10af7c5132f36c",
+      "checksum_match": true
+    }
+  ],
+  "outputs": [
+    "gdT_prediction/gdtai_methodology_audit/index.html",
+    "gdT_prediction/gdtai_methodology_audit/gdtai_methodology_audit_report.pdf",
+    "Integrated_dataset/logs/gdT_prediction/gdtai_methodology_audit/gdtai_methodology_audit_summary.md",
+    "Integrated_dataset/tables/gdT_prediction/gdtai_methodology_audit/issue_register.csv",
+    "Integrated_dataset/tables/gdT_prediction/gdtai_methodology_audit/recommended_actions.csv",
+    "Integrated_dataset/tables/gdT_prediction/gdtai_methodology_audit/corrected_external_pure_tcr_metrics.csv",
+    "Integrated_dataset/tables/gdT_prediction/gdtai_methodology_audit/prevalence_ppv_scenarios.csv",
+    "Integrated_dataset/figures/gdT_prediction/gdtai_methodology_audit/corrected_tcr_only_performance.png",
+    "Integrated_dataset/figures/gdT_prediction/gdtai_methodology_audit/prevalence_ppv_scenarios.png",
+    "Integrated_dataset/figures/gdT_prediction/gdtai_methodology_audit/extension_strict_nk_challenge.png",
+    "Integrated_dataset/figures/gdT_prediction/gdtai_methodology_audit/evaluation_reuse_map.png"
+  ]
+}

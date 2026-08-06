@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gdTAI training and evaluation audit</title>
+<style>
+:root { --ink:#272522; --muted:#69645e; --paper:#ffffff; --line:#d9d4cd; --soft:#f5f2ed; --red:#b4433c; --amber:#d58b28; --green:#2f7d6d; --taupe:#7a6f63; }
+* { box-sizing:border-box; }
+body { margin:0; background:#ece9e4; color:var(--ink); font-family:Arial,Helvetica,sans-serif; line-height:1.42; letter-spacing:0; }
+main { max-width:1180px; margin:0 auto; background:var(--paper); min-height:100vh; }
+header { padding:42px 54px 34px; border-top:8px solid var(--red); border-bottom:1px solid var(--line); }
+h1 { margin:0 0 8px; font-size:34px; letter-spacing:0; }
+.subtitle { margin:0; color:var(--muted); font-size:16px; max-width:900px; }
+.meta { margin-top:18px; color:var(--muted); font-size:12px; }
+section { padding:32px 54px; border-bottom:1px solid var(--line); break-inside:auto; }
+h2 { margin:0 0 18px; font-size:23px; letter-spacing:0; }
+h3 { margin:24px 0 10px; font-size:16px; letter-spacing:0; }
+p { margin:8px 0 14px; }
+.lead { font-size:17px; max-width:960px; }
+.facts { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:20px 0; }
+.fact { border:1px solid var(--line); border-top:4px solid var(--taupe); padding:15px; min-height:112px; }
+.fact strong { display:block; font-size:25px; margin-bottom:6px; }
+.fact span { color:var(--muted); font-size:12px; }
+.callout { border-left:5px solid var(--red); background:#fbf3f1; padding:16px 18px; margin:18px 0; }
+.callout.green { border-color:var(--green); background:#eef7f4; }
+.figure { margin:18px 0 8px; text-align:center; break-inside:avoid; }
+.figure img { width:100%; max-width:1030px; height:auto; }
+.caption { color:var(--muted); font-size:11px; text-align:left; margin-top:4px; }
+.table-wrap { overflow-x:auto; margin:12px 0 18px; }
+table { border-collapse:collapse; width:100%; font-size:11.5px; }
+th { background:#eeeae4; text-align:left; padding:8px 7px; border:1px solid var(--line); vertical-align:bottom; }
+td { padding:7px; border:1px solid var(--line); vertical-align:top; }
+tbody tr:nth-child(even) { background:#faf9f7; }
+.issue-table { font-size:10.5px; table-layout:fixed; }
+.issue-table th:nth-child(1) { width:8%; } .issue-table th:nth-child(2) { width:12%; } .issue-table th:nth-child(3) { width:25%; } .issue-table th:nth-child(4) { width:24%; } .issue-table th:nth-child(5) { width:31%; }
+.severity,.priority { display:inline-block; padding:2px 6px; border-radius:3px; font-size:9px; font-weight:bold; text-transform:uppercase; }
+.critical { background:#f3d2cf; color:#7b211c; } .high { background:#f7e3c1; color:#71420d; } .moderate { background:#e3e0dc; color:#47433e; }
+.priority { background:#dcece7; color:#205d50; }
+code { font-family:Consolas,monospace; font-size:10px; }
+ul { margin:8px 0 14px 20px; padding:0; } li { margin:6px 0; }
+.small { color:var(--muted); font-size:11px; }
+footer { padding:24px 54px; color:var(--muted); font-size:11px; }
+@media (max-width:760px) { header,section,footer { padding-left:22px; padding-right:22px; } .facts { grid-template-columns:1fr 1fr; } h1 { font-size:28px; } }
+@media print {
+  @page { size:A4 landscape; margin:10mm; }
+  body { background:white; font-size:9.5pt; } main { max-width:none; }
+  header { padding:14mm 10mm 8mm; } section { padding:8mm 10mm; } footer { padding:6mm 10mm; }
+  h1 { font-size:24pt; } h2 { font-size:17pt; } h3 { font-size:12pt; }
+  .facts { gap:5mm; } .fact { min-height:24mm; padding:4mm; }
+  .figure { margin:3mm 0 1.5mm; } .figure img { width:auto; max-width:100%; max-height:75mm; object-fit:contain; }
+  table { font-size:7.2pt; } .issue-table { font-size:6.2pt; } th,td { padding:1.3mm; }
+  .print-omit { display:none; }
+  .page-break { break-before:page; } .table-wrap { overflow:visible; }
+}
+</style>
+</head>
+<body><main>
+<header>
+  <h1>gdTAI training and evaluation audit</h1>
+  <p class="subtitle">Independent methodology review, reconciled against frozen artifacts and executable repository code. Scope: data preparation, labels, feature construction, algorithms, splitting, tuning, evaluation, deployment claims, and reproducibility.</p>
+  <p class="meta">Audit date: 2026-08-06 HKT | Read-only analysis: no H5AD was opened or modified | Atlas reference: 5.13 million cells</p>
+</header>
+
+<section>
+  <h2>Executive conclusion</h2>
+  <p class="lead"><strong>gdTAI has real discriminatory signal, but the published internal numbers do not yet rule out selection overfitting.</strong> The largest problems are evaluation reuse, cell-level train/tune splits, source-class confounding, and a partly transcriptome-informed external label. These are more consequential than the size of the fitted coefficients.</p>
+  <div class="facts">
+    <div class="fact"><strong>2</strong><span>critical design findings requiring claim correction</span></div>
+    <div class="fact"><strong>89.29%</strong><span>Round 12 F1 on corrected TCR-only benchmark</span></div>
+    <div class="fact"><strong>89.22%</strong><span>Round 14 F1 on corrected TCR-only benchmark</span></div>
+    <div class="fact"><strong>1.78</strong><span>maximum absolute V2 coefficient after standardization</span></div>
+  </div>
+  <div class="callout"><strong>Claim boundary.</strong> BALF_BLOOD_COPD was used in Round 12 versus Round 14 promotion. It should be described as a reused cross-study benchmark, not an untouched independent external test. Current releases remain suitable as research comparators while evaluation is rebuilt.</div>
+  <div class="callout green"><strong>Best next move without new data.</strong> Do not start with another ad hoc retraining round. First run nested leave-one-dataset-out evaluation with donor/library/clonotype grouping, expression-independent TCR labels, dataset-balanced weights, and all feature selection/calibration inside each training fold.</div>
+</section>
+
+<section>
+  <h2>Independent reviewer result</h2>
+  <p>A separately instantiated read-only reviewer examined the repository without editing files. Its conclusions were then reconciled against the main-agent provenance inventory.</p>
+  <ul>
+    <li>It independently confirmed both critical defects: V2 validation-based algorithm selection and BALF_BLOOD_COPD reuse in V3 promotion.</li>
+    <li>It independently reproduced the corrected TCR-only result: Round 12 F1 0.8929 and Round 14 F1 0.8922, with Round 14 gaining 10 TP but adding 14 strict-abT FP.</li>
+    <li>It identified the mixed-run V3 release record, full-atlas candidate selection, extension holdout unsealing, missing gene-completeness guardrails, and absence of grouped uncertainty as additional confirmed issues.</li>
+    <li>It agreed that no currently inspected cohort can support a new claim of untouched external validation.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Where evaluation independence was lost</h2>
+  <div class="figure"><img src="figures/evaluation_reuse_map.png" alt="Evaluation reuse map"><div class="caption">Code-level provenance shows selection reuse. This is selection leakage, not evidence that external labels were directly used to fit model coefficients.</div></div>
+  <ul>
+    <li>V2 thresholds were tuned on the tune split, but the final algorithm was selected by F1 on the cohort named validation.</li>
+    <li>V3 Round 14 wraps the V2 logistic score with a deterministic TRDC/NK gate; it is not a newly fitted 210-gene classifier.</li>
+    <li>Round 12 versus Round 14 promotion used atlas, held-out, and BALF_BLOOD_COPD F1 plus external specificity guardrails.</li>
+    <li>Train/tune rows were randomized at cell level within source-label groups, allowing donor/library/clonotype correlations across both sets.</li>
+  </ul>
+</section>
+
+<section class="page-break">
+  <h2>Corrected TCR-only re-evaluation</h2>
+  <p>The existing BALF_BLOOD_COPD predictions were re-scored without changing model outputs. Primary positives are all cells labeled by the source workflow as paired productive TRG/TRD with no productive TRA/TRB, including 98 CD4-like cells previously excluded by expression. Primary negatives are strict paired productive TRA/TRB with no productive TRG/TRD. NK, B, and myeloid annotations are excluded from this primary table and retained conceptually as stress tests.</p>
+  <div class="figure"><img src="figures/corrected_tcr_only_performance.png" alt="Corrected TCR-only performance"><div class="caption">Round 12 and Round 14 have nearly identical F1. Round 12 trades slightly lower recall for higher precision and fewer strict abT false positives.</div></div>
+  <div class="table-wrap"><table class=""><thead><tr><th>Model</th><th>TCR gdT</th><th>TCR abT</th><th>TP</th><th>FP</th><th>FN</th><th>Precision</th><th>Recall</th><th>Specificity</th><th>F1</th><th>PR-AUC</th></tr></thead><tbody><tr><td>V2 high-F1</td><td>1,046</td><td>33,117</td><td>888</td><td>90</td><td>158</td><td>90.80%</td><td>84.89%</td><td>99.73%</td><td>87.75%</td><td>0.904</td></tr><tr><td>V2 high-purity</td><td>1,046</td><td>33,117</td><td>867</td><td>49</td><td>179</td><td>94.65%</td><td>82.89%</td><td>99.85%</td><td>88.38%</td><td>0.904</td></tr><tr><td>V3 Round 12</td><td>1,046</td><td>33,117</td><td>859</td><td>19</td><td>187</td><td>97.84%</td><td>82.12%</td><td>99.94%</td><td>89.29%</td><td>0.918</td></tr><tr><td>V3 Round 14</td><td>1,046</td><td>33,117</td><td>869</td><td>33</td><td>177</td><td>96.34%</td><td>83.08%</td><td>99.90%</td><td>89.22%</td><td>0.901</td></tr></tbody></table></div>
+  <p><strong>Interpretation:</strong> Round 12 F1 is 0.8929; Round 14 F1 is 0.8922. The difference is too small, and the cohort too reused, to justify a general superiority claim. Round 14 gains 0.96 percentage points of recall while adding 14 strict-abT false positives.</p>
+  <h3>Recall of TCR-confirmed positives excluded by the old CD4-like rule</h3>
+  <div class="table-wrap"><table class=""><thead><tr><th>Model</th><th>N</th><th>Detected</th><th>Missed</th><th>Recall</th></tr></thead><tbody><tr><td>V2 high-F1</td><td>98</td><td>56</td><td>42</td><td>57.14%</td></tr><tr><td>V2 high-purity</td><td>98</td><td>45</td><td>53</td><td>45.92%</td></tr><tr><td>V3 Round 12</td><td>98</td><td>46</td><td>52</td><td>46.94%</td></tr><tr><td>V3 Round 14</td><td>98</td><td>55</td><td>43</td><td>56.12%</td></tr></tbody></table></div>
+  <h3>Library-level stability</h3>
+  <div class="table-wrap"><table class=""><thead><tr><th>Library</th><th>Model</th><th>Positive</th><th>Negative</th><th>FP</th><th>Precision</th><th>Recall</th><th>F1</th></tr></thead><tbody><tr><td>LIB1</td><td>V2 high-purity</td><td>140</td><td>4,743</td><td>8</td><td>93.55%</td><td>82.86%</td><td>87.88%</td></tr><tr><td>LIB2</td><td>V2 high-purity</td><td>147</td><td>4,711</td><td>13</td><td>89.52%</td><td>75.51%</td><td>81.92%</td></tr><tr><td>LIB3</td><td>V2 high-purity</td><td>416</td><td>12,084</td><td>15</td><td>95.97%</td><td>85.82%</td><td>90.61%</td></tr><tr><td>LIB4</td><td>V2 high-purity</td><td>343</td><td>11,579</td><td>13</td><td>95.61%</td><td>82.51%</td><td>88.58%</td></tr><tr><td>LIB1</td><td>V3 Round 12</td><td>140</td><td>4,743</td><td>6</td><td>95.00%</td><td>81.43%</td><td>87.69%</td></tr><tr><td>LIB2</td><td>V3 Round 12</td><td>147</td><td>4,711</td><td>0</td><td>100.00%</td><td>73.47%</td><td>84.71%</td></tr><tr><td>LIB3</td><td>V3 Round 12</td><td>416</td><td>12,084</td><td>6</td><td>98.33%</td><td>84.86%</td><td>91.10%</td></tr><tr><td>LIB4</td><td>V3 Round 12</td><td>343</td><td>11,579</td><td>7</td><td>97.59%</td><td>82.80%</td><td>89.59%</td></tr><tr><td>LIB1</td><td>V3 Round 14</td><td>140</td><td>4,743</td><td>8</td><td>93.65%</td><td>84.29%</td><td>88.72%</td></tr><tr><td>LIB2</td><td>V3 Round 14</td><td>147</td><td>4,711</td><td>5</td><td>95.76%</td><td>76.87%</td><td>85.28%</td></tr><tr><td>LIB3</td><td>V3 Round 14</td><td>416</td><td>12,084</td><td>10</td><td>97.25%</td><td>84.86%</td><td>90.63%</td></tr><tr><td>LIB4</td><td>V3 Round 14</td><td>343</td><td>11,579</td><td>10</td><td>96.61%</td><td>83.09%</td><td>89.34%</td></tr></tbody></table></div>
+</section>
+
+<section class="page-break">
+  <h2>Rare-cell deployment changes purity</h2>
+  <p>Sensitivity and specificity were taken from the corrected TCR-only benchmark and projected to plausible deployment prevalence. These are scenarios, not empirical estimates for every dataset.</p>
+  <div class="figure"><img src="figures/prevalence_ppv_scenarios.png" alt="Prevalence-aware PPV"><div class="caption">Even small specificity differences matter when gdT prevalence is below 1%.</div></div>
+  <h3>Expected results at 1% true prevalence per million cells</h3>
+  <div class="table-wrap"><table class=""><thead><tr><th>Model</th><th>Expected TP</th><th>Expected FP</th><th>Predicted positive</th><th>Expected PPV</th><th>Expected FDR</th></tr></thead><tbody><tr><td>V2 high-F1</td><td>8,489</td><td>2,690</td><td>11,180</td><td>75.93%</td><td>24.07%</td></tr><tr><td>V2 high-purity</td><td>8,289</td><td>1,465</td><td>9,754</td><td>84.98%</td><td>15.02%</td></tr><tr><td>V3 Round 12</td><td>8,212</td><td>568</td><td>8,780</td><td>93.53%</td><td>6.47%</td></tr><tr><td>V3 Round 14</td><td>8,308</td><td>987</td><td>9,294</td><td>89.39%</td><td>10.61%</td></tr></tbody></table></div>
+</section>
+
+<section>
+  <h2>Cross-dataset negative-control challenge</h2>
+  <p>The frozen models were recently screened on eight extension cohorts containing 758,135 T/NK cells. They provide useful abT and NK specificity stress tests but no gdT-positive truth, so they cannot support sensitivity or final model promotion.</p>
+  <div class="figure"><img src="figures/extension_strict_nk_challenge.png" alt="Extension strict NK challenge"><div class="caption">Dataset-level variation is more informative than a single pooled specificity. Small strict-NK strata are omitted from the chart but retained in canonical tables.</div></div>
+  <div class="table-wrap"><table class=""><thead><tr><th>Model</th><th>Datasets</th><th>Cells</th><th>abT controls</th><th>abT FP</th><th>abT FPR</th><th>Strict NK</th><th>NK FP</th><th>NK FPR</th></tr></thead><tbody><tr><td>V2 high-F1</td><td>8</td><td>758,135</td><td>338,046</td><td>1,237</td><td>0.37%</td><td>72,434</td><td>10,770</td><td>14.87%</td></tr><tr><td>V2 high-purity</td><td>8</td><td>758,135</td><td>338,046</td><td>912</td><td>0.27%</td><td>72,434</td><td>525</td><td>0.72%</td></tr><tr><td>V3 Round 12</td><td>8</td><td>758,135</td><td>338,046</td><td>767</td><td>0.23%</td><td>72,434</td><td>872</td><td>1.20%</td></tr><tr><td>V3 Round 14</td><td>8</td><td>758,135</td><td>338,046</td><td>962</td><td>0.28%</td><td>72,434</td><td>1,242</td><td>1.71%</td></tr></tbody></table></div>
+</section>
+
+<section class="page-break">
+  <h2>Issue register</h2>
+  <p>Findings are ordered by severity. “Confirmed” means the behavior is directly visible in code or retained artifacts; design risks are explicitly labeled as such.</p>
+  <div class="table-wrap"><table class="issue-table"><thead><tr><th>Severity</th><th>ID / stage</th><th>Finding</th><th>Consequence</th><th>Required action</th></tr></thead><tbody><tr><td><span class='severity critical'>Critical</span></td><td><strong>AUD-01</strong><br>V2 model selection</td><td>The combined cohort named validation was used to accept and select the V2 algorithm.</td><td>Reported V2 validation F1 is a selection estimate, not an untouched final-test estimate.</td><td>Re-estimate with nested grouped outer folds; reserve model choice and thresholding for inner folds.</td></tr><tr><td><span class='severity critical'>Critical</span></td><td><strong>AUD-02</strong><br>V3 promotion</td><td>The cohort called independent external was included in Round 12 versus Round 14 guardrails and mean-F1 promotion.</td><td>The cohort is no longer independent of model selection, so its metrics are optimistic for generalization claims.</td><td>Rename it a reused cross-study benchmark and stop using it for tuning or promotion.</td></tr><tr><td><span class='severity high'>High</span></td><td><strong>AUD-03</strong><br>Train/tune splitting</td><td>Within each source-label stratum, individual cells were shuffled into train and tune splits.</td><td>Donor, library, and clonotype-correlated expression can appear in both splits and inflate tuning performance.</td><td>Group by dataset then donor/library, and by clonotype where TCR clonotypes are available.</td></tr><tr><td><span class='severity high'>High</span></td><td><strong>AUD-04</strong><br>External ground truth</td><td>The external gdT label excludes paired productive gdT/no-abT cells using CD4 annotation or CD4 expression, while CD4 is a model feature; external negatives also include expression annotations.</td><td>Feature-label circularity can make the benchmark easier and hides performance on CD4-like TCR-confirmed gdT cells.</td><td>Use TCR-only labels for primary metrics and report CD4-like, NK-like, and low-CD3 cells as stress strata.</td></tr><tr><td><span class='severity high'>High</span></td><td><strong>AUD-05</strong><br>Validation composition</td><td>Large validation components are positive-only cord blood and negative-only GSE254249, linking class to cohort and biology.</td><td>A pooled cell-level metric partly measures source/platform separation and is dominated by artificial class composition.</td><td>Report within-dataset contrasts, dataset-macro metrics, and leave-one-dataset-out performance.</td></tr><tr><td><span class='severity high'>High</span></td><td><strong>AUD-06</strong><br>Adaptive iteration</td><td>Many candidate rounds, thresholds, gates, and post-hoc comparisons repeatedly inspected the same atlas, held-out, and external cohorts.</td><td>Repeated adaptive inspection creates selection overfitting even when model fitting never reads the external labels directly.</td><td>Pre-register a compact candidate grid and evaluation rule before the next run; keep all decisions inside nested resampling.</td></tr><tr><td><span class='severity high'>High</span></td><td><strong>AUD-07</strong><br>Deployment prevalence</td><td>Training/evaluation prevalence is higher and more controlled than deployment prevalence in many T/NK cohorts.</td><td>Precision can fall sharply at 0.1-1% prevalence despite specificity near 99.9%.</td><td>Publish PPV/FDR curves at realistic prevalence and select operating modes by explicit error costs.</td></tr><tr><td><span class='severity high'>High</span></td><td><strong>AUD-08</strong><br>Positive labels</td><td>All cells in sorted gdT datasets are treated as gold positives, including possible contaminants, doublets, and low-quality cells.</td><td>Label noise can reward source signatures and penalize biologically valid but weak-expression gdT cells.</td><td>Run source-exclusion sensitivity analyses and robust/noisy-label training; do not silently relabel by model features.</td></tr><tr><td><span class='severity high'>High</span></td><td><strong>AUD-09</strong><br>Feature design</td><td>Individual TCR V/J genes can encode donor repertoire, clonotype, tissue, and chemistry; stability was not established for the released V2/Round14 coefficients.</td><td>Good within-source discrimination may not transfer when repertoire or gene detection changes.</td><td>Compare family-level sums, detection indicators, and individual V/J genes using outer-fold stability selection and missing-panel stress tests.</td></tr><tr><td><span class='severity high'>High</span></td><td><strong>AUD-10</strong><br>Full-atlas FP estimation</td><td>Hidden abT false positives in non-TCR-sequenced sources are extrapolated from observed paired-abT errors in TCR-sequenced sources.</td><td>The estimate assumes exchangeability across studies and does not capture NK or other non-abT errors under domain shift.</td><td>Present this as a sensitivity range stratified by dataset/technology, not a single estimated FP fraction.</td></tr><tr><td><span class='severity high'>High</span></td><td><strong>AUD-11</strong><br>Domain-shift challenge</td><td>Frozen-model extension cohorts show materially higher and dataset-variable NK/abT false-positive rates than the reused external benchmark.</td><td>One pooled external specificity does not describe cross-study deployment risk.</td><td>Use dataset-level stress panels and macro/maximum FPR guardrails, while keeping sensitivity evaluation separate.</td></tr><tr><td><span class='severity high'>High</span></td><td><strong>AUD-13</strong><br>Full-atlas candidate selection</td><td>V3 candidate selection used full-atlas recall, F1, TRDC/TRDV composition, and estimated FP, even though the full atlas includes training cells.</td><td>The atlas-wide performance and composition targets are development criteria, not independent evidence of generalization.</td><td>Move every selection criterion into nested outer-fold out-of-fold predictions and treat full-atlas application as post-selection inference only.</td></tr><tr><td><span class='severity high'>High</span></td><td><strong>AUD-14</strong><br>Release provenance</td><td>The Round 14 manifest says promoted, its pickle embeds accepted_for_promotion=False and candidate versioning, the completed-run summary selects Round 12, and training-negative counts disagree with methodology.</td><td>The artifact checksum is sound, but the promoted build cannot be reconstructed from one internally coherent run record.</td><td>Create one immutable release bundle and semantic-consistency test spanning pickle fields, manifest, registry, run summary, command, data hashes, and composition.</td></tr><tr><td><span class='severity high'>High</span></td><td><strong>AUD-15</strong><br>Extension holdout governance</td><td>The extension config names sealed holdouts, but screen-manifest loading forces sealed_holdout=False; minimum model-gene completeness is also configured as zero.</td><td>Screened cohorts are no longer prospective holdouts, and incomplete gene panels can produce misleadingly confident calls.</td><td>Relabel screened cohorts as development stress sets; enforce a gene-completeness floor and abstain when critical genes or sufficient model coverage are absent.</td></tr><tr><td><span class='severity moderate'>Moderate</span></td><td><strong>AUD-12</strong><br>Reproducibility governance</td><td>Model checksums are registered, but frozen manifests do not fully pin input H5AD hashes, split cell IDs, Git commit, package lock, and fold-specific feature selection.</td><td>The artifact is verifiable, but exact training reconstruction and leakage auditing are incomplete.</td><td>Add immutable run manifests with data hashes, environment lock, split IDs, fold definitions, seed, commit, and output checksums.</td></tr><tr><td><span class='severity moderate'>Moderate</span></td><td><strong>AUD-16</strong><br>Statistical uncertainty</td><td>Canonical comparisons emphasize pooled cell metrics and cell-level paired tests without donor/dataset-cluster confidence intervals.</td><td>Large cell counts overstate effective sample size; model ranking may change across donors or datasets.</td><td>Report donor- and dataset-macro metrics with clustered bootstrap confidence intervals and worst-dataset guardrails.</td></tr><tr><td><span class='severity moderate'>Moderate</span></td><td><strong>AUD-17</strong><br>Calibration</td><td>Round 14 is a gated probability-like score rather than a calibrated probability, while its threshold was chosen under enriched development prevalence.</td><td>A score of 0.936 cannot be interpreted as a 93.6% probability, and fixed thresholds may not transfer across prevalence or chemistry.</td><td>Cross-fit calibration inside grouped folds and publish prevalence-specific PPV/FDR plus an abstention state.</td></tr></tbody></table></div>
+  <p class="small print-omit">Full evidence paths, certainty labels, and recommended actions are in <code>issue_register.csv</code>.</p>
+</section>
+
+<section class="page-break">
+  <h2>What can be done without essentially more data</h2>
+  <p>The existing data are sufficient for a much more honest and informative evaluation. The constraint is not sample count alone; it is how independent units, labels, feature selection, and adaptive decisions are handled.</p>
+  <div class="table-wrap"><table><thead><tr><th>Priority</th><th>Action</th><th>Implementation</th><th>Why it matters</th></tr></thead><tbody><tr><td><span class='priority'>P0</span></td><td><strong>Correct claims and freeze comparators</strong></td><td>Treat V2, Round 12, and Round 14 as legacy comparators. Rename BALF_BLOOD_COPD a reused cross-study benchmark.</td><td>Documentation-only; prevents unsupported independent-validation claims.</td></tr><tr><td><span class='priority'>P0</span></td><td><strong>Lock the analysis specification</strong></td><td>Before rerunning, freeze labels, outer/inner groups, candidate families, feature sets, metrics, guardrails, and promotion rule in a committed config.</td><td>Stops further adaptive evaluation leakage.</td></tr><tr><td><span class='priority'>P0</span></td><td><strong>Rebuild expression-independent labels</strong></td><td>Use paired productive gd/no productive ab as positives and paired/single productive ab/no gd as separately reported negatives. Keep transcriptomic flags only as stress strata.</td><td>Removes CD4/NK feature-label circularity.</td></tr><tr><td><span class='priority'>P1</span></td><td><strong>Nested leave-one-dataset-out evaluation</strong></td><td>Outer folds hold out complete datasets. Inner folds group donor/library and clonotype when available; preprocessing, feature selection, calibration, and thresholds occur inside inner training only.</td><td>Best available honest generalization estimate without new data.</td></tr><tr><td><span class='priority'>P1</span></td><td><strong>Dataset-balanced learning</strong></td><td>Cap or weight each dataset and class so HRA005041 does not dominate. Compare matched within-dataset positives and negatives wherever possible.</td><td>Reduces source and prevalence confounding.</td></tr><tr><td><span class='priority'>P1</span></td><td><strong>Feature-family ablation and stability</strong></td><td>Compare regularized logistic models using family sums/detection, individual V/J genes, transcriptome lineage features, and combinations. Retain features stable across outer folds.</td><td>Tests whether repertoire-specific V/J signals are portable.</td></tr><tr><td><span class='priority'>P1</span></td><td><strong>Soft two-stage T-lineage model</strong></td><td>Generate an out-of-fold high-sensitivity T-lineage probability, then combine it with the gd-versus-ab score. Do not hard-exclude NK-marker-high or TRDV-dropout cells.</td><td>Addresses NK FPs while preserving cytotoxic and dropout-prone gdT cells.</td></tr><tr><td><span class='priority'>P1</span></td><td><strong>Prevalence-aware calibration and abstention</strong></td><td>Calibrate only within inner folds; publish PPV/FDR at 0.1%, 0.25%, 0.5%, 1%, 2%, and 5% prevalence; abstain when critical genes or sufficient panel coverage are missing.</td><td>Makes operating modes interpretable in rare-cell deployment and prevents confident calls from incomplete panels.</td></tr><tr><td><span class='priority'>P1</span></td><td><strong>Failure and robustness panel</strong></td><td>Report strict NK, NKT/MAIT, CD8, CD4/Treg, low-CD3, TRDC+TRDV-, doublet/QC proxies, missing genes, 3-prime versus 5-prime, tissue, disease, and source strata.</td><td>Surfaces clinically relevant failure modes hidden by pooled metrics.</td></tr><tr><td><span class='priority'>P2</span></td><td><strong>Uncertainty and model simplification</strong></td><td>Use dataset bootstrap confidence intervals and compare the simplest elastic-net/logistic model against gates and trees. Promote complexity only for consistent macro-fold gains.</td><td>Controls variance and supports portable deployment.</td></tr><tr><td><span class='priority'>P2</span></td><td><strong>Leakage diagnostics</strong></td><td>Run label permutation within dataset/donor and predict source from candidate features. Large residual performance or source predictability indicates confounding.</td><td>Directly tests source leakage using current data.</td></tr><tr><td><span class='priority'>P2</span></td><td><strong>Immutable semantic release check</strong></td><td>Require pickle fields, registry, manifest, run summary, training composition, command, Git commit, environment, and input hashes to agree before promotion.</td><td>Makes the selected build exactly reconstructable and catches stale mixed-run metadata.</td></tr></tbody></table></div>
+  <h3>Proposed promotion rule for the next iteration</h3>
+  <ul>
+    <li>Primary objective: maximize dataset-macro F1 across outer folds, not pooled cell F1.</li>
+    <li>Safety guardrails: report median and worst-dataset strict NK FPR, paired-abT FPR, and recall in every positive source.</li>
+    <li>Reject a more complex model unless its outer-fold improvement is consistent and confidence intervals exclude a practically negligible gain.</li>
+    <li>Freeze two operating points from out-of-fold predictions: highest F1 and high purity under a prespecified FPR/FDR target.</li>
+    <li>After model choice, fit once on all eligible data. Do not present an internal resampling result as a new independent external validation.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Coefficient and feature assessment</h2>
+  <p>The V2 release uses <code>StandardScaler</code> followed by class-balanced logistic regression. Its standardized coefficients range from -1.776 to 1.202; the maximum absolute value is 1.776. That magnitude is not, by itself, evidence of instability. The stronger overfitting concerns are split leakage, source confounding, repeated model selection, and unmeasured feature stability across held-out datasets.</p>
+  <div class="table-wrap"><table class=""><thead><tr><th>Feature</th><th>Standardized coefficient</th><th>Absolute value</th></tr></thead><tbody><tr><td>TRAV8-4_log1p_cp10k</td><td>-1.776</td><td>1.776</td></tr><tr><td>TRBV12-3_log1p_cp10k</td><td>-1.641</td><td>1.641</td></tr><tr><td>TRAV5_log1p_cp10k</td><td>-1.486</td><td>1.486</td></tr><tr><td>TRAV1-1_log1p_cp10k</td><td>-1.432</td><td>1.432</td></tr><tr><td>TRAV16_log1p_cp10k</td><td>-1.411</td><td>1.411</td></tr><tr><td>TRAV6_log1p_cp10k</td><td>-1.394</td><td>1.394</td></tr><tr><td>TRAV23DV6_log1p_cp10k</td><td>-1.278</td><td>1.278</td></tr><tr><td>TRBV24-1_log1p_cp10k</td><td>-1.231</td><td>1.231</td></tr><tr><td>TRBC2_log1p_cp10k</td><td>0.263</td><td>0.263</td></tr><tr><td>TRGV4_log1p_cp10k</td><td>0.281</td><td>0.281</td></tr><tr><td>TRBC1_log1p_cp10k</td><td>0.363</td><td>0.363</td></tr><tr><td>TRDC_log1p_cp10k</td><td>0.446</td><td>0.446</td></tr><tr><td>TRGV9_log1p_cp10k</td><td>0.506</td><td>0.506</td></tr><tr><td>TRDV3_log1p_cp10k</td><td>0.551</td><td>0.551</td></tr><tr><td>TRDV2_log1p_cp10k</td><td>0.803</td><td>0.803</td></tr><tr><td>TRDV1_log1p_cp10k</td><td>1.202</td><td>1.202</td></tr></tbody></table></div>
+  <p class="small">Positive TRBC/TRAC coefficients and large individual V/J effects should be treated as prompts for outer-fold stability analysis, not as biological conclusions.</p>
+</section>
+
+<section>
+  <h2>Reproducibility and scope</h2>
+  <p>All registered model artifacts passed SHA256 verification during this audit.</p>
+  <div class="table-wrap"><table><thead><tr><th>Model</th><th>Status</th><th>Bytes</th><th>SHA256 prefix</th><th>Check</th></tr></thead><tbody><tr><td>gdtai_v2</td><td>reference_release</td><td>16,002</td><td><code>c7f6e7d1d1c0c8de...</code></td><td>PASS</td></tr><tr><td>gdtai_v3</td><td>promoted_default</td><td>15,532</td><td><code>16dedc0081da9b84...</code></td><td>PASS</td></tr><tr><td>gdtai_v3_round12</td><td>validated_high_purity_fallback</td><td>808,096</td><td><code>7373e79350f7db19...</code></td><td>PASS</td></tr><tr><td>gdtai_v4</td><td>experimental_not_promoted</td><td>2,200,399</td><td><code>f7e26ae41c95d3d9...</code></td><td>PASS</td></tr></tbody></table></div>
+  <h3>V3 semantic provenance mismatch</h3>
+  <ul>
+    <li>Manifest model/status: <code>v3_round14_v2_score_trdc_gate_fixed_0p936</code> / <code>promoted_default</code>.</li>
+    <li>Embedded pickle model/version/acceptance: <code>v3_round14_v2_score_trdc_gate_fixed_0p936</code> / <code>gdTAI_v3_candidate</code> / <code>False</code>.</li>
+    <li>Completed-run summary selected <code>v3_round12_hist_gradient_fixed_0p5</code>, while the canonical path now contains Round 14.</li>
+    <li>Recorded training negatives: 480,000; methodology statement: 100,000.</li>
+  </ul>
+  <p><strong>Still missing for exact reconstruction:</strong> immutable input-data hashes, exact split cell IDs, grouped fold assignments, the Git commit for every historical run, a package/environment lock, and fold-local feature-selection records.</p>
+  <p><strong>Audit limitation:</strong> no unused cohort remains after repeated iteration. The corrected TCR-only analysis improves label independence but does not restore test independence. Nested grouped evaluation is therefore the strongest defensible next estimate available without new data.</p>
+</section>
+
+<footer>Canonical tables: Integrated_dataset/tables/gdT_prediction/gdtai_methodology_audit/ &nbsp;|&nbsp; Canonical figures: Integrated_dataset/figures/gdT_prediction/gdtai_methodology_audit/ &nbsp;|&nbsp; Summary: Integrated_dataset/logs/gdT_prediction/gdtai_methodology_audit/</footer>
+</main></body></html>

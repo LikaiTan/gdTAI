@@ -33,7 +33,9 @@ Current registry state:
 - 1,212 file rows
 - 264 lifecycle compatibility links
 
-`BALF_BLOOD_COPD` is an independent external validation cohort. Its
+`BALF_BLOOD_COPD` is a reused cross-study gdTAI benchmark. It was originally
+registered as an independent external validation cohort, but its metrics later
+influenced Round 12 versus Round 14 promotion, exhausting that independence. Its
 approximately 949 GB raw/interim workspace remains
 physically under `/home/tanlikai/databank/owndata/singlecell`. The project raw
 entry is a compatibility view of that workspace, while only the selected

@@ -64,14 +64,21 @@
 - migration plans and checksum maps: `maintenance/reorganization/`
 - physical storage migration evidence:
   `data/registry/migrations/dataset_centered_20260716/`
-- independent-validation intake evidence:
+- BALF_BLOOD_COPD benchmark-intake evidence:
   `data/registry/migrations/balf_blood_copd_20260716/`
-- independent-validation H5AD-only storage evidence:
+- BALF_BLOOD_COPD H5AD-only storage evidence:
   `data/registry/migrations/balf_blood_copd_h5ad_only_20260716/`
 - reproducibility and rollback guides: `docs/`
 
 ## Current review packages
 
+- independent gdTAI training and evaluation audit:
+  - `docs/GDTAI_METHODOLOGY_AUDIT.md`
+  - `gdT_prediction/gdtai_methodology_audit/index.html`
+  - `gdT_prediction/gdtai_methodology_audit/gdtai_methodology_audit_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_methodology_audit/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_methodology_audit/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_methodology_audit/`
 - gdTAI external methodological review:
   - `Integrated_dataset/logs/gdT_prediction/external_review/gdtai_external_review_report.md`
   - `gdT_prediction/external_review/gdtai_external_review_report.html`
@@ -138,7 +145,7 @@
   - `Integrated_dataset/figures/GDT_2020AUG_woCOV_phase4/`
   - `Integrated_dataset/figures/GDTlung2023july_7p_phase4/`
   - `Integrated_dataset/figures/MalteGDT_phase4/`
-- `BALF_BLOOD_COPD` independent validation cohort:
+- `BALF_BLOOD_COPD` reused cross-study benchmark:
   - `data/datasets/BALF_BLOOD_COPD/processed/current.h5ad`
   - `data/datasets/BALF_BLOOD_COPD/processed/artifacts/phase4_final_annotated.h5ad`
   - `docs/BALF_BLOOD_COPD_INTAKE.md`

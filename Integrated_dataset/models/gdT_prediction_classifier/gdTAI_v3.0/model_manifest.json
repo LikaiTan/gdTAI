@@ -5,6 +5,9 @@
   "model_size_bytes": 15532,
   "version": "gdTAI_v3.0",
   "status": "promoted_default",
+  "payload_embedded_version": "gdTAI_v3_candidate",
+  "payload_embedded_accepted_for_promotion": false,
+  "historical_run_record_note": "The retained original V3 run summary selected Round 12 and the Round 14 payload embeds candidate acceptance=false. Promotion was applied later by the checksum-pinned Round 12 versus Round 14 comparison; exact reconstruction requires the comparison bundle plus the original run bundle.",
   "operating_profile": "balanced",
   "threshold": 0.936,
   "accepted_for_promotion": true,
@@ -14,6 +17,8 @@
   "comparison_workflow": "workflows/gdtai/compare_gdtai_v3_round12_vs_round14.py",
   "external_validation_dataset_id": "BALF_BLOOD_COPD",
   "external_validation_h5ad": "data/datasets/BALF_BLOOD_COPD/processed/current.h5ad",
+  "external_evaluation_status": "reused_cross_study_benchmark_not_independent",
+  "external_evaluation_reuse_note": "BALF_BLOOD_COPD was used in Round 12 versus Round 14 promotion guardrails and mean-F1 selection; its metrics are selection estimates rather than an untouched external test.",
   "requires_counts_layer_for_external_h5ad": true,
   "normalization": "log1p(counts per 10000)",
   "n_gene_features": 210,
@@ -51,5 +56,5 @@
     "artifact_path": "Integrated_dataset/models/gdT_prediction_classifier/gdtai_v3_round12_vs_round14/round12_model.pkl",
     "sha256": "7373e79350f7db190c415b376b9763e31652754438ee8c5afd3853beb7b2ebc4"
   },
-  "caveat": "The balanced Round 14 default has higher NK and paired-TCRAB call burdens than the Round 12 high-purity fallback; report these sensitivity checks on new datasets."
+  "caveat": "The balanced Round 14 default has higher NK and paired-TCRAB call burdens than the Round 12 high-purity fallback. BALF_BLOOD_COPD was reused for promotion and is not an independent test; report dataset-level sensitivity checks on new datasets."
 }

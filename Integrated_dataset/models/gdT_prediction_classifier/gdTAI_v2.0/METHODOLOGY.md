@@ -319,6 +319,12 @@ The selected frozen base model was:
 logistic_individual_TCRABGD_genes
 ```
 
+Audit clarification (2026-08-06): candidate acceptance and final algorithm
+selection used the combined cohort named `validation` (strict validation F1,
+then precision and recall). The metrics below are therefore model-selection
+estimates, not performance from an untouched final test set. Threshold selection
+remained confined to the tune split.
+
 Strict validation performance for the selected base model:
 
 | metric | value |
@@ -552,4 +558,3 @@ Primary reports:
 
 - `gdT_prediction/gse144469_holdout_tcrgene_report.html`
 - `gdT_prediction/gdtai_annotation_specific_cascade_report.html`
-

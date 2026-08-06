@@ -153,6 +153,25 @@
   - emailed the reconciliation report, audit log, and evidence table to Likai
   - left additive correction, merge, and integration blocked for explicit
     review
+- independent gdTAI training and evaluation audit completed on 2026-08-06
+  - a separately instantiated read-only reviewer and main-agent provenance
+    inventory independently confirmed that V2 validation and BALF_BLOOD_COPD
+    results were used for model selection
+  - reclassified BALF_BLOOD_COPD as a reused cross-study benchmark rather than
+    an untouched independent external test
+  - recomputed expression-independent TCR-only metrics on 1,046 paired
+    productive gdT/no-abT positives and 33,117 strict paired abT/no-gdT
+    negatives; Round 12 and Round 14 F1 were effectively tied at `0.8929` and
+    `0.8922`
+  - verified every registered model SHA-256 and documented a separate V3
+    semantic provenance mismatch across pickle, manifest, completed-run
+    summary, and training composition
+  - published a 17-item issue register, prevalence scenarios, extension
+    negative-control synthesis, and a precommitted nested grouped-evaluation
+    program without opening or modifying an H5AD
+  - corrected V2/V3 methodology and registry wording; retained Round 14 as the
+    current promoted artifact pending a separately approved reevaluation
+  - emailed the summary and comprehensive PDF audit report to Likai
 
 ## Current working era
 

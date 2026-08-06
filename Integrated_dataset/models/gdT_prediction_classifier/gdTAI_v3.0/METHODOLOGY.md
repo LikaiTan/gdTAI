@@ -2,15 +2,18 @@
 
 ## Objective
 
-The objective was to move `GSE144469` into training/tuning, retain non-GSE144469 validation sets, evaluate an independent external H5AD only after fitting, and apply candidate models to the full 5.13M-cell atlas. The practical target was full-atlas primary-gold recall above `0.8` with estimated abT false positives below `5%` of predictions.
+The objective was to move `GSE144469` into training/tuning, retain non-GSE144469 validation sets, evaluate a cross-study H5AD after fitting, and apply candidate models to the full 5.13M-cell atlas. The practical target was full-atlas primary-gold recall above `0.8` with estimated abT false positives below `5%` of predictions.
 
 ## Input Data Policy
 
 - The atlas training input was `high_speed_temp/Integrated_dataset/integrated_plus6.h5ad`.
-- The independent external test dataset is registered as `BALF_BLOOD_COPD`.
+- The cross-study benchmark dataset is registered as `BALF_BLOOD_COPD`.
 - Its canonical input is `data/datasets/BALF_BLOOD_COPD/processed/current.h5ad`.
 - The historical path `/home/tanlikai/databank/owndata/singlecell/data/results/phase4_final_annotated.h5ad` remains a compatibility alias to the same file.
-- The external H5AD was never used for fitting, threshold tuning, feature selection, or full-atlas candidate selection.
+- The external H5AD was not used to fit model coefficients. It was, however,
+  repeatedly evaluated and then used in Round 12 versus Round 14 promotion
+  guardrails and mean-F1 selection. It is therefore a reused cross-study
+  benchmark, not an untouched independent external test.
 - External inference requires `layers["counts"]`; the pipeline refuses normalized/log `X` for external use.
 
 ## Labels And Splits
@@ -98,7 +101,7 @@ Full atlas primary-gold metrics:
 - precision: `0.9752`
 - F1: `0.8823`
 
-Independent external primary metrics:
+Reused cross-study benchmark primary metrics:
 
 - predicted: `856`
 - TP / FP / FN: `814` / `42` / `134`
@@ -111,8 +114,10 @@ Independent external primary metrics:
 
 Both model artifacts were pinned by SHA256 and compared on identical cohorts.
 Round 14 was selected on 2026-07-15 because it was the only model to pass all
-four prespecified guardrails, including full-atlas gold recall >= 0.80, while
-remaining below the atlas, external, and GSE254249 false-positive limits.
+four guardrails, including full-atlas gold recall >= 0.80, while remaining
+below the atlas, cross-study benchmark, and GSE254249 false-positive limits.
+Because those benchmark results influenced promotion, they cannot be used as an
+independent estimate of Round 14 generalization.
 
 - mean F1 across the three evaluation frames: `0.8997`
 - comparison report: `gdT_prediction/gdtai_v3_round12_vs_round14/index.html`

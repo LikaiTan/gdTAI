@@ -2,7 +2,10 @@
 
 ## Scope
 
-`BALF_BLOOD_COPD` is the independent local validation cohort used by gdTAI.
+`BALF_BLOOD_COPD` is the local cross-study benchmark used by gdTAI. It was
+originally designated an independent validation cohort, but its metrics later
+influenced Round 12 versus Round 14 promotion. It must therefore not be cited
+as an untouched independent external test.
 It contains four 10x 5' libraries from paired BALF and PBMC samples:
 
 - `LIB1`, `LIB2`: BALF
