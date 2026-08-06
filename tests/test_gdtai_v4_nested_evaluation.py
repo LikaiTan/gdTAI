@@ -101,6 +101,32 @@ class GdtaiV4NestedEvaluationTests(unittest.TestCase):
         self.assertEqual(treg.tolist(), [False, False, True])
         self.assertEqual(union.tolist(), [True, False, True])
 
+    def test_preflight_exclusion_scope_is_reproduced_before_all_cell_application(self) -> None:
+        x = np.zeros((2, len(self.features)), dtype=np.float32)
+        lookup = {gene: index for index, gene in enumerate(self.features)}
+        for row in (0, 1):
+            for gene in ["CD4", "IL7R", "CCR7"]:
+                x[row, lookup[gene]] = 1.2
+        cells = pd.DataFrame(
+            {
+                "stage1_role": ["t_positive", "t_positive"],
+                "truth_class": ["gdT_primary", "abT_primary"],
+                "cd4_helper_exclusion": [True, False],
+                "treg_exclusion": [False, False],
+                "exclusion_union": [True, False],
+            }
+        )
+        audit = RUNNER.apply_frozen_exclusions(cells, x, self.features, self.config)
+        self.assertTrue(audit["preflight_scope_reproduction_pass"])
+        self.assertEqual(audit["preflight_scope_cells"], 1)
+        self.assertEqual(cells["cd4_helper_exclusion"].tolist(), [True, True])
+        self.assertEqual(cells["exclusion_union"].tolist(), [True, True])
+
+        cells.loc[0, "cd4_helper_exclusion"] = False
+        cells.loc[0, "exclusion_union"] = False
+        with self.assertRaises(RuntimeError):
+            RUNNER.apply_frozen_exclusions(cells, x, self.features, self.config)
+
     def test_balanced_weights_include_reliability_and_normalize(self) -> None:
         y = np.array([1, 1, 0, 0, 0, 1, 0], dtype=np.int8)
         source = np.array(["A", "A", "A", "A", "A", "B", "B"], dtype=object)

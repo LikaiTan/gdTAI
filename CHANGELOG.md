@@ -227,8 +227,11 @@
     filtering, weighting, calibration, frozen threshold guardrails, fair
     comparators, hierarchical bootstrap, feature-stability checks, extension
     negative controls, and print-safe HTML/PDF reporting
-  - passed 16 deterministic synthetic unit/integration tests, including a full
+  - passed 17 deterministic synthetic unit/integration tests, including a full
     outer fold through every candidate model path
+  - corrected the cache exclusion audit to reproduce the exact Step 1 scope
+    before applying the unchanged frozen CD4/Treg rules to all evaluation rows;
+    the initial cache attempt stopped at this audit before any fitting
   - this is an implementation checkpoint only; no project-data model had been
     fitted and no V4 model had been promoted at this checkpoint
 

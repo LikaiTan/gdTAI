@@ -394,6 +394,47 @@ def extract_csr_rows(
     return output
 
 
+def apply_frozen_exclusions(
+    cells: pd.DataFrame,
+    gene_matrix: np.ndarray,
+    feature_names: Sequence[str],
+    config: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Reproduce the preflight scope, then apply frozen exclusions to all rows."""
+    cd4, treg, union = exclusion_flags(
+        gene_matrix,
+        feature_names,
+        config["cd4_helper_rule"],
+        config["treg_rule"],
+    )
+    preflight_scope = (
+        cells["stage1_role"].eq("nk_negative")
+        | cells["truth_class"].isin(
+            ["gdT_primary", "gdT_silver", "sorted_gdT_weak", "sorted_sensitivity"]
+        )
+    ).to_numpy(dtype=bool)
+    comparisons = (
+        ("cd4_helper_exclusion", cd4),
+        ("treg_exclusion", treg),
+        ("exclusion_union", union),
+    )
+    for column, recomputed in comparisons:
+        frozen = cells[column].to_numpy(dtype=bool)
+        if not np.array_equal(recomputed[preflight_scope], frozen[preflight_scope]):
+            mismatch = int((recomputed[preflight_scope] != frozen[preflight_scope]).sum())
+            raise RuntimeError(
+                f"Recomputed {column} disagrees with the frozen preflight scope for {mismatch} cells"
+            )
+        cells[column] = recomputed
+    return {
+        "preflight_scope_cells": int(preflight_scope.sum()),
+        "preflight_scope_reproduction_pass": True,
+        "all_cell_cd4_helper_excluded": int(cd4.sum()),
+        "all_cell_treg_excluded": int(treg.sum()),
+        "all_cell_union_excluded": int(union.sum()),
+    }
+
+
 def extract_feature_cache(config: Mapping[str, Any], row_chunk: int, force: bool) -> dict[str, Any]:
     cache_dir = resolve(config["outputs"]["cache_dir"])
     cache_dir.mkdir(parents=True, exist_ok=True)
@@ -487,18 +528,7 @@ def extract_feature_cache(config: Mapping[str, Any], row_chunk: int, force: bool
     legacy_score_path = cache_dir / "legacy_trd_minus_trab.npy"
     legacy_score = extract_legacy_score(cells, config)
     np.save(legacy_score_path, legacy_score, allow_pickle=False)
-    cd4, treg, union = exclusion_flags(
-        gene_matrix,
-        feature_names,
-        config["cd4_helper_rule"],
-        config["treg_rule"],
-    )
-    if not np.array_equal(cd4, cells["cd4_helper_exclusion"].to_numpy(dtype=bool)):
-        raise RuntimeError("Recomputed CD4 exclusion disagrees with the frozen manifest")
-    if not np.array_equal(treg, cells["treg_exclusion"].to_numpy(dtype=bool)):
-        raise RuntimeError("Recomputed Treg exclusion disagrees with the frozen manifest")
-    if not np.array_equal(union, cells["exclusion_union"].to_numpy(dtype=bool)):
-        raise RuntimeError("Recomputed exclusion union disagrees with the frozen manifest")
+    exclusion_audit = apply_frozen_exclusions(cells, gene_matrix, feature_names, config)
     extraction_table = resolve(config["outputs"]["table_dir"]) / "feature_cache_inputs.csv"
     extraction_table.parent.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(extraction_rows).to_csv(extraction_table, index=False)
@@ -519,7 +549,7 @@ def extract_feature_cache(config: Mapping[str, Any], row_chunk: int, force: bool
         "legacy_score_primary_finite": bool(
             np.isfinite(legacy_score[cells["truth_class"].isin(["gdT_primary", "abT_primary"]).to_numpy(dtype=bool)]).all()
         ),
-        "exclusion_reproduction_pass": True,
+        "exclusion_audit": exclusion_audit,
     }
     write_json(summary, summary_path)
     return summary
@@ -2290,6 +2320,9 @@ def run_nested_evaluation(config: Mapping[str, Any], heldout_filter: Sequence[st
     legacy_score = np.load(cache_summary["legacy_score_path"], mmap_mode="r")
     if gene_matrix.shape != (cells.shape[0], len(feature_names)):
         raise RuntimeError("Cached gene matrix dimensions changed")
+    exclusion_audit = apply_frozen_exclusions(cells, gene_matrix, feature_names, config)
+    if exclusion_audit != cache_summary.get("exclusion_audit"):
+        raise RuntimeError("Full-cell exclusion audit changed after cache construction")
     sources = config_primary_sources(config)
     if heldout_filter:
         unknown = sorted(set(heldout_filter) - set(sources))
