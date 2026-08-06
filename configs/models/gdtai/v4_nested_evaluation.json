@@ -1,0 +1,214 @@
+{
+  "protocol_version": "1.2",
+  "random_seed": 20260807,
+  "preflight": {
+    "summary": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_preflight/preflight_summary.json",
+    "cell_manifest": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_preflight/cell_label_manifest.csv.gz",
+    "cell_manifest_sha256": "8157cbebfedeb84fc34eba05429aa8a7a834c6f7ceba15bd4790b5dd06bf7e0c",
+    "split_manifest": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_preflight/inner_group_split_manifest.csv.gz",
+    "split_manifest_sha256": "c84da2ca999676bab0ed180ae3d380e1e7d5b2e08da886ae2f6f912f9e0080a7",
+    "feature_manifest": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_preflight/feature_manifest.csv",
+    "feature_manifest_sha256": "7fc2b0afb2b761288f941895a219fb38cc541a49464c8d2b330b81719e087808",
+    "input_manifest": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_preflight/input_manifest.csv",
+    "cd4_treg_rule_sha256": "518726721c04ce5bfbfd8c0d04bd5289cc4f390d6166c3d644144c921f7ac67b"
+  },
+  "step2_approval_file": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_nested_evaluation/STEP2_APPROVAL.json",
+  "outputs": {
+    "cache_dir": "Integrated_dataset/cache/gdT_prediction/gdtai_v4_nested_evaluation",
+    "table_dir": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_nested_evaluation",
+    "figure_dir": "Integrated_dataset/figures/gdT_prediction/gdtai_v4_nested_evaluation",
+    "log_dir": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_nested_evaluation",
+    "static_dir": "gdT_prediction/gdtai_v4_nested_evaluation"
+  },
+  "normalization": {
+    "target_sum": 10000.0,
+    "raw_state": "raw_counts",
+    "registered_transformed_input": "hra005041",
+    "registered_transformed_state": "log1p_cp10k_registered"
+  },
+  "feature_policy": {
+    "expected_gene_count": 197,
+    "minimum_detection_fraction": 0.0005,
+    "maximum_retained_genes": 220,
+    "minimum_inference_coverage": 0.9,
+    "critical_genes": [
+      "CD3D",
+      "CD3E",
+      "TRAC",
+      "TRBC1",
+      "TRBC2",
+      "TRDC",
+      "TRDV1",
+      "TRDV2",
+      "TRDV3"
+    ],
+    "stage1_genes": [
+      "BCL11B",
+      "CCL5",
+      "CCR7",
+      "CD2",
+      "CD247",
+      "CD3D",
+      "CD3E",
+      "CD3G",
+      "CD4",
+      "CD5",
+      "CD6",
+      "CD8A",
+      "CD8B",
+      "CTLA4",
+      "CTSW",
+      "EOMES",
+      "FCER1G",
+      "FCGR3A",
+      "FOXP3",
+      "GNLY",
+      "GZMB",
+      "IKZF2",
+      "IL2RA",
+      "IL7R",
+      "KLRB1",
+      "KLRC1",
+      "KLRD1",
+      "KLRF1",
+      "LAT",
+      "LCK",
+      "LEF1",
+      "LTB",
+      "MAL",
+      "NKG7",
+      "PRF1",
+      "RUNX3",
+      "SELL",
+      "TBX21",
+      "TCF7",
+      "THEMIS",
+      "TIGIT",
+      "TRAT1",
+      "TYROBP",
+      "ZNF683",
+      "TRAC",
+      "TRBC1",
+      "TRBC2",
+      "TRDC",
+      "TRGC1",
+      "TRGC2"
+    ],
+    "derived_panels": {
+      "T_lineage_mean": [
+        "CD3D",
+        "CD3E",
+        "CD3G",
+        "CD247",
+        "CD2",
+        "LCK",
+        "LAT",
+        "TRAT1",
+        "CD5",
+        "CD6",
+        "THEMIS",
+        "BCL11B",
+        "TCF7",
+        "LEF1"
+      ],
+      "NK_context_mean": [
+        "NKG7",
+        "GNLY",
+        "KLRD1",
+        "TYROBP",
+        "FCER1G",
+        "FCGR3A",
+        "KLRC1",
+        "KLRF1",
+        "PRF1",
+        "GZMB",
+        "CTSW",
+        "CCL5",
+        "EOMES",
+        "TBX21"
+      ],
+      "CD4_helper_mean": ["CD4", "IL7R", "CCR7", "SELL", "LTB", "MAL"],
+      "Treg_mean": ["FOXP3", "IL2RA", "CTLA4", "TIGIT"]
+    },
+    "family_prefixes": {
+      "TRA_detected": ["TRAV", "TRAJ", "TRAC"],
+      "TRB_detected": ["TRBV", "TRBJ", "TRBC"],
+      "TRG_detected": ["TRGV", "TRGJ", "TRGC"],
+      "TRD_detected": ["TRDV", "TRDD", "TRDJ", "TRDC"]
+    }
+  },
+  "models": {
+    "stage1_elastic_net": {
+      "C": [0.03, 0.1, 0.3, 1.0],
+      "l1_ratio": [0.0, 0.25, 0.5, 0.75],
+      "max_iter": 5000,
+      "tolerance": 0.0001
+    },
+    "stage2_elastic_net": {
+      "C": [0.01, 0.03, 0.1, 0.3, 1.0],
+      "l1_ratio": [0.0, 0.25, 0.5, 0.75, 1.0],
+      "max_iter": 5000,
+      "tolerance": 0.0001
+    },
+    "stage2_hist_gradient_boosting": {
+      "learning_rate": [0.03, 0.07],
+      "max_leaf_nodes": [7, 15],
+      "min_samples_leaf": [100, 500],
+      "l2_regularization": [1.0, 10.0],
+      "max_iter": 250,
+      "early_stopping": false
+    },
+    "compact_logistic_genes": [
+      "TRDC",
+      "TRDV1",
+      "TRDV2",
+      "TRDV3",
+      "TRAC",
+      "TRBC1",
+      "TRBC2"
+    ]
+  },
+  "stage1_guardrails": {
+    "gdt_recall_per_source": 0.99,
+    "abt_recall_per_source": 0.98
+  },
+  "operating_modes": {
+    "balanced": {
+      "objective": "f1",
+      "minimum_macro_recall": 0.8,
+      "maximum_paired_abt_fpr": 0.002,
+      "maximum_strict_nk_fpr": 0.01
+    },
+    "high_purity": {
+      "objective": "f0_5",
+      "minimum_macro_recall": 0.7,
+      "maximum_paired_abt_fpr": 0.001,
+      "maximum_strict_nk_fpr": 0.005
+    }
+  },
+  "cd4_helper_rule": {
+    "marker": "CD4",
+    "marker_min": 0.0,
+    "support_genes": ["IL7R", "CCR7", "SELL", "LTB", "MAL"],
+    "support_detected_min": 2,
+    "program_genes": ["CD4", "IL7R", "CCR7", "SELL", "LTB", "MAL"],
+    "program_mean_min": 0.5
+  },
+  "treg_rule": {
+    "marker": "FOXP3",
+    "marker_min": 0.0,
+    "support_genes": ["IL2RA", "CTLA4", "TIGIT"],
+    "support_detected_min": 1,
+    "program_genes": ["FOXP3", "IL2RA", "CTLA4", "TIGIT"],
+    "program_mean_min": 0.5
+  },
+  "bootstrap_replicates": 2000,
+  "feature_stability": {
+    "top_k": 30,
+    "minimum_stable_fraction": 0.7,
+    "maximum_single_dataset_share": 0.5,
+    "permutation_max_cells": 20000,
+    "permutation_repeats": 3
+  },
+  "prevalence_grid": [0.001, 0.005, 0.01, 0.02, 0.05]
+}

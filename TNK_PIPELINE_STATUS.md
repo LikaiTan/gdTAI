@@ -3,15 +3,17 @@
 ## Current milestone
 
 - gdTAI V4 protocol v1.2 Step 1 preflight passed with zero failures and zero
-  warnings; no model has been fitted and Step 2 remains blocked for explicit
-  supervision approval
+  warnings; the checksum-bound Step 2 evaluator is implemented and
+  synthetic-tested, and the user explicitly authorized implementation on
+  2026-08-07; no project-data model has yet been fitted
 
 ## Next action
 
-- review the gdTAI V4 protocol v1.2 Step 1 PASS report and explicitly decide
-  whether to authorize Step 2 nested evaluation
-- do not proceed to fitting, calibration, threshold selection, comparison, or
-  promotion before that approval
+- create the checksum-bound Step 2 approval record from the pinned template,
+  validate all source hashes, build the read-only 197-gene cache, and run the
+  nested leave-one-dataset-out evaluation
+- do not promote a model, fit a release artifact, or run whole-atlas inference
+  from Step 2 alone
 - do not promote or claim superiority for another gdTAI model before grouped
   resampling, expression-independent labels, and fold-local selection are in place
 - review the frozen-profile negative-control report and official-GEO metadata
@@ -25,6 +27,13 @@
 
 - protocol v1.2 Step 1 passed all frozen input, feature, truth-label,
   exclusion-feasibility, grouped-split, hash, and file-state checks
+- Step 2 implementation passes 16 deterministic unit/integration tests,
+  including all model families, fair comparators, threshold guardrails,
+  hierarchical bootstrap, sparse extraction, and print-safe reporting
+- the pinned Step 2 evaluation config, runner, and core SHA-256 values are
+  `de930d4484a57a8ba77d4df79da2d2018c1b35e7095da5f6bdb6db8279082b32`,
+  `9c9542c685e17147258c98736489985b6b4d399fbfd3528ea3f58deb68d2c839`, and
+  `1d81f817fa22e799f9721d05d2e849556ab9ad6d9033dd7ad5587fccc273722e`
 - the registered HRA005041 `log1p(CP10K)` matrix passed a full 766,639-cell
   inverse-library-size audit: zero empty rows, zero rows outside the frozen
   `1e-4` tolerance, and maximum absolute deviation

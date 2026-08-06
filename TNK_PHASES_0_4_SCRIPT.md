@@ -444,6 +444,64 @@ Current gate result:
 - no model fitting, calibration, threshold search, inference, or promotion ran
 - Step 2 remains unauthorized until explicit supervision approval
 
+## Post-Phase-4 gdTAI V4 Step 2 nested evaluation
+
+Objective:
+
+- run the checksum-bound nested leave-one-dataset-out evaluation after the
+  Step 1 PASS package has received explicit supervision approval
+- compare V4 against the legacy TRD-minus-TRAB strategy and fair compact/V2-like
+  models on the same folds, labels, calibration procedure, and operating rules
+
+Phase or task:
+
+- gdTAI V4 Step 2 project-data feature caching, nested evaluation, and report
+
+Exact `.py` scripts:
+
+- `workflows/gdtai/gdtai_v4_nested_core.py`
+- `workflows/gdtai/run_gdtai_v4_nested_evaluation.py`
+
+Core configuration and authorization template:
+
+- `configs/models/gdtai/v4_nested_evaluation.json`
+- `configs/models/gdtai/v4_step2_approval_template.json`
+
+Execution commands:
+
+```bash
+MPLCONFIGDIR=/tmp/matplotlib-gdtai-v4 \
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/run_gdtai_v4_nested_evaluation.py --stage validate
+
+MPLCONFIGDIR=/tmp/matplotlib-gdtai-v4 \
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/run_gdtai_v4_nested_evaluation.py \
+  --stage all --candidate-jobs 16 --matrix-row-chunk 20000
+```
+
+Core outputs:
+
+- `Integrated_dataset/cache/gdT_prediction/gdtai_v4_nested_evaluation/`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_nested_evaluation/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v4_nested_evaluation/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_nested_evaluation/`
+- `gdT_prediction/gdtai_v4_nested_evaluation/index.html`
+- `gdT_prediction/gdtai_v4_nested_evaluation/gdtai_v4_nested_evaluation_report.pdf`
+
+Gate semantics:
+
+- cache construction, fitting, calibration, and threshold selection require a
+  checksum-bound `STEP2_APPROVAL.json`; validation alone never fits a model
+- CD4/Treg exclusions, labels, folds, 197-gene universe, candidate grids,
+  operating-point guardrails, and promotion criteria remain frozen
+- all three primary datasets are held out in turn; donor/library/clonotype groups
+  remain intact within inner folds
+- report held-out paired-abT and strict-NK false-positive rates separately
+- VDJ rescue is reported separately and cannot improve RNA-only model metrics
+- Step 2 may establish that V4 fails; it does not authorize model promotion,
+  release fitting, or whole-atlas inference
+
 ## Phase 1: Coarse T/NK extraction
 
 Objective:

@@ -220,6 +220,17 @@
     artifact checksum inventory
   - performed no fitting, calibration, threshold search, inference, or
     promotion; Step 2 remains blocked for explicit supervision approval
+- gdTAI V4 Step 2 nested evaluator implemented on 2026-08-07
+  - added a checksum-bound authorization gate before any project-data cache or
+    fitting operation
+  - implemented nested leave-one-dataset-out fitting, fold-local feature
+    filtering, weighting, calibration, frozen threshold guardrails, fair
+    comparators, hierarchical bootstrap, feature-stability checks, extension
+    negative controls, and print-safe HTML/PDF reporting
+  - passed 16 deterministic synthetic unit/integration tests, including a full
+    outer fold through every candidate model path
+  - this is an implementation checkpoint only; no project-data model had been
+    fitted and no V4 model had been promoted at this checkpoint
 
 ## Current working era
 
