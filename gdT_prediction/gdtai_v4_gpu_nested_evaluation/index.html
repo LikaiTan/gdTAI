@@ -1,0 +1,223 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>gdTAI V4.1-GPU Gate C</title><style>
+@page { size:A4; margin:13mm; } * { box-sizing:border-box; } body { margin:0; background:#eef3f1; color:#18211f; font:10pt/1.45 Arial,sans-serif; } main { max-width:1180px; margin:auto; background:white; padding:30px 36px 60px; }
+h1 { font-size:25pt; margin:0 0 6px; letter-spacing:0; } h2 { color:#145c52; border-bottom:1px solid #cbd8d5; padding-bottom:5px; margin:25px 0 9px; } h3 { color:#176b5f; }
+.status { border-left:5px solid #ad3535; background:#fff1ef; padding:13px 16px; margin:18px 0; } .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; } figure { margin:8px 0 16px; break-inside:avoid; } img { width:100%; border:1px solid #d2ddda; } figcaption { color:#52625f; font-size:9pt; }
+table { border-collapse:collapse; width:100%; font-size:7.4pt; table-layout:fixed; } th { color:white; background:#176b5f; text-align:left; } th,td { border:1px solid #c9d5d2; padding:4px; overflow-wrap:anywhere; vertical-align:top; } tr:nth-child(even) td { background:#f3f7f6; }
+code { overflow-wrap:anywhere; } @media print { body { background:white; } main { max-width:none; padding:0; } .grid { display:block; } h2 { break-after:avoid; } tr,figure { break-inside:avoid; } }
+</style></head><body><main><p><strong>SUPERVISION REPORT · 7 AUGUST 2026</strong></p><h1>gdTAI V4.1-GPU Gate C</h1><p>Nested cross-dataset evaluation under the precommitted purity and recall guardrails.</p>
+<div class="status"><strong>Complete, but no model is eligible.</strong> All three outer folds finished. No Stage-1 candidate satisfied the literal per-source NK-passage condition, and no fair comparator or raw legacy score satisfied either final operating mode. V3 Round 14 remains the promoted balanced default.</div>
+<h2>What Was Evaluated</h2><p>Ground truth, 197 genes, grouped splits, CD4/Treg exclusions, calibration, and operating thresholds were unchanged. Stage 1 compared three deterministic GPU ridge penalties with two fixed GPU XGBoost configurations. Primary gdT and productive alpha-beta T recall had to remain at least 0.99 and 0.98 in every inner primary source, while strict-NK passage had to remain at most 0.50 in every NK source.</p>
+<p>Silver, sorted, dual, ambiguous, and unlabeled cells never selected models or thresholds. Fair compact seven-gene and 153-gene TCR comparators used GPU ridge with the same grouped folds, exclusions, hard strict-NK negatives, calibration, and final thresholds. The raw TRD-minus-TRAB score was evaluated without refitting.</p>
+<h2>Stage-1 Blocking Result</h2><p>All 15 candidate-by-outer-fold evaluations converged, but 0/15 passed. At the highest threshold retaining the required T-cell recalls, at least one NK source still had passage above 50%. The one-cell GSE190870 stratum makes the literal maximum-source statistic discontinuous, but it does not explain away the result: after restricting the diagnostic calculation to NK sources with at least 100 cells, the best worst-source passage still ranged from 90.97% to 93.23% across outer folds. Pooled NK passage was lower at 8.60% to 12.38%, showing marked source heterogeneity rather than adequate general separation. These post-hoc summaries do not alter the official failure.</p>
+<div class="grid"><figure><img src="assets/stage1_guardrail_failure.png"><figcaption>Literal and sample-size-aware Stage-1 diagnostics.</figcaption></figure><figure><img src="assets/comparator_near_miss.png"><figcaption>Balanced comparator near-miss operating points.</figcaption></figure></div>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>outer_fold_id</th>
+      <th>family</th>
+      <th>minimum_source_gdt_recall</th>
+      <th>minimum_source_abt_recall</th>
+      <th>pooled_nk_passage</th>
+      <th>maximum_nk_passage_sources_n_ge_100</th>
+      <th>worst_nk_source_n_ge_100</th>
+      <th>worst_nk_source_n_ge_100_n</th>
+      <th>maximum_source_nk_passage</th>
+      <th>worst_nk_source_n</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>outer_0_HRA005041</td>
+      <td>xgboost</td>
+      <td>0.9903</td>
+      <td>0.9896</td>
+      <td>0.1238</td>
+      <td>0.9305</td>
+      <td>GSE287301</td>
+      <td>1539</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>outer_0_HRA005041</td>
+      <td>xgboost</td>
+      <td>0.9903</td>
+      <td>0.9903</td>
+      <td>0.1409</td>
+      <td>0.9305</td>
+      <td>GSE287301</td>
+      <td>1539</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>outer_1_GSE144469</td>
+      <td>xgboost</td>
+      <td>0.9902</td>
+      <td>0.9989</td>
+      <td>0.1025</td>
+      <td>0.9409</td>
+      <td>BALF_BLOOD_COPD</td>
+      <td>254</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>outer_1_GSE144469</td>
+      <td>torch_ridge</td>
+      <td>0.9902</td>
+      <td>0.9984</td>
+      <td>0.1066</td>
+      <td>0.9921</td>
+      <td>BALF_BLOOD_COPD</td>
+      <td>254</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>outer_2_BALF_BLOOD_COPD</td>
+      <td>torch_ridge</td>
+      <td>0.9902</td>
+      <td>0.9992</td>
+      <td>0.08601</td>
+      <td>0.9323</td>
+      <td>GSE144469</td>
+      <td>7804</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>outer_2_BALF_BLOOD_COPD</td>
+      <td>torch_ridge</td>
+      <td>0.9902</td>
+      <td>0.9992</td>
+      <td>0.1072</td>
+      <td>0.9334</td>
+      <td>GSE144469</td>
+      <td>7804</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<h2>Fair Comparator Results</h2><p>No compact seven-gene ridge, V2-like TCR-gene ridge, or raw legacy-score threshold met the balanced or high-purity constraints. Therefore there are no valid held-out predictions from which to claim F1, calculate a paired bootstrap advantage, or select a V4 model.</p>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>outer_fold_id</th>
+      <th>model_id</th>
+      <th>nearest_objective</th>
+      <th>nearest_recall</th>
+      <th>nearest_paired_abt_fpr</th>
+      <th>nearest_strict_nk_fpr</th>
+      <th>recall_requirement</th>
+      <th>paired_abt_fpr_limit</th>
+      <th>strict_nk_fpr_limit</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>outer_0_HRA005041</td>
+      <td>compact_7gene_logistic</td>
+      <td>0.3681</td>
+      <td>0.2441</td>
+      <td>0.002009</td>
+      <td>0.006741</td>
+      <td>0.8</td>
+      <td>0.002</td>
+      <td>0.01</td>
+    </tr>
+    <tr>
+      <td>outer_0_HRA005041</td>
+      <td>legacy_trd_minus_trab</td>
+      <td>0.3939</td>
+      <td>0.2643</td>
+      <td>0.001998</td>
+      <td>0.009731</td>
+      <td>0.8</td>
+      <td>0.002</td>
+      <td>0.01</td>
+    </tr>
+    <tr>
+      <td>outer_0_HRA005041</td>
+      <td>v2_like_tcr_logistic</td>
+      <td>0.2734</td>
+      <td>0.1862</td>
+      <td>0.002009</td>
+      <td>0.003888</td>
+      <td>0.8</td>
+      <td>0.002</td>
+      <td>0.01</td>
+    </tr>
+    <tr>
+      <td>outer_1_GSE144469</td>
+      <td>compact_7gene_logistic</td>
+      <td>0.4221</td>
+      <td>0.3033</td>
+      <td>0.0009419</td>
+      <td>0.009992</td>
+      <td>0.8</td>
+      <td>0.002</td>
+      <td>0.01</td>
+    </tr>
+    <tr>
+      <td>outer_1_GSE144469</td>
+      <td>legacy_trd_minus_trab</td>
+      <td>0.2996</td>
+      <td>0.1777</td>
+      <td>0.0001199</td>
+      <td>0.01</td>
+      <td>0.8</td>
+      <td>0.002</td>
+      <td>0.01</td>
+    </tr>
+    <tr>
+      <td>outer_1_GSE144469</td>
+      <td>v2_like_tcr_logistic</td>
+      <td>0.3402</td>
+      <td>0.262</td>
+      <td>0.001997</td>
+      <td>0.008672</td>
+      <td>0.8</td>
+      <td>0.002</td>
+      <td>0.01</td>
+    </tr>
+    <tr>
+      <td>outer_2_BALF_BLOOD_COPD</td>
+      <td>compact_7gene_logistic</td>
+      <td>0.6355</td>
+      <td>0.5014</td>
+      <td>0.001144</td>
+      <td>0.01</td>
+      <td>0.8</td>
+      <td>0.002</td>
+      <td>0.01</td>
+    </tr>
+    <tr>
+      <td>outer_2_BALF_BLOOD_COPD</td>
+      <td>legacy_trd_minus_trab</td>
+      <td>0.4002</td>
+      <td>0.2715</td>
+      <td>0.0004062</td>
+      <td>0.01001</td>
+      <td>0.8</td>
+      <td>0.002</td>
+      <td>0.01</td>
+    </tr>
+    <tr>
+      <td>outer_2_BALF_BLOOD_COPD</td>
+      <td>v2_like_tcr_logistic</td>
+      <td>0.6615</td>
+      <td>0.5595</td>
+      <td>0.001999</td>
+      <td>0.008323</td>
+      <td>0.8</td>
+      <td>0.002</td>
+      <td>0.01</td>
+    </tr>
+  </tbody>
+</table>
+<h2>What Is Not Estimable</h2><p>V4 Stage 2 was not entered because Stage 1 had no eligible candidate. Extension-cohort model false-positive rates and paired hierarchical-bootstrap differences are consequently not estimable. This is a valid negative Gate C result, not missing evidence and not authorization to relax a threshold after observing outcomes.</p>
+<h2>Interpretation</h2><p>The precommitted Stage-1 rule is statistically brittle because it takes a hard maximum over NK strata ranging from one cell to more than 90,000 cells. However, the ≥100-cell sensitivity analysis shows a second, substantive problem: at the recall-preserving threshold, at least one well-populated dataset passes more than 90% of strict NK cells. Thus V4.1 failed because T-lineage sensitivity and cross-dataset NK rejection were incompatible under this feature panel, not merely because of a one-cell denominator. A future V4.2 may use hierarchical or minimum-stratum guardrails, but it must also improve source-robust discrimination and be declared before re-evaluation.</p>
+<h2>Decision Boundary</h2><p>No V4.1 model is promoted or released. No whole-atlas inference is permitted. V3 Round 14 remains the balanced default pending a separately reviewed redesign.</p>
+</main></body></html>

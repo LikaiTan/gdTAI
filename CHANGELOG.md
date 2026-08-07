@@ -1,5 +1,21 @@
 # CHANGELOG.md
 
+## 2026-08-07 - Completed gdTAI V4.1-GPU Gate C as a negative result
+
+- Completed all three checksum-bound nested outer decision paths on the A100;
+  99/99 recorded inner-fold fits converged and 57 complete threshold frontiers
+  were retained.
+- Found 0/15 eligible Stage-1 candidate evaluations. The literal worst-source
+  NK passage was 100%, and the best worst-source passage among NK strata with
+  at least 100 cells remained 90.97%-93.23% at recall-preserving thresholds.
+- Found no eligible balanced or high-purity operating point for compact
+  seven-gene ridge, V2-like TCR-gene ridge, or raw legacy TRD-minus-TRAB score.
+- Marked V4 Stage 2, extension-model controls, and paired bootstrap as not
+  estimable because no Stage-1 model passed; no V4.1 artifact was promoted,
+  released, or applied to the atlas.
+- Published the Gate C HTML/PDF report and retained V3 Round 14 as the promoted
+  balanced default.
+
 ## 2026-08-07 - Passed gdTAI V4.1-GPU Gate B
 
 - Implemented deterministic PyTorch ridge and GPU XGBoost fitting primitives,

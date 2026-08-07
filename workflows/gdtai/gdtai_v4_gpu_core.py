@@ -151,6 +151,10 @@ class GpuFit:
     runtime_seconds: float
     peak_gpu_memory_bytes: int
 
+    @property
+    def n_iter(self) -> int:
+        return self.n_iterations
+
     def transform(self, matrix: np.ndarray) -> np.ndarray:
         x = np.asarray(matrix, dtype=np.float32)[:, self.selected_columns]
         return ((x - self.mean) / self.scale).astype(np.float32, copy=False)

@@ -568,6 +568,28 @@ Gate B implementation:
   - no project-data model was fitted
   - the project-fit action fails closed until a separate Gate C record exists
 
+Gate C nested evaluation:
+
+- exact `.py` scripts:
+  - `workflows/gdtai/run_gdtai_v4_gpu_nested_project.py`
+  - `workflows/gdtai/finalize_gdtai_v4_gpu_gate_c_failure.py`
+- key outputs:
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_gpu_nested_evaluation/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_gpu_nested_evaluation/`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_gpu_nested_evaluation/`
+  - `Integrated_dataset/models/gdT_prediction/gdtai_v4_gpu_nested_evaluation/checkpoints/`
+  - `gdT_prediction/gdtai_v4_gpu_nested_evaluation/index.html`
+  - `gdT_prediction/gdtai_v4_gpu_nested_evaluation/gdtai_v4_gpu_gate_c_report.pdf`
+- result:
+  - all three outer decision paths completed and 99/99 recorded fold fits
+    converged
+  - 0/15 Stage-1 candidate evaluations passed; no V4 Stage-2 model was eligible
+  - no fair comparator or raw legacy-score operating point passed either mode
+  - extension-model controls and paired bootstrap were not estimable without
+    an eligible balanced V4 model
+  - V4.1 failed Gate C; V3 Round 14 remains the promoted balanced default
+  - Gate D release fitting, promotion, and atlas inference remain blocked
+
 ## Phase 1: Coarse T/NK extraction
 
 Objective:

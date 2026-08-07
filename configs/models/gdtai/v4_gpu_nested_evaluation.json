@@ -13,7 +13,8 @@
     "figure_dir": "Integrated_dataset/figures/gdT_prediction/gdtai_v4_gpu_nested_evaluation",
     "log_dir": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_gpu_nested_evaluation",
     "checkpoint_dir": "Integrated_dataset/models/gdT_prediction/gdtai_v4_gpu_nested_evaluation/checkpoints",
-    "static_dir": "gdT_prediction/gdtai_v4_gpu_gate_b"
+    "gate_b_static_dir": "gdT_prediction/gdtai_v4_gpu_gate_b",
+    "static_dir": "gdT_prediction/gdtai_v4_gpu_nested_evaluation"
   },
   "environment": {
     "cuda_visible_devices": "0",
@@ -78,7 +79,7 @@
     "maximum_nk_passage_per_source": 0.5
   },
   "checkpoint": {
-    "frontier_format": "csv.gz",
+    "frontier_format": "parquet_zstd",
     "probability_atol": 0.0,
     "probability_rtol": 0.0
   }

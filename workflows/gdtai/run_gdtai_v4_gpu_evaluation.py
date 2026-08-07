@@ -42,6 +42,7 @@ from gdtai_v4_gpu_core import (  # noqa: E402
 
 DEFAULT_CONFIG = PROJECT_ROOT / "configs/models/gdtai/v4_gpu_nested_evaluation.json"
 CORE_PATH = Path(__file__).with_name("gdtai_v4_gpu_core.py")
+PROJECT_RUNNER_PATH = Path(__file__).with_name("run_gdtai_v4_gpu_nested_project.py")
 
 
 def resolve(value: str | Path) -> Path:
@@ -57,10 +58,14 @@ def merged_config(path: Path) -> dict[str, Any]:
     config = load_json(path)
     base = load_json(resolve(config["base_contract_config"]))
     config["preflight"] = base["preflight"]
+    config["normalization"] = base["normalization"]
     config["feature_policy"] = base["feature_policy"]
     config["operating_modes"] = base["operating_modes"]
     config["cd4_helper_rule"] = base["cd4_helper_rule"]
     config["treg_rule"] = base["treg_rule"]
+    config["bootstrap_replicates"] = base["bootstrap_replicates"]
+    config["feature_stability"] = base["feature_stability"]
+    config["prevalence_grid"] = base["prevalence_grid"]
     return config
 
 
@@ -90,7 +95,10 @@ def validate_approval(config: Mapping[str, Any], gate: str) -> dict[str, Any]:
     if not str(record.get("approved_by", "")).strip() or not str(record.get("approved_at", "")).strip():
         raise PermissionError(f"Gate {gate} approval lacks approver or timestamp")
     if gate == "C":
-        code = {"config": sha256_file(DEFAULT_CONFIG), "runner": sha256_file(Path(__file__)), "core": sha256_file(CORE_PATH)}
+        code = {
+            "config": sha256_file(DEFAULT_CONFIG), "runner": sha256_file(Path(__file__)),
+            "core": sha256_file(CORE_PATH), "project_runner": sha256_file(PROJECT_RUNNER_PATH),
+        }
         if record.get("code_sha256") != code:
             raise PermissionError("Gate C approval is not bound to the current implementation")
     return record
@@ -281,7 +289,7 @@ def write_outputs(config: Mapping[str, Any], contract: Mapping[str, Any], synthe
         "This QC package does not authorize fitting project cells. A separate checksum-bound Gate C record is mandatory.",
     ]
     (log_dir / "gdtai_v4_gpu_gate_b_summary.md").write_text("\n".join(lines) + "\n")
-    static_dir = resolve(config["outputs"]["static_dir"])
+    static_dir = resolve(config["outputs"]["gate_b_static_dir"])
     static_dir.mkdir(parents=True, exist_ok=True)
     rows = "".join(
         f"<tr><td>{html.escape(str(row['check']))}</td><td class={'pass' if row['pass'] else 'fail'}>{'PASS' if row['pass'] else 'FAIL'}</td><td><code>{html.escape(str(row['detail']))}</code></td></tr>"
@@ -356,7 +364,15 @@ def main() -> None:
         print(resolve(config["outputs"]["log_dir"]) / "gdtai_v4_gpu_gate_b_summary.json")
         return
     validate_approval(config, "C")
-    raise RuntimeError("Gate C is valid, but project evaluation must be launched by the nested orchestration entrypoint added after Gate B review")
+    environment = validate_gpu_environment(config["environment"])
+    config["_gpu_environment"] = environment
+    config["_gate_c_code_sha256"] = {
+        "config": sha256_file(DEFAULT_CONFIG), "runner": sha256_file(Path(__file__)),
+        "core": sha256_file(CORE_PATH), "project_runner": sha256_file(PROJECT_RUNNER_PATH),
+    }
+    from run_gdtai_v4_gpu_nested_project import run_project_evaluation
+
+    run_project_evaluation(config)
 
 
 if __name__ == "__main__":

@@ -2,16 +2,16 @@
 
 ## Current milestone
 
-- gdTAI V4 protocol v1.2 CPU Step 2 is retired as an incomplete negative
-  experiment after two completed outer folds; V4.1-GPU Gate B implementation,
-  synthetic A100 verification, portable export/reload, and read-only frozen
-  cache validation passed on 2026-08-07 without fitting project cells
+- gdTAI V4.1-GPU Gate C completed on 2026-08-07 as a negative result under the
+  frozen protocol: all three outer decision paths completed, but no Stage-1
+  candidate or fair-comparator operating point was eligible; V3 Round 14
+  remains the promoted balanced default
 
 ## Next action
 
-- review the V4.1-GPU Gate B QC package and approve or reject Gate C nested
-  project-data evaluation
-- do not fit any project-data GPU model before a separate Gate C approval
+- review the V4.1-GPU Gate C negative-result report
+- do not authorize Gate D release fitting, V4.1 promotion, or whole-atlas
+  inference from this failed experiment
 - do not promote a model, fit a release artifact, or run whole-atlas inference
   from the incomplete CPU evidence or the GPU feasibility probes
 - do not promote or claim superiority for another gdTAI model before grouped
@@ -25,12 +25,18 @@
 
 ## Current blockers or review items
 
-- V4.1-GPU Gate B passed 32/32 checks: all frozen manifest and complete cache
-  hashes matched, PyTorch ridge and GPU XGBoost repeated bit-identically,
-  portable NPZ/UBJ reloads reproduced probabilities exactly, and threshold
-  frontier plus atomic checkpoint tests passed
-- the Gate C authorization file is absent and the project-fit action fails
-  closed; no V4.1-GPU project cell has been fitted
+- V4.1-GPU Gate C was explicitly approved and checksum-bound; 99/99 recorded
+  inner-fold fits converged and all 57 complete threshold-frontier files were
+  retained
+- zero of 15 Stage-1 candidate-by-outer-fold evaluations passed the frozen
+  recall plus maximum-source NK-passage rule; the one-cell GSE190870 stratum
+  reached 100% passage, but even among NK strata with at least 100 cells the
+  best worst-source passage remained 90.97%-93.23%
+- zero compact seven-gene, V2-like TCR-gene, or raw legacy-score operating
+  points passed balanced or high-purity constraints across the three folds
+- V4 Stage 2, extension-model false-positive rates, and paired hierarchical
+  bootstrap were not estimable because Stage 1 selected no eligible candidate;
+  no V4.1 model was promoted, released, or applied to the atlas
 
 - V4 v1.2 CPU outer folds completed for HRA005041 and GSE144469; no V4,
   compact seven-gene, V2-like, or legacy-score threshold satisfied either

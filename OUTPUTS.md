@@ -72,6 +72,14 @@
 
 ## Current review packages
 
+- gdTAI V4.1-GPU Gate C negative nested evaluation:
+  - `gdT_prediction/gdtai_v4_gpu_nested_evaluation/index.html`
+  - `gdT_prediction/gdtai_v4_gpu_nested_evaluation/gdtai_v4_gpu_gate_c_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_gpu_nested_evaluation/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_gpu_nested_evaluation/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_gpu_nested_evaluation/`
+  - decision: no eligible V4.1 model; V3 Round 14 remains promoted
+
 - gdTAI V4 Step 1 preflight and grouped split freeze:
   - `gdT_prediction/gdtai_v4_preflight/index.html`
   - `gdT_prediction/gdtai_v4_preflight/gdtai_v4_preflight_report.pdf`
