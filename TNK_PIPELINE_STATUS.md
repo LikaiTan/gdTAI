@@ -2,14 +2,19 @@
 
 ## Current milestone
 
-- gdTAI V4.1-GPU Gate C completed on 2026-08-07 as a negative result under the
-  frozen protocol: all three outer decision paths completed, but no Stage-1
-  candidate or fair-comparator operating point was eligible; V3 Round 14
-  remains the promoted balanced default
+- gdTAI V4.2 Step 0 NK-label and saved-OOF counterfactual audit completed with
+  `PASS` on 2026-08-07; it identified single-annotation NK controls as the
+  dominant V4.1 Gate-C blocker and performed no new model fitting
 
 ## Next action
 
-- review the V4.1-GPU Gate C negative-result report
+- review the V4.2 Step 0 report and the proposed new-data NK-reference
+  integration amendment
+- decide whether to approve a separate, read-only modeling integration using
+  five extension development cohorts while keeping GSE169246, GSE315928, and
+  GSE121636/GSE121637 out of development
+- if approved, run a new metadata/input/split preflight and implementation QC
+  gate before any integration, clustering, pseudo-labeling, or model fitting
 - do not authorize Gate D release fitting, V4.1 promotion, or whole-atlas
   inference from this failed experiment
 - do not promote a model, fit a release artifact, or run whole-atlas inference
@@ -24,6 +29,23 @@
   explicit approval
 
 ## Current blockers or review items
+
+- V4.2 Step 0 verified 336,780 V4.1 NK controls: 315,726 (`93.7%`) had only a
+  single scVI NK annotation and 21,054 (`6.3%`) had dual scVI/author agreement
+- all 15 checksum-bound saved-OOF candidate/fold evaluations passed the frozen
+  50% NK source cap under the dual-annotation truth counterfactual; worst-source
+  passage among sources with at least 100 cells was `5.27%-19.37%`, versus
+  `90.97%-99.21%` using all V4.1 controls
+- the counterfactual is diagnostic only because the saved V4.1 candidates were
+  trained with weak controls; no V4.2 performance claim is available
+- the user proposed integrating new data and repeated clustering to expand NK
+  training labels; this is scientifically reasonable only as a development
+  pseudo-label lane with locked whole-dataset validation and explicit approval
+- the proposed development cohorts contain 318,156 T/NK candidates; the locked
+  GSE169246 cohort provides 7,770 author NK and 54,925 productive alpha-beta T
+  cells, and GSE315928 provides 66,813 paired-alpha-beta controls
+- no V4.2 integration, scVI fit, clustering, pseudo-labeling, classifier fit,
+  threshold search, promotion, release fitting, or atlas inference is approved
 
 - V4.1-GPU Gate C was explicitly approved and checksum-bound; 99/99 recorded
   inner-fold fits converged and all 57 complete threshold-frontier files were
@@ -241,6 +263,14 @@ Additional current state:
   checksums, and historical results were moved under `archive/`
 
 ## Current review artifacts
+
+- gdTAI V4.2 Step 0 NK-label audit and proposed repair:
+  - `docs/GDTAI_V4_2_PRECOMMITTED_PLAN.md`
+  - `gdT_prediction/gdtai_v4_2_step0/index.html`
+  - `gdT_prediction/gdtai_v4_2_step0/gdtai_v4_2_step0_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_step0/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_step0/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_step0/`
 
 - gdTAI V4.1-GPU pre-fit feasibility and protocol:
   - `docs/GDTAI_V4_GPU_PRECOMMITTED_PLAN.md`

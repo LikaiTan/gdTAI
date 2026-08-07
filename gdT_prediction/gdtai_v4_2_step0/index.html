@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>gdTAI V4.2 Step 0</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="print.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">gdTAI V4.2 Step 0</h1>
+</header>
+<h1 id="gdtai-v4.2-step-0-why-v4.1-failed-and-how-to-repair-it">gdTAI
+V4.2 Step 0: why V4.1 failed and how to repair it</h1>
+<h2 id="decision-summary">Decision summary</h2>
+<p>V4.1 did <strong>not</strong> demonstrate that a two-step gdTAI model
+is intrinsically worse than V2 or V3. It stopped before Stage 2 because
+the Stage-1 eligibility gate treated a heterogeneous, mostly weak
+NK-control pool as equally definitive ground truth.</p>
+<ul>
+<li>V4.1 used <strong>336,780</strong> strict-NK controls.</li>
+<li>Only <strong>21,054 (6.3%)</strong> had dual scVI/author NK
+agreement.</li>
+<li><strong>315,726 (93.7%)</strong> had only the scVI NK label after
+conflict filtering.</li>
+<li>Under the unchanged T-recall thresholds, the worst source with at
+least 100 cells passed at <strong>91.0% to 99.2%</strong> for all V4.1
+controls.</li>
+<li>The same saved out-of-fold predictions passed only <strong>5.3% to
+19.4%</strong> of dual-annotation NK controls. All 15 candidate/fold
+combinations satisfy the frozen 50% cap under that stronger truth
+definition.</li>
+</ul>
+<p>This is a <strong>label-only counterfactual</strong>, not V4.2
+performance. The V4.1 models were still trained using the weak controls,
+and no model was fitted in this audit.</p>
+<h2 id="why-v4.1-looked-weak">Why V4.1 looked weak</h2>
+<ol type="1">
+<li><strong>Stage 2 never ran.</strong> There is no V4.1 final F1,
+precision, or recall to compare directly with V2/V3.</li>
+<li><strong>The Stage-1 failure was source-specific.</strong> Large
+single-annotation sources such as GSE144469 and GSE287301 were highly
+T-like by CD3/TCR-constant expression, while genuine-looking BALF NK
+controls also showed substantial passage in one outer fold. This
+combines label uncertainty with real cross-dataset calibration
+shift.</li>
+<li><strong>The gate was brittle.</strong> It used the literal maximum
+source passage, including a one-cell source, and did not distinguish
+primary labels from stress labels.</li>
+<li><strong>Historical V2/V3 figures are optimistic for model
+selection.</strong> Their validation cohorts were reused during
+development. V4.2 must compare algorithms on identical grouped,
+fold-local splits and report the frozen historical artifacts
+separately.</li>
+</ol>
+<figure>
+<img
+src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_step0/nk_control_provenance_by_source.png"
+alt="NK-control provenance" />
+<figcaption aria-hidden="true">NK-control provenance</figcaption>
+</figure>
+<h2 id="nk-label-audit">NK-label audit</h2>
+<p>The expression audit is used only to diagnose label conflict. It does
+not create, remove, or relabel training truth.</p>
+<table>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 7%" />
+<col style="width: 19%" />
+<col style="width: 23%" />
+<col style="width: 19%" />
+<col style="width: 19%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">source_gse_id</th>
+<th style="text-align: right;">n_cells</th>
+<th style="text-align: left;">cd3_two_of_three_fraction</th>
+<th style="text-align: left;">expression_coherent_t_fraction</th>
+<th style="text-align: left;">ab_cd3_coherent_fraction</th>
+<th style="text-align: left;">gd_cd3_coherent_fraction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">GSE287301</td>
+<td style="text-align: right;">1539</td>
+<td style="text-align: left;">90.3%</td>
+<td style="text-align: left;">84.7%</td>
+<td style="text-align: left;">80.7%</td>
+<td style="text-align: left;">53.5%</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE144469</td>
+<td style="text-align: right;">7804</td>
+<td style="text-align: left;">73.0%</td>
+<td style="text-align: left;">70.5%</td>
+<td style="text-align: left;">69.9%</td>
+<td style="text-align: left;">23.4%</td>
+</tr>
+<tr>
+<td style="text-align: left;">HRA005041</td>
+<td style="text-align: right;">4951</td>
+<td style="text-align: left;">69.1%</td>
+<td style="text-align: left;">65.1%</td>
+<td style="text-align: left;">61.5%</td>
+<td style="text-align: left;">44.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE171037</td>
+<td style="text-align: right;">225</td>
+<td style="text-align: left;">49.8%</td>
+<td style="text-align: left;">49.8%</td>
+<td style="text-align: left;">49.8%</td>
+<td style="text-align: left;">14.2%</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE162498</td>
+<td style="text-align: right;">129</td>
+<td style="text-align: left;">42.6%</td>
+<td style="text-align: left;">42.6%</td>
+<td style="text-align: left;">38.0%</td>
+<td style="text-align: left;">33.3%</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE211504</td>
+<td style="text-align: right;">303</td>
+<td style="text-align: left;">26.7%</td>
+<td style="text-align: left;">23.1%</td>
+<td style="text-align: left;">21.1%</td>
+<td style="text-align: left;">12.5%</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img
+src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_step0/nk_control_tlineage_coherence.png"
+alt="T-lineage coherence" />
+<figcaption aria-hidden="true">T-lineage coherence</figcaption>
+</figure>
+<h2 id="saved-oof-counterfactual">Saved-OOF counterfactual</h2>
+<p>For each of the 15 completed V4.1 Stage-1 candidate/fold
+combinations, the audit reconstructed the exact checksum-bound training
+rows, loaded calibrated OOF probabilities, and selected the highest
+threshold satisfying per-source gdT recall &gt;= 0.99 and productive
+alpha-beta T-cell recall &gt;= 0.98. Only the NK evaluation mask
+changed.</p>
+<table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 9%" />
+<col style="width: 20%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">heldout_source</th>
+<th style="text-align: left;">family</th>
+<th style="text-align: right;">threshold</th>
+<th style="text-align: left;">minimum_source_gdt_recall</th>
+<th style="text-align: left;">minimum_source_abt_recall</th>
+<th style="text-align: left;">pooled_passage</th>
+<th style="text-align: left;">maximum_source_passage_n_ge_minimum</th>
+<th style="text-align: left;">worst_source_n_ge_minimum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">BALF_BLOOD_COPD</td>
+<td style="text-align: left;">torch_ridge</td>
+<td style="text-align: right;">0.00257</td>
+<td style="text-align: left;">99.02%</td>
+<td style="text-align: left;">99.92%</td>
+<td style="text-align: left;">2.92%</td>
+<td style="text-align: left;">5.92%</td>
+<td style="text-align: left;">GSE125527</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE144469</td>
+<td style="text-align: left;">torch_ridge</td>
+<td style="text-align: right;">0.00043</td>
+<td style="text-align: left;">99.02%</td>
+<td style="text-align: left;">99.84%</td>
+<td style="text-align: left;">4.88%</td>
+<td style="text-align: left;">8.60%</td>
+<td style="text-align: left;">GSE125527</td>
+</tr>
+<tr>
+<td style="text-align: left;">HRA005041</td>
+<td style="text-align: left;">torch_ridge</td>
+<td style="text-align: right;">0.00126</td>
+<td style="text-align: left;">99.03%</td>
+<td style="text-align: left;">99.41%</td>
+<td style="text-align: left;">4.95%</td>
+<td style="text-align: left;">5.27%</td>
+<td style="text-align: left;">GSE125527</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img
+src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_step0/stage1_counterfactual_feasibility.png"
+alt="Counterfactual feasibility" />
+<figcaption aria-hidden="true">Counterfactual feasibility</figcaption>
+</figure>
+<h2 id="frozen-v4.2-repair">Frozen V4.2 repair</h2>
+<p>The detailed precommit is in
+<code>docs/GDTAI_V4_2_PRECOMMITTED_PLAN.md</code>. Its key changes
+are:</p>
+<ul>
+<li>Primary Stage-1 NK truth requires dual scVI/author NK agreement, no
+productive TCR, and no doublet flag.</li>
+<li>Single-annotation NK cells receive zero fitting and selection
+weight; they remain a required stress test.</li>
+<li>CD3/TCR expression coherence remains diagnostic only and cannot
+define truth.</li>
+<li>Stage 1 remains a high-recall T-cell gate. It cannot use a hard
+cytotoxic-gene veto, and Stage 2 has no hard TRDC/TRDV requirement.</li>
+<li>Stage 2 uses individual genes and the cross-fitted Stage-1
+probability, never TRD/TRAB scores, source IDs, or batch IDs; total
+features remain below 300.</li>
+<li>Source-size-aware constraints use strata with at least 100 controls.
+Smaller strata and Wilson intervals are reported separately rather than
+controlling a literal maximum.</li>
+<li>V2-like and V3-like algorithms are retrained fold-locally on the
+same labels and splits. Frozen V2/V3 artifacts remain descriptive
+because their development data overlap the benchmark.</li>
+<li>Promotion requires a clinically meaningful F1 improvement under
+grouped resampling while retaining the frozen paired-alpha-beta and NK
+false-positive guardrails.</li>
+</ul>
+<h2 id="qc-and-supervision-gate">QC and supervision gate</h2>
+<table>
+<colgroup>
+<col style="width: 70%" />
+<col style="width: 3%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">check</th>
+<th style="text-align: left;">status</th>
+<th style="text-align: left;">detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">sha256_cell_manifest</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">8157cbebfedeb84fc34eba05429aa8a7a834c6f7ceba15bd4790b5dd06bf7e0c</td>
+</tr>
+<tr>
+<td style="text-align: left;">sha256_feature_manifest</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">7fc2b0afb2b761288f941895a219fb38cc541a49464c8d2b330b81719e087808</td>
+</tr>
+<tr>
+<td style="text-align: left;">sha256_gene_feature_cache</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">97b2a719cfe77526005941fce289e676518513cec7104aa7770825f5c92c4350</td>
+</tr>
+<tr>
+<td style="text-align: left;">feature_cache_shape</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">(1137739, 197)</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">checkpoint_rows::outer_0_HRA005041::torch_ridge__l2_strength=0.001</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">4b2ed0dd323846955ea2219412665cec7158e1eb84160fe53d258d2919c992db</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">checkpoint_rows::outer_0_HRA005041::xgboost__colsample_bytree=1.0__learning_rate=0.05__max_depth=5__min_child_weight=200__n_estimators=200__reg_lambda=10.0__subsample=1.0</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">4b2ed0dd323846955ea2219412665cec7158e1eb84160fe53d258d2919c992db</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">checkpoint_rows::outer_0_HRA005041::torch_ridge__l2_strength=0.01</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">4b2ed0dd323846955ea2219412665cec7158e1eb84160fe53d258d2919c992db</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">checkpoint_rows::outer_0_HRA005041::xgboost__colsample_bytree=1.0__learning_rate=0.05__max_depth=3__min_child_weight=50__n_estimators=200__reg_lambda=10.0__subsample=1.0</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">4b2ed0dd323846955ea2219412665cec7158e1eb84160fe53d258d2919c992db</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">checkpoint_rows::outer_0_HRA005041::torch_ridge__l2_strength=0.1</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">4b2ed0dd323846955ea2219412665cec7158e1eb84160fe53d258d2919c992db</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">checkpoint_rows::outer_1_GSE144469::torch_ridge__l2_strength=0.001</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">49ef83ce2c2cddd8d05032273721e59bcaeacef2c72a41a2aaff5969213d77f7</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">checkpoint_rows::outer_1_GSE144469::xgboost__colsample_bytree=1.0__learning_rate=0.05__max_depth=5__min_child_weight=200__n_estimators=200__reg_lambda=10.0__subsample=1.0</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">49ef83ce2c2cddd8d05032273721e59bcaeacef2c72a41a2aaff5969213d77f7</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">checkpoint_rows::outer_1_GSE144469::torch_ridge__l2_strength=0.01</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">49ef83ce2c2cddd8d05032273721e59bcaeacef2c72a41a2aaff5969213d77f7</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">checkpoint_rows::outer_1_GSE144469::xgboost__colsample_bytree=1.0__learning_rate=0.05__max_depth=3__min_child_weight=50__n_estimators=200__reg_lambda=10.0__subsample=1.0</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">49ef83ce2c2cddd8d05032273721e59bcaeacef2c72a41a2aaff5969213d77f7</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">checkpoint_rows::outer_1_GSE144469::torch_ridge__l2_strength=0.1</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">49ef83ce2c2cddd8d05032273721e59bcaeacef2c72a41a2aaff5969213d77f7</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">checkpoint_rows::outer_2_BALF_BLOOD_COPD::torch_ridge__l2_strength=0.001</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">bad99923cb15679819ad5ee16d01cbbe23eaca9a99e5d01987449cd42342a1c5</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">checkpoint_rows::outer_2_BALF_BLOOD_COPD::xgboost__colsample_bytree=1.0__learning_rate=0.05__max_depth=5__min_child_weight=200__n_estimators=200__reg_lambda=10.0__subsample=1.0</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">bad99923cb15679819ad5ee16d01cbbe23eaca9a99e5d01987449cd42342a1c5</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">checkpoint_rows::outer_2_BALF_BLOOD_COPD::torch_ridge__l2_strength=0.01</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">bad99923cb15679819ad5ee16d01cbbe23eaca9a99e5d01987449cd42342a1c5</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">checkpoint_rows::outer_2_BALF_BLOOD_COPD::xgboost__colsample_bytree=1.0__learning_rate=0.05__max_depth=3__min_child_weight=50__n_estimators=200__reg_lambda=10.0__subsample=1.0</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">bad99923cb15679819ad5ee16d01cbbe23eaca9a99e5d01987449cd42342a1c5</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">checkpoint_rows::outer_2_BALF_BLOOD_COPD::torch_ridge__l2_strength=0.1</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">bad99923cb15679819ad5ee16d01cbbe23eaca9a99e5d01987449cd42342a1c5</td>
+</tr>
+<tr>
+<td style="text-align: left;">stage1_checkpoints_complete</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">15/15 candidate-fold combinations</td>
+</tr>
+<tr>
+<td style="text-align: left;">dual_annotation_nk_sources</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">2 sources</td>
+</tr>
+<tr>
+<td style="text-align: left;">dual_annotation_counterfactual_gate</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">15/15 pass Wilson-aware 50% cap</td>
+</tr>
+<tr>
+<td style="text-align: left;">expression_used_for_truth</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">diagnostic only; no labels changed</td>
+</tr>
+<tr>
+<td style="text-align: left;">model_fitting_performed</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">none; saved V4.1 OOF probabilities
+only</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Result: PASS.</strong> This authorizes review of the V4.2
+protocol only. It does not authorize fitting. The next action requires
+explicit supervision approval.</p>
+<h2 id="reproducible-outputs">Reproducible outputs</h2>
+<ul>
+<li>Full tables:
+<code>Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_step0/</code></li>
+<li>Machine summary:
+<code>Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_step0/summary.json</code></li>
+<li>Frozen protocol:
+<code>docs/GDTAI_V4_2_PRECOMMITTED_PLAN.md</code></li>
+<li>Reader HTML:
+<code>gdT_prediction/gdtai_v4_2_step0/index.html</code></li>
+<li>PDF:
+<code>gdT_prediction/gdtai_v4_2_step0/gdtai_v4_2_step0_report.pdf</code></li>
+</ul>
+</body>
+</html>

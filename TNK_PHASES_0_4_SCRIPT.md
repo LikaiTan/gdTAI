@@ -590,6 +590,52 @@ Gate C nested evaluation:
   - V4.1 failed Gate C; V3 Round 14 remains the promoted balanced default
   - Gate D release fitting, promotion, and atlas inference remain blocked
 
+## Post-Phase-4 gdTAI V4.2 label audit and protocol freeze
+
+Objective:
+
+- determine whether V4.1 Gate C failed because of Stage-1 model capacity or
+  heterogeneous NK-control provenance
+- freeze a repaired two-stage protocol before any V4.2 fitting
+
+Phase or task:
+
+- gdTAI V4.2 Step 0 read-only NK-label audit and saved-OOF counterfactual
+
+Exact `.py` script:
+
+- `workflows/gdtai/build_gdtai_v4_2_step0_audit.py`
+
+Execution command:
+
+```bash
+MPLCONFIGDIR=/tmp/matplotlib-gdtai-v42-step0 \
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/build_gdtai_v4_2_step0_audit.py
+```
+
+Core configuration and protocol:
+
+- `configs/models/gdtai/v4_2_precommit.json`
+- `docs/GDTAI_V4_2_PRECOMMITTED_PLAN.md`
+
+Key outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_step0/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_step0/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_step0/`
+- `gdT_prediction/gdtai_v4_2_step0/index.html`
+- `gdT_prediction/gdtai_v4_2_step0/gdtai_v4_2_step0_report.pdf`
+
+Gate semantics:
+
+- the audit may read checksum-bound V4.1 OOF probabilities but cannot fit,
+  calibrate, select, promote, or apply a V4.2 model
+- expression-based T-lineage coherence is diagnostic only and cannot define NK
+  truth
+- V4.2 implementation and fitting remain blocked until the Step 0 report and
+  frozen protocol receive explicit supervision approval
+
 ## Phase 1: Coarse T/NK extraction
 
 Objective:

@@ -1,0 +1,55 @@
+{
+  "protocol_version": "4.2-step0",
+  "random_seed": 20260807,
+  "inputs": {
+    "cell_manifest": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_preflight/cell_label_manifest.csv.gz",
+    "feature_manifest": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_preflight/feature_manifest.csv",
+    "gene_feature_cache": "Integrated_dataset/cache/gdT_prediction/gdtai_v4_nested_evaluation/gene_features.npy",
+    "cache_manifest": "Integrated_dataset/cache/gdT_prediction/gdtai_v4_nested_evaluation/feature_cache_manifest.json",
+    "v4_1_checkpoints": "Integrated_dataset/models/gdT_prediction/gdtai_v4_gpu_nested_evaluation/checkpoints"
+  },
+  "expected_sha256": {
+    "cell_manifest": "8157cbebfedeb84fc34eba05429aa8a7a834c6f7ceba15bd4790b5dd06bf7e0c",
+    "feature_manifest": "7fc2b0afb2b761288f941895a219fb38cc541a49464c8d2b330b81719e087808",
+    "gene_feature_cache": "97b2a719cfe77526005941fce289e676518513cec7104aa7770825f5c92c4350"
+  },
+  "primary_t_sources": [
+    "HRA005041",
+    "GSE144469",
+    "BALF_BLOOD_COPD"
+  ],
+  "nk_truth": {
+    "primary_strength": 1.0,
+    "stress_strength": 0.5,
+    "minimum_source_size_for_gate": 100,
+    "expression_coherence_is_diagnostic_only": true
+  },
+  "stage1_counterfactual": {
+    "gdt_recall_per_source": 0.99,
+    "abt_recall_per_source": 0.98,
+    "maximum_nk_passage_per_source": 0.5,
+    "wilson_confidence_z": 1.959963984540054
+  },
+  "expression_audit": {
+    "cd3_genes": ["CD3D", "CD3E", "CD3G"],
+    "abt_constant_genes": ["TRAC", "TRBC1", "TRBC2"],
+    "gdt_constant_genes": ["TRDC", "TRGC1", "TRGC2"],
+    "minimum_cd3_detected": 2
+  },
+  "v4_2_training_contract": {
+    "maximum_total_features": 300,
+    "use_trd_or_trab_scores": false,
+    "use_source_or_batch_features": false,
+    "hard_trdc_or_trdv_requirement": false,
+    "hard_nk_effector_gene_veto": false,
+    "single_annotation_nk_training_weight": 0.0,
+    "primary_nk_training_weight": 1.0,
+    "stage1_probability_allowed_as_stage2_feature": true
+  },
+  "outputs": {
+    "table_dir": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_step0",
+    "figure_dir": "Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_step0",
+    "log_dir": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_step0",
+    "static_dir": "gdT_prediction/gdtai_v4_2_step0"
+  }
+}

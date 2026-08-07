@@ -276,6 +276,20 @@
     provenance without changing the frozen model or selection contract
   - this is an implementation checkpoint only; no project-data model had been
     fitted and no V4 model had been promoted at this checkpoint
+- gdTAI V4.2 Step 0 NK-label audit completed on 2026-08-07
+  - hash-verified the 1,137,739-cell label manifest, 197-gene cache, and all 15
+    completed V4.1 Stage-1 saved-OOF checkpoint paths
+  - found that 315,726/336,780 (`93.7%`) V4.1 NK controls had only a single
+    scVI annotation, while 21,054 (`6.3%`) had dual scVI/author agreement
+  - showed that all 15 candidate/fold combinations pass the frozen Stage-1 NK
+    source cap when evaluated against dual-annotation controls at unchanged
+    per-source T-recall thresholds
+  - retained expression-based T-lineage coherence as a diagnostic only and
+    changed no labels or H5AD files
+  - published a four-page HTML/PDF report and a proposed V4.2 repair protocol;
+    no integration, clustering, fitting, threshold search, or promotion ran
+  - added a supervision proposal to build a separate new-data NK modeling
+    integration with whole-dataset development/validation separation
 
 ## Current working era
 
