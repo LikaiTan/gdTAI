@@ -229,6 +229,70 @@ instead of relying on one transferred threshold; and expect the balanced guardra
 (recall ≥0.80 at ≤0.2% FPR) to be reachable only marginally, if at all, without a
 structurally different NK defense.
 
+## 9. Round 3: NK label repair (2026-08-08)
+
+Round 3 tested the NK-label-contamination hypothesis directly, with two pre-registered
+changes: **R3-1** strict-NK negatives restricted to gdTCR-assayed sublibraries (cells whose
+"no gdTCR" is censoring rather than evidence are excluded from fitting and from FPR
+denominators); **R3-2** NK-annotated cells with TRDC expression split out as an
+abstain-zone diagnostic. Silver weak positives were reverted (R2-2 was counterproductive);
+NK hard negatives in Stage-2 training and the larger HGB grid were retained.
+
+The repair was drastic, as predicted from the assay audit: HRA005041 strict NK dropped
+757 → **15** (98% of its NK "negatives" were in sublibraries that could not see γδ chains);
+GSE254249's entire 8,198-cell NK stratum is censored and unusable; BALF dropped 254 → 214
+plus 40 TRDC-ambiguous. Total clean NK across the three LODO sources: **533 cells**.
+
+### 9.1 The headline finding: the "NK leakage" was mostly the measuring instrument
+
+With clean NK denominators, **strict-NK FPR is 0.000 for every model on every dataset** —
+kimi elastic-net, kimi HistGBM, and the frozen V2/V3 profiles alike (single exception:
+frozen V3 R14 calls 1 of 214 clean BALF NK cells). Round 1's alarming 15–22% NK FPR on
+HRA005041 was measured almost entirely against the 741 censored cells; on the 15 cells where
+NK status is actually observable, no model calls any of them positive. The censored-NK call
+rate remains 18–23% for all models — a number that cannot be interpreted as model error
+without gdTCR assays for those cells, and which bounds the true NK FPR from above.
+
+Two consequences:
+
+1. **gdTAI v3's NK-guard architecture was solving a label problem with model capacity.**
+   The frozen models' NK FPR also collapses to ~0 on clean denominators — they were never
+   as NK-leaky as the contaminated metric claimed.
+2. **The NK guardrail as currently defined is unmeasurable, not failed.** 533 clean NK
+   cells (15/304/214 per dataset) cannot support a 1% per-dataset FPR guardrail. NK
+   evaluation must be pooled across datasets and reported with Wilson intervals, and the
+   censored-NK call rate must be reported separately as an upper bound.
+
+### 9.2 Round-3 metrics (balanced mode)
+
+| candidate | macro F1 (95% CI) | macro recall | macro precision | macro abT FPR | clean NK FPR | inner guardrails |
+|---|---:|---:|---:|---:|---:|---|
+| kimi HistGBM | 0.831 [0.794, 0.857] | 0.783 | 0.911 | 0.65% | 0.000 | met in fold 2 |
+| kimi elastic-net | 0.551 [0.439, 0.600] | 0.465 | 0.952 | 0.28% | 0.000 | met in fold 2 |
+| frozen V3 R14 (descriptive) | ~0.91 | 0.886 | 0.937 | 0.38% | 0.000–0.5% | n/a |
+
+Per held-out dataset (kimi HistGBM): HRA005041 recall 0.785 / abT FPR 0.03%; GSE144469
+0.904 / 1.88%; BALF 0.662 / 0.05%. Both families passed the full balanced guardrail set in
+inner tuning for fold 2 (recall 0.85/0.95, abT FPR ≤0.2%, NK FPR 0) — the first guardrail
+pass of the kimi experiment, enabled by honest NK labels. Fold 1 and fold 3 still fail on
+recall at the 0.2% FPR ceiling (inner recall 0.73 and 0.71 for HistGBM), and the BALF
+recall gap (~0.66 vs frozen 0.83) is unaffected by the NK repair — that gap is real model
+difference on TCR-defined positives, not label noise.
+
+### 9.3 What round 3 settles
+
+- The NK problem was **two problems**: a contaminated measuring instrument (now fixed —
+  and the fix must be ported to the V4 protocol's NK definition and the extension-screen
+  NK strata) and a smaller genuine model-error component bounded by the censored-NK call
+  rate (18–23% on unverifiable cells; unresolvable without gdTCR assays — an abstain zone
+  is the honest answer).
+- The remaining performance gap is concentrated in **recall at strict FPR** (folds 1/3) and
+  **BALF cross-study recall** — neither is NK-related. BALF positives remain biologically
+  hard (tissue Vδ1-like cells under different chemistry); without new gdTCR data this is
+  close to the irreducible floor for a 197-gene RNA-only model.
+- The elastic-net family's instability (BALF recall 0.09) persists across all three rounds;
+  HistGBM is the only viable Stage-2 family in this program.
+
 ## 7. Artifacts
 
 - Script: `workflows/gdtai/run_gdtai_kimi_nested.py` (seed 20260807)

@@ -166,6 +166,17 @@ HGB_MAX_ITER = 250
 #  R2-3 HistGBM capacity raised (leaves {15,31}, max_iter 400) — round 1 grid maxed at
 #       leaves 15 / 250 iterations.
 #  R2-4 recall-at-fixed-FPR operating points reported for every candidate.
+#
+# Round 3 (NK label repair, documented before running):
+#  R3-1 strict_NK requires a gdTCR-assayed sublibrary (97.9% of HRA005041 strict-NK
+#       cells were in sublibraries that could not see gd chains; their "no gdTCR" was
+#       censoring, not evidence). Censored NK cells leave fitting and FPR denominators;
+#       their call rate is reported as an upper-bound diagnostic only.
+#  R3-2 NK-annotated cells with TRDC expression (no TCR contigs) are the biologically
+#       ambiguous zone: excluded from training negatives and from the strict-NK FPR
+#       denominator; reported separately as the abstain-zone call rate.
+#  R3-3 R2-2 reverted (silver weak positives pulled TRD+ NK into the positive class);
+#       R2-1 and R2-3 retained.
 ROUND2_HGB_GRID = [
     {"learning_rate": lr, "max_leaf_nodes": ln, "min_samples_leaf": ms, "l2_regularization": l2}
     for lr in (0.03, 0.07) for ln in (15, 31) for ms in (100, 500) for l2 in (1.0, 10.0)
@@ -441,13 +452,14 @@ def assert_grouped(a, b, groups):
 def main() -> None:
     global HGB_GRID, HGB_MAX_ITER
     parser = argparse.ArgumentParser()
-    parser.add_argument("--round", type=int, default=2, choices=[1, 2],
-                        help="experiment round; round 2 adds NK hard negatives, silver weak "
-                             "positives, larger HistGBM grid, and fixed-FPR operating points")
+    parser.add_argument("--round", type=int, default=3, choices=[1, 2, 3],
+                        help="experiment round; 2 adds NK hard negatives + silver weak positives; "
+                             "3 repairs NK labels (assayed-sublibrary strict NK, TRDC+ NK ambiguity "
+                             "split) and reverts silver weak positives")
     args = parser.parse_args()
     ROUND = args.round
     SUF = "" if ROUND == 1 else f"_r{ROUND}"
-    if ROUND == 2:
+    if ROUND >= 2:
         HGB_GRID = ROUND2_HGB_GRID
         HGB_MAX_ITER = 400
     log.info("gdTAI-kimi round %d (output suffix '%s')", ROUND, SUF)
@@ -481,6 +493,15 @@ def main() -> None:
         log.info("extracting %s (%d cells)", s, rows.size)
         x = extract_features(ATLAS_H5AD, "X", rows, union_genes)
         sources[s] = (x, lab, p4)
+        if ROUND == 3:
+            nk0 = lab.kimi_class == "strict_NK"
+            trdc_expr = x[:, list(union_genes).index("TRDC")] > 0
+            lab.loc[nk0 & ~lab.sublib_assayed, "kimi_class"] = "NK_censored"
+            lab.loc[nk0 & lab.sublib_assayed & trdc_expr, "kimi_class"] = "NK_TRDC_ambiguous"
+            log.info("%s round-3 NK repair: strict %d -> clean %d, censored %d, TRDC-ambiguous %d",
+                     s, int(nk0.sum()), int((lab.kimi_class == "strict_NK").sum()),
+                     int((lab.kimi_class == "NK_censored").sum()),
+                     int((lab.kimi_class == "NK_TRDC_ambiguous").sum()))
         log.info("%s labels: %s", s, lab.kimi_class.value_counts().to_dict())
         if s in ATLAS_PRIMARY_SOURCES:
             log.info("%s gdTCR-assayed sublibraries: %d of %d", s,
@@ -495,6 +516,13 @@ def main() -> None:
     p4_b = pd.to_numeric(pd.Series(balf_obs["phase4_trd_minus_trab"]), errors="coerce").fillna(0).to_numpy(np.float32)
     x_b = extract_features(BALF_H5AD, "counts", np.arange(n_balf), union_genes)
     sources["BALF_BLOOD_COPD"] = (x_b, lab_b, p4_b)
+    if ROUND == 3:
+        nk0 = lab_b.kimi_class == "strict_NK"
+        trdc_expr = x_b[:, list(union_genes).index("TRDC")] > 0
+        lab_b.loc[nk0 & trdc_expr, "kimi_class"] = "NK_TRDC_ambiguous"
+        log.info("BALF round-3 NK repair: strict %d -> clean %d, TRDC-ambiguous %d",
+                 int(nk0.sum()), int((lab_b.kimi_class == "strict_NK").sum()),
+                 int((lab_b.kimi_class == "NK_TRDC_ambiguous").sum()))
     log.info("BALF labels: %s", lab_b.kimi_class.value_counts().to_dict())
 
     pd.DataFrame([{"source": s, **lab.kimi_class.value_counts().to_dict()} for s, (_, lab, _) in sources.items()]
@@ -690,6 +718,8 @@ def main() -> None:
         y_te = (cls_te == "gdT_primary").to_numpy(np.int8)
         abt_te = (cls_te == "abT_primary").to_numpy()
         nk_te = (cls_te == "strict_NK").to_numpy()
+        nk_cens_te = (cls_te == "NK_censored").to_numpy()
+        nk_trdc_te = (cls_te == "NK_TRDC_ambiguous").to_numpy()
         g_te = lab_te.group.astype(str).to_numpy()
         keep_rows = eval_mask | nk_te
         s1_prob_te = s1_full.predict_proba(x_te[:, s1_cols])[:, 1].astype(np.float32)
@@ -701,6 +731,8 @@ def main() -> None:
             row["ece"] = ece(y_te[eval_mask], np.clip(score_te[eval_mask], 0, 1))
             row["abt_fpr"] = float(pred[abt_te].mean()) if abt_te.sum() else np.nan
             row["nk_fpr"] = float(pred[nk_te].mean()) if nk_te.sum() else np.nan
+            row["nk_censored_callrate"] = float(pred[nk_cens_te].mean()) if nk_cens_te.sum() else np.nan
+            row["nk_trdc_amb_callrate"] = float(pred[nk_trdc_te].mean()) if nk_trdc_te.sum() else np.nan
             for pv in PREVALENCES:
                 row[f"ppv@{pv}"] = row["recall"] * pv / max(row["recall"] * pv + row["abt_fpr"] * (1 - pv), 1e-12)
             row.update({"held_out": held_out, "candidate": name, "threshold": float(thr)})
@@ -775,6 +807,8 @@ def main() -> None:
             row = metric_block(y_te[eval_mask], score[eval_mask], pred[eval_mask].astype(np.int8))
             row["abt_fpr"] = float(pred[abt_te].mean()) if abt_te.sum() else np.nan
             row["nk_fpr"] = float(pred[nk_te].mean()) if nk_te.sum() else np.nan
+            row["nk_censored_callrate"] = float(pred[nk_cens_te].mean()) if nk_cens_te.sum() else np.nan
+            row["nk_trdc_amb_callrate"] = float(pred[nk_trdc_te].mean()) if nk_trdc_te.sum() else np.nan
             row.update({"held_out": held_out, "candidate": f"frozen_{pid}", "threshold": "registered"})
             results.append(row)
             test_scores.append(pd.DataFrame({"held_out": held_out, "candidate": f"frozen_{pid}",
