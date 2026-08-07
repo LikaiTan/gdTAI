@@ -1,5 +1,17 @@
 # CHANGELOG.md
 
+## 2026-08-07 - Retired V4 CPU evaluation and froze GPU redesign proposal
+
+- Preserved completed HRA005041 and GSE144469 V4 v1.2 CPU outer-fold artifacts
+  as diagnostic negative results; neither fold contained a valid operating
+  threshold for V4 or the fair comparators.
+- Terminated the unfinished BALF_BLOOD_COPD CPU fold at the user's direction.
+- Verified synthetic-only A100 feasibility, deterministic PyTorch weighted
+  ridge logistic regression, deterministic GPU XGBoost, model export, and
+  isolated direct-CUDA operation without touching another user's MPS daemon.
+- Added the pre-fit `GDTAI_V4_GPU_PRECOMMITTED_PLAN.md`; project-data GPU
+  implementation and fitting remain blocked pending explicit review.
+
 ## Completed milestones
 
 - Initial control-file framework established

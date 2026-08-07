@@ -477,7 +477,7 @@ MPLCONFIGDIR=/tmp/matplotlib-gdtai-v4 \
 MPLCONFIGDIR=/tmp/matplotlib-gdtai-v4 \
 /home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
   workflows/gdtai/run_gdtai_v4_nested_evaluation.py \
-  --stage all --candidate-jobs 16 --fold-jobs 3 --matrix-row-chunk 20000
+  --stage all --candidate-jobs 26 --fold-jobs 3 --matrix-row-chunk 20000
 ```
 
 Core outputs:
@@ -501,6 +501,52 @@ Gate semantics:
 - VDJ rescue is reported separately and cannot improve RNA-only model metrics
 - Step 2 may establish that V4 fails; it does not authorize model promotion,
   release fitting, or whole-atlas inference
+
+Current result:
+
+- HRA005041 and GSE144469 outer folds completed as negative results: no V4 or
+  fair comparator threshold passed the frozen operating modes
+- Stage-1 SAGA was nonconverged and passed all held-out strict-NK cells in both
+  completed folds
+- the user retired the CPU-only experiment before BALF_BLOOD_COPD completed;
+  no CPU model is promotable and the saved artifacts are diagnostic only
+
+## Post-Phase-4 gdTAI V4.1-GPU plan freeze
+
+Objective:
+
+- replace the retired CPU-only SAGA search with a bounded, deterministic GPU
+  nested experiment without changing truth labels, grouped folds, 197 genes,
+  CD4/Treg exclusions, operating guardrails, or promotion criteria
+- verify GPU access, determinism, serialization, memory, checkpointing, and
+  non-interference with the server's existing MPS owner before project fitting
+
+Phase or task:
+
+- gdTAI V4.1-GPU Gate A feasibility and precommitted protocol
+
+Exact `.py` script:
+
+- none for project data; feasibility used synthetic-only inline probes
+
+Core outputs:
+
+- `docs/GDTAI_V4_GPU_PRECOMMITTED_PLAN.md`
+- `gdT_prediction/gdtai_v4_gpu_precommit/index.html`
+- `gdT_prediction/gdtai_v4_gpu_precommit/gdtai_v4_gpu_precommitted_plan.pdf`
+
+Gate semantics:
+
+- use deterministic PyTorch weighted ridge logistic and GPU XGBoost; exclude
+  cuML logistic because its installed solver lacks adequate convergence
+  provenance in the full-scale probe
+- use a unique `CUDA_MPS_PIPE_DIRECTORY`; never alter or connect to the
+  `/tmp/nvidia-mps` daemon owned by another user
+- prohibit silent CPU fallback for primary candidate training
+- do not implement or fit the project-data GPU evaluator until this plan is
+  explicitly approved
+- after approval, implementation plus synthetic tests form a separate QC gate
+  before any project-data model fit
 
 ## Phase 1: Coarse T/NK extraction
 

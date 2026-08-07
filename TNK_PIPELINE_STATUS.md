@@ -2,18 +2,19 @@
 
 ## Current milestone
 
-- gdTAI V4 protocol v1.2 Step 1 preflight passed with zero failures and zero
-  warnings; the checksum-bound Step 2 evaluator is implemented and
-  synthetic-tested, and the user explicitly authorized implementation on
-  2026-08-07; no project-data model has yet been fitted
+- gdTAI V4 protocol v1.2 CPU Step 2 is retired as an incomplete negative
+  experiment after two completed outer folds; the user directed termination of
+  the CPU-only strategy on 2026-08-07, and a separately named V4.1-GPU plan is
+  at the pre-fit supervision gate
 
 ## Next action
 
-- create the checksum-bound Step 2 approval record from the pinned template,
-  validate all source hashes, build the read-only 197-gene cache, and run the
-  nested leave-one-dataset-out evaluation
+- review and approve or reject
+  `docs/GDTAI_V4_GPU_PRECOMMITTED_PLAN.md`
+- do not implement the project-data GPU evaluator or fit a project-data GPU
+  model before the plan receives explicit supervision approval
 - do not promote a model, fit a release artifact, or run whole-atlas inference
-  from Step 2 alone
+  from the incomplete CPU evidence or the GPU feasibility probes
 - do not promote or claim superiority for another gdTAI model before grouped
   resampling, expression-independent labels, and fold-local selection are in place
 - review the frozen-profile negative-control report and official-GEO metadata
@@ -25,6 +26,25 @@
 
 ## Current blockers or review items
 
+- V4 v1.2 CPU outer folds completed for HRA005041 and GSE144469; no V4,
+  compact seven-gene, V2-like, or legacy-score threshold satisfied either
+  frozen operating mode in either fold
+- all 16 Stage-1 SAGA candidates were nonconverged in both completed CPU outer
+  folds, and the selected Stage-1 threshold passed 100% of held-out strict-NK
+  cells in both folds
+- the BALF_BLOOD_COPD CPU fold was terminated at the user's direction before
+  an atomic fold result was written; completed CPU folds and the feature cache
+  remain preserved as read-only diagnostic evidence
+- GPU feasibility passed on synthetic data with the A100 80 GB: the 0.835-GiB
+  gene cache has ample memory headroom, deterministic PyTorch ridge logistic
+  produced bit-identical repeat probabilities, and GPU XGBoost produced
+  bit-identical repeat probabilities plus portable UBJ export
+- the default `/tmp/nvidia-mps` daemon belongs to another user; gdTAI direct
+  CUDA succeeds with an isolated `CUDA_MPS_PIPE_DIRECTORY`, and the plan
+  prohibits modifying or connecting to the other user's daemon
+- cuML logistic regression is excluded from the proposed candidates because a
+  full-scale synthetic fit emitted a line-search stop and the installed version
+  did not expose adequate convergence provenance
 - protocol v1.2 Step 1 passed all frozen input, feature, truth-label,
   exclusion-feasibility, grouped-split, hash, and file-state checks
 - Step 2 implementation passes 17 deterministic unit/integration tests,
@@ -210,6 +230,12 @@ Additional current state:
 
 ## Current review artifacts
 
+- gdTAI V4.1-GPU pre-fit feasibility and protocol:
+  - `docs/GDTAI_V4_GPU_PRECOMMITTED_PLAN.md`
+  - `gdT_prediction/gdtai_v4_gpu_precommit/index.html`
+  - `gdT_prediction/gdtai_v4_gpu_precommit/gdtai_v4_gpu_precommitted_plan.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_gpu_precommit/gpu_feasibility_summary.md`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_gpu_precommit/gpu_feasibility_checks.csv`
 - gdTAI V4 Step 1 preflight and split freeze:
   - `gdT_prediction/gdtai_v4_preflight/index.html`
   - `gdT_prediction/gdtai_v4_preflight/gdtai_v4_preflight_report.pdf`
