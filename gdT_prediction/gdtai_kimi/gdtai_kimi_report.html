@@ -562,6 +562,144 @@ atlas datasets; the honest kimi-vs-frozen comparison is BALF only.</li>
 intentionally not run (sealed cohorts remain sealed; whole-atlas
 inference requires separate approval).</li>
 </ul>
+<h2 id="round-2-diagnosis-driven-iteration-2026-08-07-same-day">8. Round
+2: diagnosis-driven iteration (2026-08-07, same day)</h2>
+<p>Round 1 showed three failure drivers: NK leakage as the binding
+constraint, BALF positives clustering just below the transferred
+threshold, and HGB grid capacity limits. Round 2 made exactly four
+pre-registered changes: <strong>R2-1</strong> grouped NK hard negatives
+(weight 0.5) added to Stage-2 training; <strong>R2-2</strong> TRD-only
+silver-like cells added as weight-0.25 weak positives;
+<strong>R2-3</strong> HistGBM capacity raised (leaves 15–31, max_iter
+400); <strong>R2-4</strong> recall-at-fixed-FPR operating points
+reported for every candidate.</p>
+<h3 id="round-1-vs-round-2-dataset-macro-balanced-mode">8.1 Round 1 vs
+round 2 (dataset-macro, balanced mode)</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>candidate</th>
+<th>macro F1 r1 → r2</th>
+<th>macro recall r1 → r2</th>
+<th>macro abT FPR r1 → r2</th>
+<th>macro NK FPR r1 → r2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kimi HistGBM balanced</td>
+<td>0.811 → <strong>0.838</strong></td>
+<td>0.752 → <strong>0.828</strong></td>
+<td>0.63% → 1.05%</td>
+<td>5.3% → 17.1%</td>
+</tr>
+<tr>
+<td>kimi HistGBM high-purity</td>
+<td>0.727 → 0.789</td>
+<td>0.630 → 0.720</td>
+<td>0.43% → 0.61%</td>
+<td>4.1% → 6.4%</td>
+</tr>
+<tr>
+<td>kimi elastic-net balanced</td>
+<td>0.634 → 0.464</td>
+<td>0.591 → 0.419</td>
+<td>0.47% → 0.79%</td>
+<td>6.9% → 1.2%</td>
+</tr>
+<tr>
+<td>C2 compact 7-gene</td>
+<td>0.595 → 0.589</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Round 2 bought recall but paid for it in false positives — it moved
+along the recall/FPR frontier rather than dominating round 1. The silver
+weak positives (R2-2) broadened the positive class but pulled
+TRD-positive NK-like cells with them (GSE144469 held-out NK FPR rose
+1.0% → 32.9%): <strong>TRD-only evidence cannot distinguish silver gdT
+from NK contamination, and adding silver to fitting was
+counterproductive for NK control.</strong> This independently confirms
+protocol v1.2’s decision to remove silver and sorted cells from fitting.
+The NK training negatives (R2-1) did not reduce NK FPR either (fold-2
+inner NK FPR ~20%, unchanged) — NK leakage in this feature space is not
+a sample-size problem.</p>
+<h3
+id="the-useful-output-the-honest-recallfpr-frontier-kimi-histgbm-round-2">8.2
+The useful output: the honest recall@FPR frontier (kimi HistGBM, round
+2)</h3>
+<p>Thresholds set on inner-OOF to fixed abT-FPR targets, applied to the
+held-out dataset:</p>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr>
+<th>held-out</th>
+<th style="text-align: right;">recall @ ≤0.1% target</th>
+<th style="text-align: right;">recall @ ≤0.2% target</th>
+<th style="text-align: right;">recall @ ≤0.5% target</th>
+<th style="text-align: right;">recall @ ≤1% target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HRA005041</td>
+<td style="text-align: right;">0.627 (meas. 0.01%)</td>
+<td style="text-align: right;">0.793 (0.02%)</td>
+<td style="text-align: right;">0.952 (0.20%)</td>
+<td style="text-align: right;">0.983 (1.24%)</td>
+</tr>
+<tr>
+<td>GSE144469</td>
+<td style="text-align: right;">0.910 (meas. 1.87%)</td>
+<td style="text-align: right;">0.914 (3.06%)</td>
+<td style="text-align: right;">0.921 (7.28%)</td>
+<td style="text-align: right;">0.951 (14.95%)</td>
+</tr>
+<tr>
+<td>BALF_BLOOD_COPD</td>
+<td style="text-align: right;">0.487 (meas. 0.01%)</td>
+<td style="text-align: right;">0.624 (0.02%)</td>
+<td style="text-align: right;">0.841 (0.13%)</td>
+<td style="text-align: right;">0.926 (1.46%)</td>
+</tr>
+</tbody>
+</table>
+<p>Two transferable lessons: (a) thresholds calibrated on atlas sources
+transfer well to HRA005041 and BALF (measured FPR tracks the target) but
+<strong>fail badly toward GSE144469</strong> (measured FPR up to 19× the
+target) — a single global threshold is not robust across that dataset’s
+direction; (b) the honest achievable operating point is roughly
+<strong>macro recall ≈ 0.90 at 0.5% abT FPR</strong> (0.95 / 0.92 / 0.84
+per dataset), not the 0.80 recall at 0.2% FPR the balanced guardrail
+demands — the precommitted guardrails sit slightly off the achievable
+frontier for any model in this family, which is exactly what the
+parallel V4 v1.2 CPU run found independently.</p>
+<h3 id="round-2-conclusion">8.3 Round-2 conclusion</h3>
+<p>No round-2 variant met the guardrails; kimi remains an experimental
+negative result, now with a mapped frontier. The evidence-based guidance
+for the V4.1-GPU plan: keep silver and sorted cells out of fitting;
+treat NK FPR as the primary limiting metric and pool NK guardrails
+across datasets (BALF has 254 strict-NK cells); report recall@fixed-FPR
+curves instead of relying on one transferred threshold; and expect the
+balanced guardrail (recall ≥0.80 at ≤0.2% FPR) to be reachable only
+marginally, if at all, without a structurally different NK defense.</p>
 <h2 id="artifacts">7. Artifacts</h2>
 <ul>
 <li>Script: <code>workflows/gdtai/run_gdtai_kimi_nested.py</code> (seed

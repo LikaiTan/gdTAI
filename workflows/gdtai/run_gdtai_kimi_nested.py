@@ -54,6 +54,7 @@ for _tnk_path in (
     if _tnk_value not in _tnk_sys.path:
         _tnk_sys.path.insert(0, _tnk_value)
 
+import argparse
 import json
 import logging
 import pickle
@@ -154,6 +155,22 @@ HGB_GRID = [
     {"learning_rate": lr, "max_leaf_nodes": ln, "min_samples_leaf": ms, "l2_regularization": l2}
     for lr in (0.03, 0.07) for ln in (7, 15) for ms in (100, 500) for l2 in (1.0, 10.0)
 ]
+HGB_MAX_ITER = 250
+
+# Round 2 (diagnosis-driven, documented before running):
+#  R2-1 Stage-2 trains on grouped NK hard negatives (weight 0.5) — round 1 showed
+#       NK leakage, not ab leakage, is the binding constraint.
+#  R2-2 TRD-only cells (silver-like: TRD CDR3, not paired gd, no ab, not NK-annotated)
+#       join training as weight-0.25 weak positives — round 1 showed BALF positives
+#       cluster just below the transferred threshold; broader positive coverage targets this.
+#  R2-3 HistGBM capacity raised (leaves {15,31}, max_iter 400) — round 1 grid maxed at
+#       leaves 15 / 250 iterations.
+#  R2-4 recall-at-fixed-FPR operating points reported for every candidate.
+ROUND2_HGB_GRID = [
+    {"learning_rate": lr, "max_leaf_nodes": ln, "min_samples_leaf": ms, "l2_regularization": l2}
+    for lr in (0.03, 0.07) for ln in (15, 31) for ms in (100, 500) for l2 in (1.0, 10.0)
+]
+FPR_OPERATING_POINTS = (0.001, 0.002, 0.005, 0.01)
 
 
 # --------------------------------------------------------------------------- io helpers
@@ -278,6 +295,10 @@ def build_labels(obs: dict[str, np.ndarray], source: str) -> pd.DataFrame:
     cls[(df.annotation == nk_label) & ~df.has_ab & ~df.any_gd] = "strict_NK"
     if source in SORTED_WEAK_SOURCES:
         cls[(~df.has_ab) & ~dual & (cls != "gdT_primary")] = "sorted_gdT_weak"
+    if source in LODO_SOURCES:
+        # R2-2: TRD-only silver-like cells as weak positives (training only)
+        silver = df.any_gd & ~df.paired_gd & ~df.has_ab & (df.annotation != nk_label)
+        cls[silver & (cls == "excluded")] = "gdT_silver_weak"
     df["kimi_class"] = cls
     return df
 
@@ -304,7 +325,7 @@ def fit_en(x, y, w, alpha, l1):
 
 
 def fit_hgb(x, y, w, cfg):
-    m = HistGradientBoostingClassifier(loss="log_loss", max_iter=250, early_stopping=False,
+    m = HistGradientBoostingClassifier(loss="log_loss", max_iter=HGB_MAX_ITER, early_stopping=False,
                                        random_state=SEED, **cfg)
     m.fit(x, y, sample_weight=w)
     return m
@@ -321,9 +342,10 @@ def apply_platt(c, scores):
 
 
 def fold_weights(cls: pd.Series, dsrc: np.ndarray) -> np.ndarray:
-    w = cls.map({"gdT_primary": 1.0, "abT_primary": 1.0,
-                 "abT_censored_weak": 0.25, "sorted_gdT_weak": 0.25}).fillna(0.0).to_numpy(dtype=np.float64)
-    ybin = cls.isin(["gdT_primary", "sorted_gdT_weak"]).astype(int).to_numpy()
+    w = cls.map({"gdT_primary": 1.0, "abT_primary": 1.0, "strict_NK": 0.5,
+                 "abT_censored_weak": 0.25, "sorted_gdT_weak": 0.25,
+                 "gdT_silver_weak": 0.25}).fillna(0.0).to_numpy(dtype=np.float64)
+    ybin = cls.isin(["gdT_primary", "sorted_gdT_weak", "gdT_silver_weak"]).astype(int).to_numpy()
     for s in np.unique(dsrc):
         for c in (0, 1):
             m = (dsrc == s) & (ybin == c)
@@ -417,6 +439,18 @@ def assert_grouped(a, b, groups):
 # --------------------------------------------------------------------------- main
 
 def main() -> None:
+    global HGB_GRID, HGB_MAX_ITER
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--round", type=int, default=2, choices=[1, 2],
+                        help="experiment round; round 2 adds NK hard negatives, silver weak "
+                             "positives, larger HistGBM grid, and fixed-FPR operating points")
+    args = parser.parse_args()
+    ROUND = args.round
+    SUF = "" if ROUND == 1 else f"_r{ROUND}"
+    if ROUND == 2:
+        HGB_GRID = ROUND2_HGB_GRID
+        HGB_MAX_ITER = 400
+    log.info("gdTAI-kimi round %d (output suffix '%s')", ROUND, SUF)
     t0 = time.time()
     config = json.loads(EVAL_CONFIG.read_text())
     profiles = load_profiles(config)
@@ -464,7 +498,7 @@ def main() -> None:
     log.info("BALF labels: %s", lab_b.kimi_class.value_counts().to_dict())
 
     pd.DataFrame([{"source": s, **lab.kimi_class.value_counts().to_dict()} for s, (_, lab, _) in sources.items()]
-                 ).to_csv(TABLE_DIR / "label_inventory.csv", index=False)
+                 ).to_csv(TABLE_DIR / f"label_inventory{SUF}.csv", index=False)
 
     g197 = [pos_u[g] for g in GENES_197]
     names197 = GENES_197
@@ -479,10 +513,12 @@ def main() -> None:
         train_sources = [s for s in LODO_SOURCES if s != held_out]
 
         frames, xs = [], []
+        keep_classes = ["gdT_primary", "abT_primary", "abT_censored_weak", "sorted_gdT_weak", "strict_NK"]
+        if ROUND == 2:
+            keep_classes.append("gdT_silver_weak")
         for s in train_sources + SORTED_WEAK_SOURCES:
             x_s, lab_s, _ = sources[s]
-            keep = lab_s.kimi_class.isin(["gdT_primary", "abT_primary", "abT_censored_weak",
-                                          "sorted_gdT_weak", "strict_NK"]).to_numpy()
+            keep = lab_s.kimi_class.isin(keep_classes).to_numpy()
             frames.append(lab_s.loc[keep, ["source", "group", "kimi_class"]])
             xs.append(x_s[keep])
         tr = pd.concat(frames, ignore_index=True)
@@ -491,10 +527,9 @@ def main() -> None:
         groups = tr.group.astype(str).to_numpy()
         dsrc = tr.source.to_numpy()
         is_nk = (cls_tr == "strict_NK").to_numpy()
-        fit_mask = ~is_nk
-        y_fit = cls_tr.isin(["gdT_primary", "sorted_gdT_weak"]).to_numpy(dtype=np.int8)
-        y_all = ((cls_tr == "gdT_primary") | (cls_tr == "sorted_gdT_weak")).astype(np.int8).to_numpy()
-        y_all[is_nk] = 0
+        fit_mask = np.ones(len(tr), dtype=bool) if ROUND == 2 else ~is_nk
+        pos_classes = ["gdT_primary", "sorted_gdT_weak"] + (["gdT_silver_weak"] if ROUND == 2 else [])
+        y_all = cls_tr.isin(pos_classes).astype(np.int8).to_numpy()
 
         # ---- Stage 1: soft T-lineage gate
         s1_pos = cls_tr.isin(["gdT_primary", "abT_primary"]).to_numpy()
@@ -615,15 +650,17 @@ def main() -> None:
             pos_idx = np.flatnonzero(fit_mask & (y_all == 1))
             neg_prim = np.flatnonzero(cls_tr.eq("abT_primary").to_numpy())
             neg_cens = np.flatnonzero(cls_tr.eq("abT_censored_weak").to_numpy())
+            neg_nk = np.flatnonzero(is_nk) if ROUND == 2 else np.array([], dtype=int)
             if neg_prim.size > NEG_PRIMARY_CAP:
                 neg_prim = np.sort(rng.choice(neg_prim, NEG_PRIMARY_CAP, replace=False))
             if neg_cens.size > NEG_CENSORED_CAP:
                 neg_cens = np.sort(rng.choice(neg_cens, NEG_CENSORED_CAP, replace=False))
-            use = np.sort(np.concatenate([pos_idx, neg_prim, neg_cens]))
+            use = np.sort(np.concatenate([pos_idx, neg_prim, neg_cens, neg_nk]))
             m = fit_en(x2[use], y_all[use], w2[use], *param) if kind == "en" else fit_hgb(x2[use], y_all[use], w2[use], param)
-            chosen[fam] = {"model": m, "cal": cal, "t_bal": t_bal, "t_hp": t_hp, "key": key, "info": info}
+            chosen[fam] = {"model": m, "cal": cal, "t_bal": t_bal, "t_hp": t_hp, "key": key,
+                           "info": info, "oof": oof}
 
-        pd.DataFrame(diag_rows).to_csv(TABLE_DIR / f"inner_candidate_diagnostics_holdout_{held_out}.csv", index=False)
+        pd.DataFrame(diag_rows).to_csv(TABLE_DIR / f"inner_candidate_diagnostics_holdout_{held_out}{SUF}.csv", index=False)
 
         # comparators: full refit + calibration + threshold on same protocol
         comp_fitted = {}
@@ -681,6 +718,26 @@ def main() -> None:
             results[-1]["inner_guardrails_met"] = pack["info"].get("guardrails_met")
             if pack["t_hp"] is not None:
                 record(f"{fam}_highpurity", score_te, pack["t_hp"])
+            if ROUND == 2:
+                # R2-4: recall at fixed inner-OOF abT-FPR operating points
+                pcal_tr = apply_platt(pack["cal"], pack["oof"])
+                for fpr_t in FPR_OPERATING_POINTS:
+                    grid = np.unique(np.quantile(pcal_tr[primary_mask], np.linspace(0, 1, 2000)))
+                    feas = []
+                    for tt in grid:
+                        fpr = (pcal_tr[abt_mask] >= tt).mean()
+                        if fpr <= fpr_t:
+                            rec = ((pcal_tr[primary_mask & (y_all == 1)] >= tt).mean())
+                            feas.append((rec, tt))
+                    if not feas:
+                        continue
+                    rec_in, tt = max(feas)
+                    row = {"held_out": held_out, "candidate": f"{fam}_fpr{fpr_t:g}",
+                           "threshold": float(tt), "inner_recall_at_fpr": float(rec_in),
+                           "recall": float((score_te[eval_mask & (y_te == 1)] >= tt).mean()),
+                           "abt_fpr": float((score_te[abt_te] >= tt).mean()),
+                           "nk_fpr": float((score_te[nk_te] >= tt).mean()) if nk_te.sum() else np.nan}
+                    results.append(row)
             cd4m = np.mean([x_te[:, pos_u[g]] for g in CD4_EXCL_PANEL], axis=0)
             cd4det = np.sum([x_te[:, pos_u[g]] > 0 for g in CD4_EXCL_PANEL[1:]], axis=0)
             tregm = np.mean([x_te[:, pos_u[g]] for g in TREG_EXCL_PANEL], axis=0)
@@ -728,7 +785,7 @@ def main() -> None:
 
         fold_models[held_out] = {"chosen": {k: {"key": v["key"], "t_bal": v["t_bal"], "t_hp": v["t_hp"],
                                                 "info": v["info"]} for k, v in chosen.items()}}
-        with open(MODEL_DIR / f"kimi_fold_holdout_{held_out}.pkl", "wb") as fh:
+        with open(MODEL_DIR / f"kimi_fold_holdout_{held_out}{SUF}.pkl", "wb") as fh:
             pickle.dump({"held_out": held_out, "chosen": chosen, "comparators": comp_fitted,
                          "stage1": {"model": s1_full, "alpha": best_alpha, "thr": s1_thr},
                          "union_genes": union_genes, "note": "experimental; not registered; not promotable"}, fh)
@@ -750,9 +807,9 @@ def main() -> None:
         log.info("fold %s done (%.1f min)", held_out, (time.time() - t0) / 60)
 
     res = pd.DataFrame(results)
-    res.to_csv(TABLE_DIR / "nested_metrics_by_heldout.csv", index=False)
+    res.to_csv(TABLE_DIR / f"nested_metrics_by_heldout{SUF}.csv", index=False)
     ts = pd.concat(test_scores, ignore_index=True)
-    ts.to_parquet(TABLE_DIR / "heldout_cell_scores.parquet", index=False)
+    ts.to_parquet(TABLE_DIR / f"heldout_cell_scores{SUF}.parquet", index=False)
 
     macro = res[~res.held_out.str.startswith("stress")].groupby("candidate").agg(
         macro_f1=("f1", "mean"), macro_recall=("recall", "mean"), macro_precision=("precision", "mean"),
@@ -760,7 +817,7 @@ def main() -> None:
         macro_nk_fpr=("nk_fpr", "mean"), macro_roc_auc=("roc_auc", "mean"), macro_pr_auc=("pr_auc", "mean"),
         macro_ece=("ece", "mean"), min_recall=("recall", "min"),
         max_abt_fpr=("abt_fpr", "max"), max_nk_fpr=("nk_fpr", "max")).reset_index()
-    macro.to_csv(TABLE_DIR / "nested_metrics_macro.csv", index=False)
+    macro.to_csv(TABLE_DIR / f"nested_metrics_macro{SUF}.csv", index=False)
 
     # donor-cluster bootstrap CIs + paired differences on eval cells
     rng = np.random.default_rng(SEED + 6)
@@ -788,10 +845,10 @@ def main() -> None:
                           "macro_f1_ci_hi": float(np.percentile(macro_reps, 97.5)),
                           "macro_f1_mean_boot": float(macro_reps.mean())})
         pd.DataFrame({"candidate": cand, "macro_f1_boot": macro_reps}).to_csv(
-            TABLE_DIR / f"bootstrap_macro_f1_{cand}.csv", index=False)
-    pd.DataFrame(boot_rows).to_csv(TABLE_DIR / "bootstrap_macro_f1_cis.csv", index=False)
+            TABLE_DIR / f"bootstrap_macro_f1_{cand}{SUF}.csv", index=False)
+    pd.DataFrame(boot_rows).to_csv(TABLE_DIR / f"bootstrap_macro_f1_cis{SUF}.csv", index=False)
 
-    (LOG_DIR / "fold_model_choices.json").write_text(json.dumps(fold_models, indent=2, default=str))
+    (LOG_DIR / f"fold_model_choices{SUF}.json").write_text(json.dumps(fold_models, indent=2, default=str))
     log.info("all done in %.1f min", (time.time() - t0) / 60)
 
 
