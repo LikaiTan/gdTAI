@@ -1,0 +1,10 @@
+cohort_id,path_source,role,include_in_integration_fit,include_in_cluster_label_design,allow_pseudolabel_training,allow_model_tuning,allow_locked_evaluation,expected_cells,scientific_use
+current_atlas,current_atlas,development_reference,True,True,False,True,False,3705306,Existing atlas reference and expression-independent TCR anchors
+GSE114724,extension_manifest,development_cluster_expansion,True,True,True,True,False,28652,Cluster-consensus NK development candidates
+GSE159251,extension_manifest,development_cluster_expansion,True,True,True,True,False,68898,Cluster-consensus NK development candidates
+GSE292700,extension_manifest,development_cluster_expansion,True,True,True,True,False,78254,Cluster-consensus NK development candidates
+GSE294273_GSE294274,extension_manifest,development_cluster_expansion,True,True,True,True,False,55744,Cluster-consensus NK development candidates
+GSE296954,extension_manifest,development_cluster_expansion,True,True,True,True,False,86608,Cluster-consensus NK development candidates
+GSE169246,extension_manifest,locked_author_nk_stage1_specificity,False,False,False,False,True,354373,Author NK Stage-1 passage plus reduced-feature final-cascade sensitivity
+GSE315928,extension_manifest,locked_paired_abt_specificity,False,False,False,False,True,66813,Whole-dataset paired-alpha-beta false-positive evaluation
+GSE121636_GSE121637,extension_manifest,locked_mixed_t_nk_stress,False,False,False,False,True,18793,Whole-dataset mixed T-NK stress evaluation

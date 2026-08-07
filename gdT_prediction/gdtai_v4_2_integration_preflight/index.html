@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>gdTAI V4.2 integration preflight</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="print.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">gdTAI V4.2 integration preflight</h1>
+</header>
+<h1 id="gdtai-v4.2-modeling-integration-preflight">gdTAI V4.2
+modeling-integration preflight</h1>
+<h2 id="decision">Decision</h2>
+<p><strong>PASS_REVIEW_REQUIRED.</strong> The proposed sidecar
+integration is technically feasible and the whole-dataset role split is
+internally consistent. This report authorizes supervision review only.
+It does not authorize integration, scVI fitting, clustering,
+pseudo-labeling, classifier fitting, threshold selection, promotion, or
+atlas inference.</p>
+<ul>
+<li>Development integration: <strong>4,023,462 cells</strong> from the
+current atlas plus five new development cohorts.</li>
+<li>Locked evaluation: <strong>439,979 cells</strong> across three whole
+cohorts excluded before HVG selection and scVI fitting.</li>
+<li>Common development genes: <strong>14,265</strong>; eligible after
+TCR/mitochondrial/ribosomal/immunoglobulin exclusion:
+<strong>13,975</strong>.</li>
+<li>GSE169246 contains all 50 Stage-1 genes but only <strong>145/197
+(73.6%)</strong> full classifier genes. It is a valid Stage-1 NK-passage
+challenge but only a reduced-feature sensitivity analysis for
+final-cascade FPR.</li>
+<li>The extension cohorts contain no expression-independent gdT-positive
+truth. They strengthen specificity training/evaluation but cannot
+establish gdT recall, F1, or superiority alone.</li>
+</ul>
+<figure>
+<img
+src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_integration_preflight/cohort_roles_and_cell_counts.png"
+alt="Cohort roles" />
+<figcaption aria-hidden="true">Cohort roles</figcaption>
+</figure>
+<h2 id="frozen-cohort-roles">Frozen cohort roles</h2>
+<table>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 20%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 11%" />
+<col style="width: 14%" />
+<col style="width: 9%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">cohort_id</th>
+<th style="text-align: left;">role</th>
+<th style="text-align: left;">include_in_integration_fit</th>
+<th style="text-align: left;">allow_pseudolabel_training</th>
+<th style="text-align: left;">allow_model_tuning</th>
+<th style="text-align: left;">allow_locked_evaluation</th>
+<th style="text-align: right;">expected_cells</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">current_atlas</td>
+<td style="text-align: left;">development_reference</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: right;">3705306</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE114724</td>
+<td style="text-align: left;">development_cluster_expansion</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: right;">28652</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE159251</td>
+<td style="text-align: left;">development_cluster_expansion</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: right;">68898</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE292700</td>
+<td style="text-align: left;">development_cluster_expansion</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: right;">78254</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE294273_GSE294274</td>
+<td style="text-align: left;">development_cluster_expansion</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: right;">55744</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE296954</td>
+<td style="text-align: left;">development_cluster_expansion</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: right;">86608</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE169246</td>
+<td style="text-align: left;">locked_author_nk_stage1_specificity</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: right;">354373</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE315928</td>
+<td style="text-align: left;">locked_paired_abt_specificity</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: right;">66813</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE121636_GSE121637</td>
+<td style="text-align: left;">locked_mixed_t_nk_stress</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: right;">18793</td>
+</tr>
+</tbody>
+</table>
+<p>All locked cohorts are excluded from HVG selection, scVI training,
+clustering, cluster interpretation, pseudo-label construction, feature
+selection, calibration, thresholding, and model-family selection. These
+cohorts have already been inspected by earlier frozen-model screens and
+are not prospective or fully independent; they are locked specifically
+for V4.2 comparison.</p>
+<h2 id="matrix-and-feature-compatibility">Matrix and feature
+compatibility</h2>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 8%" />
+<col style="width: 11%" />
+<col style="width: 9%" />
+<col style="width: 13%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">cohort_id</th>
+<th style="text-align: right;">n_cells</th>
+<th style="text-align: right;">n_genes</th>
+<th style="text-align: left;">matrix_key</th>
+<th style="text-align: left;">matrix_encoding</th>
+<th style="text-align: left;">matrix_dtype</th>
+<th style="text-align: left;">sample_integer_like</th>
+<th style="text-align: left;">model_feature_coverage</th>
+<th style="text-align: left;">stage1_feature_coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">current_atlas</td>
+<td style="text-align: right;">3705306</td>
+<td style="text-align: right;">27413</td>
+<td style="text-align: left;">X</td>
+<td style="text-align: left;">csr_matrix</td>
+<td style="text-align: left;">float32</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">100.0%</td>
+<td style="text-align: left;">100.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE114724</td>
+<td style="text-align: right;">28652</td>
+<td style="text-align: right;">33694</td>
+<td style="text-align: left;">X</td>
+<td style="text-align: left;">csr_matrix</td>
+<td style="text-align: left;">int64</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">100.0%</td>
+<td style="text-align: left;">100.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE159251</td>
+<td style="text-align: right;">68898</td>
+<td style="text-align: right;">22013</td>
+<td style="text-align: left;">X</td>
+<td style="text-align: left;">csr_matrix</td>
+<td style="text-align: left;">int64</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">95.4%</td>
+<td style="text-align: left;">100.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE292700</td>
+<td style="text-align: right;">78254</td>
+<td style="text-align: right;">38606</td>
+<td style="text-align: left;">X</td>
+<td style="text-align: left;">csr_matrix</td>
+<td style="text-align: left;">int64</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">100.0%</td>
+<td style="text-align: left;">100.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE294273_GSE294274</td>
+<td style="text-align: right;">55744</td>
+<td style="text-align: right;">33540</td>
+<td style="text-align: left;">X</td>
+<td style="text-align: left;">csr_matrix</td>
+<td style="text-align: left;">int64</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">100.0%</td>
+<td style="text-align: left;">100.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE296954</td>
+<td style="text-align: right;">86608</td>
+<td style="text-align: right;">36601</td>
+<td style="text-align: left;">X</td>
+<td style="text-align: left;">csr_matrix</td>
+<td style="text-align: left;">float32</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">100.0%</td>
+<td style="text-align: left;">100.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE169246</td>
+<td style="text-align: right;">354373</td>
+<td style="text-align: right;">12989</td>
+<td style="text-align: left;">layers/counts</td>
+<td style="text-align: left;">csr_matrix</td>
+<td style="text-align: left;">int64</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">73.6%</td>
+<td style="text-align: left;">100.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE315928</td>
+<td style="text-align: right;">66813</td>
+<td style="text-align: right;">36601</td>
+<td style="text-align: left;">X</td>
+<td style="text-align: left;">csr_matrix</td>
+<td style="text-align: left;">float32</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">100.0%</td>
+<td style="text-align: left;">100.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE121636_GSE121637</td>
+<td style="text-align: right;">18793</td>
+<td style="text-align: right;">33694</td>
+<td style="text-align: left;">X</td>
+<td style="text-align: left;">csr_matrix</td>
+<td style="text-align: left;">int64</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">100.0%</td>
+<td style="text-align: left;">100.0%</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img
+src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_integration_preflight/feature_coverage_by_cohort.png"
+alt="Feature coverage" />
+<figcaption aria-hidden="true">Feature coverage</figcaption>
+</figure>
+<p>The development intersection supports 4,000 batch-aware HVGs without
+forcing classifier genes into the latent representation. All TCR genes
+are excluded from HVG selection so that TCR-family expression cannot
+directly define cluster-derived NK pseudo-labels. The classifier itself
+remains a log1p(CP10K) individual-gene model and never consumes scVI
+coordinates or Leiden labels.</p>
+<h2 id="available-controls">Available controls</h2>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 10%" />
+<col style="width: 18%" />
+<col style="width: 18%" />
+<col style="width: 32%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">cohort_id</th>
+<th style="text-align: right;">n_cells</th>
+<th style="text-align: right;">n_paired_ab_tcr</th>
+<th style="text-align: right;">n_paired_gd_tcr</th>
+<th style="text-align: right;">n_author_nk_no_productive_tcr</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">current_atlas</td>
+<td style="text-align: right;">3705306</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE114724</td>
+<td style="text-align: right;">28652</td>
+<td style="text-align: right;">23789</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE159251</td>
+<td style="text-align: right;">68898</td>
+<td style="text-align: right;">32420</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE292700</td>
+<td style="text-align: right;">78254</td>
+<td style="text-align: right;">16903</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE294273_GSE294274</td>
+<td style="text-align: right;">55744</td>
+<td style="text-align: right;">27838</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE296954</td>
+<td style="text-align: right;">86608</td>
+<td style="text-align: right;">51063</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE169246</td>
+<td style="text-align: right;">354373</td>
+<td style="text-align: right;">54925</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">7770</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE315928</td>
+<td style="text-align: right;">66813</td>
+<td style="text-align: right;">66813</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE121636_GSE121637</td>
+<td style="text-align: right;">18793</td>
+<td style="text-align: right;">8094</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p>Primary weight-1 NK anchors mapped to the current atlas:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">source_gse_id</th>
+<th style="text-align: right;">n_anchor_cells</th>
+<th style="text-align: right;">n_matched_current_atlas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">GSE125527</td>
+<td style="text-align: right;">3547</td>
+<td style="text-align: right;">3547</td>
+</tr>
+<tr>
+<td style="text-align: left;">GSE228597</td>
+<td style="text-align: right;">17507</td>
+<td style="text-align: right;">17507</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img
+src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_integration_preflight/specificity_controls_by_cohort.png"
+alt="Specificity controls" />
+<figcaption aria-hidden="true">Specificity controls</figcaption>
+</figure>
+<p>GSE169246 contributes 7,770 author NK cells without productive TCR
+and 54,925 productive paired alpha-beta T cells. GSE315928 contributes
+66,813 paired alpha-beta T cells with complete 197-gene coverage.
+GSE121636/GSE121637 remains a mixed stress cohort because it lacks an
+independent author NK label in the harmonized object.</p>
+<h2 id="precommitted-integration-and-clustering">Precommitted
+integration and clustering</h2>
+<ol type="1">
+<li>Build a new sidecar object under the mirrored SSD root; never mutate
+a source or canonical milestone H5AD.</li>
+<li>Use raw counts, 4,000 batch-aware common HVGs, the existing
+library/sample/source batch hierarchy, scVI <code>128 x 2</code>, 30
+latent dimensions, negative-binomial likelihood, 20 epochs maximum,
+batch size 8,192, GPU only, and early stopping.</li>
+<li>Run nine global RAPIDS Leiden partitions: resolutions 0.4, 0.8, 1.2
+crossed with seeds 11, 29, 47.</li>
+<li>Recluster the T/NK boundary in nine additional partitions:
+resolutions 0.3, 0.6, 1.0 crossed with the same seeds.</li>
+<li>A cluster-derived development NK negative requires &gt;=80% run
+agreement, &gt;=95% independently labeled NK-anchor purity, &lt;=2%
+productive-TCR contamination, representation in &gt;=3 development
+sources, and &lt;=70% contribution from any one source.</li>
+<li>No threshold on CD3, TRDC, TRDV, NKG7, GNLY, KLRD1, TYROBP, FCER1G,
+or FCGR3A may define truth. Pseudo-labels receive weight 0.5, are
+source-balanced and capped, and cannot determine validation
+guardrails.</li>
+</ol>
+<p>Primary paired-gdT inputs remain outside integration and pseudo-label
+construction. They retain weight-1 positive roles during classifier
+fitting. Their later latent-query proximity to NK clusters is diagnostic
+only and cannot tune the pseudo-label rules.</p>
+<h2 id="resource-feasibility">Resource feasibility</h2>
+<table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
+<col style="width: 11%" />
+<col style="width: 6%" />
+<col style="width: 8%" />
+<col style="width: 13%" />
+<col style="width: 7%" />
+<col style="width: 10%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: right;">development_cells</th>
+<th style="text-align: right;">input_full_csr_gib</th>
+<th style="text-align: right;">estimated_common_csr_gib</th>
+<th style="text-align: right;">estimated_hvg_csr_gib</th>
+<th style="text-align: right;">latent_gib</th>
+<th style="text-align: right;">knn_graph_gib</th>
+<th style="text-align: right;">conservative_peak_ram_gib</th>
+<th style="text-align: right;">ssd_free_gib</th>
+<th style="text-align: left;">gpu_name</th>
+<th style="text-align: right;">gpu_total_gib</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">4023462</td>
+<td style="text-align: right;">66.6</td>
+<td style="text-align: right;">34.7</td>
+<td style="text-align: right;">9.7</td>
+<td style="text-align: right;">0.45</td>
+<td style="text-align: right;">1.35</td>
+<td style="text-align: right;">223.6</td>
+<td style="text-align: right;">875.1</td>
+<td style="text-align: left;">NVIDIA A100 80GB PCIe</td>
+<td style="text-align: right;">80</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img
+src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_integration_preflight/resource_feasibility.png"
+alt="Resources" />
+<figcaption aria-hidden="true">Resources</figcaption>
+</figure>
+<p>The estimate is intentionally conservative and remains below the
+active 800-GiB exception. The A100 is available with more than the
+frozen 75-GiB minimum, and SSD free space exceeds the 300-GiB floor.</p>
+<h2 id="qc-checks">QC checks</h2>
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 8%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">check</th>
+<th style="text-align: left;">status</th>
+<th style="text-align: left;">detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">sha256::current_atlas</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">9060920d6fe19bdbbc1845d79a571ce545bfe731642a83550e6f784fe3f7d2c3</td>
+</tr>
+<tr>
+<td style="text-align: left;">expected_cells::current_atlas</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">3705306</td>
+</tr>
+<tr>
+<td style="text-align: left;">sparse_matrix::current_atlas</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">csr_matrix</td>
+</tr>
+<tr>
+<td style="text-align: left;">raw_count_sample::current_atlas</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">n=90000; range=1.0..1866.0</td>
+</tr>
+<tr>
+<td style="text-align: left;">unique_axes::current_atlas</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">cell_duplicates=0; gene_duplicates=0</td>
+</tr>
+<tr>
+<td style="text-align: left;">sha256::GSE114724</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">394425c7937432ac7fce4b904b35b46fa7519fc5107e4942aff27cf7d6e7a808</td>
+</tr>
+<tr>
+<td style="text-align: left;">expected_cells::GSE114724</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">28652</td>
+</tr>
+<tr>
+<td style="text-align: left;">sparse_matrix::GSE114724</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">csr_matrix</td>
+</tr>
+<tr>
+<td style="text-align: left;">raw_count_sample::GSE114724</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">n=90000; range=1.0..218.0</td>
+</tr>
+<tr>
+<td style="text-align: left;">unique_axes::GSE114724</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">cell_duplicates=0; gene_duplicates=0</td>
+</tr>
+<tr>
+<td style="text-align: left;">sha256::GSE159251</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">abe6502b3a15a3ba458fc47b46e86277e8b9764665722616205201f8452ed569</td>
+</tr>
+<tr>
+<td style="text-align: left;">expected_cells::GSE159251</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">68898</td>
+</tr>
+<tr>
+<td style="text-align: left;">sparse_matrix::GSE159251</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">csr_matrix</td>
+</tr>
+<tr>
+<td style="text-align: left;">raw_count_sample::GSE159251</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">n=90000; range=1.0..196.0</td>
+</tr>
+<tr>
+<td style="text-align: left;">unique_axes::GSE159251</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">cell_duplicates=0; gene_duplicates=0</td>
+</tr>
+<tr>
+<td style="text-align: left;">sha256::GSE292700</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">78c9ada980a21592ba72a56c1beea12dcd0d256a630b2294be68b711d977dc8a</td>
+</tr>
+<tr>
+<td style="text-align: left;">expected_cells::GSE292700</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">78254</td>
+</tr>
+<tr>
+<td style="text-align: left;">sparse_matrix::GSE292700</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">csr_matrix</td>
+</tr>
+<tr>
+<td style="text-align: left;">raw_count_sample::GSE292700</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">n=90000; range=1.0..459.0</td>
+</tr>
+<tr>
+<td style="text-align: left;">unique_axes::GSE292700</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">cell_duplicates=0; gene_duplicates=0</td>
+</tr>
+<tr>
+<td style="text-align: left;">sha256::GSE294273_GSE294274</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">6a20d61544c7cd33d33ceec756837308e7a88d992919e6496a29822eda9215cf</td>
+</tr>
+<tr>
+<td style="text-align: left;">expected_cells::GSE294273_GSE294274</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">55744</td>
+</tr>
+<tr>
+<td style="text-align: left;">sparse_matrix::GSE294273_GSE294274</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">csr_matrix</td>
+</tr>
+<tr>
+<td style="text-align: left;">raw_count_sample::GSE294273_GSE294274</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">n=90000; range=1.0..699.0</td>
+</tr>
+<tr>
+<td style="text-align: left;">unique_axes::GSE294273_GSE294274</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">cell_duplicates=0; gene_duplicates=0</td>
+</tr>
+<tr>
+<td style="text-align: left;">sha256::GSE296954</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">f3484482e35b49d3c3f192ad1e6570d2c066f3fcf68db99b5bafa9312dc440b0</td>
+</tr>
+<tr>
+<td style="text-align: left;">expected_cells::GSE296954</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">86608</td>
+</tr>
+<tr>
+<td style="text-align: left;">sparse_matrix::GSE296954</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">csr_matrix</td>
+</tr>
+<tr>
+<td style="text-align: left;">raw_count_sample::GSE296954</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">n=90000; range=1.0..523.0</td>
+</tr>
+<tr>
+<td style="text-align: left;">unique_axes::GSE296954</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">cell_duplicates=0; gene_duplicates=0</td>
+</tr>
+<tr>
+<td style="text-align: left;">sha256::GSE169246</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">f251382c62109a486500a2ac472e2e5608d368625891db3de512956bd5ce6e6c</td>
+</tr>
+<tr>
+<td style="text-align: left;">expected_cells::GSE169246</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">354373</td>
+</tr>
+<tr>
+<td style="text-align: left;">sparse_matrix::GSE169246</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">csr_matrix</td>
+</tr>
+<tr>
+<td style="text-align: left;">raw_count_sample::GSE169246</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">n=90000; range=1.0..179.0</td>
+</tr>
+<tr>
+<td style="text-align: left;">unique_axes::GSE169246</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">cell_duplicates=0; gene_duplicates=0</td>
+</tr>
+<tr>
+<td style="text-align: left;">sha256::GSE315928</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">2fe674761db67aa337c4d80932d69d4bfbb47e44d2a16c22cbf5ecd819c8d70d</td>
+</tr>
+<tr>
+<td style="text-align: left;">expected_cells::GSE315928</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">66813</td>
+</tr>
+<tr>
+<td style="text-align: left;">sparse_matrix::GSE315928</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">csr_matrix</td>
+</tr>
+<tr>
+<td style="text-align: left;">raw_count_sample::GSE315928</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">n=90000; range=1.0..257.0</td>
+</tr>
+<tr>
+<td style="text-align: left;">unique_axes::GSE315928</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">cell_duplicates=0; gene_duplicates=0</td>
+</tr>
+<tr>
+<td style="text-align: left;">sha256::GSE121636_GSE121637</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">b7182274cab834f10e0eb8de240c7d770c5f8890be0fe862d41712f7476e463d</td>
+</tr>
+<tr>
+<td style="text-align: left;">expected_cells::GSE121636_GSE121637</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">18793</td>
+</tr>
+<tr>
+<td style="text-align: left;">sparse_matrix::GSE121636_GSE121637</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">csr_matrix</td>
+</tr>
+<tr>
+<td style="text-align: left;">raw_count_sample::GSE121636_GSE121637</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">n=90000; range=1.0..789.0</td>
+</tr>
+<tr>
+<td style="text-align: left;">unique_axes::GSE121636_GSE121637</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">cell_duplicates=0; gene_duplicates=0</td>
+</tr>
+<tr>
+<td style="text-align: left;">unique_cohort_roles</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">duplicates=0</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">locked_cohorts_excluded_from_development</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">leaking_cohorts=0</td>
+</tr>
+<tr>
+<td style="text-align: left;">development_source_count</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">6 input objects</td>
+</tr>
+<tr>
+<td style="text-align: left;">primary_nk_anchor_count</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">21054 anchors</td>
+</tr>
+<tr>
+<td style="text-align: left;">primary_nk_anchor_source_count</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">2 sources</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">primary_nk_anchors_map_to_current_atlas</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">21054/21054 matched</td>
+</tr>
+<tr>
+<td style="text-align: left;">common_gene_universe</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">13975 eligible common genes</td>
+</tr>
+<tr>
+<td style="text-align: left;">development_model_feature_coverage</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">minimum=0.954</td>
+</tr>
+<tr>
+<td style="text-align: left;">locked_stage1_feature_coverage</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">minimum=1.000</td>
+</tr>
+<tr>
+<td style="text-align: left;">required_metadata_columns</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">missing=0</td>
+</tr>
+<tr>
+<td style="text-align: left;">ram_feasibility</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">estimated 223.6 GiB &lt; 800 GiB</td>
+</tr>
+<tr>
+<td style="text-align: left;">ssd_feasibility</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">875.1 GiB free</td>
+</tr>
+<tr>
+<td style="text-align: left;">gpu_feasibility</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">NVIDIA A100 80GB PCIe; total=80.0 GiB</td>
+</tr>
+<tr>
+<td style="text-align: left;">all_input_h5ads_unchanged</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">9/9 unchanged</td>
+</tr>
+</tbody>
+</table>
+<p>Missing required metadata columns: <strong>0</strong>. All nine input
+H5AD size and nanosecond modification-time pairs were checked before and
+after the audit.</p>
+<h2 id="supervision-gate">Supervision gate</h2>
+<p>The next executable milestone is implementation QC for a fail-closed
+sidecar integration runner. It requires explicit approval. Even after
+integration approval, V4.2 classifier fitting requires a separate
+reviewed QC gate and approval record.</p>
+<h2 id="outputs">Outputs</h2>
+<ul>
+<li>Full tables:
+<code>Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_integration_preflight/</code></li>
+<li>Machine summary:
+<code>Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_integration_preflight/summary.json</code></li>
+<li>HTML:
+<code>gdT_prediction/gdtai_v4_2_integration_preflight/index.html</code></li>
+<li>PDF:
+<code>gdT_prediction/gdtai_v4_2_integration_preflight/gdtai_v4_2_integration_preflight_report.pdf</code></li>
+</ul>
+</body>
+</html>

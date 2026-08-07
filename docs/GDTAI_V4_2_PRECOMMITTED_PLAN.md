@@ -101,9 +101,15 @@ cluster-consensus NK development negative only when all conditions hold:
 - at least 95% NK purity among independently labeled NK-versus-productive-TCR
   anchor cells in its consensus cluster;
 - no more than 2% productive-TCR contamination among all cells in that cluster;
-- no more than 0.5% primary paired-gdT contamination;
 - representation in at least three development sources, with no source
   contributing more than 70% of the cluster.
+
+Primary paired-gdT inputs remain outside this sidecar integration so their
+expression and labels cannot influence pseudo-label construction. Their
+cluster-projection proximity is reported later as a diagnostic, not used as an
+eligibility rule. During classifier fitting, all primary gdT cells remain
+weight-1 Stage-1 T positives and Stage-2 gdT positives; cluster-derived NK
+negatives cannot outweigh the primary NK pool.
 
 No threshold on NKG7, GNLY, KLRD1, TYROBP, FCER1G, FCGR3A, CD3, TRDC, or TRDV
 may define these labels. Clustering-derived NK cells are transcriptomic

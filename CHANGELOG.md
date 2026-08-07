@@ -290,6 +290,22 @@
     no integration, clustering, fitting, threshold search, or promotion ran
   - added a supervision proposal to build a separate new-data NK modeling
     integration with whole-dataset development/validation separation
+- gdTAI V4.2 modeling-integration preflight completed on 2026-08-08
+  - froze five extension development cohorts, the current atlas reference, and
+    three whole-cohort locked evaluation roles before any integration
+  - hash-verified all nine input H5ADs, sampled raw-count state, required sparse
+    matrices and metadata, and confirmed unchanged size/mtime after the audit
+  - mapped all 21,054 weight-1 dual-annotation NK anchors exactly to the current
+    atlas and verified complete Stage-1 gene coverage in every cohort
+  - found 14,265 common development genes and 13,975 eligible genes after
+    excluding TCR, mitochondrial, ribosomal, and immunoglobulin genes
+  - classified GSE169246 final-cascade evaluation as reduced-feature
+    sensitivity because it has 145/197 genes despite complete 50/50 Stage-1
+    coverage
+  - passed the 800-GiB RAM, 300-GiB SSD, and 75-GiB GPU gates with estimated
+    peak RAM 223.6 GiB, 875.1 GiB SSD free, and an idle A100 80 GB
+  - published and visually checked a seven-page HTML/PDF report; no integration,
+    clustering, pseudo-labeling, fitting, or promotion ran
 
 ## Current working era
 

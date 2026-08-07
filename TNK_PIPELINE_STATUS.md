@@ -2,19 +2,18 @@
 
 ## Current milestone
 
-- gdTAI V4.2 Step 0 NK-label and saved-OOF counterfactual audit completed with
-  `PASS` on 2026-08-07; it identified single-annotation NK controls as the
-  dominant V4.1 Gate-C blocker and performed no new model fitting
+- gdTAI V4.2 modeling-integration preflight completed with
+  `PASS_REVIEW_REQUIRED` on 2026-08-08; all 59 checksum, role-separation,
+  matrix, metadata, anchor, feature, resource, and file-state checks passed
 
 ## Next action
 
-- review the V4.2 Step 0 report and the proposed new-data NK-reference
-  integration amendment
-- decide whether to approve a separate, read-only modeling integration using
-  five extension development cohorts while keeping GSE169246, GSE315928, and
-  GSE121636/GSE121637 out of development
-- if approved, run a new metadata/input/split preflight and implementation QC
-  gate before any integration, clustering, pseudo-labeling, or model fitting
+- review the V4.2 integration-preflight PDF and checksum-bound cohort roles
+- decide whether to approve implementation QC and execution of the separate
+  sidecar modeling integration; this approval would not authorize classifier
+  fitting
+- after an approved integration and clustering QC report, decide separately
+  whether to authorize V4.2 classifier fitting and nested comparison
 - do not authorize Gate D release fitting, V4.1 promotion, or whole-atlas
   inference from this failed experiment
 - do not promote a model, fit a release artifact, or run whole-atlas inference
@@ -29,6 +28,26 @@
   explicit approval
 
 ## Current blockers or review items
+
+- V4.2 integration preflight passed 59/59 checks on 4,023,462 development cells
+  and 439,979 whole-cohort locked-evaluation cells
+- all 21,054 primary dual-annotation NK anchors mapped to the current atlas;
+  every development and locked cohort has 50/50 Stage-1 genes
+- GSE169246 has only 145/197 full classifier genes, so its 7,770 author NK cells
+  are a primary Stage-1 passage challenge but final-cascade FPR is explicitly a
+  reduced-feature sensitivity analysis
+- GSE315928 retains 66,813 paired-alpha-beta controls with 197/197 genes;
+  GSE121636/GSE121637 remains a mixed stress cohort rather than author NK truth
+- the development intersection has 14,265 genes and 13,975 eligible non-TCR,
+  non-mitochondrial, non-ribosomal, non-immunoglobulin genes before selecting
+  4,000 HVGs
+- the resource audit estimated 223.6 GiB conservative peak RAM, verified 875.1
+  GiB free SSD, and found an idle A100 80-GB GPU
+- all nine input H5ADs were hash-verified and retained identical size and
+  nanosecond modification time; no H5AD was modified
+- an inactive approval template exists, but integration implementation and
+  execution remain blocked for explicit supervision; classifier fitting has a
+  separate later gate
 
 - V4.2 Step 0 verified 336,780 V4.1 NK controls: 315,726 (`93.7%`) had only a
   single scVI NK annotation and 21,054 (`6.3%`) had dual scVI/author agreement
@@ -263,6 +282,15 @@ Additional current state:
   checksums, and historical results were moved under `archive/`
 
 ## Current review artifacts
+
+- gdTAI V4.2 modeling-integration preflight:
+  - `configs/models/gdtai/v4_2_cohort_roles.csv`
+  - `configs/models/gdtai/v4_2_integration_preflight.json`
+  - `gdT_prediction/gdtai_v4_2_integration_preflight/index.html`
+  - `gdT_prediction/gdtai_v4_2_integration_preflight/gdtai_v4_2_integration_preflight_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_integration_preflight/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_integration_preflight/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_integration_preflight/`
 
 - gdTAI V4.2 Step 0 NK-label audit and proposed repair:
   - `docs/GDTAI_V4_2_PRECOMMITTED_PLAN.md`

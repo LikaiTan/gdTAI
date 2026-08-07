@@ -636,6 +636,64 @@ Gate semantics:
 - V4.2 implementation and fitting remain blocked until the Step 0 report and
   frozen protocol receive explicit supervision approval
 
+## Post-Phase-4 gdTAI V4.2 modeling-integration preflight
+
+Objective:
+
+- freeze whole-cohort development and locked-evaluation roles before any new
+  data integration
+- prove raw-count, metadata, TCR-anchor, feature, GPU, RAM, SSD, and rollback
+  compatibility without merging or fitting
+
+Phase or task:
+
+- gdTAI V4.2 read-only sidecar-integration preflight and supervision package
+
+Exact `.py` script:
+
+- `workflows/gdtai/run_gdtai_v4_2_integration_preflight.py`
+
+Execution command:
+
+```bash
+MPLCONFIGDIR=/tmp/matplotlib-gdtai-v42-integration-preflight \
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/run_gdtai_v4_2_integration_preflight.py
+```
+
+Core configuration and role manifest:
+
+- `configs/models/gdtai/v4_2_integration_preflight.json`
+- `configs/models/gdtai/v4_2_cohort_roles.csv`
+
+Key outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_integration_preflight/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_integration_preflight/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_integration_preflight/`
+- `gdT_prediction/gdtai_v4_2_integration_preflight/index.html`
+- `gdT_prediction/gdtai_v4_2_integration_preflight/gdtai_v4_2_integration_preflight_report.pdf`
+
+Current result:
+
+- `PASS_REVIEW_REQUIRED`; all 59 checks passed
+- 4,023,462 development cells and 439,979 locked cells were checksum-bound
+- all 21,054 primary dual-annotation NK anchors mapped exactly to the current
+  atlas, and all locked cohorts retained 50/50 Stage-1 genes
+- the common development universe contains 14,265 genes, of which 13,975
+  remain after the frozen TCR/mitochondrial/ribosomal/immunoglobulin exclusion
+- conservative peak RAM is 223.6 GiB, SSD free space is 875.1 GiB, and the
+  A100 80-GB GPU passed the resource gate
+- all nine input H5AD size and nanosecond modification-time pairs were unchanged
+
+Gate semantics:
+
+- no merge, scVI fit, clustering, pseudo-label construction, classifier fit,
+  threshold search, promotion, or inference ran
+- an inactive checksum-bound approval template was generated
+- implementation or integration requires explicit supervision approval; later
+  classifier fitting requires a separate reviewed approval gate
+
 ## Phase 1: Coarse T/NK extraction
 
 Objective:

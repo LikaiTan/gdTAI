@@ -72,6 +72,17 @@
 
 ## Current review packages
 
+- gdTAI V4.2 modeling-integration preflight:
+  - `configs/models/gdtai/v4_2_cohort_roles.csv`
+  - `configs/models/gdtai/v4_2_integration_preflight.json`
+  - `gdT_prediction/gdtai_v4_2_integration_preflight/index.html`
+  - `gdT_prediction/gdtai_v4_2_integration_preflight/gdtai_v4_2_integration_preflight_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_integration_preflight/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_integration_preflight/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_integration_preflight/`
+  - decision: 59/59 preflight checks passed; integration and fitting remain
+    blocked by separate explicit supervision gates
+
 - gdTAI V4.2 Step 0 NK-label and saved-OOF counterfactual audit:
   - `docs/GDTAI_V4_2_PRECOMMITTED_PLAN.md`
   - `gdT_prediction/gdtai_v4_2_step0/index.html`

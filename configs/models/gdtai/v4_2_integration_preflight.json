@@ -1,0 +1,123 @@
+{
+  "protocol_version": "4.2-integration-preflight",
+  "random_seed": 20260807,
+  "inputs": {
+    "current_atlas": "high_speed_temp/Integrated_dataset/integrated.h5ad",
+    "extension_manifest": "data/interim/extension_intake/tnk_filtered_h5ads_manifest.csv",
+    "cohort_roles": "configs/models/gdtai/v4_2_cohort_roles.csv",
+    "model_feature_manifest": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_preflight/feature_manifest.csv",
+    "v4_cell_label_manifest": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_preflight/cell_label_manifest.csv.gz",
+    "v4_evaluation_config": "configs/models/gdtai/v4_nested_evaluation.json",
+    "step0_protocol": "docs/GDTAI_V4_2_PRECOMMITTED_PLAN.md"
+  },
+  "expected_current_atlas": {
+    "sha256": "9060920d6fe19bdbbc1845d79a571ce545bfe731642a83550e6f784fe3f7d2c3",
+    "size_bytes": 73350311676,
+    "n_cells": 3705306,
+    "n_genes": 27413,
+    "matrix_key": "X"
+  },
+  "expected_primary_nk_anchors": {
+    "n_cells": 21054,
+    "n_sources": 2
+  },
+  "matrix_keys": {
+    "default": "X",
+    "GSE169246": "layers/counts"
+  },
+  "required_metadata": {
+    "current_atlas": [
+      "source_gse_id",
+      "donor_id",
+      "sample_id",
+      "library_id",
+      "technology_simple"
+    ],
+    "extension": [
+      "source_gse_id",
+      "donor_id",
+      "sample_id",
+      "library_id",
+      "technology_simple",
+      "tissue_harmonized",
+      "specimen_context"
+    ],
+    "tcr": [
+      "has_any_ab_tcr",
+      "has_any_gd_tcr",
+      "has_TRA_TRB_paired",
+      "has_TRG_TRD_paired"
+    ]
+  },
+  "matrix_audit": {
+    "sample_values_per_region": 30000,
+    "integer_tolerance": 1e-6,
+    "require_nonnegative": true,
+    "allowed_sparse_encodings": ["csr_matrix", "csc_matrix"]
+  },
+  "feature_policy": {
+    "n_hvgs": 4000,
+    "minimum_common_genes": 8000,
+    "minimum_model_feature_coverage": 0.9,
+    "minimum_stage1_feature_coverage": 1.0,
+    "exclude_tcr_genes_from_hvg": true,
+    "exclude_mito_ribo_ig_from_hvg": true,
+    "force_classifier_genes_into_hvg": false
+  },
+  "planned_scvi": {
+    "n_hidden": 128,
+    "n_layers": 2,
+    "n_latent": 30,
+    "gene_likelihood": "nb",
+    "max_epochs": 20,
+    "batch_size": 8192,
+    "early_stopping": true,
+    "early_stopping_patience": 5,
+    "accelerator": "gpu",
+    "devices": 1,
+    "batch_key_hierarchy": ["library_id", "sample_id", "source_gse_id"]
+  },
+  "planned_clustering": {
+    "global": {
+      "resolutions": [0.4, 0.8, 1.2],
+      "seeds": [11, 29, 47],
+      "n_neighbors": 30
+    },
+    "t_nk_boundary": {
+      "resolutions": [0.3, 0.6, 1.0],
+      "seeds": [11, 29, 47],
+      "n_neighbors": 30
+    },
+    "backend": "rapids_singlecell"
+  },
+  "pseudolabel_contract": {
+    "minimum_run_agreement": 0.8,
+    "minimum_anchor_nk_purity": 0.95,
+    "maximum_productive_tcr_contamination": 0.02,
+    "primary_gdt_contamination_is_diagnostic_not_eligibility": true,
+    "minimum_development_sources": 3,
+    "maximum_single_source_fraction": 0.7,
+    "reliability_weight": 0.5,
+    "maximum_total_effective_weight_relative_to_primary_nk": 1.0,
+    "marker_thresholds_may_define_truth": false,
+    "may_control_validation_guardrails": false
+  },
+  "resource_contract": {
+    "maximum_cpu_cores": 80,
+    "maximum_ram_gib": 800,
+    "minimum_gpu_memory_gib": 75,
+    "minimum_ssd_free_gib": 300,
+    "planned_ssd_root": "/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference",
+    "canonical_nfs_output_root": "Integrated_dataset"
+  },
+  "approval": {
+    "integration_approval_file": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_integration_preflight/INTEGRATION_APPROVAL.json",
+    "fitting_requires_separate_approval": true
+  },
+  "outputs": {
+    "table_dir": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_integration_preflight",
+    "figure_dir": "Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_integration_preflight",
+    "log_dir": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_integration_preflight",
+    "static_dir": "gdT_prediction/gdtai_v4_2_integration_preflight"
+  }
+}
