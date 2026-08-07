@@ -44,6 +44,9 @@
   serial fold implementation proved inefficient and emitted unrecorded SAGA
   convergence warnings; the evaluator now runs the same frozen folds in
   deterministic parallel and records iteration/convergence provenance
+- the clean execution uses 26 candidate workers and three fold workers for a
+  maximum of 78 concurrent fits, within the 80-CPU contract; this changes only
+  scheduling, not data, models, seeds, folds, or selection
 - the registered HRA005041 `log1p(CP10K)` matrix passed a full 766,639-cell
   inverse-library-size audit: zero empty rows, zero rows outside the frozen
   `1e-4` tolerance, and maximum absolute deviation
@@ -227,6 +230,10 @@ Additional current state:
   - `Integrated_dataset/logs/gdT_prediction/external_review/gdtai_external_review_report.md`
   - `gdT_prediction/external_review/gdtai_external_review_report.html`
   - `gdT_prediction/external_review/gdtai_external_review_report.pdf`
+- gdTAI-kimi experimental nested cross-dataset evaluation (not promotable):
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_kimi/gdtai_kimi_report.md`
+  - `gdT_prediction/gdtai_kimi/gdtai_kimi_report.pdf`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_kimi/`
 - extension official-GEO metadata reconciliation:
   - `docs/EXTENSION_GEO_METADATA_RECONCILIATION.md`
   - `configs/metadata/extension_geo_metadata_reconciliation.csv`

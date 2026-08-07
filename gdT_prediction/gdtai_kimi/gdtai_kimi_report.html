@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>gdTAI-kimi experimental nested evaluation</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="report_style.css" />
+</head>
+<body>
+<h1
+id="gdtai-kimi-an-honest-benchmark-experiment-for-the-gdtai-program">gdTAI-kimi:
+an honest-benchmark experiment for the gdTAI program</h1>
+<p><strong>Date:</strong> 2026-08-07 <strong>Status:</strong>
+experimental candidate, <strong>not registered, not promotable</strong>.
+gdTAI-kimi is a separately named experiment run outside the frozen GDTAI
+V4 precommitted protocol
+(<code>docs/GDTAI_V4_PRECOMMITTED_PLAN.md</code>), applying that
+protocol’s core principles end-to-end. Its purpose is twofold: (1) test
+whether the V4 protocol is executable as written, and (2) quantify how
+gdTAI-class models behave when every split, feature decision,
+calibration step, and threshold is grouped, fold-local, and free of
+adaptive iteration.</p>
+<p><strong>One-paragraph answer.</strong> Under fully honest nested
+leave-one-dataset-out evaluation, a from-scratch two-stage gdT
+classifier (gdTAI-kimi, HistGBM variant) reaches dataset-macro F1
+<strong>0.811</strong> (donor-cluster bootstrap 95% CI [0.761, 0.845]) —
+far above the fairly retrained simple baselines (0.57–0.60) but below
+the frozen V2/V3 profiles’ descriptive scores (~0.91, which are
+optimistically biased in this frame because those models were developed
+with access to HRA005041 and GSE144469 cells). <strong>No kimi variant
+met the precommitted balanced-mode guardrails in any outer
+fold</strong>, so under the V4 promotion rule gdTAI-kimi would be
+published as an experimental negative result. The binding constraints
+were recall at the 0.2% paired-abT FPR ceiling (folds 1 and 3) and the
+strict-NK FPR ceiling (fold 2). NK leakage — not αβ leakage — is the
+hardest unsolved problem in this model class.</p>
+<hr />
+<h2 id="design">1. Design</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Element</th>
+<th>gdTAI-kimi choice</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Evaluation</td>
+<td>Nested leave-one-dataset-out over HRA005041, GSE144469,
+BALF_BLOOD_COPD; 3-fold StratifiedGroupKFold inner tuning, group = donor
+(fallback sample/library)</td>
+</tr>
+<tr>
+<td>Labels</td>
+<td>Expression-independent, computed from raw CDR3 fields:
+<code>gdT_primary</code> = paired TRG/TRD, no ab evidence;
+<code>abT_primary</code> = paired TRA/TRB, no gd evidence,
+<strong>restricted to gdTCR-assayed sublibraries</strong>; censored
+paired-abT = weight-0.25 training-only weak negatives; sorted-gdT cells
+without paired TCR = weight-0.25 training-only weak positives;
+dual/ambiguous excluded</td>
+</tr>
+<tr>
+<td>Features</td>
+<td>Frozen 197-gene universe from the V4 plan + fold-local derived
+features (family detection counts, panel means, Stage-1 OOF
+probability); no Phase-4 scores, no metadata, no annotations</td>
+</tr>
+<tr>
+<td>Architecture</td>
+<td>Stage 1 soft T-lineage gate (elastic-net; OOF probability is a
+Stage-2 feature; no cell hard-removed). Stage 2: elastic-net logistic
+(16-config grid) vs HistGBM (16-config grid), identical folds and
+weights</td>
+</tr>
+<tr>
+<td>Calibration/thresholds</td>
+<td>Sigmoid (Platt) on inner-OOF scores; thresholds selected on
+inner-OOF under the V4 plan’s guardrails (balanced: macro recall ≥0.80,
+paired-abT FPR ≤0.2%, strict-NK FPR ≤1%; high-purity: ≥0.70 / ≤0.1% /
+≤0.5%)</td>
+</tr>
+<tr>
+<td>Comparators (same folds)</td>
+<td>C1 Phase-4 TRD−TRAB score; C2 compact 7-gene logistic; C3
+TCR-gene-only elastic-net</td>
+</tr>
+<tr>
+<td>Frozen references</td>
+<td>V2 high-F1, V2 high-purity, V3 Round 12, V3 Round 14 scored on
+identical held-out cells — <strong>descriptive only</strong> (see
+§4.2)</td>
+</tr>
+<tr>
+<td>Statistics</td>
+<td>Per-dataset metrics primary; 1,000-rep donor-cluster bootstrap CIs
+on dataset-macro F1</td>
+</tr>
+</tbody>
+</table>
+<p>Deviations from the frozen V4 protocol (documented in the script
+docstring): GSE144469 expression from the integrated-plus6 atlas X; SGD
+optimizer for elastic-net; fold-local ≤100k tuning subsamples; no
+extension-cohort guardrails (sealed cohorts stay sealed); no full-atlas
+inference.</p>
+<h2 id="label-inventory-all-expression-independent">2. Label inventory
+(all expression-independent)</h2>
+<table>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr>
+<th>source</th>
+<th style="text-align: right;">gdT_primary</th>
+<th style="text-align: right;">abT_primary</th>
+<th style="text-align: right;">abT_censored_weak</th>
+<th style="text-align: right;">strict_NK</th>
+<th style="text-align: right;">sorted weak</th>
+<th style="text-align: right;">dual excluded</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HRA005041</td>
+<td style="text-align: right;">4,894</td>
+<td style="text-align: right;">22,211</td>
+<td style="text-align: right;">520,817</td>
+<td style="text-align: right;">757</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">5,917</td>
+</tr>
+<tr>
+<td>GSE144469</td>
+<td style="text-align: right;">4,003</td>
+<td style="text-align: right;">61,729</td>
+<td style="text-align: right;">2,989</td>
+<td style="text-align: right;">307</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">1,103</td>
+</tr>
+<tr>
+<td>BALF_BLOOD_COPD</td>
+<td style="text-align: right;">1,046</td>
+<td style="text-align: right;">33,117</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">254</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">3,116</td>
+</tr>
+<tr>
+<td>GDT_2020AUG_woCOV</td>
+<td style="text-align: right;">15,066</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">10,838</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr>
+<td>MalteGDT</td>
+<td style="text-align: right;">5,650</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">2,150</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr>
+<td>GSE254249 (stress only)</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">174,010</td>
+<td style="text-align: right;">8,198</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+</tr>
+</tbody>
+</table>
+<p>Notes: HRA005041 contributes only 22,211 sublibrary-clean abT
+negatives (vs 520,817 censored) — exactly the M1 trade-off, and it is
+workable. BALF contributes only 254 strict-NK cells, making per-dataset
+NK FPR estimates on BALF extremely coarse.</p>
+<h2 id="headline-results">3. Headline results</h2>
+<h3 id="dataset-macro-mean-over-the-three-held-out-datasets">3.1
+Dataset-macro (mean over the three held-out datasets)</h3>
+<table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr>
+<th>candidate</th>
+<th style="text-align: right;">macro F1</th>
+<th style="text-align: right;">bootstrap 95% CI</th>
+<th style="text-align: right;">macro recall</th>
+<th style="text-align: right;">macro precision</th>
+<th style="text-align: right;">macro abT FPR</th>
+<th style="text-align: right;">macro NK FPR</th>
+<th style="text-align: right;">min per-dataset recall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>kimi HistGBM balanced</strong></td>
+<td style="text-align: right;"><strong>0.811</strong></td>
+<td style="text-align: right;"><strong>[0.761, 0.845]</strong></td>
+<td style="text-align: right;">0.752</td>
+<td style="text-align: right;">0.915</td>
+<td style="text-align: right;">0.63%</td>
+<td style="text-align: right;">5.3%</td>
+<td style="text-align: right;">0.676</td>
+</tr>
+<tr>
+<td>kimi elastic-net balanced</td>
+<td style="text-align: right;">0.634</td>
+<td style="text-align: right;">[0.605, 0.655]</td>
+<td style="text-align: right;">0.591</td>
+<td style="text-align: right;">0.937</td>
+<td style="text-align: right;">0.47%</td>
+<td style="text-align: right;">6.9%</td>
+<td style="text-align: right;"><strong>0.083</strong></td>
+</tr>
+<tr>
+<td>kimi HistGBM high-purity</td>
+<td style="text-align: right;">0.727</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">0.630</td>
+<td style="text-align: right;">0.939</td>
+<td style="text-align: right;">0.43%</td>
+<td style="text-align: right;">4.1%</td>
+<td style="text-align: right;">0.469</td>
+</tr>
+<tr>
+<td>C1 Phase-4 TRD−TRAB</td>
+<td style="text-align: right;">0.573</td>
+<td style="text-align: right;">[0.512, 0.607]</td>
+<td style="text-align: right;">0.477</td>
+<td style="text-align: right;">0.929</td>
+<td style="text-align: right;">0.44%</td>
+<td style="text-align: right;">1.6%</td>
+<td style="text-align: right;">0.211</td>
+</tr>
+<tr>
+<td>C2 compact 7-gene</td>
+<td style="text-align: right;">0.595</td>
+<td style="text-align: right;">[0.497, 0.639]</td>
+<td style="text-align: right;">0.515</td>
+<td style="text-align: right;">0.923</td>
+<td style="text-align: right;">0.57%</td>
+<td style="text-align: right;">2.8%</td>
+<td style="text-align: right;">0.208</td>
+</tr>
+<tr>
+<td>C3 TCR-gene elastic-net</td>
+<td style="text-align: right;">0.582</td>
+<td style="text-align: right;">[0.471, 0.628]</td>
+<td style="text-align: right;">0.495</td>
+<td style="text-align: right;">0.936</td>
+<td style="text-align: right;">0.45%</td>
+<td style="text-align: right;">2.0%</td>
+<td style="text-align: right;">0.209</td>
+</tr>
+<tr>
+<td>frozen V2 high-purity*</td>
+<td style="text-align: right;">0.906</td>
+<td style="text-align: right;">[0.891, 0.916]</td>
+<td style="text-align: right;">0.885</td>
+<td style="text-align: right;">0.930</td>
+<td style="text-align: right;">0.40%</td>
+<td style="text-align: right;">4.6%</td>
+<td style="text-align: right;">0.829</td>
+</tr>
+<tr>
+<td>frozen V3 Round 12*</td>
+<td style="text-align: right;">0.913</td>
+<td style="text-align: right;">[0.888, 0.922]</td>
+<td style="text-align: right;">0.888</td>
+<td style="text-align: right;">0.944</td>
+<td style="text-align: right;">0.36%</td>
+<td style="text-align: right;">8.1%</td>
+<td style="text-align: right;">0.821</td>
+</tr>
+<tr>
+<td>frozen V3 Round 14*</td>
+<td style="text-align: right;">0.910</td>
+<td style="text-align: right;">[0.897, 0.917]</td>
+<td style="text-align: right;">0.886</td>
+<td style="text-align: right;">0.937</td>
+<td style="text-align: right;">0.38%</td>
+<td style="text-align: right;">7.8%</td>
+<td style="text-align: right;">0.831</td>
+</tr>
+</tbody>
+</table>
+<p>*Frozen profiles are descriptive references. They were
+trained/selected with access to HRA005041 and GSE144469 cells, so their
+numbers on those datasets are train-adjacent and optimistically biased;
+see §4.2.</p>
+<h3 id="per-held-out-dataset-balanced-mode">3.2 Per held-out dataset
+(balanced mode)</h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+</colgroup>
+<thead>
+<tr>
+<th>held-out</th>
+<th>candidate</th>
+<th style="text-align: right;">precision</th>
+<th style="text-align: right;">recall</th>
+<th style="text-align: right;">F1</th>
+<th style="text-align: right;">abT FPR</th>
+<th style="text-align: right;">NK FPR</th>
+<th style="text-align: right;">ROC-AUC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HRA005041</td>
+<td>kimi HistGBM</td>
+<td style="text-align: right;">0.999</td>
+<td style="text-align: right;">0.677</td>
+<td style="text-align: right;">0.807</td>
+<td style="text-align: right;">0.02%</td>
+<td style="text-align: right;">14.9%</td>
+<td style="text-align: right;">0.998</td>
+</tr>
+<tr>
+<td>HRA005041</td>
+<td>kimi elastic-net</td>
+<td style="text-align: right;">0.980</td>
+<td style="text-align: right;">0.811</td>
+<td style="text-align: right;">0.887</td>
+<td style="text-align: right;">0.36%</td>
+<td style="text-align: right;">20.0%</td>
+<td style="text-align: right;">0.991</td>
+</tr>
+<tr>
+<td>HRA005041</td>
+<td>frozen V3 R14*</td>
+<td style="text-align: right;">0.998</td>
+<td style="text-align: right;">0.962</td>
+<td style="text-align: right;">0.979</td>
+<td style="text-align: right;">0.05%</td>
+<td style="text-align: right;">22.1%</td>
+<td style="text-align: right;">0.999</td>
+</tr>
+<tr>
+<td>GSE144469</td>
+<td>kimi HistGBM</td>
+<td style="text-align: right;">0.760</td>
+<td style="text-align: right;"><strong>0.902</strong></td>
+<td style="text-align: right;">0.825</td>
+<td style="text-align: right;">1.85%</td>
+<td style="text-align: right;">1.0%</td>
+<td style="text-align: right;">0.970</td>
+</tr>
+<tr>
+<td>GSE144469</td>
+<td>kimi elastic-net</td>
+<td style="text-align: right;">0.843</td>
+<td style="text-align: right;">0.879</td>
+<td style="text-align: right;">0.861</td>
+<td style="text-align: right;">1.06%</td>
+<td style="text-align: right;">0.7%</td>
+<td style="text-align: right;">0.948</td>
+</tr>
+<tr>
+<td>GSE144469</td>
+<td>frozen V3 R14*</td>
+<td style="text-align: right;">0.850</td>
+<td style="text-align: right;">0.866</td>
+<td style="text-align: right;">0.858</td>
+<td style="text-align: right;">0.99%</td>
+<td style="text-align: right;">1.0%</td>
+<td style="text-align: right;">0.962</td>
+</tr>
+<tr>
+<td>BALF_BLOOD_COPD</td>
+<td>kimi HistGBM</td>
+<td style="text-align: right;">0.986</td>
+<td style="text-align: right;">0.676</td>
+<td style="text-align: right;">0.802</td>
+<td style="text-align: right;">0.03%</td>
+<td style="text-align: right;">0.0%</td>
+<td style="text-align: right;">0.980</td>
+</tr>
+<tr>
+<td>BALF_BLOOD_COPD</td>
+<td>kimi elastic-net</td>
+<td style="text-align: right;">0.989</td>
+<td style="text-align: right;"><strong>0.083</strong></td>
+<td style="text-align: right;">0.153</td>
+<td style="text-align: right;">0.00%</td>
+<td style="text-align: right;">0.0%</td>
+<td style="text-align: right;">0.980</td>
+</tr>
+<tr>
+<td>BALF_BLOOD_COPD</td>
+<td>frozen V3 R14*</td>
+<td style="text-align: right;">0.963</td>
+<td style="text-align: right;">0.831</td>
+<td style="text-align: right;">0.892</td>
+<td style="text-align: right;">0.10%</td>
+<td style="text-align: right;">0.4%</td>
+<td style="text-align: right;">0.969</td>
+</tr>
+</tbody>
+</table>
+<h2 id="findings">4. Findings</h2>
+<h3
+id="kimi-fails-the-precommitted-guardrails-in-every-fold-an-honest-negative-result">4.1
+Kimi fails the precommitted guardrails in every fold — an honest
+negative result</h3>
+<p>No kimi variant satisfied the balanced-mode guardrails during inner
+tuning. The binding constraint differed by fold: training on
+GSE144469+BALF, the best achievable macro recall at the 0.2% abT-FPR
+ceiling was 0.66 (HistGBM); training on HRA005041+GSE144469, elastic-net
+reached only 0.40; training on HRA005041+BALF, recall was fine (0.95)
+but the inner strict-NK FPR was 14–20%, 14–20× over the 1% ceiling.
+Under the V4 promotion rule this experiment ends here: V3 Round 14 stays
+the default and kimi is published as a negative result. This is the
+protocol working as intended.</p>
+<h3
+id="the-frozen-models-advantage-is-real-but-smaller-than-their-headline-numbers-imply">4.2
+The frozen models’ advantage is real but smaller than their headline
+numbers imply</h3>
+<p>The only like-for-like frame is BALF_BLOOD_COPD (never used to fit
+any model; used in frozen model <em>selection</em>, so still mildly
+favorable to them). There, frozen V3 R14 beats kimi HistGBM on recall
+(0.831 vs 0.676) at comparable precision. On HRA005041 and GSE144469 the
+frozen models’ numbers are train-adjacent: V3 trained on both datasets’
+cells, so its 0.96-recall on “held-out” HRA005041 is not a
+generalization measurement. Notably, on GSE144469 — where frozen V3 had
+every advantage — kimi HistGBM still achieved <em>higher</em> recall
+(0.902 vs 0.866), at the cost of a higher abT FPR (1.85% vs 0.99%).</p>
+<h3 id="nk-leakage-is-the-binding-constraint-not-αβ-leakage">4.3 NK
+leakage is the binding constraint, not αβ leakage</h3>
+<p>Across folds and model families, the strict-NK FPR is 5–50× harder to
+control than the paired-abT FPR (e.g., kimi HistGBM on held-out
+HRA005041: abT FPR 0.02% vs NK FPR 14.9%). This is not unique to kimi:
+frozen V3 R14’s NK FPR on the same cells is 22.1% — <em>worse</em> than
+kimi HistGBM. The historical NK hard-negative strategy (v3’s TRDC+TRDV−
+guard) addressed a visible symptom; the grouped, never-fitted NK
+evaluation shows the problem is deeper. The V4 protocol’s soft-gate-only
+NK defense is likely insufficient as written; see §5.</p>
+<h3
+id="gdtai-class-models-add-large-real-value-over-simple-baselines">4.4
+gdTAI-class models add large, real value over simple baselines</h3>
+<p>The fairly retrained comparators collapse under honest evaluation:
+macro F1 0.57–0.60, with per-dataset recall as low as 0.21 on BALF. The
+full two-stage model roughly doubles comparator recall at similar
+precision. The answer to “is a TRD−TRAB score good enough” is clearly no
+— but the answer to “do we need more than ~200 genes and a small
+gradient-boosted tree” is also no.</p>
+<h3 id="elastic-net-is-unstable-across-datasets-histgbm-is-robust">4.5
+Elastic-net is unstable across datasets; HistGBM is robust</h3>
+<p>The elastic-net variant collapsed on held-out BALF (recall 0.083
+balanced, 0.027 high-purity) while performing acceptably on the other
+two folds — its learned linear weights do not transfer across
+chemistries/tissues. HistGBM’s worst-dataset recall was 0.676. Family
+choice matters less than this stability gap; any future protocol should
+score worst-dataset recall, not just macro.</p>
+<h3 id="fold-to-fold-model-instability-is-itself-a-finding">4.6
+Fold-to-fold model instability is itself a finding</h3>
+<p>Different folds selected different configs (en_a0.001_l0.75 /
+en_a0.0003_l0.25 / en_a0.001_l0.5; hgb_14 / hgb_12 / …) and the
+GSE254249 stress FPR varied &gt;10× across fold models (0.01%–1.3% for
+HistGBM balanced). A single “final fit on all data” would hide this
+variance; the V4 protocol’s feature-stability promotion condition (§6.3
+item 5) is well-motivated and should be extended to threshold
+stability.</p>
+<h3 id="cd4treg-post-exclusion-is-nearly-free">4.7 CD4/Treg
+post-exclusion is nearly free</h3>
+<p>The frozen CD4-helper/Treg exclusion rules cost only 1–20
+gold-positive cells per dataset (≤0.5% recall) while providing a
+deterministic safety rail. Keep them.</p>
+<h2 id="implications-for-the-frozen-v4-protocol">5. Implications for the
+frozen V4 protocol</h2>
+<ol type="1">
+<li><strong>Guardrail feasibility risk is real.</strong> The 0.80
+macro-recall at ≤0.2% abT-FPR balanced guardrail was unreachable in two
+of three folds for a fresh model family. Before Step 2, the preflight
+should verify the guardrails are jointly satisfiable on inner-OOF
+predictions, or the V4 run will end in a guaranteed guardrail
+failure.</li>
+<li><strong>Add an NK defense to Stage 2, or accept NK FPR as the
+limiting metric.</strong> Options: include never-evaluated NK hard
+negatives in Stage-2 training (v3’s approach, but with grouped folds and
+representative NK sampling rather than TRDC+TRDV−-only), or make the
+Stage-1 gate firmer for NK-like cells (a soft gate lets NK leakage
+through by design).</li>
+<li><strong>Report guardrail-failed candidates anyway.</strong> Kimi’s
+per-dataset numbers remain informative precisely because the failure is
+flagged, not hidden. The V4 report template should include best-effort
+rows with <code>guardrails_met=false</code>.</li>
+<li><strong>Adopt worst-dataset recall as a primary metric</strong>
+(§4.5) and threshold-stability reporting (§4.6).</li>
+<li><strong>BALF’s 254 strict-NK cells cannot support a 1% NK-FPR
+guardrail at dataset level</strong> (1% = 2.5 cells). NK guardrails
+should be pooled across datasets or BALF’s NK stratum acknowledged as
+uninformative.</li>
+</ol>
+<h2 id="caveats">6. Caveats</h2>
+<ul>
+<li>gdTAI-kimi used the atlas X matrix for GSE144469 rather than the raw
+SRR-joined object the V4 plan mandates; results may differ slightly
+under the plan’s data contract.</li>
+<li>Labels remain TCR-pipeline-derived (review finding F2): kimi
+measures TCR-call reproduction from RNA, same as its predecessors. The
+two-tier negative scheme controls <em>assay censoring</em> bias, not
+label circularity.</li>
+<li>Frozen-profile numbers are descriptive and biased in their favor on
+atlas datasets; the honest kimi-vs-frozen comparison is BALF only.</li>
+<li>Extension-cohort guardrails and full-atlas inference were
+intentionally not run (sealed cohorts remain sealed; whole-atlas
+inference requires separate approval).</li>
+</ul>
+<h2 id="artifacts">7. Artifacts</h2>
+<ul>
+<li>Script: <code>workflows/gdtai/run_gdtai_kimi_nested.py</code> (seed
+20260807)</li>
+<li>Tables:
+<code>Integrated_dataset/tables/gdT_prediction/gdtai_kimi/</code>
+(per-dataset and macro metrics, per-candidate inner diagnostics,
+bootstrap distributions, label inventory, per-cell held-out scores)</li>
+<li>Figures:
+<code>Integrated_dataset/figures/gdT_prediction/gdtai_kimi/</code></li>
+<li>Experimental fold models:
+<code>Integrated_dataset/models/gdT_prediction_classifier/gdtai_kimi/</code>
+(explicitly unregistered, not promotable)</li>
+<li>Run log:
+<code>Integrated_dataset/logs/gdT_prediction/gdtai_kimi/run.log</code></li>
+</ul>
+</body>
+</html>

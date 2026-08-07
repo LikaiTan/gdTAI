@@ -89,6 +89,13 @@
   - `Integrated_dataset/logs/gdT_prediction/external_review/gdtai_external_review_report.md`
   - `gdT_prediction/external_review/gdtai_external_review_report.html`
   - `gdT_prediction/external_review/gdtai_external_review_report.pdf`
+- gdTAI-kimi experimental nested cross-dataset evaluation (not promotable):
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_kimi/gdtai_kimi_report.md`
+  - `gdT_prediction/gdtai_kimi/gdtai_kimi_report.html`
+  - `gdT_prediction/gdtai_kimi/gdtai_kimi_report.pdf`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_kimi/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_kimi/`
+  - `Integrated_dataset/models/gdT_prediction_classifier/gdtai_kimi/` (experimental, unregistered)
 - extension official-GEO metadata reconciliation:
   - `docs/EXTENSION_GEO_METADATA_RECONCILIATION.md`
   - `configs/metadata/extension_geo_metadata_reconciliation.csv`
