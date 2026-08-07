@@ -1,5 +1,16 @@
 # CHANGELOG.md
 
+## 2026-08-07 - Passed gdTAI V4.1-GPU Gate B
+
+- Implemented deterministic PyTorch ridge and GPU XGBoost fitting primitives,
+  complete Stage-1/Stage-2 threshold frontiers, portable NPZ/UBJ exports, and
+  hash-bound atomic candidate checkpoints.
+- Passed 32/32 Gate B checks, including full frozen-cache hashes,
+  bit-identical repeated A100 probabilities for both families, exact portable
+  artifact reloads, and checkpoint resume.
+- Published the print-safe Gate B HTML/PDF QC package; no project cell was
+  fitted and Gate C remains absent.
+
 ## 2026-08-07 - Retired V4 CPU evaluation and froze GPU redesign proposal
 
 - Preserved completed HRA005041 and GSE144469 V4 v1.2 CPU outer-fold artifacts

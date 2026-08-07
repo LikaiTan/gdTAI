@@ -1,0 +1,85 @@
+{
+  "protocol_version": "4.1-gpu",
+  "protocol_path": "docs/GDTAI_V4_GPU_PRECOMMITTED_PLAN.md",
+  "base_contract_config": "configs/models/gdtai/v4_nested_evaluation.json",
+  "random_seed": 20260807,
+  "approval": {
+    "gate_b_file": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_gpu_nested_evaluation/GATE_B_APPROVAL.json",
+    "gate_c_file": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_gpu_nested_evaluation/GATE_C_APPROVAL.json"
+  },
+  "outputs": {
+    "cache_dir": "Integrated_dataset/cache/gdT_prediction/gdtai_v4_nested_evaluation",
+    "table_dir": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_gpu_nested_evaluation",
+    "figure_dir": "Integrated_dataset/figures/gdT_prediction/gdtai_v4_gpu_nested_evaluation",
+    "log_dir": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_gpu_nested_evaluation",
+    "checkpoint_dir": "Integrated_dataset/models/gdT_prediction/gdtai_v4_gpu_nested_evaluation/checkpoints",
+    "static_dir": "gdT_prediction/gdtai_v4_gpu_gate_b"
+  },
+  "environment": {
+    "cuda_visible_devices": "0",
+    "mps_path_prefix": "/tmp/gdtai-v41-",
+    "forbidden_mps_path": "/tmp/nvidia-mps",
+    "cublas_workspace_config": ":4096:8",
+    "pythonhashseed": "20260807",
+    "maximum_cpu_cores": 16,
+    "maximum_wall_seconds": 10800,
+    "maximum_competing_gpu_memory_mib": 8192,
+    "maximum_competing_gpu_utilization_percent": 20
+  },
+  "models": {
+    "stage1": {
+      "torch_ridge_l2": [0.001, 0.01, 0.1],
+      "xgboost": [
+        {"max_depth": 3, "min_child_weight": 50},
+        {"max_depth": 5, "min_child_weight": 200}
+      ],
+      "xgboost_fixed": {
+        "learning_rate": 0.05,
+        "n_estimators": 200,
+        "subsample": 1.0,
+        "colsample_bytree": 1.0,
+        "reg_lambda": 10.0
+      }
+    },
+    "stage2": {
+      "torch_ridge_l2": [0.0003, 0.001, 0.003],
+      "xgboost": [
+        {"max_depth": 3, "min_child_weight": 50},
+        {"max_depth": 3, "min_child_weight": 200},
+        {"max_depth": 5, "min_child_weight": 50},
+        {"max_depth": 5, "min_child_weight": 200}
+      ],
+      "xgboost_fixed": {
+        "learning_rate": 0.05,
+        "n_estimators": 300,
+        "subsample": 1.0,
+        "colsample_bytree": 1.0,
+        "reg_lambda": 10.0
+      }
+    },
+    "torch_fixed": {
+      "maximum_iterations": 200,
+      "gradient_inf_maximum": 0.0001,
+      "relative_terminal_loss_change_maximum": 1e-7,
+      "prediction_batch_size": 262144
+    },
+    "xgboost_fixed": {
+      "tree_method": "hist",
+      "device": "cuda",
+      "objective": "binary:logistic",
+      "eval_metric": "logloss",
+      "n_jobs": 16,
+      "verbosity": 0
+    }
+  },
+  "stage1_guardrails": {
+    "gdt_recall_per_source": 0.99,
+    "abt_recall_per_source": 0.98,
+    "maximum_nk_passage_per_source": 0.5
+  },
+  "checkpoint": {
+    "frontier_format": "csv.gz",
+    "probability_atol": 0.0,
+    "probability_rtol": 0.0
+  }
+}

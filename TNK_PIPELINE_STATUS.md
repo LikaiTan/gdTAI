@@ -3,16 +3,15 @@
 ## Current milestone
 
 - gdTAI V4 protocol v1.2 CPU Step 2 is retired as an incomplete negative
-  experiment after two completed outer folds; the user directed termination of
-  the CPU-only strategy on 2026-08-07, and a separately named V4.1-GPU plan is
-  at the pre-fit supervision gate
+  experiment after two completed outer folds; V4.1-GPU Gate B implementation,
+  synthetic A100 verification, portable export/reload, and read-only frozen
+  cache validation passed on 2026-08-07 without fitting project cells
 
 ## Next action
 
-- review and approve or reject
-  `docs/GDTAI_V4_GPU_PRECOMMITTED_PLAN.md`
-- do not implement the project-data GPU evaluator or fit a project-data GPU
-  model before the plan receives explicit supervision approval
+- review the V4.1-GPU Gate B QC package and approve or reject Gate C nested
+  project-data evaluation
+- do not fit any project-data GPU model before a separate Gate C approval
 - do not promote a model, fit a release artifact, or run whole-atlas inference
   from the incomplete CPU evidence or the GPU feasibility probes
 - do not promote or claim superiority for another gdTAI model before grouped
@@ -25,6 +24,13 @@
   explicit approval
 
 ## Current blockers or review items
+
+- V4.1-GPU Gate B passed 32/32 checks: all frozen manifest and complete cache
+  hashes matched, PyTorch ridge and GPU XGBoost repeated bit-identically,
+  portable NPZ/UBJ reloads reproduced probabilities exactly, and threshold
+  frontier plus atomic checkpoint tests passed
+- the Gate C authorization file is absent and the project-fit action fails
+  closed; no V4.1-GPU project cell has been fitted
 
 - V4 v1.2 CPU outer folds completed for HRA005041 and GSE144469; no V4,
   compact seven-gene, V2-like, or legacy-score threshold satisfied either

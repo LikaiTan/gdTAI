@@ -548,6 +548,26 @@ Gate semantics:
 - after approval, implementation plus synthetic tests form a separate QC gate
   before any project-data model fit
 
+Gate B implementation:
+
+- exact `.py` scripts:
+  - `workflows/gdtai/gdtai_v4_gpu_core.py`
+  - `workflows/gdtai/run_gdtai_v4_gpu_evaluation.py`
+- automated tests:
+  - `tests/test_gdtai_v4_gpu_core.py`
+- configuration:
+  - `configs/models/gdtai/v4_gpu_nested_evaluation.json`
+- key outputs:
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_gpu_nested_evaluation/gdtai_v4_gpu_gate_b_summary.json`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_gpu_nested_evaluation/gdtai_v4_gpu_gate_b_summary.md`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_gpu_nested_evaluation/`
+  - `gdT_prediction/gdtai_v4_gpu_gate_b/index.html`
+  - `gdT_prediction/gdtai_v4_gpu_gate_b/gdtai_v4_gpu_gate_b_qc.pdf`
+- result:
+  - 32/32 synthetic and read-only checks passed on the A100
+  - no project-data model was fitted
+  - the project-fit action fails closed until a separate Gate C record exists
+
 ## Phase 1: Coarse T/NK extraction
 
 Objective:
