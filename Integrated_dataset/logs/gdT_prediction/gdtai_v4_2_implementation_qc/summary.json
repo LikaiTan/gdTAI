@@ -1,0 +1,11 @@
+{
+  "checks_passed": 15,
+  "checks_total": 15,
+  "classifier_fitting_performed": false,
+  "core_sha256": "3b695092e13b540b3c44956bbfac28d325380d9e55b044a03651347728676905",
+  "execution_config_sha256": "1c184b2d745f7f9152d16a076bb48f48a5bcb1308f0857458f1ebb74093dd76e",
+  "next_action": "Review and explicitly approve project-data sidecar integration; classifier fitting remains a later gate.",
+  "project_data_integration_performed": false,
+  "result": "PASS_REVIEW_REQUIRED",
+  "runner_sha256": "40e2dd161f230dd8e2052df331927af206c77a47da8cd7ca550be883ab55e446"
+}

@@ -2,16 +2,17 @@
 
 ## Current milestone
 
-- gdTAI V4.2 modeling-integration preflight completed with
-  `PASS_REVIEW_REQUIRED` on 2026-08-08; all 59 checksum, role-separation,
-  matrix, metadata, anchor, feature, resource, and file-state checks passed
+- gdTAI V4.2 sidecar-integration implementation QC completed with
+  `PASS_REVIEW_REQUIRED` on 2026-08-08; all 15 role-lock, fail-closed,
+  sparse-H5AD, source-file-state, direct-CUDA scVI, and RAPIDS checks passed
 
 ## Next action
 
-- review the V4.2 integration-preflight PDF and checksum-bound cohort roles
-- decide whether to approve implementation QC and execution of the separate
-  sidecar modeling integration; this approval would not authorize classifier
-  fitting
+- review the V4.2 implementation-QC PDF and checksum-bound project-data
+  integration approval template
+- decide whether to authorize development-data sparse staging, A100 scVI,
+  consensus clustering, and pseudo-label QC; this approval would not authorize
+  classifier fitting
 - after an approved integration and clustering QC report, decide separately
   whether to authorize V4.2 classifier fitting and nested comparison
 - do not authorize Gate D release fitting, V4.1 promotion, or whole-atlas
@@ -29,6 +30,17 @@
 
 ## Current blockers or review items
 
+- V4.2 implementation QC passed 15/15 checks; the synthetic 1,600-cell scVI
+  fit ran on `cuda:0` using the A100 80-GB GPU, produced a finite 8-dimensional
+  latent matrix, and completed RAPIDS neighbors plus two Leiden seeds
+- 11/11 deterministic tests passed for approval binding, role leakage,
+  fail-closed execution, source-balanced sampling, CSR/CSC H5AD slicing,
+  batch-key fallback, expression-independent boundary construction, and
+  consensus pseudo-label rules
+- all nine source H5AD size and nanosecond-mtime pairs remained unchanged; no
+  project-data integration, project-data model fit, or classifier fit occurred
+- project-data sidecar execution remains blocked until the checksum-bound
+  `PROJECT_DATA_INTEGRATION_APPROVAL.json` is activated after review
 - V4.2 integration preflight passed 59/59 checks on 4,023,462 development cells
   and 439,979 whole-cohort locked-evaluation cells
 - all 21,054 primary dual-annotation NK anchors mapped to the current atlas;
@@ -45,9 +57,9 @@
   GiB free SSD, and found an idle A100 80-GB GPU
 - all nine input H5ADs were hash-verified and retained identical size and
   nanosecond modification time; no H5AD was modified
-- an inactive approval template exists, but integration implementation and
-  execution remain blocked for explicit supervision; classifier fitting has a
-  separate later gate
+- the checksum-bound implementation approval is active; project-data
+  integration, classifier fitting, and every later release action remain
+  blocked behind their respective QC gates
 
 - V4.2 Step 0 verified 336,780 V4.1 NK controls: 315,726 (`93.7%`) had only a
   single scVI NK annotation and 21,054 (`6.3%`) had dual scVI/author agreement

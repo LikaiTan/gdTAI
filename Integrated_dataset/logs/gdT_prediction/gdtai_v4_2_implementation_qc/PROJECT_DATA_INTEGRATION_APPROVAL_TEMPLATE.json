@@ -1,0 +1,11 @@
+{
+  "approved": false,
+  "approved_at": "",
+  "approved_by": "",
+  "core_sha256": "3b695092e13b540b3c44956bbfac28d325380d9e55b044a03651347728676905",
+  "execution_config_sha256": "1c184b2d745f7f9152d16a076bb48f48a5bcb1308f0857458f1ebb74093dd76e",
+  "protocol_version": "4.2-integration-execution-v1",
+  "review_artifact": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/gdT_prediction/gdtai_v4_2_implementation_qc/gdtai_v4_2_implementation_qc_report.pdf",
+  "runner_sha256": "40e2dd161f230dd8e2052df331927af206c77a47da8cd7ca550be883ab55e446",
+  "scope": "Development-data sidecar staging, GPU scVI, consensus clustering, and pseudo-label QC only; no classifier fitting."
+}

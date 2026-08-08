@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>gdTAI V4.2 implementation QC</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="print.css" />
+</head>
+<body>
+<h1 id="gdtai-v4.2-sidecar-integration-implementation-qc">gdTAI V4.2
+sidecar integration implementation QC</h1>
+<h2 id="decision">Decision</h2>
+<p><strong>PASS_REVIEW_REQUIRED.</strong> The sidecar runner is
+implemented and passed deterministic unit, fail-closed, sparse-H5AD,
+direct-CUDA scVI, and RAPIDS clustering tests. No project-data
+integration, project-data scVI fit, pseudo-label construction, or
+classifier fit was performed.</p>
+<ul>
+<li>Checks passed: <strong>15/15</strong>.</li>
+<li>Synthetic scVI device: <strong>cuda:0</strong> on <strong>NVIDIA
+A100 80GB PCIe</strong>.</li>
+<li>Synthetic latent matrix: <strong>1,600 x 8</strong>, all
+finite.</li>
+<li>Locked cohorts remain excluded by code and the project-data stage
+aborts while its separate approval file is absent.</li>
+<li>CPU fallback is forbidden for scVI and RAPIDS stages.</li>
+</ul>
+<figure>
+<img
+src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_implementation_qc/implementation_qc_summary.png"
+alt="Implementation QC" />
+<figcaption aria-hidden="true">Implementation QC</figcaption>
+</figure>
+<h2 id="frozen-executable-design">Frozen executable design</h2>
+<ol type="1">
+<li>Select 4,000 common non-TCR, non-mitochondrial, non-ribosomal, and
+non-immunoglobulin HVGs from a deterministic source-balanced sample
+capped at 20,000 cells per source.</li>
+<li>Stage only development cohorts in a new sparse H5AD on SSD. Locked
+cohorts are excluded before metadata loading, HVG selection, matrix
+staging, scVI, clustering, and label construction.</li>
+<li>Fit the precommitted 30-dimensional negative-binomial scVI model on
+one A100 GPU, with no CPU fallback.</li>
+<li>Run nine global and nine boundary RAPIDS Leiden partitions. The
+boundary is defined only by global clusters containing both independent
+primary-NK and productive-TCR anchors.</li>
+<li>Select low-weight pseudo-NK development candidates only through
+repeated cluster agreement, independent-anchor purity, productive-TCR
+contamination, and cross-source representation. No CD3, TRDC, TRDV,
+NKG7, GNLY, KLRD1, TYROBP, FCER1G, or FCGR3A threshold defines
+truth.</li>
+<li>Source balance and the primary-NK effective-weight cap are enforced
+at the later classifier-fitting gate. Pseudo-labels cannot control
+validation guardrails.</li>
+</ol>
+<p>The two implementation safety floors frozen before project-data
+execution are at least 20 independent anchors and at least 10 primary NK
+anchors per qualifying cluster. They prevent tiny-anchor clusters from
+passing a percentage rule by chance.</p>
+<h2 id="checks">Checks</h2>
+<table>
+<colgroup>
+<col style="width: 41%" />
+<col style="width: 9%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">check</th>
+<th style="text-align: left;">status</th>
+<th style="text-align: left;">detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">checksum_bound_preflight_approval</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">2026-08-08T08:29:03+08:00</td>
+</tr>
+<tr>
+<td style="text-align: left;">development_locked_role_split</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">6 development objects; 3 locked
+objects</td>
+</tr>
+<tr>
+<td style="text-align: left;">locked_development_permissions</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">locked cohorts have zero development
+permissions</td>
+</tr>
+<tr>
+<td style="text-align: left;">cpu_fallback_forbidden</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">scVI and RAPIDS project stages require
+CUDA</td>
+</tr>
+<tr>
+<td style="text-align: left;">marker_threshold_truth_forbidden</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">cluster evidence only</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">pseudo_labels_cannot_control_guardrails</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">primary truth retains guardrail
+ownership</td>
+</tr>
+<tr>
+<td style="text-align: left;">python_compile</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">three modules compiled</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">deterministic_unit_and_sparse_h5ad_tests</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">11 passed in 2.52s</td>
+</tr>
+<tr>
+<td style="text-align: left;">runner_validate_stage</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">checksum and role validation passed</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">project_data_stage_fails_without_approval</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">prepare aborted before SSD access</td>
+</tr>
+<tr>
+<td style="text-align: left;">all_source_h5ads_unchanged</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">9/9 size/mtime pairs unchanged</td>
+</tr>
+<tr>
+<td style="text-align: left;">direct_cuda_a100</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">NVIDIA A100 80GB PCIe; 79.3 GiB</td>
+</tr>
+<tr>
+<td style="text-align: left;">synthetic_scvi_gpu_fit</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">latent=[1600, 8]; device=cuda:0</td>
+</tr>
+<tr>
+<td style="text-align: left;">synthetic_rapids_neighbors_leiden</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">clusters=4,4</td>
+</tr>
+<tr>
+<td style="text-align: left;">synthetic_gpu_no_cpu_fallback</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">direct CUDA only</td>
+</tr>
+</tbody>
+</table>
+<h2 id="supervision-gate">Supervision gate</h2>
+<p>Project-data integration is still blocked. Activating
+<code>PROJECT_DATA_INTEGRATION_APPROVAL.json</code> authorizes only
+development-data sparse staging, scVI, consensus clustering, and
+pseudo-label QC. It does not authorize classifier fitting, threshold
+selection, model promotion, release fitting, or whole-atlas
+inference.</p>
+<h2 id="exact-artifacts">Exact artifacts</h2>
+<ul>
+<li>Execution config:
+<code>configs/models/gdtai/v4_2_integration_execution.json</code></li>
+<li>Runner:
+<code>workflows/gdtai/run_gdtai_v4_2_nk_reference_integration.py</code></li>
+<li>Core:
+<code>workflows/gdtai/gdtai_v4_2_integration_core.py</code></li>
+<li>Approval template:
+<code>Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_implementation_qc/PROJECT_DATA_INTEGRATION_APPROVAL_TEMPLATE.json</code></li>
+<li>Full checks:
+<code>Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_implementation_qc/implementation_qc_checks.csv</code></li>
+</ul>
+</body>
+</html>

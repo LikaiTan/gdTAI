@@ -72,6 +72,16 @@
 
 ## Current review packages
 
+- gdTAI V4.2 sidecar-integration implementation QC:
+  - `configs/models/gdtai/v4_2_integration_execution.json`
+  - `gdT_prediction/gdtai_v4_2_implementation_qc/index.html`
+  - `gdT_prediction/gdtai_v4_2_implementation_qc/gdtai_v4_2_implementation_qc_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_implementation_qc/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_implementation_qc/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_implementation_qc/`
+  - decision: 15/15 checks passed; project-data sidecar execution and later
+    classifier fitting remain blocked by separate supervision gates
+
 - gdTAI V4.2 modeling-integration preflight:
   - `configs/models/gdtai/v4_2_cohort_roles.csv`
   - `configs/models/gdtai/v4_2_integration_preflight.json`

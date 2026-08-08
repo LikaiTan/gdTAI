@@ -1,5 +1,19 @@
 # CHANGELOG.md
 
+## 2026-08-08 - Passed gdTAI V4.2 sidecar-integration implementation QC
+
+- Implemented a checksum-bound, stage-addressable integration runner that
+  excludes all three locked cohorts before development metadata or expression
+  loading and aborts before SSD access when project-data approval is absent.
+- Passed 11/11 deterministic core tests, including CSR/CSC H5AD slicing,
+  source-balanced sampling, batch fallback, role leakage, boundary definition,
+  and cluster-consensus pseudo-label rules.
+- Passed 15/15 implementation checks; synthetic scVI used `cuda:0` on the A100
+  80-GB GPU and RAPIDS completed neighbor construction plus repeated Leiden
+  clustering without CPU fallback.
+- Verified all nine source H5AD size/mtime pairs unchanged. No project data was
+  integrated or fitted, and classifier fitting remains a separate gate.
+
 ## 2026-08-07 - Completed gdTAI V4.1-GPU Gate C as a negative result
 
 - Completed all three checksum-bound nested outer decision paths on the A100;

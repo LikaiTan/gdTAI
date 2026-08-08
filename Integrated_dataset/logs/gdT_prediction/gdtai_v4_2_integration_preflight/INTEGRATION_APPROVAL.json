@@ -1,0 +1,11 @@
+{
+  "approved": true,
+  "approved_at": "2026-08-08T08:29:03+08:00",
+  "approved_by": "user",
+  "cohort_role_contract_sha256": "603ff31f28b319b3ede6896f932ee174940526c08e124cbf59083740cac3c86c",
+  "config_sha256": "7221c7e5631133c10d8656b20cd63e5b18b65ed0e069d3e532b65010112e1c46",
+  "protocol_version": "4.2-integration-preflight",
+  "review_artifact": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/gdT_prediction/gdtai_v4_2_integration_preflight/gdtai_v4_2_integration_preflight_report.pdf",
+  "roles_sha256": "2d8a7d6e8ee9359135d033b3a54fd18309835c87ad877b486a9e6ec3c65a7802",
+  "scope": "Implementation and implementation QC only; does not authorize project-data integration, classifier fitting, promotion, release fitting, or atlas inference."
+}

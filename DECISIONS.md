@@ -2,6 +2,10 @@
 
 ## Current approved decisions
 
+- gdTAI V4.2 sidecar-integration implementation and synthetic/read-only
+  implementation QC are approved against the 2026-08-08 checksum-bound
+  preflight; project-data scVI fitting, classifier fitting, promotion, release
+  fitting, and atlas inference are not authorized by this approval
 - current canonical execution environment is `rapids_sc_py310`
 - Phase 5 model training and validation are out of scope unless explicitly requested
 - scANVI outputs remain in the integrated object for reference only

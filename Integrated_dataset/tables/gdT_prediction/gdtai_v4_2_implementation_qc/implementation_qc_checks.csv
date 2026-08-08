@@ -1,0 +1,16 @@
+check,status,detail
+checksum_bound_preflight_approval,PASS,2026-08-08T08:29:03+08:00
+development_locked_role_split,PASS,6 development objects; 3 locked objects
+locked_development_permissions,PASS,locked cohorts have zero development permissions
+cpu_fallback_forbidden,PASS,scVI and RAPIDS project stages require CUDA
+marker_threshold_truth_forbidden,PASS,cluster evidence only
+pseudo_labels_cannot_control_guardrails,PASS,primary truth retains guardrail ownership
+python_compile,PASS,three modules compiled
+deterministic_unit_and_sparse_h5ad_tests,PASS,11 passed in 2.52s
+runner_validate_stage,PASS,checksum and role validation passed
+project_data_stage_fails_without_approval,PASS,prepare aborted before SSD access
+all_source_h5ads_unchanged,PASS,9/9 size/mtime pairs unchanged
+direct_cuda_a100,PASS,NVIDIA A100 80GB PCIe; 79.3 GiB
+synthetic_scvi_gpu_fit,PASS,"latent=[1600, 8]; device=cuda:0"
+synthetic_rapids_neighbors_leiden,PASS,"clusters=4,4"
+synthetic_gpu_no_cpu_fallback,PASS,direct CUDA only

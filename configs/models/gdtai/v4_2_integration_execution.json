@@ -1,0 +1,93 @@
+{
+  "protocol_version": "4.2-integration-execution-v1",
+  "random_seed": 20260807,
+  "preflight": {
+    "config": "configs/models/gdtai/v4_2_integration_preflight.json",
+    "roles": "configs/models/gdtai/v4_2_cohort_roles.csv",
+    "frozen_role_contract": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_integration_preflight/frozen_cohort_roles.csv",
+    "summary": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_integration_preflight/summary.json",
+    "approval": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_integration_preflight/INTEGRATION_APPROVAL.json"
+  },
+  "execution_approval": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_implementation_qc/PROJECT_DATA_INTEGRATION_APPROVAL.json",
+  "inputs": {
+    "v4_cell_label_manifest": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_preflight/cell_label_manifest.csv.gz"
+  },
+  "hvg": {
+    "n_top_genes": 4000,
+    "flavor": "seurat_v3",
+    "batch_key": "source_gse_id",
+    "sample_cap_per_source": 20000,
+    "exclude_tcr_mito_ribo_ig": true,
+    "force_classifier_genes": false
+  },
+  "staging": {
+    "row_chunk_size": 25000,
+    "matrix_dtype": "float32",
+    "compression": "lzf",
+    "batch_key_hierarchy": [
+      "library_id",
+      "sample_id",
+      "source_gse_id"
+    ]
+  },
+  "scvi": {
+    "n_hidden": 128,
+    "n_layers": 2,
+    "n_latent": 30,
+    "gene_likelihood": "nb",
+    "max_epochs": 20,
+    "batch_size": 8192,
+    "early_stopping": true,
+    "early_stopping_patience": 5,
+    "accelerator": "gpu",
+    "devices": 1,
+    "minimum_gpu_memory_gib": 75,
+    "allow_cpu_fallback": false
+  },
+  "clustering": {
+    "backend": "rapids_singlecell",
+    "algorithm": "ivfflat",
+    "algorithm_kwds": {
+      "n_lists": 8192,
+      "n_probes": 80
+    },
+    "global": {
+      "n_neighbors": 30,
+      "resolutions": [0.4, 0.8, 1.2],
+      "seeds": [11, 29, 47]
+    },
+    "boundary": {
+      "definition": "union of global clusters containing at least one primary dual-annotation NK anchor and at least one expression-independent productive-TCR anchor",
+      "minimum_global_mixed_runs": 1,
+      "n_neighbors": 30,
+      "resolutions": [0.3, 0.6, 1.0],
+      "seeds": [11, 29, 47]
+    }
+  },
+  "pseudolabel": {
+    "minimum_run_agreement": 0.8,
+    "minimum_anchor_nk_purity": 0.95,
+    "maximum_productive_tcr_contamination": 0.02,
+    "minimum_independent_anchors_per_cluster": 20,
+    "minimum_primary_nk_anchors_per_cluster": 10,
+    "minimum_development_sources": 3,
+    "maximum_single_source_fraction": 0.7,
+    "reliability_weight": 0.5,
+    "maximum_total_effective_weight_relative_to_primary_nk": 1.0,
+    "source_evidence_population": "eligible no-productive-TCR, non-doublet cells from allow_pseudolabel_training cohorts",
+    "marker_thresholds_may_define_truth": false,
+    "may_control_validation_guardrails": false
+  },
+  "resources": {
+    "maximum_cpu_cores": 80,
+    "maximum_ram_gib": 800,
+    "minimum_ssd_free_gib": 300,
+    "ssd_root": "/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference"
+  },
+  "outputs": {
+    "table_dir": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_nk_reference",
+    "figure_dir": "Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_reference",
+    "log_dir": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_reference",
+    "static_dir": "gdT_prediction/gdtai_v4_2_nk_reference"
+  }
+}

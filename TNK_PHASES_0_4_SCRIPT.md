@@ -1541,3 +1541,46 @@ Standard behavior:
 - fingerprint the selected H5AD, four filtered matrices, four raw matrices,
   harmonized TCR table, and two demultiplexing tables
 - register `LIB1`-`LIB4` as inactive validation-only libraries
+
+## Post-Phase-4 gdTAI V4.2 NK-reference sidecar integration
+
+Objective:
+
+- build a read-only modeling sidecar that expands low-weight NK development
+  controls through scVI and repeated clustering without exposing locked
+  evaluation cohorts or changing canonical atlas/source H5AD files
+
+Phase or task:
+
+- gdTAI V4.2 sidecar-integration implementation QC and gated execution
+
+Exact `.py` scripts:
+
+- `workflows/gdtai/run_gdtai_v4_2_implementation_qc.py`
+- `workflows/gdtai/run_gdtai_v4_2_nk_reference_integration.py`
+- `workflows/gdtai/gdtai_v4_2_integration_core.py`
+
+Key outputs:
+
+- `gdT_prediction/gdtai_v4_2_implementation_qc/index.html`
+- `gdT_prediction/gdtai_v4_2_implementation_qc/gdtai_v4_2_implementation_qc_report.pdf`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_implementation_qc/`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_implementation_qc/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_implementation_qc/`
+- after separate approval, SSD sidecar under
+  `/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference/`
+- after separate approval, canonical execution QC under
+  `Integrated_dataset/{tables,figures,logs}/gdT_prediction/gdtai_v4_2_nk_reference/`
+
+Standard behavior:
+
+- require exact preflight and execution-approval hashes and abort before SSD
+  access if the current gate is absent
+- exclude all locked cohorts before metadata loading, HVG selection, matrix
+  staging, scVI, clustering, and pseudo-label construction
+- use 4,000 source-balanced common HVGs after TCR, mitochondrial, ribosomal,
+  and immunoglobulin exclusion; never force classifier genes into integration
+- use direct A100 CUDA for scVI and RAPIDS with no CPU fallback
+- define the T/NK boundary only through mixing of independent primary-NK and
+  productive-TCR anchors, never through marker-expression thresholds
+- stop after integration/clustering QC for a separate classifier-fitting gate
