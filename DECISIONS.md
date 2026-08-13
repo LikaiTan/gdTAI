@@ -93,6 +93,13 @@
 
 ## Historical exceptions and notes
 
+- on 2026-08-14, the user approved V4.2 development-data sidecar execution
+  against the original SSD input contract, but the command stopped before
+  matrix reading because the SSD-resident `integrated.h5ad` was absent
+- that approval was automatically invalidated when the execution config,
+  runner, core, and physical input contract changed to the audited
+  `TNK_cleaned.h5ad` recovery path; recovery execution requires a new explicit
+  checksum-bound approval
 - on 2026-08-06, the user explicitly approved permanent local deletion of
   `GSE305372` as a one-time exception to the default registry-deactivation-only
   removal rule; source URLs, byte sizes, SHA-256 checksums, archived code, and

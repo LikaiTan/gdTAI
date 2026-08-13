@@ -2,17 +2,19 @@
 
 ## Current milestone
 
-- gdTAI V4.2 sidecar-integration implementation QC completed with
-  `PASS_REVIEW_REQUIRED` on 2026-08-08; all 15 role-lock, fail-closed,
-  sparse-H5AD, source-file-state, direct-CUDA scVI, and RAPIDS checks passed
+- gdTAI V4.2 current-atlas recovery preflight completed with
+  `PASS_REVIEW_REQUIRED` on 2026-08-14 after the SSD-resident
+  `integrated.h5ad` disappeared before project-data execution; all 20 recovery,
+  equivalence, read-only, and fail-closed checks passed
 
 ## Next action
 
-- review the V4.2 implementation-QC PDF and checksum-bound project-data
-  integration approval template
-- decide whether to authorize development-data sparse staging, A100 scVI,
-  consensus clustering, and pseudo-label QC; this approval would not authorize
-  classifier fitting
+- review the V4.2 recovery-preflight PDF and checksum-bound recovery execution
+  approval template
+- decide whether to authorize recovered development-data sparse staging, A100
+  scVI, consensus clustering, and pseudo-label QC without opening the three
+  locked evaluation cohorts
+- publish and review integration/clustering QC before any classifier fitting
 - after an approved integration and clustering QC report, decide separately
   whether to authorize V4.2 classifier fitting and nested comparison
 - do not authorize Gate D release fitting, V4.1 promotion, or whole-atlas
@@ -30,6 +32,18 @@
 
 ## Current blockers or review items
 
+- the original `high_speed_temp/Integrated_dataset/integrated.h5ad` is absent,
+  and no exact copy was found in the project or databank search; the previously
+  recorded project-data execution approval is therefore invalid
+- the recovery preflight passed 20/20 checks using the intact canonical
+  3,705,384-cell `TNK_cleaned.h5ad`, the exact 78-row Phase-3 exclusion
+  manifest, and the original harmonized metadata sources
+- the recovered effective input contains exactly 3,705,306 cells and 27,413
+  genes, reproduces all five frozen metadata missing/unique-count audits, and
+  recovers all 21,054/21,054 primary dual-annotation NK anchors
+- no project-data integration, scVI fitting, clustering, pseudo-labeling, or
+  classifier fitting occurred; execution remains blocked until the new
+  checksum-bound `RECOVERY_EXECUTION_APPROVAL.json` is explicitly activated
 - V4.2 implementation QC passed 15/15 checks; the synthetic 1,600-cell scVI
   fit ran on `cuda:0` using the A100 80-GB GPU, produced a finite 8-dimensional
   latent matrix, and completed RAPIDS neighbors plus two Leiden seeds
@@ -39,8 +53,9 @@
   consensus pseudo-label rules
 - all nine source H5AD size and nanosecond-mtime pairs remained unchanged; no
   project-data integration, project-data model fit, or classifier fit occurred
-- project-data sidecar execution remains blocked until the checksum-bound
-  `PROJECT_DATA_INTEGRATION_APPROVAL.json` is activated after review
+- the earlier `PROJECT_DATA_INTEGRATION_APPROVAL.json` no longer authorizes
+  execution because the execution config, runner, core, and physical input
+  contract changed for recovery
 - V4.2 integration preflight passed 59/59 checks on 4,023,462 development cells
   and 439,979 whole-cohort locked-evaluation cells
 - all 21,054 primary dual-annotation NK anchors mapped to the current atlas;
@@ -183,6 +198,9 @@
   - `Integrated_dataset/TNK_cleaned.h5ad`
 - canonical current integrated milestone for downstream analysis:
   - `high_speed_temp/Integrated_dataset/integrated.h5ad`
+  - status: currently unavailable because the mirrored SSD tree disappeared;
+    V4.2 has an audited raw-count recovery path from `TNK_cleaned.h5ad`, but it
+    is not yet approved for project-data execution
 
 Additional current state:
 

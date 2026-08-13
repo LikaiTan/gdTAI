@@ -10,6 +10,8 @@ import pytest
 from scipy import sparse
 
 from workflows.gdtai.gdtai_v4_2_integration_core import (
+    apply_current_atlas_recovery,
+    attach_recovery_metadata,
     cluster_consensus_votes,
     common_eligible_genes,
     ensure_no_locked_cohorts,
@@ -17,10 +19,12 @@ from workflows.gdtai.gdtai_v4_2_integration_core import (
     make_integration_batch,
     mixed_boundary_mask,
     read_sparse_rows_genes,
+    recovery_contract_sha256,
     source_balanced_sample_indices,
     validate_preflight_approval,
     validate_project_data_approval,
     validate_pseudolabel_contract,
+    validate_recovery_preflight,
     validate_role_separation,
 )
 
@@ -81,6 +85,98 @@ def test_project_data_approval_is_absent_and_fails_closed(tmp_path: Path) -> Non
     config_path.write_text(json.dumps(config))
     with pytest.raises(PermissionError, match="approval is absent"):
         validate_project_data_approval(config_path, config, runner, core)
+
+
+def test_recovery_replaces_only_a_missing_current_atlas(tmp_path: Path) -> None:
+    source = tmp_path / "cleaned.h5ad"
+    source.touch()
+    original = tmp_path / "integrated.h5ad"
+    roles = pd.DataFrame(
+        {
+            "cohort_id": ["current_atlas", "extension"],
+            "path": [str(original), str(tmp_path / "extension.h5ad")],
+            "expected_sha256": ["old", "extension"],
+            "expected_cells": [7, 3],
+        }
+    )
+    config = {
+        "current_atlas_recovery": {
+            "active": True,
+            "require_original_missing": True,
+            "source_h5ad": str(source),
+            "source_sha256": "replacement",
+            "expected_effective_cells": 7,
+        }
+    }
+    recovered = apply_current_atlas_recovery(config, roles)
+    current = recovered.loc[recovered["cohort_id"].eq("current_atlas")].iloc[0]
+    assert current["path"] == str(source)
+    assert current["expected_sha256"] == "replacement"
+    assert bool(current["recovery_active"])
+    assert not bool(recovered.loc[recovered["cohort_id"].eq("extension"), "recovery_active"].iloc[0])
+
+    original.touch()
+    with pytest.raises(RuntimeError, match="forbidden while the original"):
+        apply_current_atlas_recovery(config, roles)
+
+
+def test_recovery_metadata_join_is_source_and_cell_specific(tmp_path: Path) -> None:
+    metadata = tmp_path / "metadata.csv"
+    pd.DataFrame(
+        {
+            "source_gse_id": ["A", "B"],
+            "original_cell_id": ["cell-1", "cell-1"],
+            "donor_id": ["donor-a", "donor-b"],
+        }
+    ).to_csv(metadata, index=False)
+    config = {
+        "current_atlas_recovery": {
+            "metadata_sources": [{"path": str(metadata), "sha256": "not-used-here"}],
+            "metadata_columns": ["donor_id"],
+        }
+    }
+    frame = pd.DataFrame(
+        {
+            "source_gse_id": ["B", "A"],
+            "source_original_cell_id": ["cell-1", "cell-1"],
+        },
+        index=["row-b", "row-a"],
+    )
+    joined = attach_recovery_metadata(frame, config)
+    assert joined["donor_id"].tolist() == ["donor-b", "donor-a"]
+
+
+def test_recovery_preflight_is_bound_to_the_exact_contract(tmp_path: Path) -> None:
+    summary = tmp_path / "summary.json"
+    recovery = {
+        "active": True,
+        "source_h5ad": str(tmp_path / "cleaned.h5ad"),
+        "source_sha256": "source",
+        "expected_raw_cells": 10,
+        "expected_effective_cells": 9,
+        "expected_genes": 4,
+        "row_exclusion_manifest": str(tmp_path / "exclude.csv"),
+        "row_exclusion_manifest_sha256": "exclude",
+        "expected_intersecting_exclusions": 1,
+        "metadata_sources": [{"path": str(tmp_path / "metadata.csv"), "sha256": "metadata"}],
+        "metadata_columns": ["donor_id"],
+        "expected_metadata_audit": {"donor_id": {"n_missing": 0, "n_unique": 2}},
+        "recovery_preflight_summary": str(summary),
+    }
+    config = {"current_atlas_recovery": recovery}
+    summary.write_text(
+        json.dumps(
+            {
+                "result": "PASS_REVIEW_REQUIRED",
+                "recovery_contract_sha256": recovery_contract_sha256(config),
+            }
+        )
+    )
+    assert validate_recovery_preflight(config)["result"] == "PASS_REVIEW_REQUIRED"
+
+    config["current_atlas_recovery"]["expected_genes"] = 5
+    with pytest.raises(RuntimeError, match="does not match"):
+        validate_recovery_preflight(config)
 
 
 def test_hvg_exclusions_are_specific_to_forbidden_families() -> None:

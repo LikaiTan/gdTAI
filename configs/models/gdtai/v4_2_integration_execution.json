@@ -8,9 +8,45 @@
     "summary": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_integration_preflight/summary.json",
     "approval": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_integration_preflight/INTEGRATION_APPROVAL.json"
   },
-  "execution_approval": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_implementation_qc/PROJECT_DATA_INTEGRATION_APPROVAL.json",
+  "execution_approval": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_recovery_preflight/RECOVERY_EXECUTION_APPROVAL.json",
   "inputs": {
     "v4_cell_label_manifest": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_preflight/cell_label_manifest.csv.gz"
+  },
+  "current_atlas_recovery": {
+    "active": true,
+    "require_original_missing": true,
+    "source_h5ad": "Integrated_dataset/TNK_cleaned.h5ad",
+    "source_sha256": "04033762f9b1380227f0dabbbdbcd7f0fbe4153e734390b30ef64824e3b181ad",
+    "expected_raw_cells": 3705384,
+    "expected_effective_cells": 3705306,
+    "expected_genes": 27413,
+    "row_exclusion_manifest": "Integrated_dataset/tables/phase3_input_sanitization.csv",
+    "row_exclusion_manifest_sha256": "dcc9d7865e0a1712e80b8eb621ab93e5bfc9296ec04b1563195f0aa352f1f097",
+    "expected_intersecting_exclusions": 78,
+    "metadata_sources": [
+      {
+        "path": "analysis_26GSE_V4/outputs/harmonized_metadata_v4.csv",
+        "sha256": "7fa54bb8ea2a147b84beddcae1f016c4bbb1af4faa9f66c1166e176831eaddac"
+      },
+      {
+        "path": "analysis_26GSE_V4/outputs/harmonized_metadata_supp.csv",
+        "sha256": "e968424576e5859b5d3ecfedf8ef4b772cba71bbdde249a5cc10800f85ea197b"
+      }
+    ],
+    "metadata_columns": [
+      "donor_id",
+      "sample_id",
+      "library_id",
+      "technology_simple"
+    ],
+    "expected_metadata_audit": {
+      "source_gse_id": {"n_missing": 0, "n_unique": 25},
+      "donor_id": {"n_missing": 366518, "n_unique": 687},
+      "sample_id": {"n_missing": 51007, "n_unique": 767},
+      "library_id": {"n_missing": 1483150, "n_unique": 412},
+      "technology_simple": {"n_missing": 1483150, "n_unique": 3}
+    },
+    "recovery_preflight_summary": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_recovery_preflight/summary.json"
   },
   "hvg": {
     "n_top_genes": 4000,

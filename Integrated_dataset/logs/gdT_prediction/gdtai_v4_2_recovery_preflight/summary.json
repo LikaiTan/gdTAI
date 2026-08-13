@@ -1,0 +1,68 @@
+{
+  "checks_passed": 20,
+  "checks_total": 20,
+  "classifier_fitting_performed": false,
+  "core_sha256": "e59dccc35e2d675e699fcb3cc15b4027d820e24a83b1eef6a0669cc6c76f64bf",
+  "effective_cells": 3705306,
+  "effective_ordered_cell_id_sha256": "26f7b75591ce9b7204b8860363fb2607c8d91a26a2df7e6cf1fd0fe47b24e59b",
+  "execution_config_sha256": "dd8337c32e8a627daad1526dc4a7caeec04a6489d847298e16eeff838250281c",
+  "expected_primary_nk_anchors": 21054,
+  "genes": 27413,
+  "intersecting_exclusions": 78,
+  "next_action": "Explicitly approve the checksum-bound recovery execution before development-data integration.",
+  "ordered_gene_id_sha256": "aee527839156fe85e3a8d5964972b496ae0deb750b5f00124d66aee2e91d4559",
+  "primary_nk_anchors": 21054,
+  "project_data_integration_performed": false,
+  "raw_cells": 3705384,
+  "recovery_contract": {
+    "expected_effective_cells": 3705306,
+    "expected_genes": 27413,
+    "expected_intersecting_exclusions": 78,
+    "expected_metadata_audit": {
+      "donor_id": {
+        "n_missing": 366518,
+        "n_unique": 687
+      },
+      "library_id": {
+        "n_missing": 1483150,
+        "n_unique": 412
+      },
+      "sample_id": {
+        "n_missing": 51007,
+        "n_unique": 767
+      },
+      "source_gse_id": {
+        "n_missing": 0,
+        "n_unique": 25
+      },
+      "technology_simple": {
+        "n_missing": 1483150,
+        "n_unique": 3
+      }
+    },
+    "expected_raw_cells": 3705384,
+    "metadata_columns": [
+      "donor_id",
+      "sample_id",
+      "library_id",
+      "technology_simple"
+    ],
+    "metadata_sources": [
+      {
+        "path": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/analysis_26GSE_V4/outputs/harmonized_metadata_v4.csv",
+        "sha256": "7fa54bb8ea2a147b84beddcae1f016c4bbb1af4faa9f66c1166e176831eaddac"
+      },
+      {
+        "path": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/analysis_26GSE_V4/outputs/harmonized_metadata_supp.csv",
+        "sha256": "e968424576e5859b5d3ecfedf8ef4b772cba71bbdde249a5cc10800f85ea197b"
+      }
+    ],
+    "row_exclusion_manifest": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/tables/phase3_input_sanitization.csv",
+    "row_exclusion_manifest_sha256": "dcc9d7865e0a1712e80b8eb621ab93e5bfc9296ec04b1563195f0aa352f1f097",
+    "source_h5ad": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/TNK_cleaned.h5ad",
+    "source_sha256": "04033762f9b1380227f0dabbbdbcd7f0fbe4153e734390b30ef64824e3b181ad"
+  },
+  "recovery_contract_sha256": "96934c8b1b5806344fc18891d06e675718b2fcb9cbdf01ef626bb684ca972519",
+  "result": "PASS_REVIEW_REQUIRED",
+  "runner_sha256": "a7ee2be9ac5246f082380e71ca0cd04a06b9f7b20f3ffe18bbd2f9ee79770b20"
+}

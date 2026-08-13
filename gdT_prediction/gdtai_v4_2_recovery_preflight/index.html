@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>gdTAI V4.2 recovery preflight</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="print.css" />
+</head>
+<body>
+<h1 id="gdtai-v4.2-current-atlas-recovery-preflight">gdTAI V4.2
+current-atlas recovery preflight</h1>
+<h2 id="decision">Decision</h2>
+<p><strong>PASS_REVIEW_REQUIRED.</strong> The SSD-resident
+<code>integrated.h5ad</code> used by the original V4.2 preflight is no
+longer present. No exact file copy was found in the project or databank
+search. The canonical NFS <code>TNK_cleaned.h5ad</code> can reconstruct
+the exact raw-count input needed by the V4.2 sidecar without using old
+scVI coordinates or Phase-4 scores.</p>
+<ul>
+<li>Raw cleaned source: <strong>3,705,384 cells x 27,413
+genes</strong>.</li>
+<li>Saved Phase-3 exclusions intersecting this source:
+<strong>78</strong>.</li>
+<li>Effective recovery: <strong>3,705,306 cells</strong>, exactly
+matching the frozen preflight.</li>
+<li>Primary dual-annotation NK anchors recovered:
+<strong>21,054/21,054</strong>.</li>
+<li>Required metadata audit: <strong>all five columns match the previous
+missing and unique counts exactly</strong>.</li>
+<li>Project-data integration, scVI fitting, clustering, pseudo-labeling,
+and classifier fitting performed: <strong>no</strong>.</li>
+</ul>
+<figure>
+<img
+src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_recovery_preflight/recovery_equivalence_summary.png"
+alt="Recovery equivalence" />
+<figcaption aria-hidden="true">Recovery equivalence</figcaption>
+</figure>
+<h2 id="why-recovery-is-valid-for-this-task">Why recovery is valid for
+this task</h2>
+<p>V4.2 integration consumes raw counts, cell identifiers, source,
+donor, sample, library, and technology. It does not consume the missing
+object’s old scVI latent representation, Leiden labels, UMAP, Phase-4
+scores, or cell-type annotation. <code>TNK_cleaned.h5ad</code> is the
+canonical pre-Phase-3 raw-count milestone. Applying the original Phase-3
+exclusion manifest removes exactly the 78 cells that distinguish its
+3,705,384 rows from the frozen 3,705,306-cell atlas input. The original
+harmonized metadata files reproduce the five required metadata columns
+and their prior audit counts.</p>
+<p>The runner now permits this recovery only when the original
+integrated path is absent. It requires the exact source,
+exclusion-manifest, and metadata hashes; the expected raw/effective
+dimensions; exact exclusion intersection; and this reviewed recovery
+contract. If the original integrated H5AD reappears, recovery fails
+closed rather than choosing between two inputs.</p>
+<h2 id="metadata-equivalence">Metadata equivalence</h2>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 13%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">column</th>
+<th style="text-align: right;">observed_missing</th>
+<th style="text-align: right;">expected_missing</th>
+<th style="text-align: right;">observed_unique</th>
+<th style="text-align: right;">expected_unique</th>
+<th style="text-align: left;">exact_match</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">source_gse_id</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: left;">True</td>
+</tr>
+<tr>
+<td style="text-align: left;">donor_id</td>
+<td style="text-align: right;">366518</td>
+<td style="text-align: right;">366518</td>
+<td style="text-align: right;">687</td>
+<td style="text-align: right;">687</td>
+<td style="text-align: left;">True</td>
+</tr>
+<tr>
+<td style="text-align: left;">sample_id</td>
+<td style="text-align: right;">51007</td>
+<td style="text-align: right;">51007</td>
+<td style="text-align: right;">767</td>
+<td style="text-align: right;">767</td>
+<td style="text-align: left;">True</td>
+</tr>
+<tr>
+<td style="text-align: left;">library_id</td>
+<td style="text-align: right;">1483150</td>
+<td style="text-align: right;">1483150</td>
+<td style="text-align: right;">412</td>
+<td style="text-align: right;">412</td>
+<td style="text-align: left;">True</td>
+</tr>
+<tr>
+<td style="text-align: left;">technology_simple</td>
+<td style="text-align: right;">1483150</td>
+<td style="text-align: right;">1483150</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">True</td>
+</tr>
+</tbody>
+</table>
+<h2 id="exclusion-accounting">Exclusion accounting</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">phase3_sanitization_reason</th>
+<th style="text-align: right;">size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">extreme_library_size</td>
+<td style="text-align: right;">78</td>
+</tr>
+</tbody>
+</table>
+<h2 id="checks">Checks</h2>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 5%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">check</th>
+<th style="text-align: left;">status</th>
+<th style="text-align: left;">detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">original_integrated_h5ad_absent</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/high_speed_temp/Integrated_dataset/integrated.h5ad</td>
+</tr>
+<tr>
+<td style="text-align: left;">recovery_source_sha256</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">04033762f9b1380227f0dabbbdbcd7f0fbe4153e734390b30ef64824e3b181ad</td>
+</tr>
+<tr>
+<td style="text-align: left;">phase3_exclusion_manifest_sha256</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">dcc9d7865e0a1712e80b8eb621ab93e5bfc9296ec04b1563195f0aa352f1f097</td>
+</tr>
+<tr>
+<td style="text-align: left;">metadata_source_sha256::0</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">7fa54bb8ea2a147b84beddcae1f016c4bbb1af4faa9f66c1166e176831eaddac</td>
+</tr>
+<tr>
+<td style="text-align: left;">metadata_source_sha256::1</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">e968424576e5859b5d3ecfedf8ef4b772cba71bbdde249a5cc10800f85ea197b</td>
+</tr>
+<tr>
+<td style="text-align: left;">recovery_raw_shape</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">(3705384, 27413)</td>
+</tr>
+<tr>
+<td style="text-align: left;">recovery_sparse_csr</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">csr_matrix</td>
+</tr>
+<tr>
+<td style="text-align: left;">recovery_unique_axes</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">obs_duplicates=0; var_duplicates=0</td>
+</tr>
+<tr>
+<td style="text-align: left;">recovery_raw_count_sample</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">{“finite”: true, “integer_like”: true,
+“maximum”: 1866.0, “minimum”: 1.0, “n_sampled”: 150000, “nonnegative”:
+true}</td>
+</tr>
+<tr>
+<td style="text-align: left;">phase3_exclusion_intersection</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">78 rows</td>
+</tr>
+<tr>
+<td style="text-align: left;">effective_cell_count</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">3705306 cells</td>
+</tr>
+<tr>
+<td style="text-align: left;">metadata_equivalence::source_gse_id</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">missing=0; unique=25</td>
+</tr>
+<tr>
+<td style="text-align: left;">metadata_equivalence::donor_id</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">missing=366518; unique=687</td>
+</tr>
+<tr>
+<td style="text-align: left;">metadata_equivalence::sample_id</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">missing=51007; unique=767</td>
+</tr>
+<tr>
+<td style="text-align: left;">metadata_equivalence::library_id</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">missing=1483150; unique=412</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">metadata_equivalence::technology_simple</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">missing=1483150; unique=3</td>
+</tr>
+<tr>
+<td style="text-align: left;">primary_nk_anchor_recovery</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">21054/21054</td>
+</tr>
+<tr>
+<td style="text-align: left;">primary_nk_anchor_source_count</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">2 sources</td>
+</tr>
+<tr>
+<td style="text-align: left;">locked_cohorts_not_opened</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">recovery audit reads only current-atlas
+precursor, exclusion manifest, metadata, and label manifest</td>
+</tr>
+<tr>
+<td style="text-align: left;">all_recovery_inputs_unchanged</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">4/4 size/mtime pairs unchanged</td>
+</tr>
+</tbody>
+</table>
+<h2 id="remaining-supervision-gates">Remaining supervision gates</h2>
+<p>The previous execution approval is intentionally invalidated because
+the execution config, runner, core, and physical input contract changed.
+Explicit approval of <code>RECOVERY_EXECUTION_APPROVAL.json</code>
+authorizes only development-data staging, A100 scVI, repeated
+clustering, and pseudo-NK QC. Classifier fitting, threshold selection,
+promotion, release fitting, and atlas inference remain separate
+unapproved actions.</p>
+<h2 id="exact-artifacts">Exact artifacts</h2>
+<ul>
+<li>Recovery contract:
+<code>configs/models/gdtai/v4_2_integration_execution.json</code></li>
+<li>Recovery checks:
+<code>Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_recovery_preflight/recovery_checks.csv</code></li>
+<li>Approval template:
+<code>Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_recovery_preflight/RECOVERY_EXECUTION_APPROVAL_TEMPLATE.json</code></li>
+<li>HTML:
+<code>gdT_prediction/gdtai_v4_2_recovery_preflight/index.html</code></li>
+<li>PDF:
+<code>gdT_prediction/gdtai_v4_2_recovery_preflight/gdtai_v4_2_recovery_preflight_report.pdf</code></li>
+</ul>
+</body>
+</html>

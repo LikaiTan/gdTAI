@@ -694,6 +694,64 @@ Gate semantics:
 - implementation or integration requires explicit supervision approval; later
   classifier fitting requires a separate reviewed approval gate
 
+## Post-Phase-4 gdTAI V4.2 current-atlas recovery preflight
+
+Objective:
+
+- reconstruct the exact raw-count current-atlas input required by the V4.2
+  sidecar after loss of the mirrored SSD `integrated.h5ad`
+- prove cell, gene, exclusion, metadata, NK-anchor, checksum, and read-only
+  equivalence before any project-data execution
+
+Phase or task:
+
+- gdTAI V4.2 read-only current-atlas recovery audit and supervision package
+
+Exact `.py` scripts:
+
+- `workflows/gdtai/run_gdtai_v4_2_recovery_preflight.py`
+- `workflows/gdtai/run_gdtai_v4_2_nk_reference_integration.py`
+
+Execution command:
+
+```bash
+MPLCONFIGDIR=/tmp/matplotlib-gdtai-v42-recovery \
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/run_gdtai_v4_2_recovery_preflight.py
+```
+
+Core configuration:
+
+- `configs/models/gdtai/v4_2_integration_execution.json`
+
+Key outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_recovery_preflight/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_recovery_preflight/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_recovery_preflight/`
+- `gdT_prediction/gdtai_v4_2_recovery_preflight/index.html`
+- `gdT_prediction/gdtai_v4_2_recovery_preflight/gdtai_v4_2_recovery_preflight_report.pdf`
+
+Current result:
+
+- `PASS_REVIEW_REQUIRED`; all 20 checks passed
+- exact recovery uses 3,705,384 raw cells, removes the saved 78 Phase-3
+  exclusions, and yields the frozen 3,705,306-cell input with 27,413 genes
+- all five required metadata missing/unique-count audits match exactly, and
+  all 21,054 primary dual-annotation NK anchors are recovered
+- the prior project-data execution approval is invalid because the physical
+  input and checksum-bound execution contract changed
+
+Gate semantics:
+
+- no project-data integration, scVI fit, clustering, pseudo-labeling,
+  classifier fitting, thresholding, promotion, or inference ran
+- the recovery path is permitted only while the original integrated H5AD is
+  absent and only when all source, manifest, metadata, and contract hashes
+  match
+- recovery execution requires explicit activation of the generated
+  checksum-bound approval; classifier fitting remains a later separate gate
+
 ## Phase 1: Coarse T/NK extraction
 
 Objective:

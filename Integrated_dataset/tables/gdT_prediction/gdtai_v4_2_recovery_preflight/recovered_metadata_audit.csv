@@ -1,0 +1,6 @@
+column,observed_missing,expected_missing,observed_unique,expected_unique,exact_match
+source_gse_id,0,0,25,25,True
+donor_id,366518,366518,687,687,True
+sample_id,51007,51007,767,767,True
+library_id,1483150,1483150,412,412,True
+technology_simple,1483150,1483150,3,3,True

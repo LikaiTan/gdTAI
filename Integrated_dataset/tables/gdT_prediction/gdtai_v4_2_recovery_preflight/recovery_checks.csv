@@ -1,0 +1,21 @@
+check,status,detail
+original_integrated_h5ad_absent,PASS,/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/high_speed_temp/Integrated_dataset/integrated.h5ad
+recovery_source_sha256,PASS,04033762f9b1380227f0dabbbdbcd7f0fbe4153e734390b30ef64824e3b181ad
+phase3_exclusion_manifest_sha256,PASS,dcc9d7865e0a1712e80b8eb621ab93e5bfc9296ec04b1563195f0aa352f1f097
+metadata_source_sha256::0,PASS,7fa54bb8ea2a147b84beddcae1f016c4bbb1af4faa9f66c1166e176831eaddac
+metadata_source_sha256::1,PASS,e968424576e5859b5d3ecfedf8ef4b772cba71bbdde249a5cc10800f85ea197b
+recovery_raw_shape,PASS,"(3705384, 27413)"
+recovery_sparse_csr,PASS,csr_matrix
+recovery_unique_axes,PASS,obs_duplicates=0; var_duplicates=0
+recovery_raw_count_sample,PASS,"{""finite"": true, ""integer_like"": true, ""maximum"": 1866.0, ""minimum"": 1.0, ""n_sampled"": 150000, ""nonnegative"": true}"
+phase3_exclusion_intersection,PASS,78 rows
+effective_cell_count,PASS,3705306 cells
+metadata_equivalence::source_gse_id,PASS,missing=0; unique=25
+metadata_equivalence::donor_id,PASS,missing=366518; unique=687
+metadata_equivalence::sample_id,PASS,missing=51007; unique=767
+metadata_equivalence::library_id,PASS,missing=1483150; unique=412
+metadata_equivalence::technology_simple,PASS,missing=1483150; unique=3
+primary_nk_anchor_recovery,PASS,21054/21054
+primary_nk_anchor_source_count,PASS,2 sources
+locked_cohorts_not_opened,PASS,"recovery audit reads only current-atlas precursor, exclusion manifest, metadata, and label manifest"
+all_recovery_inputs_unchanged,PASS,4/4 size/mtime pairs unchanged

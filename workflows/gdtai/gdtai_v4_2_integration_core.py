@@ -160,6 +160,9 @@ def validate_project_data_approval(
         "runner_sha256": sha256_file(runner_path),
         "core_sha256": sha256_file(core_path),
     }
+    if config.get("current_atlas_recovery", {}).get("active"):
+        validate_recovery_preflight(config)
+        expected["recovery_contract_sha256"] = recovery_contract_sha256(config)
     errors = []
     if approval.get("approved") is not True:
         errors.append("project-data integration approval is not active")
@@ -169,6 +172,70 @@ def validate_project_data_approval(
     if errors:
         raise PermissionError("; ".join(errors))
     return approval
+
+
+def apply_current_atlas_recovery(config: dict[str, Any], roles: pd.DataFrame) -> pd.DataFrame:
+    """Replace a missing integrated input with its frozen raw-count precursor."""
+    recovery = config.get("current_atlas_recovery", {})
+    if not recovery.get("active"):
+        return roles.copy()
+    result = roles.copy()
+    current_mask = result["cohort_id"].eq("current_atlas")
+    if current_mask.sum() != 1:
+        raise RuntimeError("Exactly one current_atlas role is required")
+    original = Path(result.loc[current_mask, "path"].iloc[0])
+    if recovery.get("require_original_missing") and original.exists():
+        raise RuntimeError("Recovery is forbidden while the original integrated H5AD exists")
+    source = resolve(recovery["source_h5ad"])
+    if not source.exists():
+        raise FileNotFoundError(f"Recovery source is missing: {source}")
+    if int(result.loc[current_mask, "expected_cells"].iloc[0]) != int(recovery["expected_effective_cells"]):
+        raise RuntimeError("Recovery effective-cell count differs from the frozen role contract")
+    result.loc[current_mask, "path"] = str(source)
+    result.loc[current_mask, "expected_sha256"] = str(recovery["source_sha256"])
+    result.loc[current_mask, "recovery_active"] = True
+    result["recovery_active"] = result["recovery_active"].fillna(False).astype(bool)
+    return result
+
+
+def recovery_contract_payload(config: dict[str, Any]) -> dict[str, Any]:
+    recovery = config["current_atlas_recovery"]
+    return {
+        "source_h5ad": str(resolve(recovery["source_h5ad"])),
+        "source_sha256": recovery["source_sha256"],
+        "expected_raw_cells": int(recovery["expected_raw_cells"]),
+        "expected_effective_cells": int(recovery["expected_effective_cells"]),
+        "expected_genes": int(recovery["expected_genes"]),
+        "row_exclusion_manifest": str(resolve(recovery["row_exclusion_manifest"])),
+        "row_exclusion_manifest_sha256": recovery["row_exclusion_manifest_sha256"],
+        "expected_intersecting_exclusions": int(recovery["expected_intersecting_exclusions"]),
+        "metadata_sources": [
+            {"path": str(resolve(item["path"])), "sha256": item["sha256"]}
+            for item in recovery["metadata_sources"]
+        ],
+        "metadata_columns": list(recovery["metadata_columns"]),
+        "expected_metadata_audit": recovery["expected_metadata_audit"],
+    }
+
+
+def recovery_contract_sha256(config: dict[str, Any]) -> str:
+    return canonical_sha256(recovery_contract_payload(config))
+
+
+def validate_recovery_preflight(config: dict[str, Any]) -> dict[str, Any]:
+    recovery = config.get("current_atlas_recovery", {})
+    if not recovery.get("active"):
+        return {"active": False}
+    summary_path = resolve(recovery["recovery_preflight_summary"])
+    if not summary_path.exists():
+        raise RuntimeError(f"Recovery preflight summary is absent: {summary_path}")
+    summary = read_json(summary_path)
+    expected = recovery_contract_sha256(config)
+    if summary.get("result") != "PASS_REVIEW_REQUIRED":
+        raise RuntimeError("Recovery preflight did not pass")
+    if summary.get("recovery_contract_sha256") != expected:
+        raise RuntimeError("Recovery preflight summary does not match the active recovery contract")
+    return summary
 
 
 def is_hvg_excluded(gene: str) -> bool:
@@ -243,6 +310,54 @@ def h5ad_obs_frame(path: str | Path, columns: Sequence[str]) -> pd.DataFrame:
 def h5ad_var_names(path: str | Path) -> np.ndarray:
     with h5py.File(resolve(path), "r") as handle:
         return axis_names(handle, "var")
+
+
+def recovery_excluded_cell_ids(config: dict[str, Any]) -> set[str]:
+    recovery = config["current_atlas_recovery"]
+    manifest = pd.read_csv(resolve(recovery["row_exclusion_manifest"]), usecols=["obs_name"])
+    return set(manifest["obs_name"].astype(str))
+
+
+def load_recovery_metadata(config: dict[str, Any]) -> pd.DataFrame:
+    recovery = config["current_atlas_recovery"]
+    usecols = ["source_gse_id", "original_cell_id", *recovery["metadata_columns"]]
+    frames = []
+    for item in recovery["metadata_sources"]:
+        path = resolve(item["path"])
+        header = pd.read_csv(path, nrows=0)
+        missing = sorted(set(usecols) - set(header.columns))
+        if missing:
+            raise KeyError(f"Recovery metadata source {path} lacks columns: {missing}")
+        frames.append(pd.read_csv(path, usecols=usecols, dtype="string", low_memory=False))
+    metadata = pd.concat(frames, ignore_index=True, copy=False)
+    for column in usecols:
+        metadata[column] = normalize_text(metadata[column])
+    metadata["metadata_key"] = (
+        metadata["source_gse_id"].fillna("missing_gse")
+        + "||"
+        + metadata["original_cell_id"].fillna("missing_cell")
+    )
+    if metadata["metadata_key"].duplicated().any():
+        raise RuntimeError("Recovery metadata contains duplicate source-plus-cell keys")
+    return metadata.set_index("metadata_key")
+
+
+def attach_recovery_metadata(frame: pd.DataFrame, config: dict[str, Any]) -> pd.DataFrame:
+    required = ["source_gse_id", "source_original_cell_id"]
+    missing = [column for column in required if column not in frame]
+    if missing:
+        raise KeyError(f"Recovery source metadata lacks columns: {missing}")
+    metadata = load_recovery_metadata(config)
+    key = (
+        normalize_text(frame["source_gse_id"]).replace("", "missing_gse")
+        + "||"
+        + normalize_text(frame["source_original_cell_id"]).replace("", "missing_cell")
+    )
+    joined = metadata.reindex(key)
+    result = frame.copy()
+    for column in config["current_atlas_recovery"]["metadata_columns"]:
+        result[column] = joined[column].to_numpy()
+    return result
 
 
 def _matrix_group(handle: h5py.File, key: str) -> h5py.Group:

@@ -1,5 +1,22 @@
 # CHANGELOG.md
 
+## 2026-08-14 - Audited V4.2 current-atlas recovery after SSD loss
+
+- Stopped the approved project-data command before matrix reading when the
+  SSD-resident `integrated.h5ad` was found to be absent.
+- Added a fail-closed recovery path from the intact 3,705,384-cell canonical
+  `TNK_cleaned.h5ad`, using the checksum-pinned 78-cell Phase-3 exclusion
+  manifest and original harmonized metadata sources.
+- Reconstructed exactly 3,705,306 effective cells x 27,413 genes, reproduced
+  the frozen five-column metadata audit, and recovered all 21,054 primary
+  dual-annotation NK anchors.
+- Passed 20/20 read-only recovery checks and published a visually reviewed
+  three-page HTML/PDF package. No project-data integration, scVI fitting,
+  clustering, pseudo-labeling, or classifier fitting ran.
+- Invalidated the former execution approval because the physical input and
+  checksum-bound code/config contract changed; recovery execution remains at a
+  new explicit supervision gate.
+
 ## 2026-08-08 - Passed gdTAI V4.2 sidecar-integration implementation QC
 
 - Implemented a checksum-bound, stage-addressable integration runner that

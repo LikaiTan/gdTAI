@@ -72,6 +72,16 @@
 
 ## Current review packages
 
+- gdTAI V4.2 current-atlas recovery preflight:
+  - `configs/models/gdtai/v4_2_integration_execution.json`
+  - `gdT_prediction/gdtai_v4_2_recovery_preflight/index.html`
+  - `gdT_prediction/gdtai_v4_2_recovery_preflight/gdtai_v4_2_recovery_preflight_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_recovery_preflight/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_recovery_preflight/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_recovery_preflight/`
+  - decision: 20/20 checks passed; recovery execution and classifier fitting
+    remain blocked by separate explicit supervision gates
+
 - gdTAI V4.2 sidecar-integration implementation QC:
   - `configs/models/gdtai/v4_2_integration_execution.json`
   - `gdT_prediction/gdtai_v4_2_implementation_qc/index.html`

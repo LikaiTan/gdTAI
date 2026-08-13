@@ -31,6 +31,8 @@ from scipy import sparse
 
 from workflows.gdtai.gdtai_v4_2_integration_core import (
     ROOT,
+    apply_current_atlas_recovery,
+    attach_recovery_metadata,
     atomic_write_json,
     common_eligible_genes,
     ensure_no_locked_cohorts,
@@ -42,6 +44,7 @@ from workflows.gdtai.gdtai_v4_2_integration_core import (
     mixed_boundary_mask,
     read_json,
     read_sparse_rows_genes,
+    recovery_excluded_cell_ids,
     resolve,
     role_contract_sha256,
     sha256_file,
@@ -49,6 +52,7 @@ from workflows.gdtai.gdtai_v4_2_integration_core import (
     validate_preflight_approval,
     validate_project_data_approval,
     validate_pseudolabel_contract,
+    validate_recovery_preflight,
     cluster_consensus_votes,
 )
 
@@ -62,6 +66,7 @@ OBS_COLUMNS = [
     "sample_id",
     "library_id",
     "technology_simple",
+    "original_cell_id",
     "has_any_ab_tcr",
     "has_any_gd_tcr",
     "has_TRA_TRB_paired",
@@ -152,6 +157,7 @@ def ensure_resources(config: dict[str, Any], paths: dict[str, Path]) -> None:
 def development_roles(config: dict[str, Any]) -> pd.DataFrame:
     contract = validate_preflight_approval(config)
     roles = contract["roles"]
+    roles = apply_current_atlas_recovery(config, roles)
     selected = roles[roles["include_in_integration_fit"]].copy()
     if selected["allow_locked_evaluation"].any():
         raise RuntimeError("Locked cohort selected for development integration")
@@ -205,6 +211,20 @@ def build_development_obs(config: dict[str, Any], roles: pd.DataFrame) -> pd.Dat
         frame["input_cohort_id"] = role.cohort_id
         frame["allow_pseudolabel_training"] = bool(role.allow_pseudolabel_training)
         if role.cohort_id == "current_atlas":
+            if bool(getattr(role, "recovery_active", False)):
+                recovery = config["current_atlas_recovery"]
+                if frame.shape[0] != int(recovery["expected_raw_cells"]):
+                    raise RuntimeError("Recovery source raw-cell count differs from the contract")
+                frame["source_original_cell_id"] = frame["original_cell_id"].astype("string")
+                excluded = recovery_excluded_cell_ids(config)
+                remove = original.isin(excluded)
+                if int(remove.sum()) != int(recovery["expected_intersecting_exclusions"]):
+                    raise RuntimeError("Recovery source exclusion intersection differs from the contract")
+                frame = frame.loc[~remove].copy()
+                original = frame.index.astype(str)
+                frame = attach_recovery_metadata(frame, config)
+                if frame.shape[0] != int(recovery["expected_effective_cells"]):
+                    raise RuntimeError("Recovery effective-cell count differs from the contract")
             frame["primary_nk_anchor"] = original.isin(primary_nk_ids)
             frame["productive_tcr_anchor"] = original.isin(productive_ids)
             frame["doublet_flag_effective"] = original.isin(doublet_ids)
@@ -316,7 +336,7 @@ def prepare_stage(config: dict[str, Any], paths: dict[str, Path], overwrite: boo
                 role.path,
                 matrix_keys.get(role.cohort_id, matrix_keys["default"]),
                 selected,
-                rows=None,
+                rows=subset["input_row"].to_numpy(np.int64),
                 row_chunk_size=int(config["staging"]["row_chunk_size"]),
             )
         )
@@ -586,6 +606,7 @@ def main() -> None:
     config_path = resolve(args.config)
     config = read_json(config_path)
     preflight = validate_preflight_approval(config)
+    recovery = validate_recovery_preflight(config)
     paths = stage_paths(config)
     validation = {
         "status": "PASS",
@@ -596,6 +617,8 @@ def main() -> None:
         "core_sha256": sha256_file(CORE_PATH),
         "development_cohorts": int(preflight["roles"]["include_in_integration_fit"].sum()),
         "locked_cohorts": int(preflight["roles"]["allow_locked_evaluation"].sum()),
+        "current_atlas_recovery_active": bool(recovery.get("active", True)),
+        "recovery_contract_sha256": recovery.get("recovery_contract_sha256"),
     }
     if args.stage == "validate":
         print(json.dumps(validation, indent=2, sort_keys=True))

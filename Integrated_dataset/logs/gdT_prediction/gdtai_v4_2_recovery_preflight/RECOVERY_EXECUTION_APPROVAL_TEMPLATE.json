@@ -1,0 +1,12 @@
+{
+  "approved": false,
+  "approved_at": "",
+  "approved_by": "",
+  "core_sha256": "e59dccc35e2d675e699fcb3cc15b4027d820e24a83b1eef6a0669cc6c76f64bf",
+  "execution_config_sha256": "dd8337c32e8a627daad1526dc4a7caeec04a6489d847298e16eeff838250281c",
+  "protocol_version": "4.2-integration-execution-v1",
+  "recovery_contract_sha256": "96934c8b1b5806344fc18891d06e675718b2fcb9cbdf01ef626bb684ca972519",
+  "review_artifact": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/gdT_prediction/gdtai_v4_2_recovery_preflight/gdtai_v4_2_recovery_preflight_report.pdf",
+  "runner_sha256": "a7ee2be9ac5246f082380e71ca0cd04a06b9f7b20f3ffe18bbd2f9ee79770b20",
+  "scope": "Recovered development-data sidecar staging, A100 scVI, consensus clustering, and pseudo-label QC only; no classifier fitting."
+}
