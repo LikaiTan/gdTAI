@@ -41,6 +41,7 @@ from workflows.gdtai.gdtai_v4_2_integration_core import (
     input_file_state,
     iter_parameter_grid,
     make_integration_batch,
+    minimum_free_gib_for_stage,
     mixed_boundary_mask,
     read_json,
     read_sparse_rows_genes,
@@ -53,6 +54,7 @@ from workflows.gdtai.gdtai_v4_2_integration_core import (
     validate_project_data_approval,
     validate_pseudolabel_contract,
     validate_recovery_preflight,
+    validate_resource_preflight,
     cluster_consensus_votes,
 )
 
@@ -144,14 +146,17 @@ def require_gpu(config: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def ensure_resources(config: dict[str, Any], paths: dict[str, Path]) -> None:
+def ensure_resources(config: dict[str, Any], paths: dict[str, Path], stage: str) -> dict[str, float]:
     paths["ssd"].mkdir(parents=True, exist_ok=True)
     free_gib = shutil.disk_usage(paths["ssd"]).free / 2**30
-    minimum = float(config["resources"]["minimum_ssd_free_gib"])
+    minimum = minimum_free_gib_for_stage(config, stage)
     if free_gib < minimum:
-        raise RuntimeError(f"SSD free space {free_gib:.1f} GiB is below the {minimum:.1f}-GiB contract")
+        raise RuntimeError(
+            f"SSD free space {free_gib:.1f} GiB is below the {minimum:.1f}-GiB contract for {stage}"
+        )
     for key in ["table", "figure", "log", "static"]:
         paths[key].mkdir(parents=True, exist_ok=True)
+    return {"observed_free_gib": free_gib, "required_free_gib": minimum}
 
 
 def development_roles(config: dict[str, Any]) -> pd.DataFrame:
@@ -607,6 +612,7 @@ def main() -> None:
     config = read_json(config_path)
     preflight = validate_preflight_approval(config)
     recovery = validate_recovery_preflight(config)
+    resource = validate_resource_preflight(config)
     paths = stage_paths(config)
     validation = {
         "status": "PASS",
@@ -619,16 +625,17 @@ def main() -> None:
         "locked_cohorts": int(preflight["roles"]["allow_locked_evaluation"].sum()),
         "current_atlas_recovery_active": bool(recovery.get("active", True)),
         "recovery_contract_sha256": recovery.get("recovery_contract_sha256"),
+        "resource_contract_sha256": resource.get("resource_contract_sha256"),
     }
     if args.stage == "validate":
         print(json.dumps(validation, indent=2, sort_keys=True))
         return
 
     validate_project_data_approval(config_path, config, RUNNER_PATH, CORE_PATH)
-    ensure_resources(config, paths)
     stages = [args.stage] if args.stage != "all" else ["prepare", "fit", "cluster", "consensus"]
     results: dict[str, Any] = {"validation": validation}
     for stage in stages:
+        results[f"{stage}_resources"] = ensure_resources(config, paths, stage)
         if stage == "prepare":
             results[stage] = prepare_stage(config, paths, args.overwrite)
         elif stage == "fit":

@@ -2,6 +2,11 @@
 
 ## Current approved decisions
 
+- gdTAI V4.2 recovered development-data sparse staging and A100 scVI were
+  approved and completed on 2026-08-14 against the checksum-bound recovery
+  package; the later cluster-resource amendment and all classifier fitting,
+  threshold selection, promotion, release fitting, and atlas inference remain
+  unapproved
 - gdTAI V4.2 sidecar-integration implementation and synthetic/read-only
   implementation QC are approved against the 2026-08-08 checksum-bound
   preflight; project-data scVI fitting, classifier fitting, promotion, release
@@ -93,6 +98,13 @@
 
 ## Historical exceptions and notes
 
+- on 2026-08-14, recovered V4.2 staging and A100 scVI completed successfully;
+  RAPIDS clustering failed closed before graph construction when shared SSD
+  capacity fell below the frozen 300-GiB floor
+- an unrelated BAM sort subsequently completed and self-cleaned, but stable
+  free space remained near 261 GiB; an operational-only proposal retains 300
+  GiB for staging/fitting and uses 150 GiB for clustering/consensus, pending a
+  new checksum-bound approval
 - on 2026-08-14, the user approved V4.2 development-data sidecar execution
   against the original SSD input contract, but the command stopped before
   matrix reading because the SSD-resident `integrated.h5ad` was absent

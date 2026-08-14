@@ -163,6 +163,9 @@ def validate_project_data_approval(
     if config.get("current_atlas_recovery", {}).get("active"):
         validate_recovery_preflight(config)
         expected["recovery_contract_sha256"] = recovery_contract_sha256(config)
+    if config.get("resources", {}).get("resource_preflight_summary"):
+        validate_resource_preflight(config)
+        expected["resource_contract_sha256"] = resource_contract_sha256(config)
     errors = []
     if approval.get("approved") is not True:
         errors.append("project-data integration approval is not active")
@@ -236,6 +239,50 @@ def validate_recovery_preflight(config: dict[str, Any]) -> dict[str, Any]:
     if summary.get("recovery_contract_sha256") != expected:
         raise RuntimeError("Recovery preflight summary does not match the active recovery contract")
     return summary
+
+
+def resource_contract_payload(config: dict[str, Any]) -> dict[str, Any]:
+    resources = config["resources"]
+    return {
+        "ssd_root": str(Path(resources["ssd_root"])),
+        "minimum_ssd_free_gib": float(resources["minimum_ssd_free_gib"]),
+        "minimum_ssd_free_gib_by_stage": {
+            str(stage): float(value)
+            for stage, value in sorted(resources["minimum_ssd_free_gib_by_stage"].items())
+        },
+        "maximum_ram_gib": float(resources["maximum_ram_gib"]),
+        "maximum_cpu_cores": int(resources["maximum_cpu_cores"]),
+    }
+
+
+def resource_contract_sha256(config: dict[str, Any]) -> str:
+    return canonical_sha256(resource_contract_payload(config))
+
+
+def validate_resource_preflight(config: dict[str, Any]) -> dict[str, Any]:
+    resources = config.get("resources", {})
+    summary_path = resources.get("resource_preflight_summary")
+    if not summary_path:
+        return {"active": False}
+    path = resolve(summary_path)
+    if not path.exists():
+        raise RuntimeError(f"Resource-amendment preflight summary is absent: {path}")
+    summary = read_json(path)
+    if summary.get("result") != "PASS_REVIEW_REQUIRED":
+        raise RuntimeError("Resource-amendment preflight did not pass")
+    expected = resource_contract_sha256(config)
+    if summary.get("resource_contract_sha256") != expected:
+        raise RuntimeError("Resource-amendment preflight does not match the active resource contract")
+    return summary
+
+
+def minimum_free_gib_for_stage(config: dict[str, Any], stage: str) -> float:
+    resources = config["resources"]
+    default = float(resources["minimum_ssd_free_gib"])
+    value = float(resources.get("minimum_ssd_free_gib_by_stage", {}).get(stage, default))
+    if value <= 0 or value > default:
+        raise ValueError(f"Invalid SSD free-space floor for stage {stage}: {value}")
+    return value
 
 
 def is_hvg_excluded(gene: str) -> bool:

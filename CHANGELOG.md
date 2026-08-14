@@ -1,5 +1,21 @@
 # CHANGELOG.md
 
+## 2026-08-14 - Completed V4.2 staging/scVI and audited cluster resources
+
+- Activated the user-approved recovery contract and staged 4,023,462
+  development cells x 4,000 HVGs with zero locked-cohort cells.
+- Completed the frozen 20-epoch scVI fit on the A100 80-GB GPU in 1,358
+  seconds with no CPU fallback; saved a finite 30-dimensional latent matrix.
+- Retained unchanged size/mtime for all six development source H5ADs.
+- Stopped before RAPIDS graph construction when shared SSD free space fell
+  below the original 300-GiB floor; did not stop or delete the unrelated BAM
+  workflow responsible for the transient pressure.
+- Added a checksum-bound stage-specific storage contract that retains 300 GiB
+  for staging/fitting and proposes 150 GiB for clustering/consensus.
+- Passed 18/18 amendment checks with a 2.33-GiB worst-case output reserve and
+  108.4-GiB post-reserve margin; clustering and classifier fitting remain
+  unperformed pending separate approvals.
+
 ## 2026-08-14 - Audited V4.2 current-atlas recovery after SSD loss
 
 - Stopped the approved project-data command before matrix reading when the

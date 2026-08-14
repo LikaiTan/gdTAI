@@ -8,7 +8,7 @@
     "summary": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_integration_preflight/summary.json",
     "approval": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_integration_preflight/INTEGRATION_APPROVAL.json"
   },
-  "execution_approval": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_recovery_preflight/RECOVERY_EXECUTION_APPROVAL.json",
+  "execution_approval": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_cluster_resource_preflight/CLUSTER_EXECUTION_APPROVAL.json",
   "inputs": {
     "v4_cell_label_manifest": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_preflight/cell_label_manifest.csv.gz"
   },
@@ -118,6 +118,13 @@
     "maximum_cpu_cores": 80,
     "maximum_ram_gib": 800,
     "minimum_ssd_free_gib": 300,
+    "minimum_ssd_free_gib_by_stage": {
+      "prepare": 300,
+      "fit": 300,
+      "cluster": 150,
+      "consensus": 150
+    },
+    "resource_preflight_summary": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_cluster_resource_preflight/summary.json",
     "ssd_root": "/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference"
   },
   "outputs": {

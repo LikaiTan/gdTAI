@@ -2,18 +2,15 @@
 
 ## Current milestone
 
-- gdTAI V4.2 current-atlas recovery preflight completed with
-  `PASS_REVIEW_REQUIRED` on 2026-08-14 after the SSD-resident
-  `integrated.h5ad` disappeared before project-data execution; all 20 recovery,
-  equivalence, read-only, and fail-closed checks passed
+- gdTAI V4.2 recovered sparse staging and A100 scVI fitting completed with
+  `PASS`; the cluster-stage resource amendment completed with
+  `PASS_REVIEW_REQUIRED` on 2026-08-14 with 18/18 checks passing
 
 ## Next action
 
-- review the V4.2 recovery-preflight PDF and checksum-bound recovery execution
-  approval template
-- decide whether to authorize recovered development-data sparse staging, A100
-  scVI, consensus clustering, and pseudo-label QC without opening the three
-  locked evaluation cohorts
+- review the cluster-stage resource-amendment PDF and decide whether to
+  authorize the 150-GiB SSD floor for saved-latent RAPIDS clustering and
+  pseudo-NK consensus QC only
 - publish and review integration/clustering QC before any classifier fitting
 - after an approved integration and clustering QC report, decide separately
   whether to authorize V4.2 classifier fitting and nested comparison
@@ -41,9 +38,28 @@
 - the recovered effective input contains exactly 3,705,306 cells and 27,413
   genes, reproduces all five frozen metadata missing/unique-count audits, and
   recovers all 21,054/21,054 primary dual-annotation NK anchors
-- no project-data integration, scVI fitting, clustering, pseudo-labeling, or
-  classifier fitting occurred; execution remains blocked until the new
-  checksum-bound `RECOVERY_EXECUTION_APPROVAL.json` is explicitly activated
+- recovered sparse staging passed on 4,023,462 development cells x 4,000 HVGs
+  with 1,667,132,819 nonzero raw counts, all 21,054 primary NK anchors, 204,869
+  productive-TCR anchors, and zero locked-cohort cells
+- A100 scVI fitting passed in 1,358 seconds with no CPU fallback and produced a
+  finite 4,023,462 x 30 latent matrix with SHA-256
+  `7030b28be885b85a4b24ce2223bb16f7c7288a29195f2512bf7bbba330791ccf`
+- the first staging attempt assembled the complete sparse matrix but AnnData
+  rejected nullable-string categorical serialization; the unchanged approved
+  runner completed after enabling its documented
+  `ANNDATA_ALLOW_WRITE_NULLABLE_STRINGS=1` compatibility setting
+- RAPIDS clustering did not start because shared SSD free space fell below the
+  original 300-GiB floor; an unrelated BAM sort completed and self-cleaned,
+  after which free space stabilized near 261 GiB
+- the cluster resource-amendment preflight passed 18/18 checks, retained 300
+  GiB for `prepare` and `fit`, proposed 150 GiB for `cluster` and `consensus`,
+  bounded worst-case cluster output plus reserve at 2.33 GiB, and retained
+  108.4 GiB post-reserve margin
+- all six development source H5AD size/mtime pairs remained unchanged;
+  clustering, pseudo-labeling, and classifier fitting remain unperformed
+- changing the stage-specific resource contract invalidated the earlier
+  execution approval; `CLUSTER_EXECUTION_APPROVAL.json` is absent and must be
+  explicitly activated before clustering
 - V4.2 implementation QC passed 15/15 checks; the synthetic 1,600-cell scVI
   fit ran on `cuda:0` using the A100 80-GB GPU, produced a finite 8-dimensional
   latent matrix, and completed RAPIDS neighbors plus two Leiden seeds
@@ -90,8 +106,10 @@
 - the proposed development cohorts contain 318,156 T/NK candidates; the locked
   GSE169246 cohort provides 7,770 author NK and 54,925 productive alpha-beta T
   cells, and GSE315928 provides 66,813 paired-alpha-beta controls
-- no V4.2 integration, scVI fit, clustering, pseudo-labeling, classifier fit,
-  threshold search, promotion, release fitting, or atlas inference is approved
+- V4.2 recovered staging and scVI fitting are complete; clustering and
+  pseudo-label QC now require the checksum-bound resource amendment, while
+  classifier fitting, threshold search, promotion, release fitting, and atlas
+  inference remain unapproved
 
 - V4.1-GPU Gate C was explicitly approved and checksum-bound; 99/99 recorded
   inner-fold fits converged and all 57 complete threshold-frontier files were
@@ -198,9 +216,9 @@
   - `Integrated_dataset/TNK_cleaned.h5ad`
 - canonical current integrated milestone for downstream analysis:
   - `high_speed_temp/Integrated_dataset/integrated.h5ad`
-  - status: currently unavailable because the mirrored SSD tree disappeared;
-    V4.2 has an audited raw-count recovery path from `TNK_cleaned.h5ad`, but it
-    is not yet approved for project-data execution
+  - status: the user reports that the former SSD object was relocated to HDD,
+    but it remains absent from the frozen project path; V4.2 staging and scVI
+    used the approved raw-count recovery from `TNK_cleaned.h5ad`
 
 Additional current state:
 

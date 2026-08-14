@@ -1,0 +1,13 @@
+{
+  "candidate_eligible": 113287,
+  "locked_cohorts_included": false,
+  "matrix_nnz": 1667132819,
+  "n_cells": 4023462,
+  "n_hvgs": 4000,
+  "primary_nk_anchors": 21054,
+  "productive_tcr_anchors": 204869,
+  "stage": "prepare",
+  "staged_h5ad": "/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference/development_hvg_counts.h5ad",
+  "staged_h5ad_sha256": "cbd6d60f919fd235d578fe5423a0b19134e7447ab36bec231dcc064976e0aa9d",
+  "status": "PASS"
+}

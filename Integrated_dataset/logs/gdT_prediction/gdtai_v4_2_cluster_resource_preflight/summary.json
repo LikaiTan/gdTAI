@@ -1,0 +1,37 @@
+{
+  "checks_passed": 18,
+  "checks_total": 18,
+  "classifier_fitting_performed": false,
+  "cluster_minimum_ssd_free_gib": 150.0,
+  "clustering_performed": false,
+  "core_sha256": "191fe373beb827d7f8c63260ffbd066b1bbd08289318fbcb23471eaddfc4b8a9",
+  "execution_config_sha256": "e70f1fc2f343011acb2f027a1a32fce2ec19467234e7236798bb42cdcaa16931",
+  "matrix_nnz": 1667132819,
+  "n_cells": 4023462,
+  "n_hvgs": 4000,
+  "n_latent": 30,
+  "observed_ssd_free_gib": 260.7571792602539,
+  "original_minimum_ssd_free_gib": 300.0,
+  "post_reserve_margin_gib": 108.42743085324764,
+  "primary_nk_anchors": 21054,
+  "recovery_contract_sha256": "96934c8b1b5806344fc18891d06e675718b2fcb9cbdf01ef626bb684ca972519",
+  "resource_contract": {
+    "maximum_cpu_cores": 80,
+    "maximum_ram_gib": 800.0,
+    "minimum_ssd_free_gib": 300.0,
+    "minimum_ssd_free_gib_by_stage": {
+      "cluster": 150.0,
+      "consensus": 150.0,
+      "fit": 300.0,
+      "prepare": 300.0
+    },
+    "ssd_root": "/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference"
+  },
+  "resource_contract_sha256": "e54bd72c55a420c9c736c5f58c38e45aadf45890db1f372ebae7b63abb9da0ec",
+  "result": "PASS_REVIEW_REQUIRED",
+  "runner_sha256": "65b319ec9bc7b73cd641b09e0f311ce7a57bc35ea62957524a0bd2de87c57659",
+  "scope": "Saved-latent RAPIDS clustering and pseudo-NK consensus QC only; no restaging, scVI refit, or classifier fitting.",
+  "source_files": 6,
+  "unchanged_source_files": 6,
+  "worst_case_cluster_output_gib": 2.3297484070062637
+}

@@ -17,14 +17,17 @@ from workflows.gdtai.gdtai_v4_2_integration_core import (
     ensure_no_locked_cohorts,
     is_hvg_excluded,
     make_integration_batch,
+    minimum_free_gib_for_stage,
     mixed_boundary_mask,
     read_sparse_rows_genes,
     recovery_contract_sha256,
+    resource_contract_sha256,
     source_balanced_sample_indices,
     validate_preflight_approval,
     validate_project_data_approval,
     validate_pseudolabel_contract,
     validate_recovery_preflight,
+    validate_resource_preflight,
     validate_role_separation,
 )
 
@@ -177,6 +180,44 @@ def test_recovery_preflight_is_bound_to_the_exact_contract(tmp_path: Path) -> No
     config["current_atlas_recovery"]["expected_genes"] = 5
     with pytest.raises(RuntimeError, match="does not match"):
         validate_recovery_preflight(config)
+
+
+def test_stage_specific_resource_floor_is_bound_and_fail_closed(tmp_path: Path) -> None:
+    summary = tmp_path / "resource_summary.json"
+    config = {
+        "resources": {
+            "ssd_root": "/ssd/test",
+            "minimum_ssd_free_gib": 300,
+            "minimum_ssd_free_gib_by_stage": {
+                "prepare": 300,
+                "fit": 300,
+                "cluster": 150,
+                "consensus": 150,
+            },
+            "maximum_ram_gib": 800,
+            "maximum_cpu_cores": 80,
+            "resource_preflight_summary": str(summary),
+        }
+    }
+    summary.write_text(
+        json.dumps(
+            {
+                "result": "PASS_REVIEW_REQUIRED",
+                "resource_contract_sha256": resource_contract_sha256(config),
+            }
+        )
+    )
+    assert minimum_free_gib_for_stage(config, "prepare") == 300
+    assert minimum_free_gib_for_stage(config, "cluster") == 150
+    assert validate_resource_preflight(config)["result"] == "PASS_REVIEW_REQUIRED"
+
+    config["resources"]["minimum_ssd_free_gib_by_stage"]["cluster"] = 149
+    with pytest.raises(RuntimeError, match="does not match"):
+        validate_resource_preflight(config)
+
+    config["resources"]["minimum_ssd_free_gib_by_stage"]["cluster"] = 301
+    with pytest.raises(ValueError, match="Invalid SSD"):
+        minimum_free_gib_for_stage(config, "cluster")
 
 
 def test_hvg_exclusions_are_specific_to_forbidden_families() -> None:

@@ -752,6 +752,79 @@ Gate semantics:
 - recovery execution requires explicit activation of the generated
   checksum-bound approval; classifier fitting remains a later separate gate
 
+## Post-Phase-4 gdTAI V4.2 cluster-stage resource amendment
+
+Objective:
+
+- preserve the completed checksum-bound sparse staging and A100 scVI outputs
+  after shared SSD capacity fell below the original global floor
+- freeze a stage-specific storage floor before RAPIDS clustering without
+  changing any scientific input, representation, clustering, or pseudo-label
+  parameter
+
+Phase or task:
+
+- gdTAI V4.2 saved-latent cluster-resource preflight and supervision package
+
+Exact `.py` scripts:
+
+- `workflows/gdtai/run_gdtai_v4_2_cluster_resource_preflight.py`
+- `workflows/gdtai/run_gdtai_v4_2_nk_reference_integration.py`
+
+Completed execution commands:
+
+```bash
+ANNDATA_ALLOW_WRITE_NULLABLE_STRINGS=1 \
+MPLCONFIGDIR=/tmp/matplotlib-gdtai-v42-recovery \
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/run_gdtai_v4_2_nk_reference_integration.py --stage prepare
+
+ANNDATA_ALLOW_WRITE_NULLABLE_STRINGS=1 \
+MPLCONFIGDIR=/tmp/matplotlib-gdtai-v42-fit \
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/run_gdtai_v4_2_nk_reference_integration.py --stage fit
+```
+
+Pending command after explicit resource-amendment approval:
+
+```bash
+ANNDATA_ALLOW_WRITE_NULLABLE_STRINGS=1 \
+NUMBA_CACHE_DIR=/tmp/numba-gdtai-v42 \
+MPLCONFIGDIR=/tmp/matplotlib-gdtai-v42-cluster \
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/run_gdtai_v4_2_nk_reference_integration.py --stage cluster
+```
+
+Key outputs:
+
+- `/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference/development_hvg_counts.h5ad`
+- `/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference/X_scVI.npy`
+- `/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference/scvi_model/`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_cluster_resource_preflight/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_cluster_resource_preflight/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_cluster_resource_preflight/`
+- `gdT_prediction/gdtai_v4_2_cluster_resource_preflight/index.html`
+- `gdT_prediction/gdtai_v4_2_cluster_resource_preflight/gdtai_v4_2_cluster_resource_preflight_report.pdf`
+
+Current result:
+
+- sparse staging passed on 4,023,462 cells x 4,000 HVGs with zero locked
+  cohorts; A100 scVI passed with a finite 30-dimensional latent representation
+- `PASS_REVIEW_REQUIRED`; all 18 resource-amendment checks passed
+- the original 300-GiB floor remains frozen for `prepare` and `fit`; the
+  proposed floor is 150 GiB for `cluster` and `consensus`
+- worst-case partition payload plus reserve is 2.33 GiB, leaving 108.4 GiB
+  above the proposed floor and reserve at audit time
+
+Gate semantics:
+
+- no clustering, pseudo-labeling, classifier fitting, thresholding, promotion,
+  release fitting, or inference ran
+- the prior approval is invalid after the checksum-bound resource-contract
+  change
+- explicit activation of `CLUSTER_EXECUTION_APPROVAL.json` authorizes only
+  saved-latent RAPIDS clustering and pseudo-NK consensus QC
+
 ## Phase 1: Coarse T/NK extraction
 
 Objective:

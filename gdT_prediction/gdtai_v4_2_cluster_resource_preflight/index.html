@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>gdTAI V4.2 cluster resource amendment</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="print.css" />
+</head>
+<body>
+<h1 id="gdtai-v4.2-cluster-stage-resource-amendment">gdTAI V4.2
+cluster-stage resource amendment</h1>
+<h2 id="decision">Decision</h2>
+<p><strong>PASS_REVIEW_REQUIRED.</strong> Sparse staging and A100 scVI
+fitting completed under the original <strong>300 GiB</strong> SSD floor.
+RAPIDS clustering did not start because an unrelated shared-SSD BAM sort
+reduced free space. After that process completed and self-cleaned, free
+space stabilized at <strong>260.8 GiB</strong>.</p>
+<p>The amendment retains 300 GiB for <code>prepare</code> and
+<code>fit</code>, and freezes <strong>150 GiB</strong> for
+<code>cluster</code> and <code>consensus</code>. This is an operational
+storage guard only. It does not change cells, HVGs, expression, scVI
+parameters, latent coordinates, clustering grids, random seeds, anchors,
+pseudo-label rules, or validation roles.</p>
+<figure>
+<img
+src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_cluster_resource_preflight/cluster_storage_contract.png"
+alt="Storage contract" />
+<figcaption aria-hidden="true">Storage contract</figcaption>
+</figure>
+<h2 id="completed-evidence">Completed evidence</h2>
+<ul>
+<li>Staged matrix: <strong>4,023,462 cells x 4,000 HVGs</strong>,
+<strong>1,667,132,819</strong> nonzero counts.</li>
+<li>Locked cohorts in staged object: <strong>no</strong>.</li>
+<li>Primary NK anchors: <strong>21,054</strong>.</li>
+<li>scVI latent: <strong>4,023,462 x 30</strong>, finite, A100, no CPU
+fallback.</li>
+<li>Source H5AD size/mtime checks: <strong>6/6 unchanged</strong>.</li>
+<li>Worst-case uncompressed partition payload plus reserve: <strong>2.33
+GiB</strong>.</li>
+<li>Free-space margin above the amended floor and reserve: <strong>108.4
+GiB</strong>.</li>
+</ul>
+<h2 id="checks">Checks</h2>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 4%" />
+<col style="width: 71%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">check</th>
+<th style="text-align: left;">status</th>
+<th style="text-align: left;">detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">prepare_passed</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_reference/prepare_summary.json</td>
+</tr>
+<tr>
+<td style="text-align: left;">fit_passed</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_reference/fit_summary.json</td>
+</tr>
+<tr>
+<td style="text-align: left;">staged_h5ad_present</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference/development_hvg_counts.h5ad</td>
+</tr>
+<tr>
+<td style="text-align: left;">staged_h5ad_sha256</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">cbd6d60f919fd235d578fe5423a0b19134e7447ab36bec231dcc064976e0aa9d</td>
+</tr>
+<tr>
+<td style="text-align: left;">staged_shape</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">(4023462, 4000)</td>
+</tr>
+<tr>
+<td style="text-align: left;">staged_sparse_csr</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">csr_matrix</td>
+</tr>
+<tr>
+<td style="text-align: left;">staged_nnz</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">1667132819 nnz</td>
+</tr>
+<tr>
+<td style="text-align: left;">locked_cohorts_absent</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">prepare summary false</td>
+</tr>
+<tr>
+<td style="text-align: left;">latent_present</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference/X_scVI.npy</td>
+</tr>
+<tr>
+<td style="text-align: left;">latent_sha256</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">7030b28be885b85a4b24ce2223bb16f7c7288a29195f2512bf7bbba330791ccf</td>
+</tr>
+<tr>
+<td style="text-align: left;">latent_shape_and_finite</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">shape=(4023462, 30); finite=True</td>
+</tr>
+<tr>
+<td style="text-align: left;">gpu_without_cpu_fallback</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">NVIDIA A100 80GB PCIe</td>
+</tr>
+<tr>
+<td style="text-align: left;">scvi_model_present</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference/scvi_model/model.pt</td>
+</tr>
+<tr>
+<td style="text-align: left;">clustering_not_started</td>
+<td style="text-align: left;">PASS</td>
+<td
+style="text-align: left;">/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference/cluster_partitions.npz</td>
+</tr>
+<tr>
+<td style="text-align: left;">source_h5ads_unchanged</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">6/6</td>
+</tr>
+<tr>
+<td
+style="text-align: left;">stage_specific_floor_preserves_original_fit_floor</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">prepare/fit=300.0 GiB</td>
+</tr>
+<tr>
+<td style="text-align: left;">cluster_floor_met</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">free=260.8; floor=150.0 GiB</td>
+</tr>
+<tr>
+<td style="text-align: left;">cluster_output_reserve_met</td>
+<td style="text-align: left;">PASS</td>
+<td style="text-align: left;">post-reserve margin=108.4 GiB</td>
+</tr>
+</tbody>
+</table>
+<h2 id="supervision-boundary">Supervision boundary</h2>
+<p>Activating <code>CLUSTER_EXECUTION_APPROVAL.json</code> authorizes
+only the already approved RAPIDS repeated clustering and pseudo-NK
+consensus QC using the saved staged H5AD and latent representation. It
+does not authorize re-staging, re-fitting scVI, classifier fitting,
+threshold selection, promotion, release fitting, or atlas inference.</p>
+<h2 id="artifacts">Artifacts</h2>
+<ul>
+<li>Checks:
+<code>Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_cluster_resource_preflight/resource_amendment_checks.csv</code></li>
+<li>Approval template:
+<code>Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_cluster_resource_preflight/CLUSTER_EXECUTION_APPROVAL_TEMPLATE.json</code></li>
+<li>HTML:
+<code>gdT_prediction/gdtai_v4_2_cluster_resource_preflight/index.html</code></li>
+<li>PDF:
+<code>gdT_prediction/gdtai_v4_2_cluster_resource_preflight/gdtai_v4_2_cluster_resource_preflight_report.pdf</code></li>
+</ul>
+</body>
+</html>
