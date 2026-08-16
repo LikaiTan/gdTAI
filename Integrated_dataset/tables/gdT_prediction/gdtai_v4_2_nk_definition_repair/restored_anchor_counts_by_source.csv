@@ -1,0 +1,15 @@
+source_gse_id,n_primary_nk,n_productive_t,input_lane
+GSE114724,0,26893,new_cohort
+GSE125527,3547,0,existing_atlas
+GSE159251,0,53773,new_cohort
+GSE188620,0,71160,existing_atlas
+GSE212217,0,142604,existing_atlas
+GSE228597,17507,0,existing_atlas
+GSE243572,0,55770,existing_atlas
+GSE243905,0,217164,existing_atlas
+GSE254249,0,174010,existing_atlas
+GSE292700,0,24577,new_cohort
+GSE294273,0,36221,new_cohort
+GSE296954,0,63405,new_cohort
+GSE308075,0,91239,existing_atlas
+GSE311112,0,10333,existing_atlas

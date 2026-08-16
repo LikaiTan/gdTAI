@@ -2,24 +2,28 @@
 
 ## Current milestone
 
-- gdTAI V4.2 saved-latent RAPIDS clustering and pseudo-NK consensus completed
-  on 2026-08-16; technical execution passed, but scientific QC ended
-  `FAIL_NO_PSEUDO_NK` because zero of 113,287 eligible cells met the frozen
-  consensus contract
-- the follow-up sidecar visualization audit completed with
-  `PASS_DIAGNOSTIC_ONLY` and identified complete anchor/cohort confounding:
-  all 21,054 primary NK anchors are from the existing atlas, while all 204,869
-  productive-TCR anchors are from the five new cohorts
+- gdTAI V4.2 NK-definition repair completed on 2026-08-17 with
+  `PASS_NK_REFERENCE_READY`
+- the repair restored 762,280 expression-independent productive-T anchors from
+  the existing-atlas source object, resolving the prior anchor/cohort
+  confounding while retaining all 21,054 dual-annotation primary NK anchors
+- an exact-GPU latent rule plus a strict T-lineage-negative/NK-lineage-positive
+  expression rule selected 469 `NK_CONFIDENT` cells from 113,287 eligible
+  no-productive-TCR development candidates; cytotoxic genes were audit-only
+- this milestone defines conservative, low-weight future-training NK negatives;
+  it is not a classifier result, model promotion, or atlas inference
 
 ## Next action
 
-- do not fit the planned V4.2 classifier from the empty pseudo-label lane
-- redesign the next reversible development iteration so NK and T anchors are
-  available within the same cohort lanes before localized neighborhood
-  propagation; do not treat the current NK-anchor-enriched region as confident
-  NK identity in new-cohort cells
-- retain source-balanced candidate construction and do not relax the frozen
-  70% source cap after observing this result
+- freeze the repaired 469-cell label/weight manifest as a low-weight negative
+  input for the next reversible V4.2 nested classifier iteration
+- run label-leakage, source-balance, feature-coverage, and grouped-fold
+  preflight before fitting; keep primary NK anchors and productive-T controls as
+  the dominant training evidence
+- retain all 469 accepted rows while capping their effective per-source
+  contribution at 70%; do not relax the cap or redefine NK from cytotoxicity
+- compare any resulting model against V2/V3 on unchanged locked cohorts before
+  considering promotion
 - keep all locked cohorts unchanged for nested comparison with V2 and V3;
   model promotion, release fitting, and whole-atlas inference remain high-risk
   decisions requiring explicit approval
@@ -68,6 +72,27 @@
   108.4 GiB post-reserve margin
 - all six development source H5AD size/mtime pairs remained unchanged through
   clustering and consensus; classifier fitting remains unperformed
+- the repaired anchor audit found 762,280 cells with productive TRA or TRB
+  evidence in the existing atlas across seven sources; with new-cohort anchors,
+  the sidecar now contains 967,149 productive-T anchors across 12 sources
+- exact A100 brute-force nearest-anchor scoring was repeated internally with
+  bit-identical neighbor indices and distances; the fixed 50-neighbor NK
+  fraction threshold is `0.98`, with a 99th-percentile known-NK distance cap of
+  `3.1079669`
+- held-out primary-NK latent recall was `93.23%`, and held-out productive-T
+  latent FPR was `0.0958%`; score ties fail closed
+- the strict expression rule requires no detected
+  `CD3D/CD3E/CD3G/TRAT1/BCL11B`, both `FCER1G` and `TYROBP`, and at least one of
+  `KLRD1/NCR1/FCGR3A/KLRC1`
+- locked GSE169246 did not set any rule or threshold: the fixed expression rule
+  recalled `35.32%` of 7,770 author NK cells and passed `0.126%` of 54,925
+  paired alpha-beta T cells; a cytotoxic-only rule passed `98.21%` and `30.40%`,
+  respectively, confirming that cytotoxicity cannot define NK identity
+- the repaired label manifest contains 469 `NK_CONFIDENT` cells from four
+  sources; all are retained for possible low-weight training with total
+  effective weight `13.33` and maximum effective source contribution `70%`
+- no source H5AD was mutated, no classifier was fitted, and no V4 artifact was
+  pushed to GitHub in the NK-definition repair
 - changing the stage-specific resource contract invalidated the earlier
   execution approval; the user approved the amended checksum-bound cluster and
   consensus scope on 2026-08-16
@@ -363,6 +388,15 @@ Additional current state:
   checksums, and historical results were moved under `archive/`
 
 ## Current review artifacts
+
+- gdTAI V4.2 conservative NK-definition repair:
+  - `gdT_prediction/gdtai_v4_2_nk_definition_repair/index.html`
+  - `gdT_prediction/gdtai_v4_2_nk_definition_repair/gdtai_v4_2_nk_definition_repair_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_definition_repair/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_nk_definition_repair/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_definition_repair/`
+  - decision: `PASS_NK_REFERENCE_READY`; 469 conservative NK reference cells
+    are ready for low-weight development use, but no classifier was fitted
 
 - gdTAI V4.2 sidecar visualization and confounding diagnostics:
   - `gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/index.html`

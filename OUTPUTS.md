@@ -72,6 +72,16 @@
 
 ## Current review packages
 
+- gdTAI V4.2 conservative NK-definition repair:
+  - `gdT_prediction/gdtai_v4_2_nk_definition_repair/index.html`
+  - `gdT_prediction/gdtai_v4_2_nk_definition_repair/gdtai_v4_2_nk_definition_repair_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_definition_repair/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_nk_definition_repair/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_definition_repair/`
+  - decision: `PASS_NK_REFERENCE_READY`; 469 conservative low-weight NK
+    reference rows are ready for a future nested training preflight, and no
+    classifier was fitted
+
 - gdTAI V4.2 sidecar visualization and confounding diagnostics:
   - `gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/index.html`
   - `gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/gdtai_v4_2_nk_reference_diagnostics_report.pdf`

@@ -852,6 +852,61 @@ Gate semantics:
 - activated `CLUSTER_EXECUTION_APPROVAL.json` authorizes only saved-latent
   RAPIDS clustering and pseudo-NK consensus QC
 
+## Post-Phase-4 gdTAI V4.2 NK-definition repair
+
+Objective:
+
+- repair the anchor/cohort confounding exposed by the failed cluster-consensus
+  lane
+- define conservative NK reference negatives without treating shared
+  cytotoxic programs as NK-specific
+
+Phase or task:
+
+- gdTAI V4.2 read-only productive-T-anchor recovery and exact latent plus
+  lineage-expression NK consensus
+
+Exact `.py` script:
+
+- `workflows/gdtai/build_gdtai_v4_2_nk_definition_repair.py`
+
+Execution command:
+
+```bash
+MPLCONFIGDIR=/tmp/matplotlib-gdtai-v42-nk-repair \
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/build_gdtai_v4_2_nk_definition_repair.py
+```
+
+Key outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_nk_definition_repair/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_definition_repair/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_definition_repair/`
+- `gdT_prediction/gdtai_v4_2_nk_definition_repair/index.html`
+- `gdT_prediction/gdtai_v4_2_nk_definition_repair/gdtai_v4_2_nk_definition_repair_report.pdf`
+
+Current result:
+
+- `PASS_NK_REFERENCE_READY`; 762,280 existing-atlas productive-T anchors were
+  restored, yielding 967,149 productive-T anchors and 21,054 primary NK anchors
+- exact A100 50-neighbor scoring passed a bit-identical internal repeat; the
+  fail-closed latent threshold is `0.98`, with 93.23% held-out primary-NK recall
+  and 0.0958% held-out productive-T FPR
+- 469 of 113,287 eligible development candidates passed both latent and strict
+  lineage-expression evidence across four sources
+- all accepted rows are retained for possible low-weight training with an
+  effective 70% maximum-source cap
+
+Gate semantics:
+
+- cytotoxic genes are diagnostic only and cannot establish NK identity
+- locked GSE169246 is validation-only and cannot determine any rule or
+  threshold
+- the output is a reference-label manifest, not a classifier, model release,
+  promotion decision, or whole-atlas inference
+- no source H5AD is modified, and V4 remains excluded from GitHub publication
+
 ## Phase 1: Coarse T/NK extraction
 
 Objective:

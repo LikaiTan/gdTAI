@@ -1,5 +1,23 @@
 # CHANGELOG.md
 
+## 2026-08-17 - Repaired and validated the V4.2 NK reference definition
+
+- Restored 762,280 productive-TRA/TRB T anchors from the existing-atlas source
+  object, removing the old-versus-new cohort confounding in the anchor set.
+- Calibrated exact A100 50-neighbor latent evidence on held-out primary NK and
+  productive-T anchors, with 93.23% NK recall and 0.0958% T-cell FPR at the
+  fail-closed 0.98 threshold.
+- Combined latent evidence with a strict NK-lineage expression rule that
+  excludes detected core T-lineage genes and does not use cytotoxic genes to
+  establish NK identity.
+- Selected 469 `NK_CONFIDENT` cells from 113,287 eligible development
+  candidates across four sources and capped effective future-training source
+  contribution at 70%.
+- Validated the fixed expression rule on locked GSE169246: 35.32% author-NK
+  recall and 0.126% paired-alpha-beta-T FPR; no locked cell set a threshold.
+- Published a visually checked six-page HTML/PDF report. No H5AD was changed,
+  no classifier was fitted, and nothing from V4 was pushed to GitHub.
+
 ## 2026-08-16 - Added V4.2 sidecar visualization and confounding diagnostics
 
 - Built a deterministic, source-balanced 250,000-cell diagnostic sample from

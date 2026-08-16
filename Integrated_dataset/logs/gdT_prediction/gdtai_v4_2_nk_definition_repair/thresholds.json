@@ -1,0 +1,13 @@
+{
+  "k_neighbors": 50,
+  "knn_algorithm": "exact_gpu_brute",
+  "known_nk_distance_quantile": 0.99,
+  "maximum_heldout_t_latent_fpr": 0.0010000000000000009,
+  "maximum_training_source_fraction": 0.7,
+  "minimum_latent_nk_fraction": 0.9,
+  "productive_t_fpr_quantile": 0.999,
+  "selected_latent_threshold": 0.9800000190734863,
+  "selected_nk_distance_cap": 3.107966899871826,
+  "t_reference_cap_per_source": 2000,
+  "t_validation_cap_per_source": 2000
+}

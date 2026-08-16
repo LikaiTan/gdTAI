@@ -1,0 +1,290 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>gdTAI V4.2 NK definition repair</title><style>
+:root{--ink:#17212b;--navy:#17324d;--teal:#197278;--red:#b3261e;--amber:#b86e16;--line:#ccd6dc;--soft:#f3f6f7}
+*{box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);line-height:1.48;max-width:1120px;margin:0 auto;padding:30px 42px;background:white}h1{font-size:29px;color:var(--navy);border-bottom:4px solid var(--teal);padding-bottom:12px}h2{font-size:20px;color:var(--navy);margin-top:31px}p,li{font-size:14px}.status{border-left:6px solid var(--teal);background:#eef8f7;padding:14px 18px;margin:18px 0}.warning{border-left:6px solid var(--amber);background:#fff9ef;padding:13px 17px;margin:18px 0}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}.card{border:1px solid var(--line);padding:12px;background:var(--soft)}.card b{display:block;font-size:21px;color:var(--navy)}.card span{font-size:11px;color:#52636e}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}figure{margin:18px 0;break-inside:avoid}img{display:block;width:100%;height:auto;margin:0 auto}figcaption{font-size:11px;color:#52636e;text-align:center;margin-top:7px}.table-wrap{overflow-x:auto;margin:14px 0 24px}table{border-collapse:collapse;width:100%;font-size:9px}th{background:var(--navy);color:white;text-align:left}th,td{padding:6px;border:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere}tr:nth-child(even){background:var(--soft)}code{background:#edf1f4;padding:1px 4px}
+@media(max-width:800px){body{padding:18px}.cards,.grid{grid-template-columns:1fr}}@media print{@page{size:A4;margin:9mm}body{max-width:none;padding:0}h1{font-size:23px}h2{font-size:17px;break-after:avoid}p,li{font-size:10px}.cards{grid-template-columns:repeat(4,1fr)}.card b{font-size:16px}.card span{font-size:8px}.grid{display:block}figure{break-inside:avoid}figure img{max-height:145mm;object-fit:contain}table{font-size:7px}tr{break-inside:avoid}.table-wrap{overflow:visible}}
+</style></head><body>
+<h1>gdTAI V4.2 NK definition repair</h1>
+<p>This read-only repair addresses the cohort-confounded pseudo-NK failure. It does not alter the canonical atlas, refit scVI, train gdTAI, or use locked cohorts for threshold selection.</p>
+<div class="status"><b>Result: PASS_NK_REFERENCE_READY.</b> The repaired definition identifies 469 cells with both latent and strict lineage evidence. The source-balanced subset is ready for low-weight development use with capped source influence.</div>
+<div class="cards"><div class="card"><b>762,280</b><span>restored existing-atlas T anchors</span></div><div class="card"><b>21,054</b><span>dual-annotation NK anchors</span></div><div class="card"><b>469</b><span>two-evidence pseudo-NK cells</span></div><div class="card"><b>469</b><span>capped-weight training rows</span></div></div>
+
+<h2>1. Defect repaired</h2><p>The prior sidecar mapped no productive-T anchors into the existing-atlas lane even though its source object contains 762,280 cells with productive TRA or TRB evidence. Restoring these cells means NK and T anchors now coexist within the same old-atlas lane; productive-T anchors also remain present in every new cohort.</p><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_definition_repair/restored_anchor_counts_by_source.png" alt="Restored anchors"><figcaption>Anchor counts use expression-independent TCR metadata and the frozen dual-annotation NK labels.</figcaption></figure><div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>source_gse_id</th>
+      <th>n_primary_nk</th>
+      <th>n_productive_t</th>
+      <th>input_lane</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GSE114724</td>
+      <td>0</td>
+      <td>26893</td>
+      <td>new_cohort</td>
+    </tr>
+    <tr>
+      <td>GSE125527</td>
+      <td>3547</td>
+      <td>0</td>
+      <td>existing_atlas</td>
+    </tr>
+    <tr>
+      <td>GSE159251</td>
+      <td>0</td>
+      <td>53773</td>
+      <td>new_cohort</td>
+    </tr>
+    <tr>
+      <td>GSE188620</td>
+      <td>0</td>
+      <td>71160</td>
+      <td>existing_atlas</td>
+    </tr>
+    <tr>
+      <td>GSE212217</td>
+      <td>0</td>
+      <td>142604</td>
+      <td>existing_atlas</td>
+    </tr>
+    <tr>
+      <td>GSE228597</td>
+      <td>17507</td>
+      <td>0</td>
+      <td>existing_atlas</td>
+    </tr>
+    <tr>
+      <td>GSE243572</td>
+      <td>0</td>
+      <td>55770</td>
+      <td>existing_atlas</td>
+    </tr>
+    <tr>
+      <td>GSE243905</td>
+      <td>0</td>
+      <td>217164</td>
+      <td>existing_atlas</td>
+    </tr>
+    <tr>
+      <td>GSE254249</td>
+      <td>0</td>
+      <td>174010</td>
+      <td>existing_atlas</td>
+    </tr>
+    <tr>
+      <td>GSE292700</td>
+      <td>0</td>
+      <td>24577</td>
+      <td>new_cohort</td>
+    </tr>
+    <tr>
+      <td>GSE294273</td>
+      <td>0</td>
+      <td>36221</td>
+      <td>new_cohort</td>
+    </tr>
+    <tr>
+      <td>GSE296954</td>
+      <td>0</td>
+      <td>63405</td>
+      <td>new_cohort</td>
+    </tr>
+    <tr>
+      <td>GSE308075</td>
+      <td>0</td>
+      <td>91239</td>
+      <td>existing_atlas</td>
+    </tr>
+    <tr>
+      <td>GSE311112</td>
+      <td>0</td>
+      <td>10333</td>
+      <td>existing_atlas</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2>2. NK definition</h2><p>A development cell is called <b>NK_CONFIDENT</b> only when it has no productive TCR, no doublet flag, passes the latent nearest-anchor threshold, remains within the known-NK distance envelope, expresses both <code>FCER1G</code> and <code>TYROBP</code> plus at least one of <code>KLRD1/NCR1/FCGR3A/KLRC1</code>, and has no detected <code>CD3D/CD3E/CD3G/TRAT1/BCL11B</code>. Cytotoxic genes are audit-only and cannot establish NK identity.</p><div class="grid"><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_definition_repair/latent_anchor_score_distributions.png" alt="Latent calibration"><figcaption>The threshold is the lowest discrete 50-neighbor score whose empirical held-out productive-T FPR is at most 0.1%; score ties fail closed.</figcaption></figure><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_definition_repair/candidate_evidence_funnel.png" alt="Evidence funnel"><figcaption>Only the intersection of independent latent and lineage-expression evidence is accepted.</figcaption></figure></div>
+
+<h2>3. Source-level result</h2><div class="grid"><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_definition_repair/candidate_counts_by_source.png" alt="Counts by source"><figcaption>All development sources are reported separately; source imbalance is controlled by capped effective weights for any future low-weight training use.</figcaption></figure><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_definition_repair/nk_definition_umap.png" alt="NK definition UMAP"><figcaption>Diagnostic UMAP overlay; the full label table, not the visualization sample, defines counts.</figcaption></figure></div><div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>source_gse_id</th>
+      <th>n_candidates</th>
+      <th>n_expression</th>
+      <th>n_latent</th>
+      <th>n_confident</th>
+      <th>n_training</th>
+      <th>effective_training_weight</th>
+      <th>n_donors</th>
+      <th>n_libraries</th>
+      <th>expression_rate</th>
+      <th>latent_rate</th>
+      <th>confident_rate</th>
+      <th>training_fraction</th>
+      <th>effective_training_source_fraction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GSE114724</td>
+      <td>1759</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.000000</td>
+      <td>3</td>
+      <td>5</td>
+      <td>0.00%</td>
+      <td>0.06%</td>
+      <td>0.00%</td>
+      <td>0.00%</td>
+      <td>0.00%</td>
+    </tr>
+    <tr>
+      <td>GSE159251</td>
+      <td>15125</td>
+      <td>3</td>
+      <td>9</td>
+      <td>2</td>
+      <td>2</td>
+      <td>0.500000</td>
+      <td>4</td>
+      <td>9</td>
+      <td>0.02%</td>
+      <td>0.06%</td>
+      <td>0.01%</td>
+      <td>0.01%</td>
+      <td>3.75%</td>
+    </tr>
+    <tr>
+      <td>GSE292700</td>
+      <td>53677</td>
+      <td>7850</td>
+      <td>1015</td>
+      <td>453</td>
+      <td>453</td>
+      <td>9.333333</td>
+      <td>2</td>
+      <td>6</td>
+      <td>14.62%</td>
+      <td>1.89%</td>
+      <td>0.84%</td>
+      <td>0.84%</td>
+      <td>70.00%</td>
+    </tr>
+    <tr>
+      <td>GSE294273</td>
+      <td>19523</td>
+      <td>383</td>
+      <td>35</td>
+      <td>12</td>
+      <td>12</td>
+      <td>3.000000</td>
+      <td>12</td>
+      <td>12</td>
+      <td>1.96%</td>
+      <td>0.18%</td>
+      <td>0.06%</td>
+      <td>0.06%</td>
+      <td>22.50%</td>
+    </tr>
+    <tr>
+      <td>GSE296954</td>
+      <td>23203</td>
+      <td>10</td>
+      <td>47</td>
+      <td>2</td>
+      <td>2</td>
+      <td>0.500000</td>
+      <td>11</td>
+      <td>22</td>
+      <td>0.04%</td>
+      <td>0.20%</td>
+      <td>0.01%</td>
+      <td>0.01%</td>
+      <td>3.75%</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2>4. Locked validation and specificity</h2><p>GSE169246 was not integrated and did not control any threshold. Its author-defined NK cells and paired alpha-beta T cells test only the fixed strict expression rule. The cytotoxic-only comparator demonstrates why NKG7/GNLY-like activity is not accepted as NK identity.</p><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_definition_repair/locked_gse169246_expression_validation.png" alt="Locked validation"><figcaption>Fixed-rule passage in locked author-NK and paired-abT populations.</figcaption></figure><div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>group</th>
+      <th>n_cells</th>
+      <th>n_strict_expression_nk</th>
+      <th>strict_expression_nk_rate</th>
+      <th>n_cytotoxic_only</th>
+      <th>cytotoxic_only_rate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Author NK, no productive TCR</td>
+      <td>7770</td>
+      <td>2744</td>
+      <td>35.32%</td>
+      <td>7631</td>
+      <td>98.21%</td>
+    </tr>
+    <tr>
+      <td>Paired alpha-beta T</td>
+      <td>54925</td>
+      <td>69</td>
+      <td>0.13%</td>
+      <td>16699</td>
+      <td>30.40%</td>
+    </tr>
+  </tbody>
+</table></div><h3>Development productive-T controls</h3><div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>cohort_id</th>
+      <th>n_productive_t</th>
+      <th>strict_expression_nk_rate</th>
+      <th>cytotoxic_only_rate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GSE114724</td>
+      <td>26893</td>
+      <td>0.00%</td>
+      <td>33.08%</td>
+    </tr>
+    <tr>
+      <td>GSE159251</td>
+      <td>53773</td>
+      <td>0.00%</td>
+      <td>37.38%</td>
+    </tr>
+    <tr>
+      <td>GSE292700</td>
+      <td>24577</td>
+      <td>0.46%</td>
+      <td>40.48%</td>
+    </tr>
+    <tr>
+      <td>GSE294273_GSE294274</td>
+      <td>36221</td>
+      <td>0.02%</td>
+      <td>30.49%</td>
+    </tr>
+    <tr>
+      <td>GSE296954</td>
+      <td>63405</td>
+      <td>0.00%</td>
+      <td>54.25%</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2>5. Marker components</h2><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_definition_repair/marker_component_heatmap.png" alt="Marker components"><figcaption>Cytotoxicity is frequent in T cells and is shown only as a warning diagnostic.</figcaption></figure>
+
+<div class="warning"><b>Scope:</b> these are conservative NK reference labels, not a finished gdTAI V4 model. No classifier was fitted, no threshold was tuned on GSE169246 or the candidate counts, no H5AD was changed, and nothing was pushed to GitHub.</div>
+<h2>Reproducibility</h2><ul><li>Latent SHA-256: <code>7030b28be885b85a4b24ce2223bb16f7c7288a29195f2512bf7bbba330791ccf</code></li><li>Script SHA-256: <code>c282b0d106caa3561b8f9c526c5dccfea522d610aad64e3ad99e53ea8863a262</code></li><li>Random seed: <code>20260817</code></li><li>Neighbor search: <code>exact_gpu_brute</code></li><li>Bit-identical exact-GPU repeat: <b>true</b></li><li>GPU: <code>NVIDIA A100 80GB PCIe</code>; CPU fallback: <b>no</b></li></ul>
+</body></html>

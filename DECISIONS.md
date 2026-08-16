@@ -2,6 +2,20 @@
 
 ## Current approved decisions
 
+- gdTAI V4.2 uses `NK_CONFIDENT` only for development cells that have no
+  productive TCR or doublet flag and pass both independent evidence classes:
+  exact latent nearest-anchor evidence and strict NK-lineage expression
+- the strict expression rule requires no detected
+  `CD3D/CD3E/CD3G/TRAT1/BCL11B`, both `FCER1G` and `TYROBP`, and at least one of
+  `KLRD1/NCR1/FCGR3A/KLRC1`; `NKG7/GNLY/PRF1/GZMB/XCL1/XCL2` remain audit-only
+  because cytotoxicity is shared by NK, CD8, and gamma-delta T cells
+- approximate cuML/FAISS IVF nearest-neighbor output is rejected for this label
+  definition after repeated runs changed the accepted count; exact A100
+  brute-force neighbors with an internal bit-identical repeat are required
+- all accepted V4.2 pseudo-NK rows are retained for possible future training at
+  low effective weight; per-source effective contribution is capped at 70%
+- the 2026-08-17 NK-definition repair is a reference-label milestone, not a
+  trained classifier, promotion decision, release artifact, or atlas inference
 - gdTAI V4.2 recovered development-data sparse staging and A100 scVI were
   approved and completed on 2026-08-14 against the checksum-bound recovery
   package; on 2026-08-16 the user approved the checksum-bound 150-GiB SSD floor

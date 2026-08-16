@@ -1,0 +1,3 @@
+group,n_cells,n_strict_expression_nk,strict_expression_nk_rate,n_cytotoxic_only,cytotoxic_only_rate
+"Author NK, no productive TCR",7770,2744,0.35315315315315315,7631,0.9821106821106821
+Paired alpha-beta T,54925,69,0.0012562585343650432,16699,0.30403277196176604

@@ -1,0 +1,62 @@
+{
+  "classifier_fitting_performed": false,
+  "cpu_fallback": false,
+  "deterministic_exact_repeat_pass": true,
+  "github_push_performed": false,
+  "gpu": "NVIDIA A100 80GB PCIe",
+  "heldout_primary_nk_latent_recall": 0.9323040380047506,
+  "heldout_productive_t_latent_fpr": 0.0009583333333333333,
+  "knn_algorithm": "exact_gpu_brute",
+  "label_gate_pass": true,
+  "latent_nk_distance_cap": 3.107966899871826,
+  "latent_sha256": "7030b28be885b85a4b24ce2223bb16f7c7288a29195f2512bf7bbba330791ccf",
+  "latent_threshold": 0.9800000190734863,
+  "locked_author_nk_expression_recall": 0.35315315315315315,
+  "locked_cohorts_used_for_threshold_selection": false,
+  "locked_paired_abt_expression_fpr": 0.0012562585343650432,
+  "n_cells_sidecar": 4023462,
+  "n_confident_nk": 469,
+  "n_confident_sources": 4,
+  "n_eligible_candidates": 113287,
+  "n_expression_nk": 8246,
+  "n_latent_nk": 1107,
+  "n_primary_nk": 21054,
+  "n_productive_t_anchors_total": 967149,
+  "n_restored_existing_t_anchors": 762280,
+  "n_training_sources": 4,
+  "n_training_subset": 469,
+  "random_seed": 20260817,
+  "result": "PASS_NK_REFERENCE_READY",
+  "script_sha256": "c282b0d106caa3561b8f9c526c5dccfea522d610aad64e3ad99e53ea8863a262",
+  "source_h5ad_mutation_performed": false,
+  "strict_expression_rule": {
+    "at_least_one_detected_nk_receptor": [
+      "KLRD1",
+      "NCR1",
+      "FCGR3A",
+      "KLRC1"
+    ],
+    "both_detected_nk_adaptors": [
+      "FCER1G",
+      "TYROBP"
+    ],
+    "cytotoxic_audit_only": [
+      "NKG7",
+      "GNLY",
+      "PRF1",
+      "GZMB",
+      "XCL1",
+      "XCL2"
+    ],
+    "no_detected_core_t_genes": [
+      "CD3D",
+      "CD3E",
+      "CD3G",
+      "TRAT1",
+      "BCL11B"
+    ]
+  },
+  "training_effective_weight": 13.333333969116211,
+  "training_maximum_source_fraction": 0.699999988079071,
+  "training_subset_ready": true
+}
