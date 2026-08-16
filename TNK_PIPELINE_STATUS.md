@@ -2,18 +2,20 @@
 
 ## Current milestone
 
-- gdTAI V4.2 recovered sparse staging and A100 scVI fitting completed with
-  `PASS`; the cluster-stage resource amendment completed with
-  `PASS_REVIEW_REQUIRED` on 2026-08-14 with 18/18 checks passing
+- gdTAI V4.2 saved-latent RAPIDS clustering and pseudo-NK consensus completed
+  on 2026-08-16; technical execution passed, but scientific QC ended
+  `FAIL_NO_PSEUDO_NK` because zero of 113,287 eligible cells met the frozen
+  consensus contract
 
 ## Next action
 
-- review the cluster-stage resource-amendment PDF and decide whether to
-  authorize the 150-GiB SSD floor for saved-latent RAPIDS clustering and
-  pseudo-NK consensus QC only
-- publish and review integration/clustering QC before any classifier fitting
-- after an approved integration and clustering QC report, decide separately
-  whether to authorize V4.2 classifier fitting and nested comparison
+- do not fit the planned V4.2 classifier from the empty pseudo-label lane
+- design the next reversible development iteration around source-balanced
+  candidate construction and localized anchor-neighborhood propagation rather
+  than relaxing the frozen 70% source cap after observing this result
+- keep all locked cohorts unchanged for nested comparison with V2 and V3;
+  model promotion, release fitting, and whole-atlas inference remain high-risk
+  decisions requiring explicit approval
 - do not authorize Gate D release fitting, V4.1 promotion, or whole-atlas
   inference from this failed experiment
 - do not promote a model, fit a release artifact, or run whole-atlas inference
@@ -55,11 +57,11 @@
   GiB for `prepare` and `fit`, proposed 150 GiB for `cluster` and `consensus`,
   bounded worst-case cluster output plus reserve at 2.33 GiB, and retained
   108.4 GiB post-reserve margin
-- all six development source H5AD size/mtime pairs remained unchanged;
-  clustering, pseudo-labeling, and classifier fitting remain unperformed
+- all six development source H5AD size/mtime pairs remained unchanged through
+  clustering and consensus; classifier fitting remains unperformed
 - changing the stage-specific resource contract invalidated the earlier
-  execution approval; `CLUSTER_EXECUTION_APPROVAL.json` is absent and must be
-  explicitly activated before clustering
+  execution approval; the user approved the amended checksum-bound cluster and
+  consensus scope on 2026-08-16
 - V4.2 implementation QC passed 15/15 checks; the synthetic 1,600-cell scVI
   fit ran on `cuda:0` using the A100 80-GB GPU, produced a finite 8-dimensional
   latent matrix, and completed RAPIDS neighbors plus two Leiden seeds
@@ -88,9 +90,9 @@
   GiB free SSD, and found an idle A100 80-GB GPU
 - all nine input H5ADs were hash-verified and retained identical size and
   nanosecond modification time; no H5AD was modified
-- the checksum-bound implementation approval is active; project-data
-  integration, classifier fitting, and every later release action remain
-  blocked behind their respective QC gates
+- the checksum-bound clustering/consensus execution is complete; classifier
+  fitting from this lane is scientifically blocked because no pseudo-NK cells
+  were selected
 
 - V4.2 Step 0 verified 336,780 V4.1 NK controls: 315,726 (`93.7%`) had only a
   single scVI NK annotation and 21,054 (`6.3%`) had dual scVI/author agreement
@@ -106,10 +108,17 @@
 - the proposed development cohorts contain 318,156 T/NK candidates; the locked
   GSE169246 cohort provides 7,770 author NK and 54,925 productive alpha-beta T
   cells, and GSE315928 provides 66,813 paired-alpha-beta controls
-- V4.2 recovered staging and scVI fitting are complete; clustering and
-  pseudo-label QC now require the checksum-bound resource amendment, while
-  classifier fitting, threshold search, promotion, release fitting, and atlas
-  inference remain unapproved
+- V4.2 completed nine global and nine boundary RAPIDS Leiden runs with no CPU
+  fallback and wrote checksum-verified partitions; the expression-independent
+  boundary contained 3,978,014/4,023,462 cells (`98.87%`), showing poor
+  boundary localization
+- six of 396 clusters passed the 95% anchor-purity and 2% productive-TCR
+  contamination limits, but each had `86.92%-89.69%` of eligible candidates
+  from GSE292700, above the frozen 70% source cap; zero clusters and zero cells
+  qualified
+- the print-safe five-page HTML/PDF QC report was visually checked; no
+  classifier, calibration, threshold, release artifact, or atlas inference was
+  produced
 
 - V4.1-GPU Gate C was explicitly approved and checksum-bound; 99/99 recorded
   inner-fold fits converged and all 57 complete threshold-frontier files were
@@ -206,7 +215,8 @@
 
 - active RAM ceiling override: `800 GB`
 - large-H5AD mirrored SSD workflow is active
-- no active QC-gate exception
+- gdTAI V4.2 saved-latent clustering and consensus use an approved 150-GiB SSD
+  free-space floor; prepare and fit retain 300 GiB
 
 ## Current canonical objects
 
@@ -330,6 +340,15 @@ Additional current state:
   checksums, and historical results were moved under `archive/`
 
 ## Current review artifacts
+
+- gdTAI V4.2 integration, clustering, and pseudo-NK consensus QC:
+  - `gdT_prediction/gdtai_v4_2_nk_reference/index.html`
+  - `gdT_prediction/gdtai_v4_2_nk_reference/gdtai_v4_2_nk_reference_qc_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_reference/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_nk_reference/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_reference/`
+  - decision: technical `PASS`, scientific `FAIL_NO_PSEUDO_NK`; no classifier
+    fitting from this lane
 
 - gdTAI V4.2 modeling-integration preflight:
   - `configs/models/gdtai/v4_2_cohort_roles.csv`

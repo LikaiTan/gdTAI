@@ -1,0 +1,7 @@
+run,cluster,n_cells,n_primary_nk_anchors,n_productive_tcr_anchors,anchor_nk_purity,productive_tcr_contamination,n_candidate_cells,n_candidate_sources,maximum_candidate_source_fraction,qualifies_as_nk,dominant_candidate_source,failed_criterion
+global_r1.2_s11,12,320717,19755,328,0.983667778718319,0.0010227084937811,2577,5,0.8692277842452464,False,GSE292700,maximum_candidate_source_fraction
+global_r1.2_s29,12,315674,19751,308,0.9846452963756918,0.0009756901106838,2544,5,0.8816823899371069,False,GSE292700,maximum_candidate_source_fraction
+global_r1.2_s47,10,222689,17221,263,0.98495767558911,0.0011810192690254,2438,5,0.881870385561936,False,GSE292700,maximum_candidate_source_fraction
+boundary_r1_s11,18,396243,20267,799,0.9620715845438148,0.0020164394071314,4307,5,0.8945902019967494,False,GSE292700,maximum_candidate_source_fraction
+boundary_r1_s29,16,402444,20267,801,0.9619802544142776,0.0019903390285356,4285,5,0.8765460910151692,False,GSE292700,maximum_candidate_source_fraction
+boundary_r1_s47,19,385259,20113,813,0.9611488100927076,0.0021102686763969,4267,5,0.8968830560112491,False,GSE292700,maximum_candidate_source_fraction

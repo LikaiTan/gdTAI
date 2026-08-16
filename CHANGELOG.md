@@ -1,5 +1,21 @@
 # CHANGELOG.md
 
+## 2026-08-16 - Completed V4.2 clustering/consensus as a negative result
+
+- Activated the checksum-bound cluster-resource amendment and completed nine
+  global plus nine boundary RAPIDS Leiden runs on the A100 without CPU fallback.
+- Wrote a verified 19-MiB partition artifact for 4,023,462 cells; all six
+  development source H5AD size/mtime pairs remained unchanged.
+- Found that the expression-independent boundary included 3,978,014 cells
+  (`98.87%`), so the broad-cluster union did not localize the T/NK boundary.
+- Evaluated 396 clusters: six passed 95% anchor purity and 2% productive-TCR
+  contamination, but all were 86.92%-89.69% dominated by GSE292700 candidates
+  and failed the frozen 70% source cap.
+- Selected zero of 113,287 eligible pseudo-NK cells and stopped before any
+  classifier, calibration, threshold, release artifact, or atlas inference.
+- Added a reproducible report builder and visually checked a print-safe
+  five-page HTML/PDF QC package.
+
 ## 2026-08-14 - Completed V4.2 staging/scVI and audited cluster resources
 
 - Activated the user-approved recovery contract and staged 4,023,462

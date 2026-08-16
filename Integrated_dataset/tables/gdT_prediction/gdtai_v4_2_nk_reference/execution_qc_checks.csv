@@ -1,0 +1,11 @@
+check,status,detail
+Recovered sparse staging,PASS,"4,023,462 cells x 4,000 HVGs"
+Locked cohorts excluded,PASS,Zero locked-cohort cells in staging and consensus
+Source H5ADs unchanged,PASS,6/6 size/mtime pairs unchanged
+A100 scVI fit,PASS,30 latent dimensions; 22.6 minutes
+RAPIDS partitions,PASS,9 global + 9 boundary runs
+Partition checksum,PASS,90e83ec83986358a015885e02e29d06eacf726d928e02b2e90428d5c09947a63
+Boundary localization,WARN,"3,978,014/4,023,462 cells (98.87%)"
+Qualifying clusters,FAIL,0/396 clusters
+Selected pseudo-NK cells,FAIL,"0/113,287 eligible cells"
+Classifier fitting,PASS,Not performed

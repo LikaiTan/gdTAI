@@ -72,6 +72,15 @@
 
 ## Current review packages
 
+- gdTAI V4.2 integration, clustering, and pseudo-NK consensus QC:
+  - `gdT_prediction/gdtai_v4_2_nk_reference/index.html`
+  - `gdT_prediction/gdtai_v4_2_nk_reference/gdtai_v4_2_nk_reference_qc_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_reference/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_nk_reference/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_reference/`
+  - decision: technical execution passed; scientific QC failed with zero
+    selected pseudo-NK cells, and no classifier was fitted
+
 - gdTAI V4.2 cluster-stage resource amendment:
   - `configs/models/gdtai/v4_2_integration_execution.json`
   - `gdT_prediction/gdtai_v4_2_cluster_resource_preflight/index.html`
@@ -79,8 +88,8 @@
   - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_cluster_resource_preflight/`
   - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_cluster_resource_preflight/`
   - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_cluster_resource_preflight/`
-  - decision: 18/18 checks passed; saved-latent clustering and consensus remain
-    blocked until the stage-specific SSD floor is explicitly approved
+  - decision: 18/18 checks passed; the user approved the stage-specific SSD
+    floor and clustering/consensus completed on 2026-08-16
 
 - gdTAI V4.2 current-atlas recovery preflight:
   - `configs/models/gdtai/v4_2_integration_execution.json`

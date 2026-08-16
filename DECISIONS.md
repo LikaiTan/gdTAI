@@ -4,9 +4,19 @@
 
 - gdTAI V4.2 recovered development-data sparse staging and A100 scVI were
   approved and completed on 2026-08-14 against the checksum-bound recovery
-  package; the later cluster-resource amendment and all classifier fitting,
-  threshold selection, promotion, release fitting, and atlas inference remain
-  unapproved
+  package; on 2026-08-16 the user approved the checksum-bound 150-GiB SSD floor
+  for saved-latent clustering and pseudo-NK consensus QC only
+- routine, reversible analysis phases proceed after documented automated QC;
+  explicit approval is reserved for high-risk actions such as destructive
+  deletion, source-data mutation, irreversible model promotion or release, and
+  material infrastructure or external-cost risk
+- gdTAI V4.2 saved-latent clustering and consensus completed on 2026-08-16,
+  but the pseudo-label lane is rejected: zero clusters and zero of 113,287
+  eligible cells met the frozen source-balanced consensus contract, so no
+  classifier may be fitted from this lane
+- the frozen 70% maximum-source criterion will not be relaxed in response to
+  this outcome; the next iteration must repair candidate source balance and
+  boundary localization while retaining the locked cohorts unchanged
 - gdTAI V4.2 sidecar-integration implementation and synthetic/read-only
   implementation QC are approved against the 2026-08-08 checksum-bound
   preflight; project-data scVI fitting, classifier fitting, promotion, release
@@ -101,10 +111,9 @@
 - on 2026-08-14, recovered V4.2 staging and A100 scVI completed successfully;
   RAPIDS clustering failed closed before graph construction when shared SSD
   capacity fell below the frozen 300-GiB floor
-- an unrelated BAM sort subsequently completed and self-cleaned, but stable
-  free space remained near 261 GiB; an operational-only proposal retains 300
-  GiB for staging/fitting and uses 150 GiB for clustering/consensus, pending a
-  new checksum-bound approval
+- an unrelated BAM sort subsequently completed and self-cleaned; the user
+  approved the operational-only contract retaining 300 GiB for staging/fitting
+  and 150 GiB for clustering/consensus on 2026-08-16
 - on 2026-08-14, the user approved V4.2 development-data sidecar execution
   against the original SSD input contract, but the command stopped before
   matrix reading because the SSD-resident `integrated.h5ad` was absent

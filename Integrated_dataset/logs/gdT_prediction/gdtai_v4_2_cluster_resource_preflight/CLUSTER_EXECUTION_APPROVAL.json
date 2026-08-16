@@ -1,0 +1,13 @@
+{
+  "approved": true,
+  "approved_at": "2026-08-16",
+  "approved_by": "user",
+  "core_sha256": "191fe373beb827d7f8c63260ffbd066b1bbd08289318fbcb23471eaddfc4b8a9",
+  "execution_config_sha256": "e70f1fc2f343011acb2f027a1a32fce2ec19467234e7236798bb42cdcaa16931",
+  "protocol_version": "4.2-integration-execution-v1",
+  "recovery_contract_sha256": "96934c8b1b5806344fc18891d06e675718b2fcb9cbdf01ef626bb684ca972519",
+  "resource_contract_sha256": "e54bd72c55a420c9c736c5f58c38e45aadf45890db1f372ebae7b63abb9da0ec",
+  "review_artifact": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/gdT_prediction/gdtai_v4_2_cluster_resource_preflight/gdtai_v4_2_cluster_resource_preflight_report.pdf",
+  "runner_sha256": "65b319ec9bc7b73cd641b09e0f311ce7a57bc35ea62957524a0bd2de87c57659",
+  "scope": "Saved-latent RAPIDS clustering and pseudo-NK consensus QC only; no restaging, scVI refit, or classifier fitting."
+}

@@ -1,0 +1,11 @@
+{
+  "classifier_stage_must_source_balance_and_cap": false,
+  "locked_cohorts_included": false,
+  "marker_thresholds_used_for_truth": false,
+  "maximum_allowed_effective_weight": 21054.0,
+  "n_candidate_eligible": 113287,
+  "n_selected_pseudo_nk": 0,
+  "raw_pseudo_nk_effective_weight": 0.0,
+  "stage": "consensus",
+  "status": "PASS"
+}

@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>gdTAI V4.2 integration and pseudo-NK QC</title>
+<style>
+:root{--ink:#17212b;--navy:#17324d;--teal:#197278;--red:#b3261e;--amber:#b86e16;--line:#ccd6dc;--soft:#f3f6f7}
+*{box-sizing:border-box} body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);line-height:1.48;max-width:1120px;margin:0 auto;padding:30px 42px;background:white}
+h1{font-size:29px;color:var(--navy);border-bottom:4px solid var(--red);padding-bottom:12px;margin-bottom:16px} h2{font-size:20px;color:var(--navy);margin-top:30px} h3{font-size:15px;color:var(--navy)} p,li{font-size:14px}
+.status{border-left:6px solid var(--red);background:#fff4f2;padding:14px 18px;margin:18px 0} .status strong{color:var(--red);font-size:18px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0} .card{border:1px solid var(--line);padding:12px;background:var(--soft)} .card b{display:block;font-size:21px;color:var(--navy)} .card span{font-size:11px;color:#52636e}
+.callout{border-left:5px solid var(--amber);background:#fff9ef;padding:12px 16px;margin:18px 0} figure{margin:22px 0;break-inside:avoid} img{display:block;max-width:94%;max-height:650px;margin:0 auto} figcaption{font-size:11px;color:#52636e;text-align:center;margin-top:7px}
+.table-wrap{overflow-x:auto;margin:14px 0 24px} table{border-collapse:collapse;width:100%;font-size:10px} th{background:var(--navy);color:white;text-align:left} th,td{padding:6px 7px;border:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere} tr:nth-child(even){background:var(--soft)} code{background:#edf1f4;padding:1px 4px} .pass{color:#176b43;font-weight:bold} .warn{color:#9a5d10;font-weight:bold} .fail{color:var(--red);font-weight:bold} .print-only{display:none} .repro{break-inside:avoid}
+@media(max-width:800px){body{padding:18px}.cards{grid-template-columns:repeat(2,1fr)}}
+@media print{@page{size:A4;margin:9mm}body{max-width:none;padding:0}h1{font-size:23px}h2{font-size:17px;break-after:avoid}p,li{font-size:10.3px}.cards{grid-template-columns:repeat(4,1fr)}.card b{font-size:16px}.card span{font-size:8px}table{font-size:7.2px}tr,figure,.card{break-inside:avoid}img{max-height:145mm}.table-wrap{overflow:visible}.screen-only{display:none!important}.print-only{display:block!important}}
+</style></head><body>
+<h1>gdTAI V4.2 integration and pseudo-NK consensus QC</h1>
+<p>Execution date: 16 August 2026. This report audits the recovered development sidecar, A100 scVI fit, repeated RAPIDS clustering, and expression-independent pseudo-NK consensus. Locked validation cohorts were excluded throughout.</p>
+<div class="status"><strong>Scientific result: FAIL - no usable pseudo-NK cells</strong><br>The computation completed correctly, but zero of 113,287 eligible cells satisfied the frozen consensus contract. Classifier fitting from this pseudo-label lane must not proceed.</div>
+<div class="cards">
+  <div class="card"><b>4,023,462</b><span>development cells</span></div>
+  <div class="card"><b>21,054</b><span>primary NK anchors</span></div>
+  <div class="card"><b>3,978,014</b><span>boundary cells (98.9%)</span></div>
+  <div class="card"><b>0</b><span>selected pseudo-NK cells</span></div>
+</div>
+
+<h2>Executive interpretation</h2>
+<p>Staging, GPU integration, and clustering passed their technical contracts: the sidecar contains 4,023,462 cells by 4,000 common HVGs, scVI produced a finite 30-dimensional latent representation on the A100 without CPU fallback, and all 18 Leiden partitions were written with a verified SHA-256 checksum.</p>
+<p>The pseudo-label contract failed scientifically. Six clusters reached at least 95% NK purity among independent anchors and no more than 2% productive-TCR contamination. Each also passed the anchor-count and multi-source-presence rules, but 87%-90% of its eligible candidate cells came from one dataset, exceeding the frozen 70% single-source cap. Therefore no cluster qualified in any run and no cell could receive the required 80% agreement.</p>
+<div class="callout"><b>Why this is not a classifier result.</b> No gdTAI classifier, calibration model, decision threshold, release artifact, or whole-atlas inference was fitted in this execution. V2/V3 performance cannot be compared to an empty V4.2 training lane.</div>
+
+<h2>Integration QC</h2>
+<figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_reference/scvi_training_history.png" alt="scVI training history"><figcaption>Training and validation loss across the frozen 20-epoch A100 scVI fit.</figcaption></figure>
+<div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>check</th>
+      <th>status</th>
+      <th>detail</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Recovered sparse staging</td>
+      <td>PASS</td>
+      <td>4,023,462 cells x 4,000 HVGs</td>
+    </tr>
+    <tr>
+      <td>Locked cohorts excluded</td>
+      <td>PASS</td>
+      <td>Zero locked-cohort cells in staging and consensus</td>
+    </tr>
+    <tr>
+      <td>Source H5ADs unchanged</td>
+      <td>PASS</td>
+      <td>6/6 size/mtime pairs unchanged</td>
+    </tr>
+    <tr>
+      <td>A100 scVI fit</td>
+      <td>PASS</td>
+      <td>30 latent dimensions; 22.6 minutes</td>
+    </tr>
+    <tr>
+      <td>RAPIDS partitions</td>
+      <td>PASS</td>
+      <td>9 global + 9 boundary runs</td>
+    </tr>
+    <tr>
+      <td>Partition checksum</td>
+      <td>PASS</td>
+      <td>90e83ec83986358a015885e02e29d06eacf726d928e02b2e90428d5c09947a63</td>
+    </tr>
+    <tr>
+      <td>Boundary localization</td>
+      <td>WARN</td>
+      <td>3,978,014/4,023,462 cells (98.87%)</td>
+    </tr>
+    <tr>
+      <td>Qualifying clusters</td>
+      <td>FAIL</td>
+      <td>0/396 clusters</td>
+    </tr>
+    <tr>
+      <td>Selected pseudo-NK cells</td>
+      <td>FAIL</td>
+      <td>0/113,287 eligible cells</td>
+    </tr>
+    <tr>
+      <td>Classifier fitting</td>
+      <td>PASS</td>
+      <td>Not performed</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2>Clustering and boundary QC</h2>
+<p>The expression-independent boundary was defined as the union of global clusters containing both a dual-annotation primary NK anchor and a productive-TCR anchor in at least one global run. It included 3,978,014 cells (98.87% of the sidecar), indicating that the global clusters were too broad for this union to localize the biological T/NK boundary.</p>
+<figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_reference/cluster_contract_geometry.png" alt="Cluster contract geometry"><figcaption>Dashed lines mark the 95% anchor-purity and 70% maximum-source thresholds. The six high-purity clusters all fall to the right of the source-balance limit.</figcaption></figure>
+<figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_reference/cluster_criterion_pass_counts.png" alt="Criterion pass counts"><figcaption>Individual criteria are feasible, but their frozen intersection contains no cluster.</figcaption></figure>
+
+<h2>Near-qualifying clusters</h2>
+<p>These are the only clusters that passed the frozen purity and productive-TCR contamination limits. Their sole failing field is <code>maximum_candidate_source_fraction</code>.</p>
+<div class="table-wrap screen-only"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>run</th>
+      <th>cluster</th>
+      <th>n_cells</th>
+      <th>n_primary_nk_anchors</th>
+      <th>n_productive_tcr_anchors</th>
+      <th>anchor_nk_purity</th>
+      <th>productive_tcr_contamination</th>
+      <th>n_candidate_cells</th>
+      <th>n_candidate_sources</th>
+      <th>dominant_candidate_source</th>
+      <th>maximum_candidate_source_fraction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>global_r1.2_s11</td>
+      <td>12</td>
+      <td>320717</td>
+      <td>19755</td>
+      <td>328</td>
+      <td>98.367%</td>
+      <td>0.102%</td>
+      <td>2577</td>
+      <td>5</td>
+      <td>GSE292700</td>
+      <td>86.923%</td>
+    </tr>
+    <tr>
+      <td>global_r1.2_s29</td>
+      <td>12</td>
+      <td>315674</td>
+      <td>19751</td>
+      <td>308</td>
+      <td>98.465%</td>
+      <td>0.098%</td>
+      <td>2544</td>
+      <td>5</td>
+      <td>GSE292700</td>
+      <td>88.168%</td>
+    </tr>
+    <tr>
+      <td>global_r1.2_s47</td>
+      <td>10</td>
+      <td>222689</td>
+      <td>17221</td>
+      <td>263</td>
+      <td>98.496%</td>
+      <td>0.118%</td>
+      <td>2438</td>
+      <td>5</td>
+      <td>GSE292700</td>
+      <td>88.187%</td>
+    </tr>
+    <tr>
+      <td>boundary_r1_s11</td>
+      <td>18</td>
+      <td>396243</td>
+      <td>20267</td>
+      <td>799</td>
+      <td>96.207%</td>
+      <td>0.202%</td>
+      <td>4307</td>
+      <td>5</td>
+      <td>GSE292700</td>
+      <td>89.459%</td>
+    </tr>
+    <tr>
+      <td>boundary_r1_s29</td>
+      <td>16</td>
+      <td>402444</td>
+      <td>20267</td>
+      <td>801</td>
+      <td>96.198%</td>
+      <td>0.199%</td>
+      <td>4285</td>
+      <td>5</td>
+      <td>GSE292700</td>
+      <td>87.655%</td>
+    </tr>
+    <tr>
+      <td>boundary_r1_s47</td>
+      <td>19</td>
+      <td>385259</td>
+      <td>20113</td>
+      <td>813</td>
+      <td>96.115%</td>
+      <td>0.211%</td>
+      <td>4267</td>
+      <td>5</td>
+      <td>GSE292700</td>
+      <td>89.688%</td>
+    </tr>
+  </tbody>
+</table></div>
+<div class="table-wrap print-only"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Run</th>
+      <th>Cluster</th>
+      <th>NK anchors</th>
+      <th>TCR anchors</th>
+      <th>NK purity</th>
+      <th>TCR/cell</th>
+      <th>Dominant source</th>
+      <th>Source share</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>global_r1.2_s11</td>
+      <td>12</td>
+      <td>19755</td>
+      <td>328</td>
+      <td>98.367%</td>
+      <td>0.102%</td>
+      <td>GSE292700</td>
+      <td>86.923%</td>
+    </tr>
+    <tr>
+      <td>global_r1.2_s29</td>
+      <td>12</td>
+      <td>19751</td>
+      <td>308</td>
+      <td>98.465%</td>
+      <td>0.098%</td>
+      <td>GSE292700</td>
+      <td>88.168%</td>
+    </tr>
+    <tr>
+      <td>global_r1.2_s47</td>
+      <td>10</td>
+      <td>17221</td>
+      <td>263</td>
+      <td>98.496%</td>
+      <td>0.118%</td>
+      <td>GSE292700</td>
+      <td>88.187%</td>
+    </tr>
+    <tr>
+      <td>boundary_r1_s11</td>
+      <td>18</td>
+      <td>20267</td>
+      <td>799</td>
+      <td>96.207%</td>
+      <td>0.202%</td>
+      <td>GSE292700</td>
+      <td>89.459%</td>
+    </tr>
+    <tr>
+      <td>boundary_r1_s29</td>
+      <td>16</td>
+      <td>20267</td>
+      <td>801</td>
+      <td>96.198%</td>
+      <td>0.199%</td>
+      <td>GSE292700</td>
+      <td>87.655%</td>
+    </tr>
+    <tr>
+      <td>boundary_r1_s47</td>
+      <td>19</td>
+      <td>20113</td>
+      <td>813</td>
+      <td>96.115%</td>
+      <td>0.211%</td>
+      <td>GSE292700</td>
+      <td>89.688%</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2>Candidate-source composition</h2>
+<figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_reference/candidate_pool_by_source.png" alt="Candidate pool by source"><figcaption>The overall eligible pool is highly imbalanced before cluster-level selection.</figcaption></figure>
+<div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Dataset</th>
+      <th>Eligible candidates</th>
+      <th>Pool share</th>
+      <th>Selected pseudo-NK</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GSE114724</td>
+      <td>1759</td>
+      <td>1.55%</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE159251</td>
+      <td>15125</td>
+      <td>13.35%</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE292700</td>
+      <td>53677</td>
+      <td>47.38%</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE294273</td>
+      <td>19523</td>
+      <td>17.23%</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GSE296954</td>
+      <td>23203</td>
+      <td>20.48%</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2>Decision and next iteration</h2>
+<p><b>Do not fit the planned V4.2 classifier from these pseudo-labels.</b> Relaxing the 70% cap after seeing this result would be outcome-driven tuning and would reintroduce the source-label shortcut the cap was designed to prevent.</p>
+<p>The next defensible iteration should repair the reference design rather than lower the purity standard: source-balance the eligible candidate construction before graph inference; increase independent, confidently annotated NK anchors from multiple development datasets; use finer local neighborhoods or anchor-neighborhood propagation instead of a union of very broad Leiden clusters; and retain the locked cohorts unchanged for nested comparison against V2 and V3.</p>
+
+<section class="repro"><h2>Reproducibility</h2>
+<ul>
+<li>Execution config SHA-256: <code>e70f1fc2f343011acb2f027a1a32fce2ec19467234e7236798bb42cdcaa16931</code></li>
+<li>Runner SHA-256: <code>65b319ec9bc7b73cd641b09e0f311ce7a57bc35ea62957524a0bd2de87c57659</code></li>
+<li>Core SHA-256: <code>191fe373beb827d7f8c63260ffbd066b1bbd08289318fbcb23471eaddfc4b8a9</code></li>
+<li>Partition SHA-256: <code>90e83ec83986358a015885e02e29d06eacf726d928e02b2e90428d5c09947a63</code></li>
+<li>Report builder SHA-256: <code>f5b9173afaa011b8534601928cebcf72813e81805dc4f110ea0a58a99e8c8b82</code></li>
+<li>Classifier fitting performed: <b>no</b></li>
+</ul></section>
+</body></html>

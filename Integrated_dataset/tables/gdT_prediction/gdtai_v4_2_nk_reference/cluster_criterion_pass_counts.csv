@@ -1,0 +1,8 @@
+criterion,n_clusters,fraction_of_clusters
+Independent anchors >= 20,390,0.9848484848484849
+Primary NK anchors >= 10,116,0.29292929292929293
+Anchor NK purity >= 95%,6,0.015151515151515152
+Productive-TCR contamination <= 2%,198,0.5
+Candidate sources >= 3,378,0.9545454545454546
+Largest source fraction <= 70%,183,0.4621212121212121
+All criteria,0,0.0

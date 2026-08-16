@@ -770,6 +770,7 @@ Exact `.py` scripts:
 
 - `workflows/gdtai/run_gdtai_v4_2_cluster_resource_preflight.py`
 - `workflows/gdtai/run_gdtai_v4_2_nk_reference_integration.py`
+- `workflows/gdtai/build_gdtai_v4_2_nk_reference_qc_report.py`
 
 Completed execution commands:
 
@@ -785,7 +786,7 @@ MPLCONFIGDIR=/tmp/matplotlib-gdtai-v42-fit \
   workflows/gdtai/run_gdtai_v4_2_nk_reference_integration.py --stage fit
 ```
 
-Pending command after explicit resource-amendment approval:
+Approved execution command:
 
 ```bash
 ANNDATA_ALLOW_WRITE_NULLABLE_STRINGS=1 \
@@ -793,6 +794,17 @@ NUMBA_CACHE_DIR=/tmp/numba-gdtai-v42 \
 MPLCONFIGDIR=/tmp/matplotlib-gdtai-v42-cluster \
 /home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
   workflows/gdtai/run_gdtai_v4_2_nk_reference_integration.py --stage cluster
+
+ANNDATA_ALLOW_WRITE_NULLABLE_STRINGS=1 \
+NUMBA_CACHE_DIR=/tmp/numba-gdtai-v42 \
+MPLCONFIGDIR=/tmp/matplotlib-gdtai-v42-consensus \
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/run_gdtai_v4_2_nk_reference_integration.py --stage consensus
+
+ANNDATA_ALLOW_WRITE_NULLABLE_STRINGS=1 \
+MPLCONFIGDIR=/tmp/matplotlib-gdtai-v42-report \
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/build_gdtai_v4_2_nk_reference_qc_report.py
 ```
 
 Key outputs:
@@ -800,6 +812,12 @@ Key outputs:
 - `/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference/development_hvg_counts.h5ad`
 - `/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference/X_scVI.npy`
 - `/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference/scvi_model/`
+- `/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference/cluster_partitions.npz`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_nk_reference/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_reference/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_reference/`
+- `gdT_prediction/gdtai_v4_2_nk_reference/index.html`
+- `gdT_prediction/gdtai_v4_2_nk_reference/gdtai_v4_2_nk_reference_qc_report.pdf`
 - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_cluster_resource_preflight/`
 - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_cluster_resource_preflight/`
 - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_cluster_resource_preflight/`
@@ -815,15 +833,24 @@ Current result:
   proposed floor is 150 GiB for `cluster` and `consensus`
 - worst-case partition payload plus reserve is 2.33 GiB, leaving 108.4 GiB
   above the proposed floor and reserve at audit time
+- the user approved the checksum-bound resource amendment on 2026-08-16
+- nine global and nine boundary RAPIDS runs completed on the A100 with no CPU
+  fallback; the partition SHA-256 is
+  `90e83ec83986358a015885e02e29d06eacf726d928e02b2e90428d5c09947a63`
+- technical execution passed, but scientific QC ended `FAIL_NO_PSEUDO_NK`:
+  the boundary contained 98.87% of cells, zero of 396 clusters met every
+  frozen criterion, and zero of 113,287 eligible cells were selected
+- all six purity/contamination-passing clusters failed only the 70% source cap;
+  GSE292700 contributed 86.92%-89.69% of their eligible candidates
 
 Gate semantics:
 
-- no clustering, pseudo-labeling, classifier fitting, thresholding, promotion,
-  release fitting, or inference ran
+- no classifier fitting, thresholding, promotion, release fitting, or inference
+  ran under this amendment
 - the prior approval is invalid after the checksum-bound resource-contract
   change
-- explicit activation of `CLUSTER_EXECUTION_APPROVAL.json` authorizes only
-  saved-latent RAPIDS clustering and pseudo-NK consensus QC
+- activated `CLUSTER_EXECUTION_APPROVAL.json` authorizes only saved-latent
+  RAPIDS clustering and pseudo-NK consensus QC
 
 ## Phase 1: Coarse T/NK extraction
 
@@ -1384,11 +1411,13 @@ Core outputs:
 - `gdT_atlas/curated_phenotypes/index.html`
 - `gdT_atlas/curated_phenotypes/gdT_atlas_curated_phenotypes_report.pdf`
 
-## QC-gate note
+## QC and risk-gate note
 
 Default rule:
 
-- every phase transition requires user-reviewed QC and explicit approval
+- routine, reversible phases proceed after documented QC
+- explicit approval is required only for high-risk operations as defined in
+  `TNK_PIPELINE_RUNBOOK.md`
 
 Do not define active exceptions here.
 Active exceptions belong only in `TNK_PIPELINE_RUNBOOK.md`.
@@ -1690,6 +1719,7 @@ Exact `.py` scripts:
 - `workflows/gdtai/run_gdtai_v4_2_implementation_qc.py`
 - `workflows/gdtai/run_gdtai_v4_2_nk_reference_integration.py`
 - `workflows/gdtai/gdtai_v4_2_integration_core.py`
+- `workflows/gdtai/build_gdtai_v4_2_nk_reference_qc_report.py`
 
 Key outputs:
 
@@ -1702,6 +1732,8 @@ Key outputs:
   `/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference/`
 - after separate approval, canonical execution QC under
   `Integrated_dataset/{tables,figures,logs}/gdT_prediction/gdtai_v4_2_nk_reference/`
+- completed execution report under
+  `gdT_prediction/gdtai_v4_2_nk_reference/`
 
 Standard behavior:
 
@@ -1714,4 +1746,7 @@ Standard behavior:
 - use direct A100 CUDA for scVI and RAPIDS with no CPU fallback
 - define the T/NK boundary only through mixing of independent primary-NK and
   productive-TCR anchors, never through marker-expression thresholds
-- stop after integration/clustering QC for a separate classifier-fitting gate
+- publish integration/clustering QC before classifier fitting; routine,
+  reversible development may then proceed under the runbook's risk-based rule
+- fail closed without classifier fitting when the consensus selects no
+  pseudo-NK cells

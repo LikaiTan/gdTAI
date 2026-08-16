@@ -111,19 +111,26 @@ Canonical path policy:
 - large H5AD files may use a mirrored SSD tree when active exceptions below say
   so
 
-## 6. Default QC-gate rule
+## 6. Default QC and risk-gate rule
 
 Default rule:
 
-- every phase transition requires user-reviewed QC and explicit user approval
+- routine, reversible analysis phases may proceed after their automated QC is
+  complete and documented
+- explicit user approval is required only for high-risk operations, including
+  destructive deletion, source-data mutation, irreversible model promotion or
+  release, and material infrastructure or external-cost risk
 
-Required before phase advancement:
+Required before routine phase advancement:
 
 1. complete the planned QC checks
 2. generate required tables, logs, and PNG figures
 3. summarize findings, issues, and uncertainties
 4. present the QC conclusion to the user
-5. wait for explicit approval
+
+If the next action is high risk, stop after step 4 and wait for explicit
+approval. Otherwise continue and report the result without creating an
+artificial approval gate.
 
 After full sample merging, complete the merged metadata backup/replacement step
 before moving forward.
@@ -135,6 +142,10 @@ Only this section may define active run-specific exceptions.
 ### Resource exception
 
 - active RAM ceiling override for this run: `800 GB`
+- gdTAI V4.2 `prepare` and `fit` retain a 300-GiB SSD free-space floor
+- gdTAI V4.2 saved-latent `cluster` and `consensus` use the approved 150-GiB
+  SSD free-space floor; this exception does not authorize restaging, scVI
+  refitting, classifier fitting, promotion, release fitting, or inference
 
 ### Path exception
 
@@ -149,10 +160,6 @@ Only this section may define active run-specific exceptions.
   `data/datasets/BALF_BLOOD_COPD/processed/`
 - the project raw lifecycle path is a compatibility view of the original
   workspace
-
-### QC-gate exception
-
-- none currently active
 
 Historical exceptions belong in `DECISIONS.md`, not here.
 
@@ -186,6 +193,7 @@ Re-read the same three files whenever:
 ## 10. Supervision notification policy
 
 - email Likai at `likai.tan@outlook.com` for every major validated milestone
-- email Likai whenever an action requires supervision or explicit approval
+- email Likai whenever a high-risk action requires supervision or explicit
+  approval
 - the email must state whether a QC gate passed, what remains blocked, and the
   exact review artifact paths

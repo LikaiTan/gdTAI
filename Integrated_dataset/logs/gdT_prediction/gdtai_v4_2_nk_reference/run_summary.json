@@ -1,33 +1,30 @@
 {
-  "fit": {
-    "cpu_fallback": false,
-    "elapsed_seconds": 1358.3129551410675,
-    "gpu": {
-      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
-      "CUDA_MPS_PIPE_DIRECTORY": "/tmp/gdtai-v42-mps-1008-3393456",
-      "CUDA_VISIBLE_DEVICES": "0",
-      "PYTHONHASHSEED": "20260807",
-      "cuda_available": true,
-      "device_name": "NVIDIA A100 80GB PCIe",
-      "torch_version": "2.9.1+cu128",
-      "total_memory_gib": 79.250732421875
-    },
-    "latent_sha256": "7030b28be885b85a4b24ce2223bb16f7c7288a29195f2512bf7bbba330791ccf",
-    "n_cells": 4023462,
-    "n_latent": 30,
-    "stage": "fit",
+  "consensus": {
+    "classifier_stage_must_source_balance_and_cap": false,
+    "locked_cohorts_included": false,
+    "marker_thresholds_used_for_truth": false,
+    "maximum_allowed_effective_weight": 21054.0,
+    "n_candidate_eligible": 113287,
+    "n_selected_pseudo_nk": 0,
+    "raw_pseudo_nk_effective_weight": 0.0,
+    "stage": "consensus",
     "status": "PASS"
   },
+  "consensus_resources": {
+    "observed_free_gib": 840.5986366271973,
+    "required_free_gib": 150.0
+  },
   "validation": {
-    "core_sha256": "e59dccc35e2d675e699fcb3cc15b4027d820e24a83b1eef6a0669cc6c76f64bf",
+    "core_sha256": "191fe373beb827d7f8c63260ffbd066b1bbd08289318fbcb23471eaddfc4b8a9",
     "current_atlas_recovery_active": true,
     "development_cohorts": 6,
-    "execution_config_sha256": "dd8337c32e8a627daad1526dc4a7caeec04a6489d847298e16eeff838250281c",
+    "execution_config_sha256": "e70f1fc2f343011acb2f027a1a32fce2ec19467234e7236798bb42cdcaa16931",
     "locked_cohorts": 3,
     "preflight_protocol_version": "4.2-integration-preflight",
     "protocol_version": "4.2-integration-execution-v1",
     "recovery_contract_sha256": "96934c8b1b5806344fc18891d06e675718b2fcb9cbdf01ef626bb684ca972519",
-    "runner_sha256": "a7ee2be9ac5246f082380e71ca0cd04a06b9f7b20f3ffe18bbd2f9ee79770b20",
+    "resource_contract_sha256": "e54bd72c55a420c9c736c5f58c38e45aadf45890db1f372ebae7b63abb9da0ec",
+    "runner_sha256": "65b319ec9bc7b73cd641b09e0f311ce7a57bc35ea62957524a0bd2de87c57659",
     "status": "PASS"
   }
 }
