@@ -6,13 +6,20 @@
   on 2026-08-16; technical execution passed, but scientific QC ended
   `FAIL_NO_PSEUDO_NK` because zero of 113,287 eligible cells met the frozen
   consensus contract
+- the follow-up sidecar visualization audit completed with
+  `PASS_DIAGNOSTIC_ONLY` and identified complete anchor/cohort confounding:
+  all 21,054 primary NK anchors are from the existing atlas, while all 204,869
+  productive-TCR anchors are from the five new cohorts
 
 ## Next action
 
 - do not fit the planned V4.2 classifier from the empty pseudo-label lane
-- design the next reversible development iteration around source-balanced
-  candidate construction and localized anchor-neighborhood propagation rather
-  than relaxing the frozen 70% source cap after observing this result
+- redesign the next reversible development iteration so NK and T anchors are
+  available within the same cohort lanes before localized neighborhood
+  propagation; do not treat the current NK-anchor-enriched region as confident
+  NK identity in new-cohort cells
+- retain source-balanced candidate construction and do not relax the frozen
+  70% source cap after observing this result
 - keep all locked cohorts unchanged for nested comparison with V2 and V3;
   model promotion, release fitting, and whole-atlas inference remain high-risk
   decisions requiring explicit approval
@@ -28,6 +35,8 @@
   GSE169246 and the other GEO-resolved rows
 - keep every extension cohort separate until merge and integration receive
   explicit approval
+- do not push any gdTAI V4 code, reports, or artifacts to GitHub until V4 is
+  scientifically finished and reviewed; local commits remain permitted
 
 ## Current blockers or review items
 
@@ -93,6 +102,20 @@
 - the checksum-bound clustering/consensus execution is complete; classifier
   fitting from this lane is scientifically blocked because no pseudo-NK cells
   were selected
+- the deterministic 250,000-cell latent-space diagnostic confirmed that the
+  sidecar is a development-only integration, not a new canonical atlas
+  milestone; it contains 3,705,306 existing-atlas cells and 318,156 new-cohort
+  cells
+- primary-NK and productive-TCR anchor roles are perfectly confounded with the
+  old/new cohort lane, so apparent anchor purity may partly represent cohort
+  structure rather than NK-versus-T biology
+- median same-source 30-neighbor retention was 46.67% for the existing atlas,
+  86.67% for GSE114724, 100% for GSE159251, 100% for GSE292700, 86.67% for
+  GSE294273/4, and 90% for GSE296954; these are descriptive integration
+  diagnostics, not biological pass/fail thresholds
+- the six near-qualifying clusters were 86.92%-89.69% GSE292700 among eligible
+  candidates; zero pseudo-NK cells remain accepted, no classifier was fitted,
+  and no H5AD was mutated
 
 - V4.2 Step 0 verified 336,780 V4.1 NK controls: 315,726 (`93.7%`) had only a
   single scVI NK annotation and 21,054 (`6.3%`) had dual scVI/author agreement
@@ -340,6 +363,15 @@ Additional current state:
   checksums, and historical results were moved under `archive/`
 
 ## Current review artifacts
+
+- gdTAI V4.2 sidecar visualization and confounding diagnostics:
+  - `gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/index.html`
+  - `gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/gdtai_v4_2_nk_reference_diagnostics_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/`
+  - decision: `PASS_DIAGNOSTIC_ONLY`; anchor/cohort confounding blocks confident
+    NK propagation and no classifier was fitted
 
 - gdTAI V4.2 integration, clustering, and pseudo-NK consensus QC:
   - `gdT_prediction/gdtai_v4_2_nk_reference/index.html`

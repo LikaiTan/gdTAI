@@ -1,5 +1,21 @@
 # CHANGELOG.md
 
+## 2026-08-16 - Added V4.2 sidecar visualization and confounding diagnostics
+
+- Built a deterministic, source-balanced 250,000-cell diagnostic sample from
+  the saved 4,023,462-cell scVI latent without modifying any H5AD.
+- Added eight PNG diagnostics covering cohort composition, UMAP structure,
+  anchor roles, candidate sources, near-qualifying clusters, and local source
+  retention.
+- Found complete anchor/cohort confounding: all 21,054 primary NK anchors came
+  from the existing atlas and all 204,869 productive-TCR anchors came from the
+  five new cohorts.
+- Confirmed that the six NK-anchor-enriched clusters remained
+  86.92%-89.69% dominated by GSE292700 candidates, so zero pseudo-NK cells are
+  accepted and no classifier was fitted.
+- Published a visually checked seven-page HTML/PDF report and froze GitHub
+  publication of V4 until the model is scientifically finished and reviewed.
+
 ## 2026-08-16 - Completed V4.2 clustering/consensus as a negative result
 
 - Activated the checksum-bound cluster-resource amendment and completed nine

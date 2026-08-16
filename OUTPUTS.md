@@ -72,6 +72,16 @@
 
 ## Current review packages
 
+- gdTAI V4.2 sidecar visualization and confounding diagnostics:
+  - `gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/index.html`
+  - `gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/gdtai_v4_2_nk_reference_diagnostics_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/`
+  - decision: `PASS_DIAGNOSTIC_ONLY`; the current sidecar cannot confidently
+    propagate NK identity to new-cohort candidates, and no classifier was
+    fitted
+
 - gdTAI V4.2 integration, clustering, and pseudo-NK consensus QC:
   - `gdT_prediction/gdtai_v4_2_nk_reference/index.html`
   - `gdT_prediction/gdtai_v4_2_nk_reference/gdtai_v4_2_nk_reference_qc_report.pdf`

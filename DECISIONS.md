@@ -14,9 +14,16 @@
   but the pseudo-label lane is rejected: zero clusters and zero of 113,287
   eligible cells met the frozen source-balanced consensus contract, so no
   classifier may be fitted from this lane
+- the follow-up 250,000-cell sidecar diagnostic found complete anchor/cohort
+  confounding: primary NK anchors exist only in the existing atlas and
+  productive-TCR anchors only in new cohorts; current NK-anchor enrichment is
+  therefore insufficient to assign new-cohort NK pseudo-labels
 - the frozen 70% maximum-source criterion will not be relaxed in response to
   this outcome; the next iteration must repair candidate source balance and
-  boundary localization while retaining the locked cohorts unchanged
+  boundary localization while retaining the locked cohorts unchanged and
+  establishing within-cohort NK and T anchors before propagation
+- gdTAI V4 must not be pushed to GitHub until it is scientifically finished
+  and reviewed; local commits are allowed for rollback and reproducibility
 - gdTAI V4.2 sidecar-integration implementation and synthetic/read-only
   implementation QC are approved against the 2026-08-08 checksum-bound
   preflight; project-data scVI fitting, classifier fitting, promotion, release

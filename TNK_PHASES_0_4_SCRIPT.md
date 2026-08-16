@@ -1720,6 +1720,7 @@ Exact `.py` scripts:
 - `workflows/gdtai/run_gdtai_v4_2_nk_reference_integration.py`
 - `workflows/gdtai/gdtai_v4_2_integration_core.py`
 - `workflows/gdtai/build_gdtai_v4_2_nk_reference_qc_report.py`
+- `workflows/gdtai/build_gdtai_v4_2_sidecar_diagnostics.py`
 
 Key outputs:
 
@@ -1734,6 +1735,9 @@ Key outputs:
   `Integrated_dataset/{tables,figures,logs}/gdT_prediction/gdtai_v4_2_nk_reference/`
 - completed execution report under
   `gdT_prediction/gdtai_v4_2_nk_reference/`
+- deterministic latent-space visualization and confounding diagnostics under
+  `gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/` and
+  `Integrated_dataset/{tables,figures,logs}/gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/`
 
 Standard behavior:
 
@@ -1750,3 +1754,8 @@ Standard behavior:
   reversible development may then proceed under the runbook's risk-based rule
 - fail closed without classifier fitting when the consensus selects no
   pseudo-NK cells
+- use the saved latent and partitions read-only for a deterministic,
+  source-balanced diagnostic sample; report cohort composition, anchor roles,
+  near-cluster source composition, and same-source neighbor retention
+- treat the current sidecar as development-only and do not infer new-cohort NK
+  identity when anchor class is confounded with cohort lane

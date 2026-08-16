@@ -161,6 +161,12 @@ Only this section may define active run-specific exceptions.
 - the project raw lifecycle path is a compatibility view of the original
   workspace
 
+### Publication exception
+
+- do not push gdTAI V4 code, reports, or artifacts to GitHub until V4 is
+  scientifically complete and the user has reviewed the finished result
+- local commits remain allowed for rollback and reproducibility
+
 Historical exceptions belong in `DECISIONS.md`, not here.
 
 ## 8. Canonical startup and re-read protocol

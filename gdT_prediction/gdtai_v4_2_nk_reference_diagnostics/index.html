@@ -1,0 +1,228 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>gdTAI V4.2 development sidecar diagnostics</title><style>
+:root{--ink:#17212b;--navy:#17324d;--teal:#197278;--red:#b3261e;--amber:#b86e16;--line:#ccd6dc;--soft:#f3f6f7}
+*{box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);line-height:1.48;max-width:1120px;margin:0 auto;padding:30px 42px;background:white}h1{font-size:29px;color:var(--navy);border-bottom:4px solid var(--teal);padding-bottom:12px}h2{font-size:20px;color:var(--navy);margin-top:31px}p,li{font-size:14px}.status{border-left:6px solid var(--amber);background:#fff9ef;padding:14px 18px;margin:18px 0}.danger{border-left:6px solid var(--red);background:#fff4f2;padding:13px 17px;margin:18px 0}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}.card{border:1px solid var(--line);padding:12px;background:var(--soft)}.card b{display:block;font-size:21px;color:var(--navy)}.card span{font-size:11px;color:#52636e}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}figure{margin:18px 0;break-inside:avoid}img{display:block;width:100%;height:auto;margin:0 auto}figcaption{font-size:11px;color:#52636e;text-align:center;margin-top:7px}.table-wrap{overflow-x:auto;margin:14px 0 24px}table{border-collapse:collapse;width:100%;font-size:10px}th{background:var(--navy);color:white;text-align:left}th,td{padding:6px 7px;border:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere}tr:nth-child(even){background:var(--soft)}code{background:#edf1f4;padding:1px 4px}.warning{color:var(--red);font-weight:bold}
+@media(max-width:800px){body{padding:18px}.cards,.grid{grid-template-columns:1fr}}
+@media print{@page{size:A4;margin:9mm}body{max-width:none;padding:0}h1{font-size:23px}h2{font-size:17px;break-after:avoid}p,li{font-size:10.2px}.cards{grid-template-columns:repeat(4,1fr)}.card b{font-size:16px}.card span{font-size:8px}.grid{display:block}figure{break-inside:avoid}figure img{max-height:145mm;object-fit:contain}table{font-size:7.2px}tr{break-inside:avoid}.table-wrap{overflow:visible}}
+</style></head><body>
+<h1>gdTAI V4.2 development sidecar diagnostics</h1>
+<p>This is a diagnostic visualization of the development-only scVI sidecar. It is not a new canonical atlas milestone and contains no locked validation cohort. Full-data counts use all 4,023,462 cells; UMAP and local-neighbor plots use a deterministic, source-balanced 250,000-cell sample.</p>
+<div class="status"><b>Interpretation:</b> the integration contains an NK-anchor-rich region, but the current method cannot confidently extend that region to unlabeled NK cells. Source balance, boundary localization, and anchor/cohort confounding all prevent a defensible pseudo-label set.</div>
+<div class="cards"><div class="card"><b>4,023,462</b><span>development cells</span></div><div class="card"><b>318,156</b><span>new-cohort cells</span></div><div class="card"><b>21,054</b><span>primary NK anchors</span></div><div class="card"><b>0</b><span>accepted pseudo-NK cells</span></div></div>
+
+<h2>What was integrated</h2><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/diagnostic_cohort_composition.png" alt="Cohort composition"><figcaption>Full-data cohort sizes and evidence classes. Candidate eligibility is intentionally restricted to the five new development cohorts.</figcaption></figure><div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Cohort</th>
+      <th>Cells</th>
+      <th>Primary NK</th>
+      <th>Primary NK %</th>
+      <th>Productive TCR</th>
+      <th>Productive TCR %</th>
+      <th>Eligible candidates</th>
+      <th>Candidate %</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Existing atlas reference</td>
+      <td>3705306</td>
+      <td>21054</td>
+      <td>0.57%</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>0</td>
+      <td>0.00%</td>
+    </tr>
+    <tr>
+      <td>GSE114724</td>
+      <td>28652</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>26893</td>
+      <td>93.86%</td>
+      <td>1759</td>
+      <td>6.14%</td>
+    </tr>
+    <tr>
+      <td>GSE159251</td>
+      <td>68898</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>53773</td>
+      <td>78.05%</td>
+      <td>15125</td>
+      <td>21.95%</td>
+    </tr>
+    <tr>
+      <td>GSE292700</td>
+      <td>78254</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>24577</td>
+      <td>31.41%</td>
+      <td>53677</td>
+      <td>68.59%</td>
+    </tr>
+    <tr>
+      <td>GSE294273/4</td>
+      <td>55744</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>36221</td>
+      <td>64.98%</td>
+      <td>19523</td>
+      <td>35.02%</td>
+    </tr>
+    <tr>
+      <td>GSE296954</td>
+      <td>86608</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>63405</td>
+      <td>73.21%</td>
+      <td>23203</td>
+      <td>26.79%</td>
+    </tr>
+  </tbody>
+</table></div><div class="danger"><b>Critical confounding:</b> all 21,054 primary NK anchors are from the existing atlas reference, whereas all 204,869 productive-TCR anchors are from the five new cohorts. The clustering cannot cleanly distinguish lineage structure from old-versus-new cohort structure.</div>
+
+<h2>Latent-space structure</h2><div class="grid"><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/diagnostic_umap_by_cohort.png" alt="UMAP by cohort"><figcaption>Diagnostic scVI UMAP by input cohort.</figcaption></figure><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/diagnostic_umap_by_anchor_role.png" alt="UMAP by evidence role"><figcaption>Primary NK and productive-TCR anchors are expression-independent; candidates are no-TCR, non-doublet cells from permitted development cohorts.</figcaption></figure></div>
+<div class="grid"><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/diagnostic_umap_candidate_sources.png" alt="Candidate sources"><figcaption>Eligible candidates show strong source-dependent localization.</figcaption></figure><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/diagnostic_umap_near_cluster_membership.png" alt="Near cluster membership"><figcaption>Membership frequency across the six clusters that passed anchor purity and TCR contamination criteria.</figcaption></figure></div>
+
+<h2>Why pseudo-NK selection failed</h2><p>All six NK-anchor-rich clusters were low in productive-TCR contamination, but their eligible candidate cells were 86.92%-89.69% GSE292700. This violates the frozen 70% maximum-source rule, so no cluster qualified and no candidate cell received a valid consensus label. Because the two anchor classes come from disjoint cohort lanes, anchor purity alone cannot prove lineage identity.</p><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/diagnostic_near_cluster_source_composition.png" alt="Near cluster source composition"><figcaption>The dashed line is the frozen 70% maximum contribution from one candidate source.</figcaption></figure><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/diagnostic_near_cluster_membership_by_role.png" alt="Membership by role"><figcaption>The anchor-defined region is stable across runs, but cohort-confounded anchors and source-skewed candidates prevent a defensible pseudo-label set.</figcaption></figure><div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Run</th>
+      <th>Cluster</th>
+      <th>NK anchors</th>
+      <th>TCR anchors</th>
+      <th>NK purity</th>
+      <th>TCR/cell</th>
+      <th>Dominant source</th>
+      <th>Source share</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>global_r1.2_s11</td>
+      <td>12</td>
+      <td>19755</td>
+      <td>328</td>
+      <td>98.37%</td>
+      <td>0.10%</td>
+      <td>GSE292700</td>
+      <td>86.92%</td>
+    </tr>
+    <tr>
+      <td>global_r1.2_s29</td>
+      <td>12</td>
+      <td>19751</td>
+      <td>308</td>
+      <td>98.46%</td>
+      <td>0.10%</td>
+      <td>GSE292700</td>
+      <td>88.17%</td>
+    </tr>
+    <tr>
+      <td>global_r1.2_s47</td>
+      <td>10</td>
+      <td>17221</td>
+      <td>263</td>
+      <td>98.50%</td>
+      <td>0.12%</td>
+      <td>GSE292700</td>
+      <td>88.19%</td>
+    </tr>
+    <tr>
+      <td>boundary_r1_s11</td>
+      <td>18</td>
+      <td>20267</td>
+      <td>799</td>
+      <td>96.21%</td>
+      <td>0.20%</td>
+      <td>GSE292700</td>
+      <td>89.46%</td>
+    </tr>
+    <tr>
+      <td>boundary_r1_s29</td>
+      <td>16</td>
+      <td>20267</td>
+      <td>801</td>
+      <td>96.20%</td>
+      <td>0.20%</td>
+      <td>GSE292700</td>
+      <td>87.65%</td>
+    </tr>
+    <tr>
+      <td>boundary_r1_s47</td>
+      <td>19</td>
+      <td>20113</td>
+      <td>813</td>
+      <td>96.11%</td>
+      <td>0.21%</td>
+      <td>GSE292700</td>
+      <td>89.69%</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2>Integration mixing diagnostic</h2><p>The same-source-neighbor fraction is a descriptive diagnostic, not a biological pass/fail metric: true tissue, disease, and phenotype differences can legitimately retain source structure. It nevertheless shows where new cohorts remain locally isolated after scVI.</p><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/diagnostic_local_source_retention.png" alt="Local source retention"><figcaption>Same-GSE fraction among sampled 30-nearest-neighbor graph edges.</figcaption></figure><div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Cohort</th>
+      <th>Sample cells</th>
+      <th>Median same-source</th>
+      <th>Mean same-source</th>
+      <th>90th percentile</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Existing atlas reference</td>
+      <td>130000</td>
+      <td>46.67%</td>
+      <td>51.01%</td>
+      <td>100.00%</td>
+    </tr>
+    <tr>
+      <td>GSE114724</td>
+      <td>13759</td>
+      <td>86.67%</td>
+      <td>75.32%</td>
+      <td>100.00%</td>
+    </tr>
+    <tr>
+      <td>GSE159251</td>
+      <td>24471</td>
+      <td>100.00%</td>
+      <td>95.64%</td>
+      <td>100.00%</td>
+    </tr>
+    <tr>
+      <td>GSE292700</td>
+      <td>30812</td>
+      <td>100.00%</td>
+      <td>87.10%</td>
+      <td>100.00%</td>
+    </tr>
+    <tr>
+      <td>GSE294273/4</td>
+      <td>25130</td>
+      <td>86.67%</td>
+      <td>73.89%</td>
+      <td>100.00%</td>
+    </tr>
+    <tr>
+      <td>GSE296954</td>
+      <td>25828</td>
+      <td>90.00%</td>
+      <td>76.76%</td>
+      <td>100.00%</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2>Conclusion</h2><p><b>An NK-anchor-enriched region is visible, but it cannot yet establish NK identity for unlabeled cells.</b> The next iteration must first break the anchor/cohort confounding, then use source-balanced candidate sampling and local anchor-neighborhood propagation with explicit rejection of source-specific neighborhoods. It should not loosen the source cap based on these results.</p><p>Classifier fitting performed: <b>no</b>. Source H5AD mutation: <b>none</b>. GitHub publication: <b>disabled until V4 is finished</b>.</p>
+<h2>Reproducibility</h2><ul><li>Latent SHA-256: <code>7030b28be885b85a4b24ce2223bb16f7c7288a29195f2512bf7bbba330791ccf</code></li><li>Partitions SHA-256: <code>90e83ec83986358a015885e02e29d06eacf726d928e02b2e90428d5c09947a63</code></li><li>Diagnostic sample seed: <code>20260816</code></li><li>Report script SHA-256: <code>a9548ad42e64437334a04ccec8c85d1a2f42c58a10f32a5d9dfa3c223e852b5c</code></li></ul>
+</body></html>
