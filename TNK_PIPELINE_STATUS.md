@@ -2,6 +2,27 @@
 
 ## Current milestone
 
+- gdTAI V4.2 productive-TRA/TRB boundary conflict audit completed on
+  2026-08-18 with `PASS_JOIN_REPAIR_REQUIRED`
+- 373,339/475,953 boundary cells (`78.44%`) have productive TRA or TRB, but
+  277,305/373,339 (`74.28%`) of those calls come from 14/29 contributing
+  sources with a documented or strong TCR-join red flag
+- the red flags include a documented legacy barcode-only mapping mode, exact
+  TRA/TRB-pair reuse across multiple sample or donor keys, and broad
+  alpha/beta calls in author-labeled non-T lineages; these defects are present
+  in source objects and therefore precede scVI, UMAP, and Leiden
+- ambient one-UMI calls are not the dominant detected explanation in the
+  quantitative subset: 47/3,047 (`1.54%`) UMI-auditable productive-AB cells
+  have no chain above one UMI, but UMI support is unavailable for 370,292
+  productive-AB cells and remains an explicit uncertainty
+- the 4,000-gene integration retained all 27 forced T/NK-context genes;
+  boundary clusters associate more strongly with expression class
+  (`NMI=0.0755`) than with raw productive-AB status (`NMI=0.0241`), so
+  re-clustering alone cannot repair unsafe metadata joins
+- only 1,508 cells meet the audit's conservative residual AB-compatible
+  stratum: paired TRA/TRB, no detected source join red flag, at least one chain
+  with at least two observed UMIs, and multi-gene T-lineage support; this is a
+  diagnostic stratum and not replacement ground truth
 - gdTAI V4.2 T/NK-restricted reintegration and second-pass NK-boundary review
   completed on 2026-08-17 with `PASS_REVIEW_REQUIRED`
 - the high-recall gate retained 3,927,924/4,023,462 cells (`97.63%`), retained
@@ -30,12 +51,24 @@
 
 ## Next action
 
+- quarantine productive TRA/TRB calls from documented or strongly suspicious
+  sources for model truth and NK exclusion while preserving the original
+  fields for provenance
+- rebuild each affected source from productive raw VDJ contigs using only
+  `sample_id + barcode_core`, retaining per-chain UMI/read support and failing
+  closed when sample identity is ambiguous
+- validate rebuilt sources by key uniqueness, before/after chain coverage,
+  exact receptor reuse across donors, and author-lineage conflicts before
+  propagating provenance-qualified TCR fields into harmonized metadata
+- regenerate the T/NK subset, source-balanced HVGs, scVI latent space, and
+  boundary clustering only after the repaired TCR sidecar passes validation
 - withdraw clusters 0, 3, and 5 as an NK candidate core; no boundary subcluster
   is currently eligible as NK training truth
-- build a non-destructive repaired chain sidecar from harmonized productive
-  CDR3 metadata, with exact source-plus-cell keys and source/library provenance
-- reconstruct primary NK anchors after excluding productive TRA/TRB conflicts
-  and auditing author annotations, doublets, ambient RNA, and assay coverage
+- do not build model truth directly from the current harmonized productive-CDR3
+  fields; first replace red-flag source assignments with validated raw-contig
+  joins carrying exact source, library, sample, cell, UMI, and read provenance
+- reconstruct primary NK anchors only after validated TCR replacement, then
+  audit author annotations, doublets, ambient RNA, and assay coverage
 - repeat source-balanced cluster-label review only after the TCR sidecar and NK
   anchors pass exact overlap and missingness checks
 - run label-leakage, source-balance, feature-coverage, and grouped-fold
@@ -427,6 +460,16 @@ Additional current state:
   checksums, and historical results were moved under `archive/`
 
 ## Current review artifacts
+
+- gdTAI V4.2 productive-TRA/TRB boundary conflict audit:
+  - `gdT_prediction/gdtai_v4_2_tcr_conflict_audit/index.html`
+  - `gdT_prediction/gdtai_v4_2_tcr_conflict_audit/gdtai_v4_2_tcr_conflict_audit_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_tcr_conflict_audit/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_tcr_conflict_audit/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_tcr_conflict_audit/`
+  - decision: `PASS_JOIN_REPAIR_REQUIRED`; do not use raw harmonized
+    productive TRA/TRB as boundary truth until affected source joins are
+    rebuilt and validated
 
 - gdTAI V4.2 NK/T-lineage feature and unsupervised-cluster review:
   - `gdT_prediction/gdtai_v4_2_nk_cluster_review/index.html`

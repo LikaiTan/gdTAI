@@ -1054,6 +1054,66 @@ Gate semantics:
 - no source H5AD, label manifest, classifier, threshold, model registry,
   release artifact, atlas inference, or GitHub publication is changed
 
+## Post-Phase-4 gdTAI V4.2 productive-TRA/TRB boundary conflict audit
+
+Objective:
+
+- determine whether the unexpectedly high productive TRA/TRB rate in the
+  V4.2 NK-like boundary is explained by ambient one-UMI calls, non-ideal
+  transcriptomic representation, unsafe TCR joins, or genuine alpha-beta T
+  cells
+- keep UMI/read support, source join provenance, transcriptomic evidence, and
+  residual biological compatibility as separate audit dimensions
+
+Phase or task:
+
+- gdTAI V4.2 read-only productive-TRA/TRB provenance and conflict audit
+
+Exact `.py` script:
+
+- `workflows/gdtai/audit_gdtai_v4_2_boundary_tcr_conflicts.py`
+
+Execution command:
+
+```bash
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/audit_gdtai_v4_2_boundary_tcr_conflicts.py
+```
+
+Key outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_tcr_conflict_audit/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_tcr_conflict_audit/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_tcr_conflict_audit/`
+- `gdT_prediction/gdtai_v4_2_tcr_conflict_audit/index.html`
+- `gdT_prediction/gdtai_v4_2_tcr_conflict_audit/gdtai_v4_2_tcr_conflict_audit_report.pdf`
+
+Current result:
+
+- 277,305/373,339 (`74.28%`) productive-AB boundary calls come from
+  source-level join-red-flag cohorts
+- only 47/3,047 (`1.54%`) UMI-auditable productive-AB cells are supported
+  exclusively by one observed UMI, while 370,292 calls lack quantitative UMI
+  provenance
+- all 27 forced T/NK-context genes entered the 4,000-gene scVI model; cluster
+  association with expression class exceeds association with raw productive-AB
+  status, so UMAP or Leiden is not the primary detected cause
+- 1,508 cells meet a conservative residual AB-compatible audit stratum; it is
+  not promoted to a truth label
+
+Standard behavior:
+
+- treat zero UMI/read values as unavailable because legacy importers used zero
+  when quantitative support was absent
+- flag a source only from documented barcode-only mapping, extensive exact
+  paired-receptor reuse across sample/donor keys, or strong author-lineage
+  conflict
+- preserve source H5ADs and original TCR fields unchanged
+- quarantine red-flag source calls from model truth until raw productive VDJ
+  contigs are rebuilt with the canonical `sample_id + barcode_core` join
+- rerun the T/NK integration and clustering only after repaired joins pass
+  source-level validation
+
 ## Phase 1: Coarse T/NK extraction
 
 Objective:
