@@ -1,0 +1,291 @@
+population,n_population,gene,family,n_detected,detected_fraction
+All development sidecar,4023462,CD3D,CD3_complex,2662995,0.6618665716241386
+All development sidecar,4023462,CD3E,CD3_complex,3170723,0.788058393492967
+All development sidecar,4023462,CD3G,CD3_complex,2112641,0.5250803909667843
+All development sidecar,4023462,CD247,CD3_complex,2271048,0.5644512114194193
+All development sidecar,4023462,TRAC,TCR_constant,1193424,0.296616197692435
+All development sidecar,4023462,TRBC1,TCR_constant,1524836,0.3789860572810182
+All development sidecar,4023462,TRBC2,TCR_constant,2320383,0.57671303966584
+All development sidecar,4023462,TRDC,TCR_constant,290288,0.07214881114821017
+All development sidecar,4023462,TRGC1,TCR_constant,187532,0.046609611324774536
+All development sidecar,4023462,TRGC2,TCR_constant,271270,0.06742203604756301
+All development sidecar,4023462,TRDV1,TCR_delta_VJ,90907,0.02259422358158223
+All development sidecar,4023462,TRDV2,TCR_delta_VJ,59417,0.014767630463516245
+All development sidecar,4023462,TRDV3,TCR_delta_VJ,24261,0.006029881728720192
+All development sidecar,4023462,TRAV14DV4,TCR_delta_VJ,130749,0.032496640952493154
+All development sidecar,4023462,TRAV23DV6,TCR_delta_VJ,73328,0.018225100672008335
+All development sidecar,4023462,TRAV29DV5,TCR_delta_VJ,163183,0.04055785788457801
+All development sidecar,4023462,TRAV36DV7,TCR_delta_VJ,56332,0.014000877850965163
+All development sidecar,4023462,TRAV38-2DV8,TCR_delta_VJ,101094,0.025126122727143936
+All development sidecar,4023462,TRDJ1,TCR_delta_VJ,5234,0.0013008697484902306
+All development sidecar,4023462,TRGV1,TCR_gamma_V,2862,0.0007113277073326404
+All development sidecar,4023462,TRGV2,TCR_gamma_V,194343,0.04830243208460774
+All development sidecar,4023462,TRGV3,TCR_gamma_V,205955,0.05118850383078056
+All development sidecar,4023462,TRGV4,TCR_gamma_V,127277,0.03163370251788137
+All development sidecar,4023462,TRGV5,TCR_gamma_V,130784,0.03250533992864851
+All development sidecar,4023462,TRGV7,TCR_gamma_V,137135,0.03408383128758268
+All development sidecar,4023462,TRGV8,TCR_gamma_V,102396,0.025449724640123357
+All development sidecar,4023462,TRGV9,TCR_gamma_V,227775,0.05661169410820831
+All development sidecar,4023462,TRGV10,TCR_gamma_V,292149,0.07261134813749949
+All development sidecar,4023462,TRGV11,TCR_gamma_V,4074,0.0010125608244839891
+Primary NK anchors,21054,CD3D,CD3_complex,1335,0.0634083784554004
+Primary NK anchors,21054,CD3E,CD3_complex,7347,0.34895981761185524
+Primary NK anchors,21054,CD3G,CD3_complex,1043,0.04953927994680346
+Primary NK anchors,21054,CD247,CD3_complex,16533,0.7852664576802508
+Primary NK anchors,21054,TRAC,TCR_constant,1189,0.05647382920110193
+Primary NK anchors,21054,TRBC1,TCR_constant,12059,0.5727652702574333
+Primary NK anchors,21054,TRBC2,TCR_constant,12552,0.5961812482188658
+Primary NK anchors,21054,TRDC,TCR_constant,8487,0.4031062980906241
+Primary NK anchors,21054,TRGC1,TCR_constant,3412,0.16205946613470124
+Primary NK anchors,21054,TRGC2,TCR_constant,818,0.038852474589151705
+Primary NK anchors,21054,TRDV1,TCR_delta_VJ,123,0.005842120262182958
+Primary NK anchors,21054,TRDV2,TCR_delta_VJ,100,0.004749691270067445
+Primary NK anchors,21054,TRDV3,TCR_delta_VJ,49,0.0023273487223330483
+Primary NK anchors,21054,TRAV14DV4,TCR_delta_VJ,36,0.0017098888572242804
+Primary NK anchors,21054,TRAV23DV6,TCR_delta_VJ,15,0.0007124536905101168
+Primary NK anchors,21054,TRAV29DV5,TCR_delta_VJ,23,0.0010924289921155125
+Primary NK anchors,21054,TRAV36DV7,TCR_delta_VJ,11,0.0005224660397074191
+Primary NK anchors,21054,TRAV38-2DV8,TCR_delta_VJ,44,0.0020898641588296763
+Primary NK anchors,21054,TRDJ1,TCR_delta_VJ,0,0.0
+Primary NK anchors,21054,TRGV1,TCR_gamma_V,8,0.00037997530160539567
+Primary NK anchors,21054,TRGV2,TCR_gamma_V,88,0.0041797283176593526
+Primary NK anchors,21054,TRGV3,TCR_gamma_V,224,0.010639308444951078
+Primary NK anchors,21054,TRGV4,TCR_gamma_V,113,0.005367151135176214
+Primary NK anchors,21054,TRGV5,TCR_gamma_V,255,0.012111712738671987
+Primary NK anchors,21054,TRGV7,TCR_gamma_V,1202,0.05709128906621069
+Primary NK anchors,21054,TRGV8,TCR_gamma_V,297,0.014106583072100314
+Primary NK anchors,21054,TRGV9,TCR_gamma_V,2435,0.1156549824261423
+Primary NK anchors,21054,TRGV10,TCR_gamma_V,658,0.03125296855704379
+Primary NK anchors,21054,TRGV11,TCR_gamma_V,3,0.00014249073810202338
+Productive TRA/TRB T anchors,967149,CD3D,CD3_complex,840784,0.8693427796544276
+Productive TRA/TRB T anchors,967149,CD3E,CD3_complex,927555,0.9590611167462304
+Productive TRA/TRB T anchors,967149,CD3G,CD3_complex,680636,0.7037550573903297
+Productive TRA/TRB T anchors,967149,CD247,CD3_complex,593692,0.6138578440343732
+Productive TRA/TRB T anchors,967149,TRAC,TCR_constant,391398,0.40469255512852725
+Productive TRA/TRB T anchors,967149,TRBC1,TCR_constant,392406,0.40573479370810495
+Productive TRA/TRB T anchors,967149,TRBC2,TCR_constant,648717,0.6707518696705471
+Productive TRA/TRB T anchors,967149,TRDC,TCR_constant,16946,0.017521602152305384
+Productive TRA/TRB T anchors,967149,TRGC1,TCR_constant,23851,0.024661143215781643
+Productive TRA/TRB T anchors,967149,TRGC2,TCR_constant,55887,0.05778530505640806
+Productive TRA/TRB T anchors,967149,TRDV1,TCR_delta_VJ,14260,0.014744367207121136
+Productive TRA/TRB T anchors,967149,TRDV2,TCR_delta_VJ,3314,0.0034265661237306766
+Productive TRA/TRB T anchors,967149,TRDV3,TCR_delta_VJ,1945,0.0020110655131732546
+Productive TRA/TRB T anchors,967149,TRAV14DV4,TCR_delta_VJ,44622,0.04613766854952029
+Productive TRA/TRB T anchors,967149,TRAV23DV6,TCR_delta_VJ,26676,0.027582099552395753
+Productive TRA/TRB T anchors,967149,TRAV29DV5,TCR_delta_VJ,55204,0.05707910570139658
+Productive TRA/TRB T anchors,967149,TRAV36DV7,TCR_delta_VJ,20685,0.021387604185084202
+Productive TRA/TRB T anchors,967149,TRAV38-2DV8,TCR_delta_VJ,32697,0.03380761392505188
+Productive TRA/TRB T anchors,967149,TRDJ1,TCR_delta_VJ,307,0.0003174278213594803
+Productive TRA/TRB T anchors,967149,TRGV1,TCR_gamma_V,874,0.0009036870223719406
+Productive TRA/TRB T anchors,967149,TRGV2,TCR_gamma_V,48480,0.05012671263683259
+Productive TRA/TRB T anchors,967149,TRGV3,TCR_gamma_V,53648,0.055470253290857974
+Productive TRA/TRB T anchors,967149,TRGV4,TCR_gamma_V,30011,0.031030378979867632
+Productive TRA/TRB T anchors,967149,TRGV5,TCR_gamma_V,29643,0.03064987918097418
+Productive TRA/TRB T anchors,967149,TRGV7,TCR_gamma_V,26347,0.02724192446045025
+Productive TRA/TRB T anchors,967149,TRGV8,TCR_gamma_V,20489,0.021184946683499645
+Productive TRA/TRB T anchors,967149,TRGV9,TCR_gamma_V,31133,0.03219048977975472
+Productive TRA/TRB T anchors,967149,TRGV10,TCR_gamma_V,75022,0.07757026063202258
+Productive TRA/TRB T anchors,967149,TRGV11,TCR_gamma_V,565,0.000584191267322822
+All eligible candidates,113287,CD3D,CD3_complex,45747,0.40381508910995967
+All eligible candidates,113287,CD3E,CD3_complex,61139,0.5396823995692357
+All eligible candidates,113287,CD3G,CD3_complex,28064,0.24772480514092526
+All eligible candidates,113287,CD247,CD3_complex,44157,0.3897799394458323
+All eligible candidates,113287,TRAC,TCR_constant,18225,0.16087459284825267
+All eligible candidates,113287,TRBC1,TCR_constant,26485,0.2337867539964868
+All eligible candidates,113287,TRBC2,TCR_constant,39962,0.35275009489173514
+All eligible candidates,113287,TRDC,TCR_constant,6161,0.05438399816395526
+All eligible candidates,113287,TRGC1,TCR_constant,2015,0.017786683379381572
+All eligible candidates,113287,TRGC2,TCR_constant,5322,0.04697802925313584
+All eligible candidates,113287,TRDV1,TCR_delta_VJ,2974,0.026251908868625703
+All eligible candidates,113287,TRDV2,TCR_delta_VJ,1777,0.01568582449883923
+All eligible candidates,113287,TRDV3,TCR_delta_VJ,471,0.004157582070316982
+All eligible candidates,113287,TRAV14DV4,TCR_delta_VJ,1874,0.016542056899732538
+All eligible candidates,113287,TRAV23DV6,TCR_delta_VJ,782,0.0069028220360676865
+All eligible candidates,113287,TRAV29DV5,TCR_delta_VJ,2350,0.020743774660817216
+All eligible candidates,113287,TRAV36DV7,TCR_delta_VJ,960,0.008474052627397671
+All eligible candidates,113287,TRAV38-2DV8,TCR_delta_VJ,1794,0.0158358858474494
+All eligible candidates,113287,TRDJ1,TCR_delta_VJ,404,0.0035661638140298533
+All eligible candidates,113287,TRGV1,TCR_gamma_V,82,0.0007238253285902177
+All eligible candidates,113287,TRGV2,TCR_gamma_V,2953,0.026066538967401378
+All eligible candidates,113287,TRGV3,TCR_gamma_V,3360,0.02965918419589185
+All eligible candidates,113287,TRGV4,TCR_gamma_V,1910,0.01685983387325995
+All eligible candidates,113287,TRGV5,TCR_gamma_V,3079,0.027178758374747324
+All eligible candidates,113287,TRGV7,TCR_gamma_V,3068,0.027081659855058393
+All eligible candidates,113287,TRGV8,TCR_gamma_V,1898,0.01675390821541748
+All eligible candidates,113287,TRGV9,TCR_gamma_V,5332,0.04706630063467123
+All eligible candidates,113287,TRGV10,TCR_gamma_V,7044,0.06217836115353041
+All eligible candidates,113287,TRGV11,TCR_gamma_V,83,0.000732652466743757
+Cluster 19 all cells,490300,CD3D,CD3_complex,128249,0.2615725066285947
+Cluster 19 all cells,490300,CD3E,CD3_complex,269686,0.550042830919845
+Cluster 19 all cells,490300,CD3G,CD3_complex,109414,0.22315725066285946
+Cluster 19 all cells,490300,CD247,CD3_complex,417168,0.8508423414236181
+Cluster 19 all cells,490300,TRAC,TCR_constant,67179,0.13701611258413215
+Cluster 19 all cells,490300,TRBC1,TCR_constant,310158,0.6325882112992046
+Cluster 19 all cells,490300,TRBC2,TCR_constant,318634,0.6498755863756883
+Cluster 19 all cells,490300,TRDC,TCR_constant,181765,0.3707220069345299
+Cluster 19 all cells,490300,TRGC1,TCR_constant,92782,0.18923516214562514
+Cluster 19 all cells,490300,TRGC2,TCR_constant,51742,0.10553130736283908
+Cluster 19 all cells,490300,TRDV1,TCR_delta_VJ,19033,0.0388190903528452
+Cluster 19 all cells,490300,TRDV2,TCR_delta_VJ,14140,0.02883948602896186
+Cluster 19 all cells,490300,TRDV3,TCR_delta_VJ,6936,0.014146440954517642
+Cluster 19 all cells,490300,TRAV14DV4,TCR_delta_VJ,3936,0.008027738119518662
+Cluster 19 all cells,490300,TRAV23DV6,TCR_delta_VJ,1515,0.003089944931674485
+Cluster 19 all cells,490300,TRAV29DV5,TCR_delta_VJ,4341,0.008853763002243524
+Cluster 19 all cells,490300,TRAV36DV7,TCR_delta_VJ,1255,0.00255965735264124
+Cluster 19 all cells,490300,TRAV38-2DV8,TCR_delta_VJ,3172,0.006469508464205589
+Cluster 19 all cells,490300,TRDJ1,TCR_delta_VJ,3007,0.006132979808280645
+Cluster 19 all cells,490300,TRGV1,TCR_gamma_V,333,0.0006791760146848869
+Cluster 19 all cells,490300,TRGV2,TCR_gamma_V,22125,0.04512543340811748
+Cluster 19 all cells,490300,TRGV3,TCR_gamma_V,22396,0.045678156230879056
+Cluster 19 all cells,490300,TRGV4,TCR_gamma_V,19187,0.03913318376504181
+Cluster 19 all cells,490300,TRGV5,TCR_gamma_V,21133,0.04310218233734448
+Cluster 19 all cells,490300,TRGV7,TCR_gamma_V,50796,0.10360187640220274
+Cluster 19 all cells,490300,TRGV8,TCR_gamma_V,20872,0.04256985519069957
+Cluster 19 all cells,490300,TRGV9,TCR_gamma_V,75126,0.15322455639404448
+Cluster 19 all cells,490300,TRGV10,TCR_gamma_V,33609,0.06854782786049357
+Cluster 19 all cells,490300,TRGV11,TCR_gamma_V,1052,0.0021456251274729757
+Cluster 19 eligible candidates,9162,CD3D,CD3_complex,2398,0.26173324601615366
+Cluster 19 eligible candidates,9162,CD3E,CD3_complex,3770,0.4114822091246453
+Cluster 19 eligible candidates,9162,CD3G,CD3_complex,928,0.10128792839991269
+Cluster 19 eligible candidates,9162,CD247,CD3_complex,7490,0.817507094520847
+Cluster 19 eligible candidates,9162,TRAC,TCR_constant,839,0.09157389216328313
+Cluster 19 eligible candidates,9162,TRBC1,TCR_constant,5257,0.573783016808557
+Cluster 19 eligible candidates,9162,TRBC2,TCR_constant,4052,0.44226151495306704
+Cluster 19 eligible candidates,9162,TRDC,TCR_constant,1952,0.213053918358437
+Cluster 19 eligible candidates,9162,TRGC1,TCR_constant,307,0.033507967692643525
+Cluster 19 eligible candidates,9162,TRGC2,TCR_constant,699,0.07629338572364112
+Cluster 19 eligible candidates,9162,TRDV1,TCR_delta_VJ,147,0.016044531761624098
+Cluster 19 eligible candidates,9162,TRDV2,TCR_delta_VJ,184,0.02008295132067234
+Cluster 19 eligible candidates,9162,TRDV3,TCR_delta_VJ,46,0.005020737830168085
+Cluster 19 eligible candidates,9162,TRAV14DV4,TCR_delta_VJ,23,0.0025103689150840426
+Cluster 19 eligible candidates,9162,TRAV23DV6,TCR_delta_VJ,4,0.0004365858982754857
+Cluster 19 eligible candidates,9162,TRAV29DV5,TCR_delta_VJ,33,0.003601833660772757
+Cluster 19 eligible candidates,9162,TRAV36DV7,TCR_delta_VJ,16,0.0017463435931019428
+Cluster 19 eligible candidates,9162,TRAV38-2DV8,TCR_delta_VJ,24,0.0026195153896529143
+Cluster 19 eligible candidates,9162,TRDJ1,TCR_delta_VJ,248,0.027068325693080115
+Cluster 19 eligible candidates,9162,TRGV1,TCR_gamma_V,5,0.0005457323728443571
+Cluster 19 eligible candidates,9162,TRGV2,TCR_gamma_V,142,0.015498799388779742
+Cluster 19 eligible candidates,9162,TRGV3,TCR_gamma_V,252,0.0275049115913556
+Cluster 19 eligible candidates,9162,TRGV4,TCR_gamma_V,159,0.017354289456450556
+Cluster 19 eligible candidates,9162,TRGV5,TCR_gamma_V,739,0.08065924470639599
+Cluster 19 eligible candidates,9162,TRGV7,TCR_gamma_V,935,0.10205195372189478
+Cluster 19 eligible candidates,9162,TRGV8,TCR_gamma_V,244,0.026631739794804626
+Cluster 19 eligible candidates,9162,TRGV9,TCR_gamma_V,1232,0.1344684566688496
+Cluster 19 eligible candidates,9162,TRGV10,TCR_gamma_V,635,0.06930801135123335
+Cluster 19 eligible candidates,9162,TRGV11,TCR_gamma_V,3,0.0003274394237066143
+Strict NK core (cluster 19 both evidence),461,CD3D,CD3_complex,0,0.0
+Strict NK core (cluster 19 both evidence),461,CD3E,CD3_complex,0,0.0
+Strict NK core (cluster 19 both evidence),461,CD3G,CD3_complex,0,0.0
+Strict NK core (cluster 19 both evidence),461,CD247,CD3_complex,434,0.9414316702819957
+Strict NK core (cluster 19 both evidence),461,TRAC,TCR_constant,19,0.04121475054229935
+Strict NK core (cluster 19 both evidence),461,TRBC1,TCR_constant,241,0.5227765726681128
+Strict NK core (cluster 19 both evidence),461,TRBC2,TCR_constant,256,0.5553145336225597
+Strict NK core (cluster 19 both evidence),461,TRDC,TCR_constant,152,0.3297180043383948
+Strict NK core (cluster 19 both evidence),461,TRGC1,TCR_constant,21,0.0455531453362256
+Strict NK core (cluster 19 both evidence),461,TRGC2,TCR_constant,45,0.09761388286334056
+Strict NK core (cluster 19 both evidence),461,TRDV1,TCR_delta_VJ,0,0.0
+Strict NK core (cluster 19 both evidence),461,TRDV2,TCR_delta_VJ,1,0.0021691973969631237
+Strict NK core (cluster 19 both evidence),461,TRDV3,TCR_delta_VJ,0,0.0
+Strict NK core (cluster 19 both evidence),461,TRAV14DV4,TCR_delta_VJ,0,0.0
+Strict NK core (cluster 19 both evidence),461,TRAV23DV6,TCR_delta_VJ,0,0.0
+Strict NK core (cluster 19 both evidence),461,TRAV29DV5,TCR_delta_VJ,1,0.0021691973969631237
+Strict NK core (cluster 19 both evidence),461,TRAV36DV7,TCR_delta_VJ,0,0.0
+Strict NK core (cluster 19 both evidence),461,TRAV38-2DV8,TCR_delta_VJ,0,0.0
+Strict NK core (cluster 19 both evidence),461,TRDJ1,TCR_delta_VJ,20,0.04338394793926247
+Strict NK core (cluster 19 both evidence),461,TRGV1,TCR_gamma_V,0,0.0
+Strict NK core (cluster 19 both evidence),461,TRGV2,TCR_gamma_V,0,0.0
+Strict NK core (cluster 19 both evidence),461,TRGV3,TCR_gamma_V,5,0.010845986984815618
+Strict NK core (cluster 19 both evidence),461,TRGV4,TCR_gamma_V,1,0.0021691973969631237
+Strict NK core (cluster 19 both evidence),461,TRGV5,TCR_gamma_V,22,0.04772234273318872
+Strict NK core (cluster 19 both evidence),461,TRGV7,TCR_gamma_V,81,0.175704989154013
+Strict NK core (cluster 19 both evidence),461,TRGV8,TCR_gamma_V,11,0.02386117136659436
+Strict NK core (cluster 19 both evidence),461,TRGV9,TCR_gamma_V,89,0.19305856832971802
+Strict NK core (cluster 19 both evidence),461,TRGV10,TCR_gamma_V,24,0.052060737527114966
+Strict NK core (cluster 19 both evidence),461,TRGV11,TCR_gamma_V,0,0.0
+Current confident outside cluster 19,8,CD3D,CD3_complex,0,0.0
+Current confident outside cluster 19,8,CD3E,CD3_complex,0,0.0
+Current confident outside cluster 19,8,CD3G,CD3_complex,0,0.0
+Current confident outside cluster 19,8,CD247,CD3_complex,7,0.875
+Current confident outside cluster 19,8,TRAC,TCR_constant,0,0.0
+Current confident outside cluster 19,8,TRBC1,TCR_constant,2,0.25
+Current confident outside cluster 19,8,TRBC2,TCR_constant,1,0.125
+Current confident outside cluster 19,8,TRDC,TCR_constant,0,0.0
+Current confident outside cluster 19,8,TRGC1,TCR_constant,1,0.125
+Current confident outside cluster 19,8,TRGC2,TCR_constant,0,0.0
+Current confident outside cluster 19,8,TRDV1,TCR_delta_VJ,0,0.0
+Current confident outside cluster 19,8,TRDV2,TCR_delta_VJ,0,0.0
+Current confident outside cluster 19,8,TRDV3,TCR_delta_VJ,0,0.0
+Current confident outside cluster 19,8,TRAV14DV4,TCR_delta_VJ,0,0.0
+Current confident outside cluster 19,8,TRAV23DV6,TCR_delta_VJ,0,0.0
+Current confident outside cluster 19,8,TRAV29DV5,TCR_delta_VJ,0,0.0
+Current confident outside cluster 19,8,TRAV36DV7,TCR_delta_VJ,0,0.0
+Current confident outside cluster 19,8,TRAV38-2DV8,TCR_delta_VJ,0,0.0
+Current confident outside cluster 19,8,TRDJ1,TCR_delta_VJ,0,0.0
+Current confident outside cluster 19,8,TRGV1,TCR_gamma_V,0,0.0
+Current confident outside cluster 19,8,TRGV2,TCR_gamma_V,0,0.0
+Current confident outside cluster 19,8,TRGV3,TCR_gamma_V,0,0.0
+Current confident outside cluster 19,8,TRGV4,TCR_gamma_V,0,0.0
+Current confident outside cluster 19,8,TRGV5,TCR_gamma_V,1,0.125
+Current confident outside cluster 19,8,TRGV7,TCR_gamma_V,0,0.0
+Current confident outside cluster 19,8,TRGV8,TCR_gamma_V,0,0.0
+Current confident outside cluster 19,8,TRGV9,TCR_gamma_V,2,0.25
+Current confident outside cluster 19,8,TRGV10,TCR_gamma_V,0,0.0
+Current confident outside cluster 19,8,TRGV11,TCR_gamma_V,0,0.0
+Cluster 9 all cells,41060,CD3D,CD3_complex,3732,0.09089137847053093
+Cluster 9 all cells,41060,CD3E,CD3_complex,15667,0.3815635655138821
+Cluster 9 all cells,41060,CD3G,CD3_complex,2252,0.054846566000974185
+Cluster 9 all cells,41060,CD247,CD3_complex,23819,0.5801022893326839
+Cluster 9 all cells,41060,TRAC,TCR_constant,7450,0.18144179249878226
+Cluster 9 all cells,41060,TRBC1,TCR_constant,18912,0.4605942523136873
+Cluster 9 all cells,41060,TRBC2,TCR_constant,19941,0.48565513882123723
+Cluster 9 all cells,41060,TRDC,TCR_constant,17834,0.4343399902581588
+Cluster 9 all cells,41060,TRGC1,TCR_constant,6278,0.15289819775937652
+Cluster 9 all cells,41060,TRGC2,TCR_constant,2040,0.04968339016074038
+Cluster 9 all cells,41060,TRDV1,TCR_delta_VJ,374,0.00910862152946907
+Cluster 9 all cells,41060,TRDV2,TCR_delta_VJ,181,0.00440818314661471
+Cluster 9 all cells,41060,TRDV3,TCR_delta_VJ,263,0.0064052605942523134
+Cluster 9 all cells,41060,TRAV14DV4,TCR_delta_VJ,146,0.003555772040915733
+Cluster 9 all cells,41060,TRAV23DV6,TCR_delta_VJ,66,0.001607403799318071
+Cluster 9 all cells,41060,TRAV29DV5,TCR_delta_VJ,162,0.003945445689235266
+Cluster 9 all cells,41060,TRAV36DV7,TCR_delta_VJ,78,0.0018996590355577203
+Cluster 9 all cells,41060,TRAV38-2DV8,TCR_delta_VJ,114,0.0027764247442766685
+Cluster 9 all cells,41060,TRDJ1,TCR_delta_VJ,93,0.002264978080857282
+Cluster 9 all cells,41060,TRGV1,TCR_gamma_V,16,0.0003896736483195324
+Cluster 9 all cells,41060,TRGV2,TCR_gamma_V,311,0.007574281539210911
+Cluster 9 all cells,41060,TRGV3,TCR_gamma_V,1045,0.02545056015586946
+Cluster 9 all cells,41060,TRGV4,TCR_gamma_V,252,0.006137359961032635
+Cluster 9 all cells,41060,TRGV5,TCR_gamma_V,1027,0.025012177301509984
+Cluster 9 all cells,41060,TRGV7,TCR_gamma_V,2146,0.05226497808085728
+Cluster 9 all cells,41060,TRGV8,TCR_gamma_V,614,0.014953726254262056
+Cluster 9 all cells,41060,TRGV9,TCR_gamma_V,6567,0.1599366780321481
+Cluster 9 all cells,41060,TRGV10,TCR_gamma_V,3165,0.0770823185582075
+Cluster 9 all cells,41060,TRGV11,TCR_gamma_V,11,0.0002679006332196785
+Cluster 9 eligible candidates,1139,CD3D,CD3_complex,124,0.10886742756804214
+Cluster 9 eligible candidates,1139,CD3E,CD3_complex,420,0.3687445127304653
+Cluster 9 eligible candidates,1139,CD3G,CD3_complex,49,0.04302019315188762
+Cluster 9 eligible candidates,1139,CD247,CD3_complex,560,0.4916593503072871
+Cluster 9 eligible candidates,1139,TRAC,TCR_constant,83,0.07287093942054433
+Cluster 9 eligible candidates,1139,TRBC1,TCR_constant,356,0.3125548726953468
+Cluster 9 eligible candidates,1139,TRBC2,TCR_constant,429,0.37664618086040386
+Cluster 9 eligible candidates,1139,TRDC,TCR_constant,303,0.2660228270412643
+Cluster 9 eligible candidates,1139,TRGC1,TCR_constant,97,0.08516242317822652
+Cluster 9 eligible candidates,1139,TRGC2,TCR_constant,75,0.06584723441615452
+Cluster 9 eligible candidates,1139,TRDV1,TCR_delta_VJ,11,0.009657594381035996
+Cluster 9 eligible candidates,1139,TRDV2,TCR_delta_VJ,5,0.004389815627743635
+Cluster 9 eligible candidates,1139,TRDV3,TCR_delta_VJ,5,0.004389815627743635
+Cluster 9 eligible candidates,1139,TRAV14DV4,TCR_delta_VJ,3,0.0026338893766461808
+Cluster 9 eligible candidates,1139,TRAV23DV6,TCR_delta_VJ,0,0.0
+Cluster 9 eligible candidates,1139,TRAV29DV5,TCR_delta_VJ,6,0.0052677787532923615
+Cluster 9 eligible candidates,1139,TRAV36DV7,TCR_delta_VJ,0,0.0
+Cluster 9 eligible candidates,1139,TRAV38-2DV8,TCR_delta_VJ,1,0.000877963125548727
+Cluster 9 eligible candidates,1139,TRDJ1,TCR_delta_VJ,4,0.003511852502194908
+Cluster 9 eligible candidates,1139,TRGV1,TCR_gamma_V,1,0.000877963125548727
+Cluster 9 eligible candidates,1139,TRGV2,TCR_gamma_V,11,0.009657594381035996
+Cluster 9 eligible candidates,1139,TRGV3,TCR_gamma_V,27,0.02370500438981563
+Cluster 9 eligible candidates,1139,TRGV4,TCR_gamma_V,7,0.006145741878841089
+Cluster 9 eligible candidates,1139,TRGV5,TCR_gamma_V,30,0.02633889376646181
+Cluster 9 eligible candidates,1139,TRGV7,TCR_gamma_V,44,0.038630377524143986
+Cluster 9 eligible candidates,1139,TRGV8,TCR_gamma_V,18,0.015803336259877086
+Cluster 9 eligible candidates,1139,TRGV9,TCR_gamma_V,170,0.14925373134328357
+Cluster 9 eligible candidates,1139,TRGV10,TCR_gamma_V,48,0.04214223002633889
+Cluster 9 eligible candidates,1139,TRGV11,TCR_gamma_V,0,0.0

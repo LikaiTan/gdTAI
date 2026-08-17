@@ -1,20 +1,24 @@
 # CHANGELOG.md
 
-## 2026-08-17 - Reviewed V4.2 NK identity with markers and clusters
+## 2026-08-17 - Extended V4.2 NK review with exact CD3/TCR expression
 
 - Built T-lineage, NK-lineage, myeloid-context, and shared-cytotoxic feature
   UMAPs from the fixed 250,000-cell diagnostic sample and ranked the frozen
   24-cluster Leiden partition using all 4,023,462 cells.
+- Added raw-UMI feature UMAPs for 29 CD3/TCR genes and exact all-cell detection
+  tables by population, cluster, and source after confirming full gene coverage
+  across all six registered source H5ADs.
 - Found that cluster 19 contains 20,237/21,054 (`96.12%`) primary NK anchors and
   461 cells passing both current latent and expression evidence.
-- Recommended those 461 cells as the strict low-weight NK reference and held
-  all 8 current confident calls outside cluster 19 from the strict set.
+- Initially identified 461 dual-evidence cluster-19 cells, then held the entire
+  set as provisional after 350 expressed a TRA/TRB constant-chain gene, 250 had
+  at least two aggregate constant-chain UMIs, and 178 had at least three.
 - Kept 594 latent-only, 759 expression-only, and 257 secondary-cluster cells as
   review tiers rather than automatically expanding NK labels.
 - Added myeloid-context plots after showing that `FCER1G/TYROBP` alone would
   mis-rank cluster 1; its myeloid program exceeds its NK program and it contains
   no primary NK anchor.
-- Published and visually checked the 12-page HTML/PDF report. No H5AD, label
+- Published and visually checked the 17-page HTML/PDF report. No H5AD, label
   manifest, classifier, or GitHub release was changed.
 
 ## 2026-08-17 - Repaired and validated the V4.2 NK reference definition

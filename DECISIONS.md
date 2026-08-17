@@ -2,9 +2,12 @@
 
 ## Current approved decisions
 
-- use the 461 current dual-evidence cells in frozen Leiden cluster 19 as the
-  strict, low-weight V4.2 NK training reference; hold all 8 current confident
-  calls outside cluster 19 from that strict set
+- hold all 461 current dual-evidence cells in frozen Leiden cluster 19 as a
+  provisional review core rather than V4.2 NK training truth; 75.92% have a
+  detected TRA/TRB constant chain and 54.23% retain at least two aggregate UMIs
+- require source/library-resolved TCR UMI, ambient-RNA, doublet, and paired-TCR
+  review before accepting any subset of the provisional core; continue to hold
+  all 8 current confident calls outside cluster 19
 - cluster-19 latent-only and expression-only cells and cluster-9 NK-like cells
   are review-only rescue tiers, not NK ground truth; cluster-19 candidates also
   remain too source-imbalanced for wholesale expansion
@@ -25,9 +28,8 @@
   definition after repeated runs changed the accepted count; exact A100
   brute-force neighbors with an internal bit-identical repeat are required
 - all 469 repaired V4.2 pseudo-NK rows remain preserved in the audit manifest,
-  but only the 461 cluster-19 core rows are eligible for strict future training
-  at low effective weight; per-source effective contribution remains capped at
-  70%
+  but none is currently eligible as strict future training truth; any reviewed
+  subset must retain a 70% maximum effective per-source contribution
 - the 2026-08-17 NK-definition repair is a reference-label milestone, not a
   trained classifier, promotion decision, release artifact, or atlas inference
 - gdTAI V4.2 recovered development-data sparse staging and A100 scVI were

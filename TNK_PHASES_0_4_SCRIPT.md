@@ -895,9 +895,9 @@ Current result:
   and 0.0958% held-out productive-T FPR
 - 469 of 113,287 eligible development candidates passed both latent and strict
   lineage-expression evidence across four sources
-- the 469-row repair manifest is retained unchanged for audit; the subsequent
-  cluster review determines which rows may enter strict low-weight training
-  under the same 70% maximum-source cap
+- the 469-row repair manifest is retained unchanged for audit; subsequent
+  cluster and raw-TCR reviews determine whether any rows may enter low-weight
+  training under the same 70% maximum-source cap
 
 Gate semantics:
 
@@ -914,6 +914,8 @@ Objective:
 
 - visualize T-lineage, NK-lineage, myeloid-context, and shared-cytotoxic marker
   programs on the saved scVI UMAP
+- overlay additional raw-count CD3, TCR constant, delta V/J, and gamma V genes
+  from the registered source H5ADs and calculate exact all-cell counts
 - compare recoverable annotation evidence with a frozen unsupervised Leiden
   partition before refining the NK training reference
 
@@ -943,10 +945,13 @@ Key outputs:
 
 Current result:
 
-- `PASS_VISUAL_REVIEW_READY`; cluster 19 contains 96.12% of all primary NK
+- `PASS_VISUAL_REVIEW_EXTENDED`; cluster 19 contains 96.12% of all primary NK
   anchors and all but 8 current `NK_CONFIDENT` calls
-- retain the 461 dual-evidence cells in cluster 19 as the strict low-weight NK
-  reference; hold every current call outside that cluster from the strict set
+- hold the 461 dual-evidence cluster-19 cells as a provisional review core, not
+  training truth: 350 have at least one TRA/TRB constant-chain UMI, 250 have at
+  least two, and 178 have at least three
+- hold every current call outside cluster 19 and every rescue tier from the
+  strict set
 - retain cluster-19 single-evidence cells and cluster-9 NK-like cells as
   review-only rescue tiers because source balance or anchor support is
   insufficient for automatic label expansion
@@ -956,6 +961,9 @@ Current result:
 Standard behavior:
 
 - use `log1p(CP10K)` within the fixed 4,000 scVI integration features
+- use `log1p(raw UMI)` for the additional 29 CD3/TCR genes because TCR genes
+  were deliberately excluded from the scVI HVGs; verify all 29 genes in all six
+  source H5ADs before counting
 - calculate exact cluster cell and anchor counts on all 4,023,462 development
   cells; use source/evidence-role sampling weights for expression summaries on
   the deterministic 250,000-cell diagnostic sample
@@ -969,6 +977,8 @@ Standard behavior:
 Gate semantics:
 
 - this task changes no H5AD, label manifest, model, threshold, or locked cohort
+- the provisional 461-cell core requires source/library ambient-RNA, doublet,
+  and paired-TCR review before classifier preflight
 - classifier fitting, model promotion, release fitting, and atlas inference do
   not occur in this review
 - V4 remains excluded from GitHub publication

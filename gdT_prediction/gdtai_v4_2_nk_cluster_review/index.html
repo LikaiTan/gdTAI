@@ -7,7 +7,7 @@
 </style></head><body>
 <h1>gdTAI V4.2 NK and T lineage cluster review</h1>
 <p>This read-only review uses the completed development-only scVI representation. UMAP coordinates and marker plots use the deterministic 250,000-cell diagnostic sample; cluster cell and anchor counts use all 4,023,462 cells. No locked cohort was included.</p>
-<div class="status"><b>Result: PASS_VISUAL_REVIEW_READY.</b> The feature plots, recoverable annotation evidence, and independent Leiden clusters are ready for biological review before changing the NK label definition.</div>
+<div class="status"><b>Result: PASS_VISUAL_REVIEW_EXTENDED.</b> The feature plots, recoverable annotation evidence, independent Leiden clusters, and exact raw CD3/TCR detection counts are ready for biological review before changing the NK label definition.</div>
 <div class="cards"><div class="card"><b>24</b><span>unsupervised clusters</span></div><div class="card"><b>21,054</b><span>primary NK anchors</span></div><div class="card"><b>967,149</b><span>restored productive-T anchors</span></div><div class="card"><b>469</b><span>current NK_CONFIDENT cells</span></div></div>
 
 <h2>1. Annotation evidence on the scVI UMAP</h2><p>The missing historical integrated H5AD prevents recovery of its complete full-cell scANVI annotation column. The plot therefore shows only traceable evidence: prior scANVI-NK cells retained in the frozen V4 manifest, dual scANVI-plus-author NK anchors, restored productive-TRA/TRB T anchors, and the 469 current two-evidence NK candidates.</p><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/umap_annotation_evidence.png" alt="Annotation evidence UMAP"><figcaption>These are provenance classes, not a new annotation model.</figcaption></figure>
@@ -15,13 +15,556 @@
 <h2>2. Unsupervised structure</h2><div class="grid"><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/umap_unsupervised_clusters.png" alt="Unsupervised cluster UMAP"><figcaption>Frozen global Leiden partition <code>global_r0.8_s29</code>.</figcaption></figure><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/cluster_lineage_score_scatter.png" alt="Cluster lineage score"><figcaption>Scores combine multiple genes; color shows myeloid contamination context and point size shows primary-NK fraction.</figcaption></figure></div>
 
 <h2>3. T-cell lineage feature plots</h2><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/feature_umap_t_lineage.png" alt="T lineage markers"><figcaption>Expression is log1p CP10K within the fixed 4,000 scVI integration features.</figcaption></figure>
-<h2>4. NK lineage feature plots</h2><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/feature_umap_nk_lineage.png" alt="NK lineage markers"><figcaption>NK evidence requires a multigene program; no single receptor is treated as definitive.</figcaption></figure>
-<h2>5. Non-T/NK contamination context</h2><p><code>FCER1G</code> and <code>TYROBP</code> are not sufficient for NK identity because myeloid cells also express them. The following panel is used only to recognize obvious non-T/NK clusters; these genes are not proposed as gdTAI classifier features.</p><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/feature_umap_myeloid_context.png" alt="Myeloid context markers"><figcaption>Clusters with broad LST1/AIF1/CTSS/LILRB/S100 support should not be called NK solely from adaptor expression.</figcaption></figure>
-<h2>6. Shared cytotoxic program</h2><div class="warning"><b>Do not use cytotoxicity as NK truth.</b> NKG7, GNLY, PRF1, GZMB, XCL1, and XCL2 can also be high in CD8 and gamma-delta T cells.</div><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/feature_umap_shared_cytotoxic.png" alt="Cytotoxic markers"><figcaption>These markers are shown as phenotype context only.</figcaption></figure>
+<h2>4. Additional CD3 and TCR genes</h2><div class="warning"><b>Expression source matters.</b> The frozen 4,000-gene scVI matrix contains only CD3E and CD247 from this panel because TCR genes were deliberately excluded from HVG selection. The plots below therefore overlay <code>log1p(raw UMI)</code> from the six registered source H5ADs on the unchanged scVI UMAP. Exact counts use all 4,023,462 cells, not only the visualization sample, and all 6 source H5ADs contain all 29 displayed genes.</div><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/feature_umap_cd3_tcr_constant.png" alt="CD3 and TCR constant genes"><figcaption>CD3 complex and TCR constant-chain raw expression on the scVI UMAP.</figcaption></figure><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/feature_umap_tcr_delta_vj.png" alt="TCR delta V and J genes"><figcaption>Delta V/J genes, including the delta-associated V genes embedded in the TRA locus.</figcaption></figure><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/feature_umap_tcr_gamma_v.png" alt="TCR gamma V genes"><figcaption>Gamma V expression is shown for context and is not treated as uniquely gamma-delta specific.</figcaption></figure>
+<p>Across the full sidecar, <b>3,435,095</b> cells express at least one of CD3D/E/G, <b>290,288</b> express TRDC, and <b>652,723</b> express at least one selected delta-V gene. There are <b>222,616</b> TRDC-positive cells without detected delta-V expression, consistent with either dropout or non-specific/ambient constant-chain signal depending on the surrounding lineage evidence.</p><div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Population</th>
+      <th>Cells</th>
+      <th>CD3D/E/G+ n</th>
+      <th>CD3D/E/G+ %</th>
+      <th>TRA/B constant+ n</th>
+      <th>TRA/B constant+ %</th>
+      <th>TRDC+ n</th>
+      <th>TRDC+ %</th>
+      <th>Delta-V+ n</th>
+      <th>Delta-V+ %</th>
+      <th>TRDC+ Delta-V- n</th>
+      <th>TRDC+ Delta-V- %</th>
+      <th>Gamma-V+ n</th>
+      <th>Gamma-V+ %</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>All development sidecar</td>
+      <td>4,023,462</td>
+      <td>3,435,095</td>
+      <td>85.38%</td>
+      <td>3,058,977</td>
+      <td>76.03%</td>
+      <td>290,288</td>
+      <td>7.21%</td>
+      <td>652,723</td>
+      <td>16.22%</td>
+      <td>222,616</td>
+      <td>5.53%</td>
+      <td>1,086,515</td>
+      <td>27.00%</td>
+    </tr>
+    <tr>
+      <td>Primary NK anchors</td>
+      <td>21,054</td>
+      <td>8,242</td>
+      <td>39.15%</td>
+      <td>17,105</td>
+      <td>81.24%</td>
+      <td>8,487</td>
+      <td>40.31%</td>
+      <td>396</td>
+      <td>1.88%</td>
+      <td>8,277</td>
+      <td>39.31%</td>
+      <td>4,642</td>
+      <td>22.05%</td>
+    </tr>
+    <tr>
+      <td>Productive TRA/TRB T anchors</td>
+      <td>967,149</td>
+      <td>957,169</td>
+      <td>98.97%</td>
+      <td>819,957</td>
+      <td>84.78%</td>
+      <td>16,946</td>
+      <td>1.75%</td>
+      <td>186,121</td>
+      <td>19.24%</td>
+      <td>11,093</td>
+      <td>1.15%</td>
+      <td>244,243</td>
+      <td>25.25%</td>
+    </tr>
+    <tr>
+      <td>All eligible candidates</td>
+      <td>113,287</td>
+      <td>78,528</td>
+      <td>69.32%</td>
+      <td>58,112</td>
+      <td>51.30%</td>
+      <td>6,161</td>
+      <td>5.44%</td>
+      <td>11,668</td>
+      <td>10.30%</td>
+      <td>3,789</td>
+      <td>3.34%</td>
+      <td>23,040</td>
+      <td>20.34%</td>
+    </tr>
+    <tr>
+      <td>Cluster 19 all cells</td>
+      <td>490,300</td>
+      <td>295,409</td>
+      <td>60.25%</td>
+      <td>418,329</td>
+      <td>85.32%</td>
+      <td>181,765</td>
+      <td>37.07%</td>
+      <td>51,030</td>
+      <td>10.41%</td>
+      <td>161,663</td>
+      <td>32.97%</td>
+      <td>197,372</td>
+      <td>40.26%</td>
+    </tr>
+    <tr>
+      <td>Cluster 19 eligible candidates</td>
+      <td>9,162</td>
+      <td>4,353</td>
+      <td>47.51%</td>
+      <td>6,678</td>
+      <td>72.89%</td>
+      <td>1,952</td>
+      <td>21.31%</td>
+      <td>451</td>
+      <td>4.92%</td>
+      <td>1,784</td>
+      <td>19.47%</td>
+      <td>3,473</td>
+      <td>37.91%</td>
+    </tr>
+    <tr>
+      <td>Strict NK core (cluster 19 both evidence)</td>
+      <td>461</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>350</td>
+      <td>75.92%</td>
+      <td>152</td>
+      <td>32.97%</td>
+      <td>2</td>
+      <td>0.43%</td>
+      <td>152</td>
+      <td>32.97%</td>
+      <td>195</td>
+      <td>42.30%</td>
+    </tr>
+    <tr>
+      <td>Current confident outside cluster 19</td>
+      <td>8</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>3</td>
+      <td>37.50%</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>3</td>
+      <td>37.50%</td>
+    </tr>
+    <tr>
+      <td>Cluster 9 all cells</td>
+      <td>41,060</td>
+      <td>16,894</td>
+      <td>41.14%</td>
+      <td>29,634</td>
+      <td>72.17%</td>
+      <td>17,834</td>
+      <td>43.43%</td>
+      <td>1,312</td>
+      <td>3.20%</td>
+      <td>17,200</td>
+      <td>41.89%</td>
+      <td>12,532</td>
+      <td>30.52%</td>
+    </tr>
+    <tr>
+      <td>Cluster 9 eligible candidates</td>
+      <td>1,139</td>
+      <td>485</td>
+      <td>42.58%</td>
+      <td>630</td>
+      <td>55.31%</td>
+      <td>303</td>
+      <td>26.60%</td>
+      <td>29</td>
+      <td>2.55%</td>
+      <td>292</td>
+      <td>25.64%</td>
+      <td>306</td>
+      <td>26.87%</td>
+    </tr>
+  </tbody>
+</table></div><div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Gene</th>
+      <th>Panel</th>
+      <th>Detected cells</th>
+      <th>Detected %</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CD3D</td>
+      <td>CD3_complex</td>
+      <td>2,662,995</td>
+      <td>66.19%</td>
+    </tr>
+    <tr>
+      <td>CD3E</td>
+      <td>CD3_complex</td>
+      <td>3,170,723</td>
+      <td>78.81%</td>
+    </tr>
+    <tr>
+      <td>CD3G</td>
+      <td>CD3_complex</td>
+      <td>2,112,641</td>
+      <td>52.51%</td>
+    </tr>
+    <tr>
+      <td>CD247</td>
+      <td>CD3_complex</td>
+      <td>2,271,048</td>
+      <td>56.45%</td>
+    </tr>
+    <tr>
+      <td>TRAC</td>
+      <td>TCR_constant</td>
+      <td>1,193,424</td>
+      <td>29.66%</td>
+    </tr>
+    <tr>
+      <td>TRBC1</td>
+      <td>TCR_constant</td>
+      <td>1,524,836</td>
+      <td>37.90%</td>
+    </tr>
+    <tr>
+      <td>TRBC2</td>
+      <td>TCR_constant</td>
+      <td>2,320,383</td>
+      <td>57.67%</td>
+    </tr>
+    <tr>
+      <td>TRDC</td>
+      <td>TCR_constant</td>
+      <td>290,288</td>
+      <td>7.21%</td>
+    </tr>
+    <tr>
+      <td>TRGC1</td>
+      <td>TCR_constant</td>
+      <td>187,532</td>
+      <td>4.66%</td>
+    </tr>
+    <tr>
+      <td>TRGC2</td>
+      <td>TCR_constant</td>
+      <td>271,270</td>
+      <td>6.74%</td>
+    </tr>
+    <tr>
+      <td>TRDV1</td>
+      <td>TCR_delta_VJ</td>
+      <td>90,907</td>
+      <td>2.26%</td>
+    </tr>
+    <tr>
+      <td>TRDV2</td>
+      <td>TCR_delta_VJ</td>
+      <td>59,417</td>
+      <td>1.48%</td>
+    </tr>
+    <tr>
+      <td>TRDV3</td>
+      <td>TCR_delta_VJ</td>
+      <td>24,261</td>
+      <td>0.60%</td>
+    </tr>
+    <tr>
+      <td>TRAV14DV4</td>
+      <td>TCR_delta_VJ</td>
+      <td>130,749</td>
+      <td>3.25%</td>
+    </tr>
+    <tr>
+      <td>TRAV23DV6</td>
+      <td>TCR_delta_VJ</td>
+      <td>73,328</td>
+      <td>1.82%</td>
+    </tr>
+    <tr>
+      <td>TRAV29DV5</td>
+      <td>TCR_delta_VJ</td>
+      <td>163,183</td>
+      <td>4.06%</td>
+    </tr>
+    <tr>
+      <td>TRAV36DV7</td>
+      <td>TCR_delta_VJ</td>
+      <td>56,332</td>
+      <td>1.40%</td>
+    </tr>
+    <tr>
+      <td>TRAV38-2DV8</td>
+      <td>TCR_delta_VJ</td>
+      <td>101,094</td>
+      <td>2.51%</td>
+    </tr>
+    <tr>
+      <td>TRDJ1</td>
+      <td>TCR_delta_VJ</td>
+      <td>5,234</td>
+      <td>0.13%</td>
+    </tr>
+    <tr>
+      <td>TRGV1</td>
+      <td>TCR_gamma_V</td>
+      <td>2,862</td>
+      <td>0.07%</td>
+    </tr>
+    <tr>
+      <td>TRGV2</td>
+      <td>TCR_gamma_V</td>
+      <td>194,343</td>
+      <td>4.83%</td>
+    </tr>
+    <tr>
+      <td>TRGV3</td>
+      <td>TCR_gamma_V</td>
+      <td>205,955</td>
+      <td>5.12%</td>
+    </tr>
+    <tr>
+      <td>TRGV4</td>
+      <td>TCR_gamma_V</td>
+      <td>127,277</td>
+      <td>3.16%</td>
+    </tr>
+    <tr>
+      <td>TRGV5</td>
+      <td>TCR_gamma_V</td>
+      <td>130,784</td>
+      <td>3.25%</td>
+    </tr>
+    <tr>
+      <td>TRGV7</td>
+      <td>TCR_gamma_V</td>
+      <td>137,135</td>
+      <td>3.41%</td>
+    </tr>
+    <tr>
+      <td>TRGV8</td>
+      <td>TCR_gamma_V</td>
+      <td>102,396</td>
+      <td>2.54%</td>
+    </tr>
+    <tr>
+      <td>TRGV9</td>
+      <td>TCR_gamma_V</td>
+      <td>227,775</td>
+      <td>5.66%</td>
+    </tr>
+    <tr>
+      <td>TRGV10</td>
+      <td>TCR_gamma_V</td>
+      <td>292,149</td>
+      <td>7.26%</td>
+    </tr>
+    <tr>
+      <td>TRGV11</td>
+      <td>TCR_gamma_V</td>
+      <td>4,074</td>
+      <td>0.10%</td>
+    </tr>
+  </tbody>
+</table></div>
+<div class="warning"><b>The 461-cell core is not yet clean enough to freeze as NK truth.</b> Zero CD3D/E/G expression is circular because absence of those genes was part of the strict expression rule. In contrast, 350 cells (75.9%) have at least one TRA/TRB constant-chain UMI, 250 (54.2%) have at least two, and 178 (38.6%) have at least three. This is too frequent to dismiss as universal single-UMI ambient signal without a source- and library-resolved ambient/doublet audit.</div><div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Gene group</th>
+      <th>Minimum total UMI</th>
+      <th>Cells</th>
+      <th>Fraction of 461</th>
+      <th>Median UMI among positive</th>
+      <th>P90 UMI among positive</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CD3D_E_G</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>CD3D_E_G</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>CD3D_E_G</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>CD3D_E_G</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>alpha_beta_constant</td>
+      <td>1</td>
+      <td>350</td>
+      <td>75.92%</td>
+      <td>3.0</td>
+      <td>7.0</td>
+    </tr>
+    <tr>
+      <td>alpha_beta_constant</td>
+      <td>2</td>
+      <td>250</td>
+      <td>54.23%</td>
+      <td>3.0</td>
+      <td>7.0</td>
+    </tr>
+    <tr>
+      <td>alpha_beta_constant</td>
+      <td>3</td>
+      <td>178</td>
+      <td>38.61%</td>
+      <td>3.0</td>
+      <td>7.0</td>
+    </tr>
+    <tr>
+      <td>alpha_beta_constant</td>
+      <td>5</td>
+      <td>80</td>
+      <td>17.35%</td>
+      <td>3.0</td>
+      <td>7.0</td>
+    </tr>
+    <tr>
+      <td>gamma_delta_constant</td>
+      <td>1</td>
+      <td>186</td>
+      <td>40.35%</td>
+      <td>2.0</td>
+      <td>4.0</td>
+    </tr>
+    <tr>
+      <td>gamma_delta_constant</td>
+      <td>2</td>
+      <td>95</td>
+      <td>20.61%</td>
+      <td>2.0</td>
+      <td>4.0</td>
+    </tr>
+    <tr>
+      <td>gamma_delta_constant</td>
+      <td>3</td>
+      <td>43</td>
+      <td>9.33%</td>
+      <td>2.0</td>
+      <td>4.0</td>
+    </tr>
+    <tr>
+      <td>gamma_delta_constant</td>
+      <td>5</td>
+      <td>15</td>
+      <td>3.25%</td>
+      <td>2.0</td>
+      <td>4.0</td>
+    </tr>
+    <tr>
+      <td>delta_V</td>
+      <td>1</td>
+      <td>2</td>
+      <td>0.43%</td>
+      <td>1.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>delta_V</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>1.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>delta_V</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>1.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>delta_V</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>1.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>gamma_V</td>
+      <td>1</td>
+      <td>195</td>
+      <td>42.30%</td>
+      <td>1.0</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>gamma_V</td>
+      <td>2</td>
+      <td>56</td>
+      <td>12.15%</td>
+      <td>1.0</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>gamma_V</td>
+      <td>3</td>
+      <td>14</td>
+      <td>3.04%</td>
+      <td>1.0</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>gamma_V</td>
+      <td>5</td>
+      <td>1</td>
+      <td>0.22%</td>
+      <td>1.0</td>
+      <td>2.0</td>
+    </tr>
+  </tbody>
+</table></div>
 
-<h2>7. Multigene programs and cluster heatmap</h2><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/umap_lineage_programs.png" alt="Lineage programs"><figcaption>Each program is the mean of gene-wise robust-scaled expression. NK-specific margin subtracts the stronger of T-lineage or myeloid-context evidence.</figcaption></figure><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/cluster_marker_detection_heatmap.png" alt="Cluster marker heatmap"><figcaption>Sampling-weighted marker detection estimates compensate for the diagnostic sample's source and evidence-role oversampling.</figcaption></figure>
+<h2>5. NK lineage feature plots</h2><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/feature_umap_nk_lineage.png" alt="NK lineage markers"><figcaption>NK evidence requires a multigene program; no single receptor is treated as definitive.</figcaption></figure>
+<h2>6. Non-T/NK contamination context</h2><p><code>FCER1G</code> and <code>TYROBP</code> are not sufficient for NK identity because myeloid cells also express them. The following panel is used only to recognize obvious non-T/NK clusters; these genes are not proposed as gdTAI classifier features.</p><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/feature_umap_myeloid_context.png" alt="Myeloid context markers"><figcaption>Clusters with broad LST1/AIF1/CTSS/LILRB/S100 support should not be called NK solely from adaptor expression.</figcaption></figure>
+<h2>7. Shared cytotoxic program</h2><div class="warning"><b>Do not use cytotoxicity as NK truth.</b> NKG7, GNLY, PRF1, GZMB, XCL1, and XCL2 can also be high in CD8 and gamma-delta T cells.</div><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/feature_umap_shared_cytotoxic.png" alt="Cytotoxic markers"><figcaption>These markers are shown as phenotype context only.</figcaption></figure>
 
-<h2>8. Clusters ranked for review</h2><p>The table ranks clusters by the continuous NK-specific margin: NK lineage minus the stronger of T-lineage or myeloid-context evidence. It does not impose a new hard NK cutoff. Exact anchor, candidate, and source-composition counts are included so expression, annotation provenance, and source bias can be considered together.</p><div class="table-wrap"><table class="dataframe data-table">
+<h2>8. Multigene programs and cluster heatmap</h2><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/umap_lineage_programs.png" alt="Lineage programs"><figcaption>Each program is the mean of gene-wise robust-scaled expression. NK-specific margin subtracts the stronger of T-lineage or myeloid-context evidence.</figcaption></figure><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/cluster_marker_detection_heatmap.png" alt="Cluster marker heatmap"><figcaption>Sampling-weighted marker detection estimates compensate for the diagnostic sample's source and evidence-role oversampling.</figcaption></figure>
+
+<h2>9. Clusters ranked for review</h2><p>The table ranks clusters by the continuous NK-specific margin: NK lineage minus the stronger of T-lineage or myeloid-context evidence. It does not impose a new hard NK cutoff. Exact anchor, candidate, and source-composition counts are included so expression, annotation provenance, and source bias can be considered together.</p><div class="table-wrap"><table class="dataframe data-table">
   <thead>
     <tr style="text-align: right;">
       <th>cluster</th>
@@ -215,7 +758,7 @@
   </tbody>
 </table></div>
 
-<h2>9. Recommended decision</h2><div class="status"><b>Strict core recommendation: retain 461 cells.</b> These cells pass both independent cell-level evidences and fall in cluster 19, which contains 96.1% of all primary NK anchors. Hold the remaining 8 current calls outside cluster 19 rather than using them as strict training NK labels.</div><p>No automatic expansion is recommended yet. Cluster 19 contains plausible dropout-rescue tiers, but its eligible candidates are 86.7% from one source, above the 70% source cap. Cluster 9 is a biologically plausible secondary NK-like cluster with better source balance, but it has only 48 primary NK anchors and weak latent-anchor passage. Both require source-resolved review before use.</p><div class="table-wrap"><table class="dataframe data-table">
+<h2>10. Recommended decision</h2><div class="status"><b>Provisional core: hold all 461 cells for review rather than freezing them as training NK truth.</b> Cluster 19 remains the strongest NK-like region and contains 96.1% of all primary NK anchors, but the new TCR constant-chain audit exposes possible T-cell dropout, ambient RNA, or doublet contamination. Continue to exclude the remaining 8 current calls outside cluster 19.</div><p>No automatic expansion is recommended. The next defensible step is a source- and library-resolved audit of TCR UMI depth, ambient burden, doublet scores, and paired TCR evidence within cluster 19. Cluster-19 single-evidence tiers and cluster 9 remain review-only.</p><div class="table-wrap"><table class="dataframe data-table">
   <thead>
     <tr style="text-align: right;">
       <th>review_tier</th>
@@ -233,7 +776,7 @@
       <td>4</td>
       <td>GSE292700</td>
       <td>96.7%</td>
-      <td>strict low-weight NK training reference</td>
+      <td>provisional core; source/ambient review</td>
     </tr>
     <tr>
       <td>B_cluster19_latent_only_dropout_review</td>
@@ -279,5 +822,5 @@
 </table></div>
 
 <h2>Decision boundary</h2><p><b>No H5AD or frozen label manifest is changed by this report.</b> A defensible expansion should require coherent NK-lineage expression, low T-lineage and myeloid support, localization to reproducible unsupervised clusters, and acceptable source composition. Cytotoxicity alone, one receptor, or the historical scANVI label alone is insufficient.</p>
-<h2>Reproducibility</h2><ul><li>Latent SHA-256: <code>7030b28be885b85a4b24ce2223bb16f7c7288a29195f2512bf7bbba330791ccf</code></li><li>Partition SHA-256: <code>90e83ec83986358a015885e02e29d06eacf726d928e02b2e90428d5c09947a63</code></li><li>Cluster run: <code>global_r0.8_s29</code></li><li>Marker-expression cache SHA-256: <code>82ad58d59e336be57a25cabaa48f56e414f674acdb2657103003ff64c2714225</code></li><li>Script SHA-256: <code>d97058c2464cdc8e45b51d2fa46d9429f50aae25a2e59d41d8218e9cff7a8db6</code></li><li>H5AD mutation: <b>none</b>; classifier fitting: <b>none</b>; GitHub push: <b>none</b>.</li></ul>
+<h2>Reproducibility</h2><ul><li>Latent SHA-256: <code>7030b28be885b85a4b24ce2223bb16f7c7288a29195f2512bf7bbba330791ccf</code></li><li>Partition SHA-256: <code>90e83ec83986358a015885e02e29d06eacf726d928e02b2e90428d5c09947a63</code></li><li>Cluster run: <code>global_r0.8_s29</code></li><li>Marker-expression cache SHA-256: <code>82ad58d59e336be57a25cabaa48f56e414f674acdb2657103003ff64c2714225</code></li><li>Raw CD3/TCR cache SHA-256: <code>80fadd095a1ed13600ef8fba164b779522a98440de8d28c11b90a7828d43cee5</code></li><li>Script SHA-256: <code>4e9cbab26923f63d22f3147ce153bb1582acd046fc785581a82239d15bbaa944</code></li><li>H5AD mutation: <b>none</b>; classifier fitting: <b>none</b>; GitHub push: <b>none</b>.</li></ul>
 </body></html>

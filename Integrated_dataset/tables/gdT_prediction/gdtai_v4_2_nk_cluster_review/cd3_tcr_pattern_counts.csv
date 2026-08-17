@@ -1,0 +1,121 @@
+population,n_population,pattern,n_cells,fraction
+All development sidecar,4023462,any_CD3D_E_G,3435095,0.8537659856113964
+All development sidecar,4023462,all_CD3D_E_G,1734769,0.43116326188739945
+All development sidecar,4023462,any_CD3_complex_including_CD247,3709376,0.9219363821504962
+All development sidecar,4023462,any_alpha_beta_TCR_constant,3058977,0.760284799508483
+All development sidecar,4023462,any_gamma_delta_TCR_constant,622070,0.15461063134186429
+All development sidecar,4023462,TRDC_detected,290288,0.07214881114821017
+All development sidecar,4023462,any_delta_V,652723,0.16222919465872923
+All development sidecar,4023462,any_gamma_V,1086515,0.2700448022126219
+All development sidecar,4023462,TRDC_and_delta_V,67672,0.016819346125302042
+All development sidecar,4023462,TRDC_without_delta_V,222616,0.055329465022908135
+All development sidecar,4023462,delta_V_without_TRDC,585051,0.14540984853342717
+All development sidecar,4023462,neither_TRDC_nor_delta_V,3148123,0.7824413403183627
+Primary NK anchors,21054,any_CD3D_E_G,8242,0.39146955447895887
+Primary NK anchors,21054,all_CD3D_E_G,362,0.017193882397644154
+Primary NK anchors,21054,any_CD3_complex_including_CD247,18163,0.8626864253823502
+Primary NK anchors,21054,any_alpha_beta_TCR_constant,17105,0.8124346917450366
+Primary NK anchors,21054,any_gamma_delta_TCR_constant,10627,0.5047496912700674
+Primary NK anchors,21054,TRDC_detected,8487,0.4031062980906241
+Primary NK anchors,21054,any_delta_V,396,0.018808777429467086
+Primary NK anchors,21054,any_gamma_V,4642,0.22048066875653083
+Primary NK anchors,21054,TRDC_and_delta_V,210,0.009974351667141636
+Primary NK anchors,21054,TRDC_without_delta_V,8277,0.3931319464234825
+Primary NK anchors,21054,delta_V_without_TRDC,186,0.00883442576232545
+Primary NK anchors,21054,neither_TRDC_nor_delta_V,12381,0.5880592761470504
+Productive TRA/TRB T anchors,967149,any_CD3D_E_G,957169,0.9896810108887049
+Productive TRA/TRB T anchors,967149,all_CD3D_E_G,602839,0.623315538763934
+Productive TRA/TRB T anchors,967149,any_CD3_complex_including_CD247,960512,0.9931375620509353
+Productive TRA/TRB T anchors,967149,any_alpha_beta_TCR_constant,819957,0.847808352177379
+Productive TRA/TRB T anchors,967149,any_gamma_delta_TCR_constant,86730,0.08967594445116522
+Productive TRA/TRB T anchors,967149,TRDC_detected,16946,0.017521602152305384
+Productive TRA/TRB T anchors,967149,any_delta_V,186121,0.19244294312458576
+Productive TRA/TRB T anchors,967149,any_gamma_V,244243,0.25253916407916466
+Productive TRA/TRB T anchors,967149,TRDC_and_delta_V,5853,0.006051807942726508
+Productive TRA/TRB T anchors,967149,TRDC_without_delta_V,11093,0.011469794209578875
+Productive TRA/TRB T anchors,967149,delta_V_without_TRDC,180268,0.18639113518185926
+Productive TRA/TRB T anchors,967149,neither_TRDC_nor_delta_V,769935,0.7960872626658354
+All eligible candidates,113287,any_CD3D_E_G,78528,0.6931775049211295
+All eligible candidates,113287,all_CD3D_E_G,16664,0.1470954301905779
+All eligible candidates,113287,any_CD3_complex_including_CD247,90268,0.7968081068436802
+All eligible candidates,113287,any_alpha_beta_TCR_constant,58112,0.5129626523784724
+All eligible candidates,113287,any_gamma_delta_TCR_constant,11474,0.10128258317370925
+All eligible candidates,113287,TRDC_detected,6161,0.05438399816395526
+All eligible candidates,113287,any_delta_V,11668,0.10299504797549587
+All eligible candidates,113287,any_gamma_V,23040,0.2033772630575441
+All eligible candidates,113287,TRDC_and_delta_V,2372,0.02093797170019508
+All eligible candidates,113287,TRDC_without_delta_V,3789,0.03344602646376019
+All eligible candidates,113287,delta_V_without_TRDC,9296,0.08205707627530079
+All eligible candidates,113287,neither_TRDC_nor_delta_V,97830,0.863558925560744
+Cluster 19 all cells,490300,any_CD3D_E_G,295409,0.6025066285947379
+Cluster 19 all cells,490300,all_CD3D_E_G,80511,0.16420762798286764
+Cluster 19 all cells,490300,any_CD3_complex_including_CD247,468841,0.9562329186212523
+Cluster 19 all cells,490300,any_alpha_beta_TCR_constant,418329,0.8532102794207628
+Cluster 19 all cells,490300,any_gamma_delta_TCR_constant,252376,0.5147379155619008
+Cluster 19 all cells,490300,TRDC_detected,181765,0.3707220069345299
+Cluster 19 all cells,490300,any_delta_V,51030,0.10407913522333265
+Cluster 19 all cells,490300,any_gamma_V,197372,0.40255353864980625
+Cluster 19 all cells,490300,TRDC_and_delta_V,20102,0.0409993881297165
+Cluster 19 all cells,490300,TRDC_without_delta_V,161663,0.3297226188048134
+Cluster 19 all cells,490300,delta_V_without_TRDC,30928,0.06307974709361615
+Cluster 19 all cells,490300,neither_TRDC_nor_delta_V,277607,0.566198245971854
+Cluster 19 eligible candidates,9162,any_CD3D_E_G,4353,0.47511460379829734
+Cluster 19 eligible candidates,9162,all_CD3D_E_G,526,0.05741104562322637
+Cluster 19 eligible candidates,9162,any_CD3_complex_including_CD247,8511,0.9289456450556647
+Cluster 19 eligible candidates,9162,any_alpha_beta_TCR_constant,6678,0.7288801571709234
+Cluster 19 eligible candidates,9162,any_gamma_delta_TCR_constant,2619,0.28585461689587427
+Cluster 19 eligible candidates,9162,TRDC_detected,1952,0.213053918358437
+Cluster 19 eligible candidates,9162,any_delta_V,451,0.04922506003056101
+Cluster 19 eligible candidates,9162,any_gamma_V,3473,0.3790657061776905
+Cluster 19 eligible candidates,9162,TRDC_and_delta_V,168,0.0183366077275704
+Cluster 19 eligible candidates,9162,TRDC_without_delta_V,1784,0.1947173106308666
+Cluster 19 eligible candidates,9162,delta_V_without_TRDC,283,0.030888452302990612
+Cluster 19 eligible candidates,9162,neither_TRDC_nor_delta_V,6927,0.7560576293385723
+Strict NK core (cluster 19 both evidence),461,any_CD3D_E_G,0,0.0
+Strict NK core (cluster 19 both evidence),461,all_CD3D_E_G,0,0.0
+Strict NK core (cluster 19 both evidence),461,any_CD3_complex_including_CD247,434,0.9414316702819957
+Strict NK core (cluster 19 both evidence),461,any_alpha_beta_TCR_constant,350,0.7592190889370932
+Strict NK core (cluster 19 both evidence),461,any_gamma_delta_TCR_constant,186,0.403470715835141
+Strict NK core (cluster 19 both evidence),461,TRDC_detected,152,0.3297180043383948
+Strict NK core (cluster 19 both evidence),461,any_delta_V,2,0.004338394793926247
+Strict NK core (cluster 19 both evidence),461,any_gamma_V,195,0.4229934924078091
+Strict NK core (cluster 19 both evidence),461,TRDC_and_delta_V,0,0.0
+Strict NK core (cluster 19 both evidence),461,TRDC_without_delta_V,152,0.3297180043383948
+Strict NK core (cluster 19 both evidence),461,delta_V_without_TRDC,2,0.004338394793926247
+Strict NK core (cluster 19 both evidence),461,neither_TRDC_nor_delta_V,307,0.665943600867679
+Current confident outside cluster 19,8,any_CD3D_E_G,0,0.0
+Current confident outside cluster 19,8,all_CD3D_E_G,0,0.0
+Current confident outside cluster 19,8,any_CD3_complex_including_CD247,7,0.875
+Current confident outside cluster 19,8,any_alpha_beta_TCR_constant,3,0.375
+Current confident outside cluster 19,8,any_gamma_delta_TCR_constant,1,0.125
+Current confident outside cluster 19,8,TRDC_detected,0,0.0
+Current confident outside cluster 19,8,any_delta_V,0,0.0
+Current confident outside cluster 19,8,any_gamma_V,3,0.375
+Current confident outside cluster 19,8,TRDC_and_delta_V,0,0.0
+Current confident outside cluster 19,8,TRDC_without_delta_V,0,0.0
+Current confident outside cluster 19,8,delta_V_without_TRDC,0,0.0
+Current confident outside cluster 19,8,neither_TRDC_nor_delta_V,8,1.0
+Cluster 9 all cells,41060,any_CD3D_E_G,16894,0.41144666341938624
+Cluster 9 all cells,41060,all_CD3D_E_G,1405,0.034218217243058936
+Cluster 9 all cells,41060,any_CD3_complex_including_CD247,29294,0.7134437408670239
+Cluster 9 all cells,41060,any_alpha_beta_TCR_constant,29634,0.721724305893814
+Cluster 9 all cells,41060,any_gamma_delta_TCR_constant,21482,0.5231855820750122
+Cluster 9 all cells,41060,TRDC_detected,17834,0.4343399902581588
+Cluster 9 all cells,41060,any_delta_V,1312,0.031953239162201656
+Cluster 9 all cells,41060,any_gamma_V,12532,0.3052118850462737
+Cluster 9 all cells,41060,TRDC_and_delta_V,634,0.01544081831466147
+Cluster 9 all cells,41060,TRDC_without_delta_V,17200,0.4188991719434973
+Cluster 9 all cells,41060,delta_V_without_TRDC,678,0.016512420847540184
+Cluster 9 all cells,41060,neither_TRDC_nor_delta_V,22548,0.549147588894301
+Cluster 9 eligible candidates,1139,any_CD3D_E_G,485,0.42581211589113255
+Cluster 9 eligible candidates,1139,all_CD3D_E_G,20,0.01755926251097454
+Cluster 9 eligible candidates,1139,any_CD3_complex_including_CD247,792,0.6953467954345918
+Cluster 9 eligible candidates,1139,any_alpha_beta_TCR_constant,630,0.553116769095698
+Cluster 9 eligible candidates,1139,any_gamma_delta_TCR_constant,409,0.35908691834942935
+Cluster 9 eligible candidates,1139,TRDC_detected,303,0.2660228270412643
+Cluster 9 eligible candidates,1139,any_delta_V,29,0.025460930640913083
+Cluster 9 eligible candidates,1139,any_gamma_V,306,0.26865671641791045
+Cluster 9 eligible candidates,1139,TRDC_and_delta_V,11,0.009657594381035996
+Cluster 9 eligible candidates,1139,TRDC_without_delta_V,292,0.25636523266022826
+Cluster 9 eligible candidates,1139,delta_V_without_TRDC,18,0.015803336259877086
+Cluster 9 eligible candidates,1139,neither_TRDC_nor_delta_V,818,0.7181738366988587

@@ -72,15 +72,15 @@
 
 ## Current review packages
 
-- gdTAI V4.2 NK/T-lineage feature and unsupervised-cluster review:
+- gdTAI V4.2 NK/T-lineage, raw TCR, and unsupervised-cluster review:
   - `gdT_prediction/gdtai_v4_2_nk_cluster_review/index.html`
   - `gdT_prediction/gdtai_v4_2_nk_cluster_review/gdtai_v4_2_nk_cluster_review_report.pdf`
   - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_cluster_review/`
   - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_nk_cluster_review/`
   - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/`
-  - decision: `PASS_VISUAL_REVIEW_READY`; use the 461 dual-evidence cluster-19
-    cells as the strict future NK reference, hold 8 current calls outside the
-    core, and do not automatically expand any review tier
+  - decision: `PASS_VISUAL_REVIEW_EXTENDED`; hold all 461 dual-evidence
+    cluster-19 cells as provisional pending source/library ambient, doublet, and
+    paired-TCR review; hold 8 calls outside the core and every rescue tier
 
 - gdTAI V4.2 conservative NK-definition repair:
   - `gdT_prediction/gdtai_v4_2_nk_definition_repair/index.html`
@@ -88,8 +88,8 @@
   - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_definition_repair/`
   - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_nk_definition_repair/`
   - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_definition_repair/`
-  - decision: `PASS_NK_REFERENCE_READY`; 469 conservative low-weight NK
-    reference rows are ready for a future nested training preflight, and no
+  - historical decision: `PASS_NK_REFERENCE_READY`; the later raw TCR review
+    holds all 469 rows from training pending source/library review, and no
     classifier was fitted
 
 - gdTAI V4.2 sidecar visualization and confounding diagnostics:

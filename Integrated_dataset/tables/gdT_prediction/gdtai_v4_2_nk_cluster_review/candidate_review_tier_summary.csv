@@ -1,5 +1,5 @@
 review_tier,n_cells,n_sources,dominant_source,maximum_source_fraction,recommended_use
-A_core_both_cluster19,461,4,GSE292700,0.9674620390455532,strict low-weight NK training reference
+A_core_both_cluster19,461,4,GSE292700,0.9674620390455532,provisional core; source/ambient review
 B_cluster19_latent_only_dropout_review,594,5,GSE292700,0.9107744107744108,dropout-rescue review only
 C_cluster19_expression_only_distance_review,759,3,GSE292700,0.9169960474308301,source/distance review only
 D_cluster9_secondary_nk_review,257,3,GSE294273,0.5758754863813229,secondary-cluster review only

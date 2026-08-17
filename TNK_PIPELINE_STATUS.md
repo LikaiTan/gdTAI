@@ -2,14 +2,18 @@
 
 ## Current milestone
 
-- gdTAI V4.2 NK/T-lineage feature and unsupervised-cluster review completed on
-  2026-08-17 with `PASS_VISUAL_REVIEW_READY`
+- gdTAI V4.2 NK/T-lineage feature, TCR-expression, and unsupervised-cluster
+  review completed on 2026-08-17 with `PASS_VISUAL_REVIEW_EXTENDED`
 - feature UMAPs cover six T-lineage, eight NK-lineage, seven myeloid-context,
-  and six shared-cytotoxic markers on the fixed 250,000-cell diagnostic sample;
-  exact cluster counts use all 4,023,462 development cells
+  six shared-cytotoxic, and 29 raw CD3/TCR genes on the fixed 250,000-cell
+  diagnostic sample; exact TCR and cluster counts use all 4,023,462 cells
 - frozen Leiden cluster 19 contains 20,237/21,054 (`96.12%`) primary NK anchors
-  and 461 cells passing both current latent and expression evidence; these 461
-  are the recommended strict, low-weight future-training NK reference
+  and 461 cells passing both current latent and expression evidence, but these
+  461 are now a provisional review core rather than training NK truth
+- 350/461 (`75.92%`) provisional-core cells have at least one TRA/TRB
+  constant-chain UMI, 250 (`54.23%`) have at least two, and 178 (`38.61%`) have
+  at least three; source/library ambient, doublet, and T-cell-dropout review is
+  required before any of them enter training
 - all 8 current `NK_CONFIDENT` calls outside cluster 19 should be held out of
   the strict NK reference; cluster-19 single-evidence cells and cluster-9
   NK-like cells remain review tiers rather than NK truth
@@ -18,17 +22,18 @@
 
 ## Next action
 
-- use the 461 dual-evidence cluster-19 cells as the strict low-weight NK
-  reference in the next reversible V4.2 classifier preflight; exclude all 8
-  current calls outside cluster 19 from that strict reference
+- do not use the 461 provisional cluster-19 cells as NK training truth yet;
+  first run a source- and library-resolved audit of TCR UMI depth, ambient RNA,
+  doublet scores, and paired TCR evidence
+- continue to exclude all 8 current calls outside cluster 19
 - keep 594 cluster-19 latent-only, 759 cluster-19 expression-only, and 257
   cluster-9 union-evidence cells as review-only rescue tiers; do not expand the
   NK training truth automatically
 - run label-leakage, source-balance, feature-coverage, and grouped-fold
   preflight before fitting; keep primary NK anchors and productive-T controls as
   the dominant training evidence
-- cap the effective per-source contribution of the 461-cell strict reference at
-  70%; do not relax the cap or redefine NK from cytotoxicity or adaptor genes
+- if a reviewed subset later passes, cap its effective per-source contribution
+  at 70%; do not relax the cap or redefine NK from cytotoxicity or adaptor genes
 - compare any resulting model against V2/V3 on unchanged locked cohorts before
   considering promotion
 - keep all locked cohorts unchanged for nested comparison with V2 and V3;
@@ -51,6 +56,17 @@
 
 ## Current blockers or review items
 
+- the strict-expression rule required zero detected `CD3D/CD3E/CD3G`, so the
+  observed zero CD3D/E/G in the 461-cell core is circular and cannot validate NK
+  identity independently
+- 350/461 provisional-core cells express a TRA/TRB constant-chain gene and 250
+  retain at least two aggregate constant-chain UMIs; this is too frequent to
+  dismiss as universal single-UMI ambient signal without source/library review
+- only 2/461 provisional-core cells express a selected delta-V gene, while 186
+  express a gamma/delta constant chain and 195 express a gamma-V gene
+- across all 4,023,462 development cells, 3,435,095 express CD3D/E/G, 290,288
+  express TRDC, 652,723 express a selected delta-V gene, and 222,616 are
+  `TRDC+` without selected delta-V expression
 - cluster 19 is the only strongly supported NK core: it contains 490,300 cells,
   20,237 primary NK anchors, 18,316 productive-T anchors, and a positive
   sampling-weighted NK-specific margin of `0.1417`
@@ -110,9 +126,8 @@
   paired alpha-beta T cells; a cytotoxic-only rule passed `98.21%` and `30.40%`,
   respectively, confirming that cytotoxicity cannot define NK identity
 - the repaired audit manifest contains 469 `NK_CONFIDENT` cells from four
-  sources and remains preserved unchanged; the later cluster review recommends
-  only its 461 cluster-19 rows for strict low-weight training, still with a 70%
-  maximum effective source contribution
+  sources and remains preserved unchanged; the later raw TCR review holds all
+  rows from training, including the 461-cell cluster-19 provisional core
 - no source H5AD was mutated, no classifier was fitted, and no V4 artifact was
   pushed to GitHub in the NK-definition repair
 - changing the stage-specific resource contract invalidated the earlier
@@ -417,8 +432,9 @@ Additional current state:
   - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_cluster_review/`
   - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_nk_cluster_review/`
   - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/`
-  - decision: `PASS_VISUAL_REVIEW_READY`; 461 cluster-19 rows form the strict
-    future NK reference and the remaining candidate tiers stay review-only
+  - decision: `PASS_VISUAL_REVIEW_EXTENDED`; all 461 cluster-19 rows are held
+    as a provisional core pending source/library TCR and doublet review, and all
+    remaining candidate tiers stay review-only
 
 - gdTAI V4.2 conservative NK-definition repair:
   - `gdT_prediction/gdtai_v4_2_nk_definition_repair/index.html`
@@ -427,8 +443,8 @@ Additional current state:
   - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_nk_definition_repair/`
   - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_definition_repair/`
   - decision: `PASS_NK_REFERENCE_READY`; the preserved 469-row audit manifest
-    was refined to a 461-cell strict subset by the later cluster review; no
-    classifier was fitted
+    was reduced to a provisional 461-cell review core and not accepted as
+    training truth after the later raw TCR audit; no classifier was fitted
 
 - gdTAI V4.2 sidecar visualization and confounding diagnostics:
   - `gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/index.html`
