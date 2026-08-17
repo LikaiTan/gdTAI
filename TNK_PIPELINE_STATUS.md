@@ -2,6 +2,25 @@
 
 ## Current milestone
 
+- sample-aware productive TCR join rebuild completed on 2026-08-18 with
+  `PASS_SIDECAR_READY`; independent validation passed 13/13 checks
+- 11/14 flagged sources passed a full or fail-closed partial rebuild, yielding
+  2,479,137 staged RNA rows, 948,991 cells with validated productive TCR, and
+  1,553,032 productive chain calls with observed UMI support
+- TRA, TRB, TRG, and TRD were rebuilt from productive, cell-associated,
+  high-confidence raw records using only `sample_id + barcode_core`; the
+  highest-UMI contig per chain was selected, with reads and full-length status
+  used as deterministic tie-breakers
+- per-chain UMI/read values and support-availability flags are retained;
+  unavailable quantitative support remains null rather than zero
+- GSE125527, GSE228597, and GSE287541 remain source-level quarantines;
+  GSE235863 passed partially with 110 duplicated RNA join-key rows blanked and
+  excluded from TCR truth
+- the checksum-bound replacement sidecar has 2,479,137 rows from 11 sources
+  and SHA-256
+  `6a7450b4edb0ad2e4796a98e3bb9f9a6fffc059f723c34bcdf2f260e65ddf253`
+- all 14 recorded source H5AD size/mtime pairs remained unchanged; no TCR
+  sidecar has yet been propagated into source or milestone H5AD metadata
 - gdTAI V4.2 productive-TRA/TRB boundary conflict audit completed on
   2026-08-18 with `PASS_JOIN_REPAIR_REQUIRED`
 - 373,339/475,953 boundary cells (`78.44%`) have productive TRA or TRB, but
@@ -51,17 +70,15 @@
 
 ## Next action
 
-- quarantine productive TRA/TRB calls from documented or strongly suspicious
-  sources for model truth and NK exclusion while preserving the original
-  fields for provenance
-- rebuild each affected source from productive raw VDJ contigs using only
-  `sample_id + barcode_core`, retaining per-chain UMI/read support and failing
-  closed when sample identity is ambiguous
-- validate rebuilt sources by key uniqueness, before/after chain coverage,
-  exact receptor reuse across donors, and author-lineage conflicts before
-  propagating provenance-qualified TCR fields into harmonized metadata
+- obtain explicit approval before the high-risk metadata-replacement gate;
+  propagation must consume the checksum-bound 11-source sidecar, create
+  backups, preserve legacy fields for provenance, and exclude all quarantined
+  sources and rows
+- after approved propagation, validate exact source/cell overlap, null support
+  semantics, chain flags, backup checksums, and unchanged expression matrices
 - regenerate the T/NK subset, source-balanced HVGs, scVI latent space, and
-  boundary clustering only after the repaired TCR sidecar passes validation
+  boundary clustering only after repaired TCR metadata propagation passes its
+  post-write validation
 - withdraw clusters 0, 3, and 5 as an NK candidate core; no boundary subcluster
   is currently eligible as NK training truth
 - do not build model truth directly from the current harmonized productive-CDR3
@@ -98,6 +115,15 @@
 
 ## Current blockers or review items
 
+- the rebuilt TCR sidecar is validated but intentionally not propagated: H5AD
+  metadata replacement remains a high-risk operation requiring explicit
+  approval and backup/rollback controls
+- GSE125527 lacks recoverable RNA library identity, GSE228597 recovers only
+  1/183,360 eligible raw cell keys, and GSE287541 has no raw VDJ file; their
+  legacy productive-chain calls remain ineligible for V4.2 model truth
+- GSE235863 has 110 duplicated RNA `sample_id + barcode_core` rows; these rows
+  are replacement-eligible for clearing stale calls but ineligible for receptor
+  truth
 - the previous source-H5AD control mask was incomplete because productive-chain
   metadata from many datasets had not been propagated into `TNK_cleaned.h5ad`
 - 373,339/475,953 boundary cells carry harmonized productive TRA or TRB, while

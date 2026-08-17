@@ -1114,6 +1114,74 @@ Standard behavior:
 - rerun the T/NK integration and clustering only after repaired joins pass
   source-level validation
 
+## Post-Phase-4 sample-aware productive TCR join rebuild
+
+Objective:
+
+- reconstruct productive TRA, TRB, TRG, and TRD metadata for all 14 flagged
+  sources from raw VDJ evidence without mutating source or milestone H5ADs
+- preserve per-chain UMI/read support and distinguish unavailable support from
+  measured zero
+- fail closed when source sample identity, raw-library identity, or RNA join-key
+  uniqueness cannot support a deterministic assignment
+
+Phase or task:
+
+- sample-aware four-chain TCR sidecar rebuild, report, and independent
+  validation
+
+Exact `.py` scripts:
+
+- `workflows/intake/rebuild_flagged_tcr_joins.py`
+- `workflows/reporting/build_tcr_join_rebuild_report.py`
+- `workflows/intake/validate_tcr_join_rebuild.py`
+
+Execution commands:
+
+```bash
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/intake/rebuild_flagged_tcr_joins.py --overwrite
+MPLCONFIGDIR=/tmp/matplotlib-tcr-report \
+  /home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/reporting/build_tcr_join_rebuild_report.py
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/intake/validate_tcr_join_rebuild.py
+```
+
+Key outputs:
+
+- `Integrated_dataset/tables/tcr_join_rebuild/`
+- `Integrated_dataset/figures/tcr_join_rebuild/`
+- `Integrated_dataset/logs/tcr_join_rebuild/`
+- `gdT_prediction/gdtai_v4_2_tcr_join_rebuild/index.html`
+- `gdT_prediction/gdtai_v4_2_tcr_join_rebuild/tcr_join_rebuild_report.pdf`
+
+Current result:
+
+- 11/14 sources passed full or fail-closed partial rebuilding; GSE125527,
+  GSE228597, and GSE287541 are quarantined
+- 2,479,137 rows are staged for replacement, including 948,991 cells with
+  validated productive TCR and 1,553,032 chain calls with observed UMI support
+- GSE235863 retains 110 duplicate RNA join-key rows as blank,
+  TCR-truth-ineligible replacement rows
+- independent validation passed 13/13 checks and all six focused parser tests
+  passed
+- all recorded source H5AD size/mtime pairs remained unchanged
+
+Standard behavior:
+
+- require productive, cell-associated, high-confidence raw records with a
+  nonempty CDR3 and join only by `sample_id + barcode_core`
+- select one call per chain by highest UMI, then reads, full-length status, and
+  stable contig id; retain selected-contig provenance and productive-contig
+  multiplicity
+- retain UMI/read availability flags and null values when quantitative support
+  is absent; never reinterpret unavailable support as zero
+- separate metadata-replacement eligibility from TCR-truth eligibility so
+  ambiguous legacy calls can be cleared without becoming negative truth
+- bind any propagation to the staged sidecar SHA-256 and require explicit
+  approval, backups, and post-write validation before changing H5AD metadata
+
 ## Phase 1: Coarse T/NK extraction
 
 Objective:

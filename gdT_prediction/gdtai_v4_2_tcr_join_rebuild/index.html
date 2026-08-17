@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>V4.2 TCR Join Rebuild QC</title>
+<style>
+@page { size: A4 landscape; margin: 11mm; }
+* { box-sizing: border-box; }
+body { margin: 0; color: #111827; font: 14px/1.45 Arial, sans-serif; background: #f5f7f8; }
+main { max-width: 1180px; margin: 0 auto; background: white; }
+.page { min-height: 185mm; padding: 28px 34px; page-break-after: always; }
+.page:last-child { page-break-after: auto; }
+.kicker { color: #087E8B; font-weight: 700; text-transform: uppercase; font-size: 12px; }
+h1 { margin: 7px 0 12px; font-size: 30px; letter-spacing: 0; }
+h2 { margin: 0 0 14px; font-size: 22px; letter-spacing: 0; }
+h3 { margin: 0 0 8px; font-size: 16px; letter-spacing: 0; }
+p { max-width: 92ch; margin: 7px 0 13px; }
+.lede { font-size: 17px; color: #374151; }
+.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 22px 0; }
+.metric { border-top: 4px solid #087E8B; padding: 12px 10px; background: #f3f7f7; }
+.metric b { display: block; font-size: 24px; }
+.metric span { color: #4B5563; font-size: 12px; }
+.notice { border-left: 4px solid #D1495B; background: #fff6f5; padding: 10px 13px; margin: 14px 0; }
+.good { border-left-color: #087E8B; background: #f1f8f8; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+.figure { margin: 8px 0 0; }
+.figure img { width: 100%; display: block; }
+.full-figure img { height: 150mm; object-fit: contain; }
+.caption { color: #4B5563; font-size: 11px; margin-top: 5px; }
+table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 10px; }
+th { background: #E8F0F1; text-align: left; padding: 6px 5px; overflow-wrap: anywhere; }
+td { padding: 5px; border-bottom: 1px solid #E5E7EB; vertical-align: top; overflow-wrap: anywhere; }
+.status { display: inline-block; padding: 2px 5px; font-size: 9px; font-weight: 700; }
+.status.pass { color: #075E66; background: #DDF1F2; }
+.status.hold { color: #9B2C2C; background: #FDE5E1; }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 18px 0; }
+.step { border: 1px solid #D1D5DB; padding: 11px; }
+.step b { color: #087E8B; display: block; margin-bottom: 5px; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }
+.small { font-size: 11px; color: #4B5563; }
+@media print { body { background: white; } main { max-width: none; } .page { padding: 0; } }
+</style>
+</head>
+<body><main>
+<section class="page">
+<div class="kicker">gdTAI V4.2 data-integrity gate</div>
+<h1>Sample-aware TCR join rebuild</h1>
+<p class="lede">Productive raw VDJ contigs were rebuilt against RNA metadata using only <code>sample_id + barcode_core</code>. Per-chain UMI and read support are preserved for TRA, TRB, TRG, and TRD; missing support remains null.</p>
+<div class="metrics">
+  <div class="metric"><b>11/14</b><span>sources pass full or partial rebuild</span></div>
+  <div class="metric"><b>2,479,137</b><span>rows staged for metadata replacement</span></div>
+  <div class="metric"><b>948,991</b><span>cells with validated productive TCR</span></div>
+  <div class="metric"><b>1,553,032</b><span>productive chain calls with observed UMI</span></div>
+</div>
+<div class="notice good"><b>QC gate:</b> the rebuild produced a checksum-bound sidecar and all 14 source H5AD size/mtime pairs remained unchanged.</div>
+<div class="notice"><b>Three sources remain quarantined.</b> GSE125527 lacks recoverable RNA library identity; GSE287541 has no raw VDJ file; GSE228597 maps only 1 eligible raw cell key to RNA (0.0005%), below the frozen 50% source floor.</div>
+</section>
+
+<section class="page">
+<h2>Legacy assignments versus raw-VDJ rebuild</h2>
+<div class="figure full-figure"><img src="assets/old_vs_rebuilt_tcr_calls.png" alt="Legacy versus rebuilt productive TCR counts"></div>
+<div class="caption">Red bars are diagnostic counts from quarantined sources and are not eligible for replacement or model truth.</div>
+</section>
+
+<section class="page">
+<h2>Rebuild method</h2>
+<div class="steps">
+  <div class="step"><b>1. Parse raw VDJ</b>Require cell-associated, high-confidence, productive contigs with nonempty CDR3.</div>
+  <div class="step"><b>2. Select within chain</b>Highest UMI, then reads, full-length status, then stable contig id.</div>
+  <div class="step"><b>3. Join safely</b>Canonical sample id plus nucleotide barcode core. Barcode-only fallback is forbidden.</div>
+  <div class="step"><b>4. Fail closed</b>Duplicate RNA keys, collapsed raw libraries, or poor source recovery cannot provide TCR truth.</div>
+</div>
+<div class="grid2">
+  <div><div class="figure"><img src="assets/raw_key_recovery.png" alt="Raw key recovery"></div><div class="caption">The 50% source floor only detects structural mapping failure; passing sources recover 93.2%-100.0% of eligible raw keys.</div></div>
+  <div><div class="figure"><img src="assets/umi_support_by_source.png" alt="UMI support"></div><div class="caption">GSE235863 is an author receptor table without UMI/read columns. These are null, not zero. Across UMI-auditable calls, 72,049 selected chains have UMI=1.</div></div>
+</div>
+<p class="small">The four-chain sidecar contains CDR3 amino acid/nucleotide sequence, V/D/J calls, clone id, UMI, reads, support-availability flags, selected contig id, productive-contig multiplicity, and raw source-file provenance.</p>
+</section>
+
+<section class="page">
+<h2>Source-level outcome</h2>
+<table class=""><thead><tr><th>Source</th><th>Outcome</th><th>Legacy any TCR</th><th>Rebuilt any TCR</th><th>Rebuilt paired AB</th><th>Raw-key recovery</th><th>Chain calls with UMI</th></tr></thead><tbody><tr><td>GSE125527</td><td><span class="status hold">Quarantined</span></td><td>68,439</td><td>0</td><td>0</td><td>NA</td><td>0</td></tr><tr><td>GSE171037</td><td><span class="status pass">Pass</span></td><td>41,536</td><td>473</td><td>0</td><td>100.0%</td><td>473</td></tr><tr><td>GSE178882</td><td><span class="status pass">Pass</span></td><td>109,136</td><td>36,102</td><td>24,191</td><td>99.5%</td><td>60,293</td></tr><tr><td>GSE188620</td><td><span class="status pass">Pass</span></td><td>71,233</td><td>71,233</td><td>60,624</td><td>93.2%</td><td>131,857</td></tr><tr><td>GSE211504</td><td><span class="status pass">Pass</span></td><td>37,635</td><td>29,121</td><td>24,833</td><td>99.2%</td><td>53,954</td></tr><tr><td>GSE212217</td><td><span class="status pass">Pass</span></td><td>151,676</td><td>151,676</td><td>122,135</td><td>96.3%</td><td>273,811</td></tr><tr><td>GSE228597</td><td><span class="status hold">Quarantined</span></td><td>212,272</td><td>0</td><td>0</td><td>0.0%</td><td>0</td></tr><tr><td>GSE235863</td><td><span class="status pass">Pass, 110 rows quarantined</span></td><td>110,081</td><td>109,985</td><td>109,985</td><td>96.7%</td><td>0</td></tr><tr><td>GSE243572</td><td><span class="status pass">Pass</span></td><td>56,322</td><td>56,322</td><td>31,930</td><td>99.9%</td><td>88,252</td></tr><tr><td>GSE243905</td><td><span class="status pass">Pass</span></td><td>218,658</td><td>218,658</td><td>189,985</td><td>97.4%</td><td>408,643</td></tr><tr><td>GSE254176</td><td><span class="status pass">Pass</span></td><td>118,328</td><td>66,110</td><td>56,880</td><td>97.4%</td><td>122,990</td></tr><tr><td>GSE254249</td><td><span class="status pass">Pass</span></td><td>174,045</td><td>174,045</td><td>174,045</td><td>96.1%</td><td>348,090</td></tr><tr><td>GSE287541</td><td><span class="status hold">Quarantined</span></td><td>80,545</td><td>0</td><td>0</td><td>NA</td><td>0</td></tr><tr><td>GSE311112</td><td><span class="status pass">Pass</span></td><td>10,435</td><td>35,266</td><td>29,403</td><td>99.2%</td><td>64,669</td></tr></tbody></table>
+<div class="notice good"><b>GSE311112 correction:</b> explicit support for relapse and BTK-clone sample names recovers 35,266 cells, compared with 9,663 under the incomplete historical parser.</div>
+<p class="small">GSE235863 has 110 duplicated RNA <code>sample_id + barcode_core</code> rows. Their rebuilt receptor fields are blank and they are excluded from receptor truth, but retained in the replacement table so stale assignments can be cleared.</p>
+</section>
+
+<section class="page">
+<h2>Residual biological and annotation checks</h2>
+<div class="grid2">
+  <div><div class="figure"><img src="assets/cross_donor_receptor_reuse.png" alt="Cross donor exact receptor reuse"></div><div class="caption">This sharing is already present in raw sample-resolved VDJ. It may include public or semi-invariant receptors; it is reported rather than used as automatic evidence of a join failure. Donor-level values are not reported for GSE178882 paired libraries or GSE243572 pooled libraries because donor identity is unresolved.</div></div>
+  <div>
+    <h3>Exact pair and author-label audit</h3>
+    <table class=""><thead><tr><th>Source</th><th>Paired AB</th><th>Cross-donor cells</th><th>Cross-donor %</th><th>Author NK</th><th>NK + rebuilt AB</th><th>NK + AB %</th></tr></thead><tbody><tr><td>GSE125527</td><td>0</td><td>0</td><td>NA</td><td>5,471</td><td>0</td><td>0.00%</td></tr><tr><td>GSE178882</td><td>24,191</td><td>NA</td><td>NA</td><td>0</td><td>0</td><td>NA</td></tr><tr><td>GSE188620</td><td>60,624</td><td>16</td><td>0.03%</td><td>0</td><td>0</td><td>NA</td></tr><tr><td>GSE211504</td><td>24,833</td><td>6</td><td>0.02%</td><td>0</td><td>0</td><td>NA</td></tr><tr><td>GSE212217</td><td>122,135</td><td>223</td><td>0.18%</td><td>0</td><td>0</td><td>NA</td></tr><tr><td>GSE228597</td><td>0</td><td>0</td><td>NA</td><td>116,837</td><td>0</td><td>0.00%</td></tr><tr><td>GSE235863</td><td>109,985</td><td>1,957</td><td>1.78%</td><td>24,676</td><td>0</td><td>0.00%</td></tr><tr><td>GSE243572</td><td>31,930</td><td>NA</td><td>NA</td><td>0</td><td>0</td><td>NA</td></tr><tr><td>GSE243905</td><td>189,985</td><td>182</td><td>0.10%</td><td>501</td><td>245</td><td>48.90%</td></tr><tr><td>GSE254176</td><td>56,880</td><td>2,287</td><td>4.02%</td><td>0</td><td>0</td><td>NA</td></tr><tr><td>GSE254249</td><td>174,045</td><td>1,707</td><td>0.98%</td><td>0</td><td>0</td><td>NA</td></tr><tr><td>GSE287541</td><td>0</td><td>0</td><td>NA</td><td>24,472</td><td>0</td><td>0.00%</td></tr><tr><td>GSE311112</td><td>29,403</td><td>18</td><td>0.06%</td><td>0</td><td>0</td><td>NA</td></tr></tbody></table>
+  </div>
+</div>
+<div class="notice"><b>Interpretation:</b> raw productive TRA/TRB in an author-NK label is a conflict to review for NKT-like cells, doublets, or annotation error. It is not erased by transcriptomic NK labeling and is not automatically admitted as model truth.</div>
+</section>
+
+<section class="page">
+<h2>Staged metadata replacement</h2>
+<p>The staged sidecar contains all rows from the 11 passing sources. Receptor-truth eligibility is separate from metadata-replacement eligibility, allowing unsafe legacy calls to be cleared without converting ambiguous rows into negative training truth.</p>
+<table class=""><thead><tr><th>Source</th><th>Replacement rows</th><th>TCR-truth eligible</th><th>Validated productive TCR</th></tr></thead><tbody><tr><td>GSE171037</td><td>60,981</td><td>60,981</td><td>473</td></tr><tr><td>GSE178882</td><td>109,138</td><td>109,138</td><td>36,102</td></tr><tr><td>GSE188620</td><td>151,027</td><td>151,027</td><td>71,233</td></tr><tr><td>GSE211504</td><td>37,637</td><td>37,637</td><td>29,121</td></tr><tr><td>GSE212217</td><td>292,271</td><td>292,271</td><td>151,676</td></tr><tr><td>GSE235863</td><td>286,843</td><td>286,733</td><td>109,985</td></tr><tr><td>GSE243572</td><td>268,664</td><td>268,664</td><td>56,322</td></tr><tr><td>GSE243905</td><td>413,696</td><td>413,696</td><td>218,658</td></tr><tr><td>GSE254176</td><td>118,332</td><td>118,332</td><td>66,110</td></tr><tr><td>GSE254249</td><td>601,436</td><td>601,436</td><td>174,045</td></tr><tr><td>GSE311112</td><td>139,112</td><td>139,112</td><td>35,266</td></tr></tbody></table>
+<div class="notice good"><b>Artifact:</b> <code>Integrated_dataset/tables/tcr_join_rebuild/validated_tcr_replacement_sidecar.parquet</code><br><b>SHA-256:</b> <code>6a7450b4edb0ad2e4796a98e3bb9f9a6fffc059f723c34bcdf2f260e65ddf253</code></div>
+<div class="notice"><b>No propagation was performed.</b> Writing these fields into source or milestone H5AD metadata remains a high-risk mutation gate. The replacement should be applied atomically with backups only after explicit approval, followed by harmonized-metadata and milestone overlap checks.</div>
+<p class="small">This report evaluates data integrity of TCR assignment. It does not evaluate or promote a gdTAI classifier, threshold, or atlas inference.</p>
+</section>
+</main></body></html>

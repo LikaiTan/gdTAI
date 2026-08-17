@@ -1,5 +1,18 @@
 # CHANGELOG.md
 
+## 2026-08-18 - Rebuilt flagged TCR joins with per-chain UMI provenance
+
+- Rebuilt productive TRA, TRB, TRG, and TRD calls for 14 flagged sources from
+  raw VDJ records using only `sample_id + barcode_core`.
+- Retained per-chain UMI/read support and availability, selected deterministic
+  highest-support calls, and kept unavailable support null rather than zero.
+- Passed 11 sources fully or partially and quarantined GSE125527, GSE228597,
+  and GSE287541; blanked 110 duplicate-key GSE235863 rows from receptor truth.
+- Staged 2,479,137 replacement rows with 948,991 validated productive-TCR
+  cells; independent validation passed 13/13 checks and six focused tests.
+- Published a visually checked six-page HTML/PDF QC report. All source H5ADs
+  remained unchanged; propagation and V4.2 retraining remain gated.
+
 ## 2026-08-17 - Added productive-chain UMAPs and rejected the provisional NK core
 
 - Added boundary-subset UMAP overlays and exact all-cell tables for productive
