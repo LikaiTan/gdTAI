@@ -1034,14 +1034,19 @@ Current result:
   genes from ranking and forcing a 27-gene T/NK context panel
 - completed 20-epoch A100 scVI, nine global RAPIDS Leiden runs, and nine
   second-pass runs within refined clusters 9 and 18
-- boundary clusters 0, 3, and 5 are a 257,569-cell review-level NK core with
-  82.57% primary-anchor recall and 1.46% productive-T controls; the resolution
-  0.4 partition has mean seed ARI 0.962
+- the resolution-0.4 boundary partition has mean seed ARI 0.962, but harmonized
+  productive-chain overlays identify 373,339/475,953 (`78.44%`) cells with TRA
+  or TRB and only 83 with TRD
+- the earlier clusters 0/3/5 candidate core is rejected because
+  190,757/257,569 (`74.06%`) carry productive TRA or TRB; 56.57% of primary NK
+  annotation anchors also conflict with productive TRA/TRB
 
 Gate semantics:
 
-- review annotations are descriptive and cannot be transferred wholesale into
-  classifier labels
+- no boundary subcluster is eligible as NK training truth; the former clusters
+  0/3/5 candidate-core designation is withdrawn
+- productive-chain overlays use nonempty harmonized productive-filtered CDR3
+  fields; assay-unavailable chain absence is not biological negative evidence
 - do not define NK from `TRDC`, selected delta-V absence, cytotoxicity,
   `FCER1G/TYROBP`, or any single gene
 - source/library ambient, doublet, TCR-depth, and paired-chain review remains

@@ -44,6 +44,7 @@ from workflows.gdtai.gdtai_v4_2_integration_core import (  # noqa: E402
     h5ad_obs_frame,
     h5ad_var_names,
     input_file_state,
+    normalize_text,
     read_json,
     read_sparse_rows_genes,
     resolve,
@@ -110,6 +111,7 @@ def stage_paths(config: dict[str, Any]) -> dict[str, Path]:
         "umap_sample": ssd / "diagnostic_umap_sample.npz",
         "boundary_partitions": ssd / "nk_boundary_partitions.npz",
         "boundary_umap_sample": ssd / "nk_boundary_umap_sample.npz",
+        "boundary_tcr_flags": ssd / "nk_boundary_productive_tcr_flags.npz",
         "table": resolve(outputs["table_dir"]),
         "figure": resolve(outputs["figure_dir"]),
         "log": resolve(outputs["log_dir"]),
@@ -960,7 +962,10 @@ def boundary_stage(
         random_state=int(config["random_seed"]) + 1704,
     )
     coordinates = np.asarray(sample.obsm["X_umap"], dtype=np.float32)
-    if coordinates.shape != (sample_local.size, 2) or not np.isfinite(coordinates).all():
+    if (
+        coordinates.shape != (sample_local.size, 2)
+        or not np.isfinite(coordinates).all()
+    ):
         raise RuntimeError("NK-boundary diagnostic UMAP is invalid")
     np.savez_compressed(
         paths["boundary_umap_sample"],
@@ -1321,7 +1326,7 @@ def plot_boundary_evidence(cluster_counts: pd.DataFrame, path: Path) -> None:
         cluster_counts["n_cells"] / cluster_counts["n_cells"].max()
     )
     plotted = ax.scatter(
-        100 * cluster_counts["productive_tcr_fraction"],
+        100 * cluster_counts["fraction_productive_ab"],
         100 * cluster_counts["primary_nk_fraction"],
         s=sizes,
         c=100 * cluster_counts["dominant_source_fraction"],
@@ -1334,15 +1339,15 @@ def plot_boundary_evidence(cluster_counts: pd.DataFrame, path: Path) -> None:
     for row in cluster_counts.itertuples(index=False):
         ax.annotate(
             str(row.boundary_cluster),
-            (100 * row.productive_tcr_fraction, 100 * row.primary_nk_fraction),
+            (100 * row.fraction_productive_ab, 100 * row.primary_nk_fraction),
             ha="center",
             va="center",
             fontsize=8,
             fontweight="bold",
         )
-    ax.set_xlabel("Productive TRA/TRB controls in cluster (%)")
-    ax.set_ylabel("Independent primary NK anchors in cluster (%)")
-    ax.set_title("Boundary-cluster evidence; bubble area reflects cluster size")
+    ax.set_xlabel("Harmonized productive TRA or TRB in cluster (%)")
+    ax.set_ylabel("Primary NK annotation anchors in cluster (%)")
+    ax.set_title("Boundary annotation conflict; bubble area reflects cluster size")
     ax.spines[["top", "right"]].set_visible(False)
     fig.colorbar(plotted, ax=ax, label="Dominant dataset contribution (%)")
     save_figure(fig, path)
@@ -1385,10 +1390,7 @@ def boundary_stability_table(
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     records: list[dict[str, Any]] = []
     for resolution in sorted(
-        {
-            float(re.search(r"boundary_r([0-9.]+)_", name).group(1))
-            for name in names
-        }
+        {float(re.search(r"boundary_r([0-9.]+)_", name).group(1)) for name in names}
     ):
         indices = [
             index
@@ -1420,6 +1422,158 @@ def boundary_stability_table(
         .reset_index()
     )
     return pairs, summary
+
+
+def boundary_productive_chain_flags(
+    config: dict[str, Any],
+    paths: dict[str, Path],
+    obs: pd.DataFrame,
+    boundary_indices: np.ndarray,
+) -> dict[str, np.ndarray]:
+    cache = paths["boundary_tcr_flags"]
+    boundary_hash = sha256_file(paths["boundary_partitions"])
+    if cache.is_file():
+        saved = np.load(cache, allow_pickle=False)
+        if str(saved["boundary_partitions_sha256"]) == boundary_hash and np.array_equal(
+            saved["boundary_indices"], boundary_indices
+        ):
+            return {
+                chain: saved[f"productive_{chain.lower()}"].astype(bool)
+                for chain in ("TRA", "TRB", "TRD")
+            }
+
+    chain_columns = ["TRA_cdr3", "TRB_cdr3", "TRD_cdr3"]
+    boundary_obs = obs.iloc[boundary_indices].copy()
+    flags = {
+        chain: np.zeros(boundary_indices.size, dtype=bool)
+        for chain in ("TRA", "TRB", "TRD")
+    }
+    covered = np.zeros(boundary_indices.size, dtype=bool)
+    roles = development_roles(config)
+    for role in roles.itertuples(index=False):
+        local = np.flatnonzero(
+            boundary_obs["input_cohort_id"].astype(str).eq(role.cohort_id).to_numpy()
+        )
+        if local.size == 0:
+            continue
+        if role.cohort_id == "current_atlas":
+            target = boundary_obs.iloc[local][["source_gse_id"]].copy()
+            source_rows = boundary_obs.iloc[local]["input_row"].to_numpy(np.int64)
+            source_ids = h5ad_obs_frame(role.path, ["original_cell_id"])
+            target["original_cell_id"] = source_ids.iloc[source_rows][
+                "original_cell_id"
+            ].to_numpy()
+            target["source_gse_id"] = normalize_text(target["source_gse_id"])
+            target["original_cell_id"] = normalize_text(target["original_cell_id"])
+            target_keys = (
+                target["source_gse_id"] + "||" + target["original_cell_id"]
+            ).to_numpy()
+            if pd.Index(target_keys).duplicated().any():
+                raise RuntimeError("Current-atlas boundary TCR keys are not unique")
+            target_set = set(target_keys)
+            blocks: list[pd.DataFrame] = []
+            usecols = ["source_gse_id", "original_cell_id", *chain_columns]
+            for item in config["current_atlas_recovery"]["metadata_sources"]:
+                metadata_path = resolve(item["path"])
+                header = pd.read_csv(metadata_path, nrows=0)
+                missing = sorted(set(usecols) - set(header.columns))
+                if missing:
+                    raise KeyError(
+                        f"Recovery metadata {metadata_path} lacks TCR fields: {missing}"
+                    )
+                for chunk in pd.read_csv(
+                    metadata_path,
+                    usecols=usecols,
+                    dtype="string",
+                    chunksize=500_000,
+                    low_memory=False,
+                ):
+                    source = normalize_text(chunk["source_gse_id"])
+                    cell = normalize_text(chunk["original_cell_id"])
+                    keys = source + "||" + cell
+                    selected = keys.isin(target_set)
+                    if selected.any():
+                        block = chunk.loc[selected, chain_columns].copy()
+                        block.index = pd.Index(keys.loc[selected].to_numpy())
+                        blocks.append(block)
+            if not blocks:
+                raise RuntimeError(
+                    "No current-atlas boundary cells matched TCR metadata"
+                )
+            metadata = pd.concat(blocks, axis=0, copy=False)
+            if metadata.index.duplicated().any():
+                duplicated = int(metadata.index.duplicated(keep=False).sum())
+                raise RuntimeError(
+                    f"Current-atlas boundary TCR metadata has {duplicated} duplicate keys"
+                )
+            missing_keys = pd.Index(target_keys).difference(metadata.index)
+            if not missing_keys.empty:
+                raise RuntimeError(
+                    f"Current-atlas boundary TCR metadata missed {missing_keys.size} cells"
+                )
+            aligned = metadata.reindex(target_keys)
+        else:
+            source = h5ad_obs_frame(role.path, chain_columns)
+            rows = boundary_obs.iloc[local]["input_row"].to_numpy(np.int64)
+            aligned = source.iloc[rows][chain_columns].copy()
+        for chain, column in zip(("TRA", "TRB", "TRD"), chain_columns, strict=True):
+            flags[chain][local] = nonempty_cdr3(aligned[column])
+        covered[local] = True
+    if not covered.all():
+        raise RuntimeError(
+            f"Productive-chain extraction missed {(~covered).sum():,} boundary cells"
+        )
+    temporary = cache.with_name(cache.name + ".partial.npz")
+    np.savez_compressed(
+        temporary,
+        boundary_indices=boundary_indices.astype(np.int64),
+        productive_tra=flags["TRA"],
+        productive_trb=flags["TRB"],
+        productive_trd=flags["TRD"],
+        boundary_partitions_sha256=np.asarray(boundary_hash),
+        definition=np.asarray(
+            "nonempty harmonized productive-filtered chain-specific CDR3"
+        ),
+    )
+    temporary.replace(cache)
+    return flags
+
+
+def plot_boundary_productive_chains(
+    sample: dict[str, np.ndarray],
+    sample_flags: dict[str, np.ndarray],
+    path: Path,
+) -> None:
+    xy = sample["X_umap"]
+    colors = {"TRA": "#2774ae", "TRB": "#16827c", "TRD": "#cf4b32"}
+    fig, axes = plt.subplots(1, 3, figsize=(14.0, 4.7), sharex=True, sharey=True)
+    for ax, chain in zip(axes, ("TRA", "TRB", "TRD"), strict=True):
+        positive = sample_flags[chain]
+        ax.scatter(
+            xy[:, 0],
+            xy[:, 1],
+            s=0.3,
+            color="#d4d8dc",
+            linewidths=0,
+            rasterized=True,
+        )
+        ax.scatter(
+            xy[positive, 0],
+            xy[positive, 1],
+            s=0.8,
+            color=colors[chain],
+            linewidths=0,
+            rasterized=True,
+        )
+        clean_umap(ax, f"Productive {chain}  n={positive.sum():,}")
+        ax.set_xticks([])
+        ax.set_yticks([])
+    fig.suptitle(
+        "Productive TCR-chain evidence inside the NK-like boundary",
+        fontsize=12,
+        y=1.01,
+    )
+    save_figure(fig, path)
 
 
 def plot_transition(path_csv: Path, path_png: Path) -> None:
@@ -1530,6 +1684,85 @@ def report_stage(config: dict[str, Any], paths: dict[str, Path]) -> dict[str, An
     boundary_sample = {
         key: np.asarray(boundary_sample_npz[key]) for key in boundary_sample_npz.files
     }
+    productive_chain_flags = boundary_productive_chain_flags(
+        config, paths, obs, boundary_indices
+    )
+    sample_chain_flags = {
+        chain: values[boundary_sample["sample_local_indices"]]
+        for chain, values in productive_chain_flags.items()
+    }
+    productive_ab = productive_chain_flags["TRA"] | productive_chain_flags["TRB"]
+    sample_productive_ab = sample_chain_flags["TRA"] | sample_chain_flags["TRB"]
+    chain_summary_records = [
+        {
+            "chain": chain,
+            "n_boundary_productive": int(values.sum()),
+            "fraction_boundary_productive": float(values.mean()),
+            "n_umap_sample_productive": int(sample_chain_flags[chain].sum()),
+            "fraction_umap_sample_productive": float(sample_chain_flags[chain].mean()),
+        }
+        for chain, values in productive_chain_flags.items()
+    ]
+    chain_summary_records.append(
+        {
+            "chain": "TRA_or_TRB",
+            "n_boundary_productive": int(productive_ab.sum()),
+            "fraction_boundary_productive": float(productive_ab.mean()),
+            "n_umap_sample_productive": int(sample_productive_ab.sum()),
+            "fraction_umap_sample_productive": float(sample_productive_ab.mean()),
+        }
+    )
+    chain_summary = pd.DataFrame(chain_summary_records)
+    chain_summary.to_csv(
+        paths["table"] / "nk_boundary_productive_chain_counts.csv", index=False
+    )
+    chain_audit = pd.DataFrame(
+        {
+            "boundary_cluster": boundary_labels,
+            "source_gse_id": obs.iloc[boundary_indices]["source_gse_id"]
+            .astype(str)
+            .to_numpy(),
+            **{
+                f"productive_{chain.lower()}": values
+                for chain, values in productive_chain_flags.items()
+            },
+            "productive_ab": productive_ab,
+        }
+    )
+    chain_by_cluster = (
+        chain_audit.groupby("boundary_cluster", observed=True)
+        .agg(
+            n_cells=("boundary_cluster", "size"),
+            n_productive_tra=("productive_tra", "sum"),
+            n_productive_trb=("productive_trb", "sum"),
+            n_productive_trd=("productive_trd", "sum"),
+            n_productive_ab=("productive_ab", "sum"),
+        )
+        .reset_index()
+    )
+    for chain in ("tra", "trb", "trd", "ab"):
+        chain_by_cluster[f"fraction_productive_{chain}"] = (
+            chain_by_cluster[f"n_productive_{chain}"] / chain_by_cluster["n_cells"]
+        )
+    chain_by_cluster.to_csv(
+        paths["table"] / "nk_boundary_productive_chain_counts_by_cluster.csv",
+        index=False,
+    )
+    chain_by_source = (
+        chain_audit.groupby("source_gse_id", observed=True)
+        .agg(
+            n_cells=("source_gse_id", "size"),
+            n_productive_tra=("productive_tra", "sum"),
+            n_productive_trb=("productive_trb", "sum"),
+            n_productive_trd=("productive_trd", "sum"),
+            n_productive_ab=("productive_ab", "sum"),
+        )
+        .reset_index()
+    )
+    chain_by_source.to_csv(
+        paths["table"] / "nk_boundary_productive_chain_counts_by_source.csv",
+        index=False,
+    )
     boundary_marker = marker[boundary_indices].tocsr()
     boundary_sample_expression = np.log1p(
         marker[boundary_sample["sample_global_indices"]].toarray()
@@ -1540,8 +1773,16 @@ def report_stage(config: dict[str, Any], paths: dict[str, Path]) -> dict[str, An
     boundary_marker_table.to_csv(
         paths["table"] / "nk_boundary_cluster_marker_detection.csv", index=False
     )
-    boundary_counts = pd.read_csv(
-        paths["table"] / "nk_boundary_cluster_counts.csv"
+    boundary_counts = pd.read_csv(paths["table"] / "nk_boundary_cluster_counts.csv")
+    boundary_counts["n_sidecar_productive_tcr"] = boundary_counts["n_productive_tcr"]
+    boundary_counts["sidecar_productive_tcr_fraction"] = (
+        boundary_counts["n_productive_tcr"] / boundary_counts["n_cells"]
+    )
+    boundary_counts = boundary_counts.merge(
+        chain_by_cluster.drop(columns="n_cells"),
+        on="boundary_cluster",
+        how="left",
+        validate="1:1",
     )
     review_annotations = {
         int(key): str(value)
@@ -1552,9 +1793,9 @@ def report_stage(config: dict[str, Any], paths: dict[str, Path]) -> dict[str, An
         raise RuntimeError(
             "Boundary review annotations do not exactly cover observed clusters"
         )
-    boundary_counts["review_annotation"] = boundary_counts[
-        "boundary_cluster"
-    ].map(review_annotations)
+    boundary_counts["review_annotation"] = boundary_counts["boundary_cluster"].map(
+        review_annotations
+    )
     boundary_counts.to_csv(
         paths["table"] / "nk_boundary_cluster_review.csv", index=False
     )
@@ -1562,9 +1803,8 @@ def report_stage(config: dict[str, Any], paths: dict[str, Path]) -> dict[str, An
         paths["table"] / "nk_boundary_cluster_counts_by_source.csv"
     )
     core_clusters = sorted(
-        cluster
-        for cluster, annotation in review_annotations.items()
-        if annotation == "core_NK_like"
+        int(cluster)
+        for cluster in config["nk_boundary"]["previous_candidate_core_clusters"]
     )
     core_rows = boundary_counts.loc[
         boundary_counts["boundary_cluster"].isin(core_clusters)
@@ -1574,6 +1814,13 @@ def report_stage(config: dict[str, Any], paths: dict[str, Path]) -> dict[str, An
     n_core_primary_nk = int(core_rows["n_primary_nk"].sum())
     n_core_productive_tcr = int(core_rows["n_productive_tcr"].sum())
     core_primary_nk_recall = n_core_primary_nk / n_primary_nk_total
+    core_mask = np.isin(boundary_labels, core_clusters)
+    n_core_productive_ab = int(productive_ab[core_mask].sum())
+    n_core_productive_trd = int(productive_chain_flags["TRD"][core_mask].sum())
+    boundary_primary_nk = (
+        obs.iloc[boundary_indices]["primary_nk_anchor"].astype(bool).to_numpy()
+    )
+    n_primary_nk_productive_ab = int((boundary_primary_nk & productive_ab).sum())
 
     cluster_marker = cluster_marker_table(labels, marker, genes)
     cluster_marker.to_csv(
@@ -1739,6 +1986,11 @@ def report_stage(config: dict[str, Any], paths: dict[str, Path]) -> dict[str, An
         "T, gamma-delta, and NK evidence inside the NK-like boundary",
         paths["figure"] / "nk_boundary_feature_umap.png",
     )
+    plot_boundary_productive_chains(
+        boundary_sample,
+        sample_chain_flags,
+        paths["figure"] / "nk_boundary_productive_tcr_umap.png",
+    )
     plot_cluster_heatmap(
         boundary_marker_table,
         heatmap_genes,
@@ -1765,11 +2017,12 @@ def report_stage(config: dict[str, Any], paths: dict[str, Path]) -> dict[str, An
             "review_annotation",
             "n_cells",
             "n_primary_nk",
-            "n_productive_tcr",
-            "n_sources",
+            "n_sidecar_productive_tcr",
+            "n_productive_ab",
+            "n_productive_trd",
             "dominant_source",
             "primary_nk_fraction",
-            "productive_tcr_fraction",
+            "fraction_productive_ab",
             "dominant_source_fraction",
         ]
     ].sort_values("boundary_cluster")
@@ -1792,6 +2045,7 @@ code { background:#eef1f4; padding:1px 4px; } .small { color:#53606d; font-size:
 <h1>gdTAI V4.2 T/NK-restricted reintegration</h1>
 <p class="small">Generated 2026-08-17. This is a development-sidecar analysis, not a classifier result or model promotion.</p>
 <div class="status"><b>Refined T/NK pool:</b> {prepare["n_retained_cells"]:,} of {prepare["n_input_cells"]:,} cells retained ({prepare["retained_fraction"]:.2%}); {prepare["n_removed_cells"]:,} cells removed. scVI used {prepare["n_hvgs"]:,} features and GPU only.</div>
+<div class="warning"><b>Updated conclusion: no NK training core is accepted.</b> Harmonized productive-chain metadata identify TRA or TRB in {productive_ab.sum():,}/{boundary_summary["n_boundary_cells"]:,} boundary cells ({productive_ab.mean():.2%}) and in {n_primary_nk_productive_ab:,}/{boundary_summary["n_primary_nk"]:,} primary NK annotation anchors ({n_primary_nk_productive_ab / boundary_summary["n_primary_nk"]:.2%}). The previous clusters 0/3/5 candidate-core interpretation is withdrawn.</div>
 <h2>1. What changed</h2>
 <p>The inputs were already high-recall T/NK candidate objects, but they retained ambiguous off-target cells. This second pass preserves all non-doublet productive-TCR cells and primary NK anchors, then requires direct T-lineage, gamma-delta, NK-receptor, or multigene NK-adaptor-plus-cytotoxic evidence. Cells with broad myeloid evidence and no direct T/gdT/NK-receptor support are removed.</p>
 <div class="warning"><b>TRDC+ / delta-V- / weak-CD3 is not used as an NK label.</b> It is retained as a phenotype for unsupervised review. Dropout, ambient RNA, and true NK biology remain competing explanations.</div>
@@ -1811,13 +2065,16 @@ code { background:#eef1f4; padding:1px 4px; } .small { color:#53606d; font-size:
 <figure><img src="{prefix}/refined_cluster_marker_detection_heatmap.png"></figure>
 <div class="table-wrap">{format_table(cluster_summary.sort_values("primary_nk_fraction", ascending=False))}</div>
 <h2>7. Second-pass NK-boundary clustering</h2>
-<p>Refined clusters 9 and 18 contain {boundary_summary["n_boundary_cells"]:,} cells and recover {boundary_summary["n_primary_nk"]:,}/{n_primary_nk_total:,} independent primary NK anchors ({boundary_summary["primary_nk_recall"]:.2%}). They also contain {boundary_summary["n_productive_tcr"]:,} productive TRA/TRB controls, so neither parent cluster is labeled wholesale. Nine GPU Leiden runs were performed inside this boundary; the frozen review partition <code>{html.escape(boundary_review)}</code> contains {boundary_summary["n_review_clusters"]} subclusters. At resolution {review_resolution:g}, the mean adjusted Rand index across three seed pairs is {review_stability["mean_adjusted_rand_index"]:.3f} (minimum {review_stability["min_adjusted_rand_index"]:.3f}), supporting the reproducibility of this review partition.</p>
+<p>Refined clusters 9 and 18 contain {boundary_summary["n_boundary_cells"]:,} cells and recover {boundary_summary["n_primary_nk"]:,}/{n_primary_nk_total:,} primary NK annotation anchors ({boundary_summary["primary_nk_recall"]:.2%}). The original sidecar mask counted only {boundary_summary["n_productive_tcr"]:,} productive-T controls because many chain fields had not been propagated into <code>TNK_cleaned.h5ad</code>. The harmonized metadata audit now identifies {productive_ab.sum():,} cells with productive TRA or TRB ({productive_ab.mean():.2%}) and {productive_chain_flags["TRD"].sum():,} with productive TRD. Nine GPU Leiden runs were performed inside this boundary; the frozen review partition <code>{html.escape(boundary_review)}</code> contains {boundary_summary["n_review_clusters"]} subclusters. At resolution {review_resolution:g}, the mean adjusted Rand index across three seed pairs is {review_stability["mean_adjusted_rand_index"]:.3f} (minimum {review_stability["min_adjusted_rand_index"]:.3f}).</p>
 <div class="grid"><figure><img src="{prefix}/nk_boundary_umap_clusters.png"><figcaption>Second-pass unsupervised subclusters.</figcaption></figure><figure><img src="{prefix}/nk_boundary_umap_phenotype.png"><figcaption>The weak-CD3 phenotype is enriched but is not an NK label.</figcaption></figure></div>
+<figure><img src="{prefix}/nk_boundary_productive_tcr_umap.png"><figcaption>Chain-specific productive TCR evidence is defined by a nonempty harmonized productive-filtered CDR3, not by RNA expression. Absence of a plotted chain is not informative in libraries without the corresponding V(D)J assay.</figcaption></figure>
+<div class="table-wrap">{format_table(chain_summary)}</div>
+<div class="warning"><b>The productive-chain overlay overturns the earlier boundary interpretation.</b> Harmonized TRA/TRB calls are a strict superset of the source-H5AD calls: all 6,307 source-H5AD-positive boundary cells agree, while 364,091 additional current-atlas cells have productive TRA/TRB metadata that had not been propagated into the H5AD. In addition, {n_primary_nk_productive_ab:,}/{boundary_summary["n_primary_nk"]:,} ({n_primary_nk_productive_ab / boundary_summary["n_primary_nk"]:.2%}) primary NK annotation anchors carry productive TRA or TRB, so those annotations cannot independently validate NK identity.</div>
 <div class="grid"><figure><img src="{prefix}/nk_boundary_evidence.png"></figure><figure><img src="{prefix}/nk_boundary_source_heatmap.png"></figure></div>
 <div class="table-wrap">{format_table(boundary_stability)}</div>
-<h2>8. Review-level NK definition</h2>
-<p>Boundary clusters {', '.join(map(str, core_clusters))} form the strongest review-level NK core: weak <code>CD3D/CD3G</code>, high NK receptors, <code>FCER1G/TYROBP</code>, and cytotoxic genes, low <code>LST1/AIF1</code>, and representation across 24-29 datasets. Together they contain {n_core_cells:,} cells, {n_core_primary_nk:,} independent NK anchors ({core_primary_nk_recall:.2%} of all primary anchors), and {n_core_productive_tcr:,} productive TRA/TRB controls ({n_core_productive_tcr / n_core_cells:.2%}). These are review annotations, not classifier labels.</p>
-<div class="warning"><b>Do not use a single gene as the NK rule.</b> <code>TRDC</code>, cytotoxic genes, <code>FCER1G</code>, and <code>TYROBP</code> can occur in gamma-delta T cells or through ambient RNA. The core designation requires concordant cluster-level evidence and source reproducibility. Source-dominated cluster 1, mixed T/NK cluster 4, cytotoxic-T-like cluster 2, and off-target/low-quality cluster 6 remain outside the core.</div>
+<h2>8. Revised NK-boundary interpretation</h2>
+<p>Boundary clusters {", ".join(map(str, core_clusters))} were initially considered a transcriptomic NK-like core because they combine weak <code>CD3D/CD3G</code>, high NK receptors, <code>FCER1G/TYROBP</code>, and cytotoxic genes with low <code>LST1/AIF1</code>. The productive-chain audit rejects that interpretation: {n_core_productive_ab:,}/{n_core_cells:,} cells ({n_core_productive_ab / n_core_cells:.2%}) have productive TRA or TRB, while only {n_core_productive_trd:,} have productive TRD. The previous candidate-core designation is therefore withdrawn; these clusters are NK-like transcriptomically but TCR-alpha-beta dominated.</p>
+<div class="warning"><b>No boundary subcluster is promoted as NK training truth.</b> The transcriptomic similarity of cytotoxic alpha-beta T, gamma-delta T, and NK cells cannot be resolved by <code>TRDC</code>, cytotoxic genes, <code>FCER1G/TYROBP</code>, or any single marker. The TCR metadata conflict and the compromised primary NK anchors must be repaired before a new classifier iteration.</div>
 <div class="table-wrap">{format_table(boundary_display)}</div>
 <figure><img src="{prefix}/nk_boundary_marker_detection_heatmap.png"></figure>
 <figure><img src="{prefix}/nk_boundary_feature_umap.png"></figure>
@@ -1825,7 +2082,7 @@ code { background:#eef1f4; padding:1px 4px; } .small { color:#53606d; font-size:
 <figure><img src="{prefix}/first_pass_to_refined_cluster_heatmap.png"><figcaption>Rows are first-pass clusters and columns are refined clusters; values are row fractions.</figcaption></figure>
 <h2>10. Retained cells by source</h2><div class="table-wrap">{format_table(source_kept, max_rows=80)}</div>
 <h2>11. Interpretation boundary</h2>
-<p>This analysis can identify coherent NK-like and T-like transcriptomic neighborhoods, but it cannot by itself prove that every TRDC-positive, delta-V-negative cell is NK. Final NK training labels require agreement among unsupervised cluster identity, independent author/scVI NK anchors, low productive-TCR contamination, source reproducibility, and source/library ambient and doublet audits.</p>
+<p>The integration identifies coherent NK-like and T-like transcriptomic neighborhoods, but the harmonized chain audit shows that the selected boundary is predominantly productive TCR-alpha-beta. The existing primary NK annotation anchors are also compromised by productive TRA/TRB evidence. No boundary cluster is suitable as NK training truth until TCR metadata are propagated consistently, anchor conflicts are resolved, and expression-independent NK labels are reconstructed.</p>
 <h2>Reproducibility</h2><ul>
 <li>Config SHA-256: <code>{html.escape(config["_config_sha256"])}</code></li><li>Script SHA-256: <code>{sha256_file(SCRIPT_PATH)}</code></li>
 <li>Staged H5AD SHA-256: <code>{prepare["staged_h5ad_sha256"]}</code></li><li>Latent SHA-256: <code>{fit["latent_sha256"]}</code></li>
@@ -1837,17 +2094,23 @@ code { background:#eef1f4; padding:1px 4px; } .small { color:#53606d; font-size:
     pdf_ok = write_report_pdf(index, pdf)
     summary = {
         "stage": "report",
-        "status": "PASS_REVIEW_REQUIRED",
+        "status": "PASS_AUDIT_NK_CORE_REJECTED",
         "n_input_cells": prepare["n_input_cells"],
         "n_retained_cells": prepare["n_retained_cells"],
         "n_removed_cells": prepare["n_removed_cells"],
         "n_refined_clusters": cluster["n_review_clusters"],
         "n_boundary_clusters": boundary_summary["n_review_clusters"],
         "n_nk_boundary_cells": boundary_summary["n_boundary_cells"],
-        "n_review_core_nk_like_cells": n_core_cells,
-        "n_review_core_primary_nk": n_core_primary_nk,
-        "review_core_primary_nk_recall": core_primary_nk_recall,
-        "n_review_core_productive_tcr": n_core_productive_tcr,
+        "n_boundary_productive_tra": int(productive_chain_flags["TRA"].sum()),
+        "n_boundary_productive_trb": int(productive_chain_flags["TRB"].sum()),
+        "n_boundary_productive_trd": int(productive_chain_flags["TRD"].sum()),
+        "previous_candidate_core_rejected": True,
+        "n_previous_candidate_core_cells": n_core_cells,
+        "n_previous_candidate_core_primary_nk": n_core_primary_nk,
+        "previous_candidate_core_primary_nk_recall": core_primary_nk_recall,
+        "n_previous_candidate_core_sidecar_productive_tcr": n_core_productive_tcr,
+        "n_previous_candidate_core_harmonized_productive_ab": n_core_productive_ab,
+        "n_primary_nk_anchor_harmonized_productive_ab": n_primary_nk_productive_ab,
         "boundary_review_mean_seed_ari": float(
             review_stability["mean_adjusted_rand_index"]
         ),

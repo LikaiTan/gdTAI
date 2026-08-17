@@ -78,9 +78,11 @@
   - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_tnk_reintegration/`
   - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_tnk_reintegration/`
   - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_tnk_reintegration/`
-  - decision: `PASS_REVIEW_REQUIRED`; clusters 0, 3, and 5 are a
-    257,569-cell review-level NK core, not training labels, and no classifier or
-    model promotion occurred
+  - productive-chain figure:
+    `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_tnk_reintegration/nk_boundary_productive_tcr_umap.png`
+  - decision: `PASS_AUDIT_NK_CORE_REJECTED`; 78.44% of the boundary and 74.06%
+    of the previous clusters 0/3/5 candidate core carry productive TRA or TRB,
+    so no NK training core is accepted and no classifier or promotion occurred
 
 - gdTAI V4.2 NK/T-lineage, raw TCR, and unsupervised-cluster review:
   - `gdT_prediction/gdtai_v4_2_nk_cluster_review/index.html`

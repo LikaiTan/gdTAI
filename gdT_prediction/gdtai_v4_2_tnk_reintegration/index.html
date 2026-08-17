@@ -13,6 +13,7 @@ code { background:#eef1f4; padding:1px 4px; } .small { color:#53606d; font-size:
 <h1>gdTAI V4.2 T/NK-restricted reintegration</h1>
 <p class="small">Generated 2026-08-17. This is a development-sidecar analysis, not a classifier result or model promotion.</p>
 <div class="status"><b>Refined T/NK pool:</b> 3,927,924 of 4,023,462 cells retained (97.63%); 95,538 cells removed. scVI used 4,000 features and GPU only.</div>
+<div class="warning"><b>Updated conclusion: no NK training core is accepted.</b> Harmonized productive-chain metadata identify TRA or TRB in 373,339/475,953 boundary cells (78.44%) and in 11,526/20,375 primary NK annotation anchors (56.57%). The previous clusters 0/3/5 candidate-core interpretation is withdrawn.</div>
 <h2>1. What changed</h2>
 <p>The inputs were already high-recall T/NK candidate objects, but they retained ambiguous off-target cells. This second pass preserves all non-doublet productive-TCR cells and primary NK anchors, then requires direct T-lineage, gamma-delta, NK-receptor, or multigene NK-adaptor-plus-cytotoxic evidence. Cells with broad myeloid evidence and no direct T/gdT/NK-receptor support are removed.</p>
 <div class="warning"><b>TRDC+ / delta-V- / weak-CD3 is not used as an NK label.</b> It is retained as a phenotype for unsupervised review. Dropout, ambient RNA, and true NK biology remain competing explanations.</div>
@@ -311,8 +312,51 @@ code { background:#eef1f4; padding:1px 4px; } .small { color:#53606d; font-size:
   </tbody>
 </table></div>
 <h2>7. Second-pass NK-boundary clustering</h2>
-<p>Refined clusters 9 and 18 contain 475,953 cells and recover 20,375/21,054 independent primary NK anchors (96.77%). They also contain 9,248 productive TRA/TRB controls, so neither parent cluster is labeled wholesale. Nine GPU Leiden runs were performed inside this boundary; the frozen review partition <code>boundary_r0.4_s29</code> contains 7 subclusters. At resolution 0.4, the mean adjusted Rand index across three seed pairs is 0.962 (minimum 0.952), supporting the reproducibility of this review partition.</p>
+<p>Refined clusters 9 and 18 contain 475,953 cells and recover 20,375/21,054 primary NK annotation anchors (96.77%). The original sidecar mask counted only 9,248 productive-T controls because many chain fields had not been propagated into <code>TNK_cleaned.h5ad</code>. The harmonized metadata audit now identifies 373,339 cells with productive TRA or TRB (78.44%) and 83 with productive TRD. Nine GPU Leiden runs were performed inside this boundary; the frozen review partition <code>boundary_r0.4_s29</code> contains 7 subclusters. At resolution 0.4, the mean adjusted Rand index across three seed pairs is 0.962 (minimum 0.952).</p>
 <div class="grid"><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_tnk_reintegration/nk_boundary_umap_clusters.png"><figcaption>Second-pass unsupervised subclusters.</figcaption></figure><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_tnk_reintegration/nk_boundary_umap_phenotype.png"><figcaption>The weak-CD3 phenotype is enriched but is not an NK label.</figcaption></figure></div>
+<figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_tnk_reintegration/nk_boundary_productive_tcr_umap.png"><figcaption>Chain-specific productive TCR evidence is defined by a nonempty harmonized productive-filtered CDR3, not by RNA expression. Absence of a plotted chain is not informative in libraries without the corresponding V(D)J assay.</figcaption></figure>
+<div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>chain</th>
+      <th>n_boundary_productive</th>
+      <th>fraction_boundary_productive</th>
+      <th>n_umap_sample_productive</th>
+      <th>fraction_umap_sample_productive</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>TRA</td>
+      <td>371616</td>
+      <td>0.7808</td>
+      <td>126200</td>
+      <td>0.6543</td>
+    </tr>
+    <tr>
+      <td>TRB</td>
+      <td>373186</td>
+      <td>0.7841</td>
+      <td>127699</td>
+      <td>0.6621</td>
+    </tr>
+    <tr>
+      <td>TRD</td>
+      <td>83</td>
+      <td>0.0002</td>
+      <td>83</td>
+      <td>0.0004</td>
+    </tr>
+    <tr>
+      <td>TRA_or_TRB</td>
+      <td>373339</td>
+      <td>0.7844</td>
+      <td>127832</td>
+      <td>0.6628</td>
+    </tr>
+  </tbody>
+</table></div>
+<div class="warning"><b>The productive-chain overlay overturns the earlier boundary interpretation.</b> Harmonized TRA/TRB calls are a strict superset of the source-H5AD calls: all 6,307 source-H5AD-positive boundary cells agree, while 364,091 additional current-atlas cells have productive TRA/TRB metadata that had not been propagated into the H5AD. In addition, 11,526/20,375 (56.57%) primary NK annotation anchors carry productive TRA or TRB, so those annotations cannot independently validate NK identity.</div>
 <div class="grid"><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_tnk_reintegration/nk_boundary_evidence.png"></figure><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_tnk_reintegration/nk_boundary_source_heatmap.png"></figure></div>
 <div class="table-wrap"><table class="dataframe data-table">
   <thead>
@@ -348,9 +392,9 @@ code { background:#eef1f4; padding:1px 4px; } .small { color:#53606d; font-size:
     </tr>
   </tbody>
 </table></div>
-<h2>8. Review-level NK definition</h2>
-<p>Boundary clusters 0, 3, 5 form the strongest review-level NK core: weak <code>CD3D/CD3G</code>, high NK receptors, <code>FCER1G/TYROBP</code>, and cytotoxic genes, low <code>LST1/AIF1</code>, and representation across 24-29 datasets. Together they contain 257,569 cells, 17,385 independent NK anchors (82.57% of all primary anchors), and 3,759 productive TRA/TRB controls (1.46%). These are review annotations, not classifier labels.</p>
-<div class="warning"><b>Do not use a single gene as the NK rule.</b> <code>TRDC</code>, cytotoxic genes, <code>FCER1G</code>, and <code>TYROBP</code> can occur in gamma-delta T cells or through ambient RNA. The core designation requires concordant cluster-level evidence and source reproducibility. Source-dominated cluster 1, mixed T/NK cluster 4, cytotoxic-T-like cluster 2, and off-target/low-quality cluster 6 remain outside the core.</div>
+<h2>8. Revised NK-boundary interpretation</h2>
+<p>Boundary clusters 0, 3, 5 were initially considered a transcriptomic NK-like core because they combine weak <code>CD3D/CD3G</code>, high NK receptors, <code>FCER1G/TYROBP</code>, and cytotoxic genes with low <code>LST1/AIF1</code>. The productive-chain audit rejects that interpretation: 190,757/257,569 cells (74.06%) have productive TRA or TRB, while only 19 have productive TRD. The previous candidate-core designation is therefore withdrawn; these clusters are NK-like transcriptomically but TCR-alpha-beta dominated.</p>
+<div class="warning"><b>No boundary subcluster is promoted as NK training truth.</b> The transcriptomic similarity of cytotoxic alpha-beta T, gamma-delta T, and NK cells cannot be resolved by <code>TRDC</code>, cytotoxic genes, <code>FCER1G/TYROBP</code>, or any single marker. The TCR metadata conflict and the compromised primary NK anchors must be repaired before a new classifier iteration.</div>
 <div class="table-wrap"><table class="dataframe data-table">
   <thead>
     <tr style="text-align: right;">
@@ -358,25 +402,27 @@ code { background:#eef1f4; padding:1px 4px; } .small { color:#53606d; font-size:
       <th>review_annotation</th>
       <th>n_cells</th>
       <th>n_primary_nk</th>
-      <th>n_productive_tcr</th>
-      <th>n_sources</th>
+      <th>n_sidecar_productive_tcr</th>
+      <th>n_productive_ab</th>
+      <th>n_productive_trd</th>
       <th>dominant_source</th>
       <th>primary_nk_fraction</th>
-      <th>productive_tcr_fraction</th>
+      <th>fraction_productive_ab</th>
       <th>dominant_source_fraction</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>0</td>
-      <td>core_NK_like</td>
+      <td>NK_like_transcriptome_TCRab_dominated</td>
       <td>190265</td>
       <td>15112</td>
       <td>2274</td>
-      <td>29</td>
+      <td>136092</td>
+      <td>16</td>
       <td>GSE254249</td>
       <td>0.0794</td>
-      <td>0.0120</td>
+      <td>0.7153</td>
       <td>0.1733</td>
     </tr>
     <tr>
@@ -385,10 +431,11 @@ code { background:#eef1f4; padding:1px 4px; } .small { color:#53606d; font-size:
       <td>35596</td>
       <td>31</td>
       <td>291</td>
-      <td>27</td>
+      <td>31762</td>
+      <td>3</td>
       <td>GSE243013</td>
       <td>0.0009</td>
-      <td>0.0082</td>
+      <td>0.8923</td>
       <td>0.8048</td>
     </tr>
     <tr>
@@ -397,22 +444,24 @@ code { background:#eef1f4; padding:1px 4px; } .small { color:#53606d; font-size:
       <td>57804</td>
       <td>20</td>
       <td>2563</td>
-      <td>26</td>
+      <td>38507</td>
+      <td>44</td>
       <td>GSE243013</td>
       <td>0.0003</td>
-      <td>0.0443</td>
+      <td>0.6662</td>
       <td>0.4622</td>
     </tr>
     <tr>
       <td>3</td>
-      <td>core_NK_like</td>
+      <td>NK_like_transcriptome_TCRab_dominated</td>
       <td>27887</td>
       <td>365</td>
       <td>626</td>
-      <td>24</td>
+      <td>21888</td>
+      <td>0</td>
       <td>GSE188620</td>
       <td>0.0131</td>
-      <td>0.0224</td>
+      <td>0.7849</td>
       <td>0.5163</td>
     </tr>
     <tr>
@@ -421,22 +470,24 @@ code { background:#eef1f4; padding:1px 4px; } .small { color:#53606d; font-size:
       <td>113540</td>
       <td>2932</td>
       <td>2200</td>
-      <td>29</td>
+      <td>101477</td>
+      <td>11</td>
       <td>GSE254249</td>
       <td>0.0258</td>
-      <td>0.0194</td>
+      <td>0.8938</td>
       <td>0.5457</td>
     </tr>
     <tr>
       <td>5</td>
-      <td>core_NK_like</td>
+      <td>NK_like_transcriptome_TCRab_dominated</td>
       <td>39417</td>
       <td>1908</td>
       <td>859</td>
-      <td>29</td>
+      <td>32777</td>
+      <td>3</td>
       <td>GSE254249</td>
       <td>0.0484</td>
-      <td>0.0218</td>
+      <td>0.8315</td>
       <td>0.2211</td>
     </tr>
     <tr>
@@ -445,10 +496,11 @@ code { background:#eef1f4; padding:1px 4px; } .small { color:#53606d; font-size:
       <td>11444</td>
       <td>7</td>
       <td>435</td>
-      <td>27</td>
+      <td>10836</td>
+      <td>6</td>
       <td>GSE243013</td>
       <td>0.0006</td>
-      <td>0.0380</td>
+      <td>0.9469</td>
       <td>0.5557</td>
     </tr>
   </tbody>
@@ -650,9 +702,9 @@ code { background:#eef1f4; padding:1px 4px; } .small { color:#53606d; font-size:
   </tbody>
 </table></div>
 <h2>11. Interpretation boundary</h2>
-<p>This analysis can identify coherent NK-like and T-like transcriptomic neighborhoods, but it cannot by itself prove that every TRDC-positive, delta-V-negative cell is NK. Final NK training labels require agreement among unsupervised cluster identity, independent author/scVI NK anchors, low productive-TCR contamination, source reproducibility, and source/library ambient and doublet audits.</p>
+<p>The integration identifies coherent NK-like and T-like transcriptomic neighborhoods, but the harmonized chain audit shows that the selected boundary is predominantly productive TCR-alpha-beta. The existing primary NK annotation anchors are also compromised by productive TRA/TRB evidence. No boundary cluster is suitable as NK training truth until TCR metadata are propagated consistently, anchor conflicts are resolved, and expression-independent NK labels are reconstructed.</p>
 <h2>Reproducibility</h2><ul>
-<li>Config SHA-256: <code>dc9d68bc31ef4bb212c4bc39d7796b6cf4d07c59917f3f15d5769253ea02498e</code></li><li>Script SHA-256: <code>0978389725f577a2afb913c9d424b84fac38b15340060371bb4c03cbcd25ec4a</code></li>
+<li>Config SHA-256: <code>ee93d1dfa5505fcb59d1ef76e3ff00a238d3e26a79db3713b9d0b9bbac9f9080</code></li><li>Script SHA-256: <code>0179a4a21f78115705327b37415d414eee01781c63709a8bbec2a38cdece0440</code></li>
 <li>Staged H5AD SHA-256: <code>de69f8fa73e16dc88630850b73763a1e98ae3dbebcbf6a5e3884be8def740e16</code></li><li>Latent SHA-256: <code>2db605d8c10add04d81902e3fb586767e4485fa073d89fc565502ca75328baa0</code></li>
 <li>Partitions SHA-256: <code>ae40cc6933419efd9796cc56704478a3d9563be4aa1c4849ab02824125d8e2a8</code></li><li>Boundary partitions SHA-256: <code>b4137a3aad812ddc2f87eed095ee4c662f2d81297e331fd93c5261c7ee930b14</code></li><li>Source H5AD mutation: <b>none</b>; classifier fitting: <b>none</b>; GitHub push: <b>none</b>.</li></ul>
 </body></html>

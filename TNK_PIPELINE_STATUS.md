@@ -16,23 +16,28 @@
 - nine second-pass Leiden runs divided the boundary into seven review
   subclusters; the resolution-0.4 partition is seed-stable with mean adjusted
   Rand index `0.962`
-- boundary clusters 0, 3, and 5 are the strongest review-level NK core:
-  257,569 cells, 17,385 primary NK anchors (`82.57%` of all anchors), 3,759
-  productive-T controls (`1.46%`), and representation across 24-29 datasets
+- chain-specific boundary UMAPs now use nonempty harmonized productive-filtered
+  CDR3 metadata: 371,616 cells have productive TRA, 373,186 have productive
+  TRB, 373,339 (`78.44%`) have either, and 83 have productive TRD
+- the productive-chain audit rejects the previous clusters 0/3/5 NK-core
+  interpretation: 190,757/257,569 (`74.06%`) carry productive TRA or TRB, and
+  11,526/20,375 (`56.57%`) primary NK annotation anchors do so as well
+- all 6,307 source-H5AD TRA/TRB-positive boundary cells agree with harmonized
+  metadata, which recovers 364,091 additional current-atlas positives whose
+  chain fields were not propagated into `TNK_cleaned.h5ad`
 - no classifier, threshold, label manifest, model promotion, release artifact,
   atlas inference, source-H5AD mutation, or GitHub push occurred
 
 ## Next action
 
-- treat boundary clusters 0, 3, and 5 as review-level evidence only; do not
-  transfer them wholesale into NK training truth
-- audit the 3,759 productive-T controls in the review core by source/library,
-  TCR UMI depth, paired-chain evidence, ambient RNA, and doublet metrics
-- quantify source-wise marker reproducibility and identify a conservative
-  source-balanced subset that preserves the weak-CD3/high-NK/low-myeloid
-  cluster program without requiring `TRDC` or any one cytotoxic gene
-- keep source-dominated cluster 1, mixed T/NK cluster 4, cytotoxic-T-like
-  cluster 2, and off-target/low-quality cluster 6 outside the candidate core
+- withdraw clusters 0, 3, and 5 as an NK candidate core; no boundary subcluster
+  is currently eligible as NK training truth
+- build a non-destructive repaired chain sidecar from harmonized productive
+  CDR3 metadata, with exact source-plus-cell keys and source/library provenance
+- reconstruct primary NK anchors after excluding productive TRA/TRB conflicts
+  and auditing author annotations, doublets, ambient RNA, and assay coverage
+- repeat source-balanced cluster-label review only after the TCR sidecar and NK
+  anchors pass exact overlap and missingness checks
 - run label-leakage, source-balance, feature-coverage, and grouped-fold
   preflight before fitting; keep primary NK anchors and productive-T controls as
   the dominant training evidence
@@ -60,17 +65,18 @@
 
 ## Current blockers or review items
 
-- the independent primary NK anchors are concentrated in GSE125527 and
-  GSE228597, so the 24-29-dataset breadth of the review core supports
-  reproducibility but does not independently prove NK identity in every source
-- 3,759 productive-T controls remain inside review-core clusters 0, 3, and 5;
-  source/library ambient, doublet, and TCR-depth review is still required
-- review annotations were assigned after unsupervised clustering from
-  concordant cluster-level marker and source evidence; they are descriptive
-  and cannot be treated as precommitted ground truth
-- source-dominated boundary cluster 1 is 80.48% GSE243013, mixed T/NK cluster
-  4 retains strong CD3/TCR expression, and boundary cluster 6 has weak NK plus
-  residual off-target evidence
+- the previous source-H5AD control mask was incomplete because productive-chain
+  metadata from many datasets had not been propagated into `TNK_cleaned.h5ad`
+- 373,339/475,953 boundary cells carry harmonized productive TRA or TRB, while
+  only 83 carry productive TRD; lack of TRD is uninformative for libraries that
+  did not perform gamma-delta V(D)J sequencing
+- 56.57% of primary NK annotation anchors conflict with productive TRA/TRB,
+  including all 3,482 GSE125527 boundary anchors and 8,044/16,893 GSE228597
+  boundary anchors; those anchors cannot independently validate NK identity
+- all 83 productive-TRD boundary cells also have productive TRA or TRB and need
+  doublet, multiplet, and chain-assignment review
+- boundary clusters remain useful transcriptomic neighborhoods, but none can be
+  interpreted as NK truth from the current anchor and chain metadata
 - the earlier 461-cell strict-expression core remains invalid for training
   because its zero-CD3 criterion was circular and TRA/TRB constant-chain UMIs
   were too frequent; the new review does not reinstate those labels

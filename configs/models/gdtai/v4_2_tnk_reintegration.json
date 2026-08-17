@@ -82,13 +82,14 @@
     "umap_sample_max_cells": 200000,
     "umap_min_dist": 0.25,
     "umap_spread": 1.0,
+    "previous_candidate_core_clusters": [0, 3, 5],
     "review_annotations": {
-      "0": "core_NK_like",
+      "0": "NK_like_transcriptome_TCRab_dominated",
       "1": "source_dominated_NK_like_review",
       "2": "cytotoxic_T_like",
-      "3": "core_NK_like",
+      "3": "NK_like_transcriptome_TCRab_dominated",
       "4": "mixed_T_NK",
-      "5": "core_NK_like",
+      "5": "NK_like_transcriptome_TCRab_dominated",
       "6": "off_target_or_low_quality"
     }
   },

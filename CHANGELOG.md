@@ -1,5 +1,20 @@
 # CHANGELOG.md
 
+## 2026-08-17 - Added productive-chain UMAPs and rejected the provisional NK core
+
+- Added boundary-subset UMAP overlays and exact all-cell tables for productive
+  TRA, TRB, and TRD using nonempty harmonized productive-filtered CDR3 fields.
+- Identified 371,616 productive-TRA, 373,186 productive-TRB, 373,339 TRA-or-TRB,
+  and 83 productive-TRD cells among 475,953 boundary cells.
+- Verified that harmonized TRA/TRB calls contain all 6,307 source-H5AD-positive
+  boundary cells plus 364,091 current-atlas positives missing from the H5AD.
+- Rejected the previous clusters 0/3/5 NK-core interpretation because
+  190,757/257,569 (`74.06%`) carry productive TRA or TRB; also found productive
+  TRA/TRB in 11,526/20,375 (`56.57%`) primary NK annotation anchors.
+- Refreshed and visually checked the 21-page HTML/PDF report. No H5AD,
+  classifier, model registry, or release artifact changed, and no GitHub push
+  occurred.
+
 ## 2026-08-17 - Reintegrated the T/NK pool and resolved the NK-like boundary
 
 - Applied a high-recall T/NK gate to 4,023,462 development cells, retained
