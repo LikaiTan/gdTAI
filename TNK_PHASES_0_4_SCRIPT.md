@@ -983,6 +983,72 @@ Gate semantics:
   not occur in this review
 - V4 remains excluded from GitHub publication
 
+## Post-Phase-4 gdTAI V4.2 T/NK-restricted reintegration
+
+Objective:
+
+- retain a high-recall T/NK development pool before dimensional reduction
+- recompute source-balanced HVGs only after T/NK restriction
+- refit scVI and repeated Leiden clustering, then subcluster the broad NK-like
+  boundary without using it as automatic NK training truth
+
+Phase or task:
+
+- gdTAI V4.2 read-only T/NK-restricted integration and NK-boundary review
+
+Exact `.py` script:
+
+- `workflows/gdtai/run_gdtai_v4_2_tnk_reintegration.py`
+
+Execution commands:
+
+```bash
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/run_gdtai_v4_2_tnk_reintegration.py --stage prepare
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/run_gdtai_v4_2_tnk_reintegration.py --stage fit
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/run_gdtai_v4_2_tnk_reintegration.py --stage cluster
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/run_gdtai_v4_2_tnk_reintegration.py --stage boundary
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/run_gdtai_v4_2_tnk_reintegration.py --stage report
+```
+
+Key outputs:
+
+- `configs/models/gdtai/v4_2_tnk_reintegration.json`
+- SSD sidecar under
+  `/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_tnk_reintegration/`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_tnk_reintegration/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_tnk_reintegration/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_tnk_reintegration/`
+- `gdT_prediction/gdtai_v4_2_tnk_reintegration/index.html`
+- `gdT_prediction/gdtai_v4_2_tnk_reintegration/gdtai_v4_2_tnk_reintegration_report.pdf`
+
+Current result:
+
+- retained 3,927,924/4,023,462 cells while preserving all 21,054 primary NK
+  and 967,149 repaired productive-T anchors and removing all flagged doublets
+- recomputed 4,000 source-balanced HVGs after subsetting, excluding TCR V/J/D
+  genes from ranking and forcing a 27-gene T/NK context panel
+- completed 20-epoch A100 scVI, nine global RAPIDS Leiden runs, and nine
+  second-pass runs within refined clusters 9 and 18
+- boundary clusters 0, 3, and 5 are a 257,569-cell review-level NK core with
+  82.57% primary-anchor recall and 1.46% productive-T controls; the resolution
+  0.4 partition has mean seed ARI 0.962
+
+Gate semantics:
+
+- review annotations are descriptive and cannot be transferred wholesale into
+  classifier labels
+- do not define NK from `TRDC`, selected delta-V absence, cytotoxicity,
+  `FCER1G/TYROBP`, or any single gene
+- source/library ambient, doublet, TCR-depth, and paired-chain review remains
+  required before classifier preflight
+- no source H5AD, label manifest, classifier, threshold, model registry,
+  release artifact, atlas inference, or GitHub publication is changed
+
 ## Phase 1: Coarse T/NK extraction
 
 Objective:

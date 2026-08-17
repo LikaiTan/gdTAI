@@ -2,33 +2,37 @@
 
 ## Current milestone
 
-- gdTAI V4.2 NK/T-lineage feature, TCR-expression, and unsupervised-cluster
-  review completed on 2026-08-17 with `PASS_VISUAL_REVIEW_EXTENDED`
-- feature UMAPs cover six T-lineage, eight NK-lineage, seven myeloid-context,
-  six shared-cytotoxic, and 29 raw CD3/TCR genes on the fixed 250,000-cell
-  diagnostic sample; exact TCR and cluster counts use all 4,023,462 cells
-- frozen Leiden cluster 19 contains 20,237/21,054 (`96.12%`) primary NK anchors
-  and 461 cells passing both current latent and expression evidence, but these
-  461 are now a provisional review core rather than training NK truth
-- 350/461 (`75.92%`) provisional-core cells have at least one TRA/TRB
-  constant-chain UMI, 250 (`54.23%`) have at least two, and 178 (`38.61%`) have
-  at least three; source/library ambient, doublet, and T-cell-dropout review is
-  required before any of them enter training
-- all 8 current `NK_CONFIDENT` calls outside cluster 19 should be held out of
-  the strict NK reference; cluster-19 single-evidence cells and cluster-9
-  NK-like cells remain review tiers rather than NK truth
-- the visual review changed no labels or H5AD files and is not a classifier
-  result, model promotion, release artifact, or atlas inference
+- gdTAI V4.2 T/NK-restricted reintegration and second-pass NK-boundary review
+  completed on 2026-08-17 with `PASS_REVIEW_REQUIRED`
+- the high-recall gate retained 3,927,924/4,023,462 cells (`97.63%`), retained
+  all 21,054 primary NK anchors and all 967,149 repaired productive-T controls,
+  removed all flagged doublets, and changed no source H5AD
+- 4,000 HVGs were recomputed only after T/NK restriction using source-balanced
+  sampling; TCR V/J/D genes were excluded from HVG ranking and a 27-gene
+  T/NK-context panel was forced into the integration feature set
+- A100-only scVI and RAPIDS Leiden produced 22 global refined clusters;
+  clusters 9 and 18 contain 475,953 cells and 20,375/21,054 (`96.77%`) primary
+  NK anchors but also 9,248 productive-T controls, so neither is NK wholesale
+- nine second-pass Leiden runs divided the boundary into seven review
+  subclusters; the resolution-0.4 partition is seed-stable with mean adjusted
+  Rand index `0.962`
+- boundary clusters 0, 3, and 5 are the strongest review-level NK core:
+  257,569 cells, 17,385 primary NK anchors (`82.57%` of all anchors), 3,759
+  productive-T controls (`1.46%`), and representation across 24-29 datasets
+- no classifier, threshold, label manifest, model promotion, release artifact,
+  atlas inference, source-H5AD mutation, or GitHub push occurred
 
 ## Next action
 
-- do not use the 461 provisional cluster-19 cells as NK training truth yet;
-  first run a source- and library-resolved audit of TCR UMI depth, ambient RNA,
-  doublet scores, and paired TCR evidence
-- continue to exclude all 8 current calls outside cluster 19
-- keep 594 cluster-19 latent-only, 759 cluster-19 expression-only, and 257
-  cluster-9 union-evidence cells as review-only rescue tiers; do not expand the
-  NK training truth automatically
+- treat boundary clusters 0, 3, and 5 as review-level evidence only; do not
+  transfer them wholesale into NK training truth
+- audit the 3,759 productive-T controls in the review core by source/library,
+  TCR UMI depth, paired-chain evidence, ambient RNA, and doublet metrics
+- quantify source-wise marker reproducibility and identify a conservative
+  source-balanced subset that preserves the weak-CD3/high-NK/low-myeloid
+  cluster program without requiring `TRDC` or any one cytotoxic gene
+- keep source-dominated cluster 1, mixed T/NK cluster 4, cytotoxic-T-like
+  cluster 2, and off-target/low-quality cluster 6 outside the candidate core
 - run label-leakage, source-balance, feature-coverage, and grouped-fold
   preflight before fitting; keep primary NK anchors and productive-T controls as
   the dominant training evidence
@@ -56,28 +60,20 @@
 
 ## Current blockers or review items
 
-- the strict-expression rule required zero detected `CD3D/CD3E/CD3G`, so the
-  observed zero CD3D/E/G in the 461-cell core is circular and cannot validate NK
-  identity independently
-- 350/461 provisional-core cells express a TRA/TRB constant-chain gene and 250
-  retain at least two aggregate constant-chain UMIs; this is too frequent to
-  dismiss as universal single-UMI ambient signal without source/library review
-- only 2/461 provisional-core cells express a selected delta-V gene, while 186
-  express a gamma/delta constant chain and 195 express a gamma-V gene
-- across all 4,023,462 development cells, 3,435,095 express CD3D/E/G, 290,288
-  express TRDC, 652,723 express a selected delta-V gene, and 222,616 are
-  `TRDC+` without selected delta-V expression
-- cluster 19 is the only strongly supported NK core: it contains 490,300 cells,
-  20,237 primary NK anchors, 18,316 productive-T anchors, and a positive
-  sampling-weighted NK-specific margin of `0.1417`
-- cluster 19 cannot be expanded wholesale because 86.68% of its eligible
-  candidates are from GSE292700, above the frozen 70% source cap
-- cluster 9 is a plausible secondary NK-like cluster with a positive
-  NK-specific margin of `0.0701` and acceptable 49.34% dominant-source share,
-  but it contains only 48 primary NK anchors and one current confident call
-- cluster 1 is not an NK cluster despite high `FCER1G/TYROBP`: its weighted
-  myeloid-context program (`0.2686`) exceeds its NK program (`0.2068`), and it
-  contains no primary NK anchor
+- the independent primary NK anchors are concentrated in GSE125527 and
+  GSE228597, so the 24-29-dataset breadth of the review core supports
+  reproducibility but does not independently prove NK identity in every source
+- 3,759 productive-T controls remain inside review-core clusters 0, 3, and 5;
+  source/library ambient, doublet, and TCR-depth review is still required
+- review annotations were assigned after unsupervised clustering from
+  concordant cluster-level marker and source evidence; they are descriptive
+  and cannot be treated as precommitted ground truth
+- source-dominated boundary cluster 1 is 80.48% GSE243013, mixed T/NK cluster
+  4 retains strong CD3/TCR expression, and boundary cluster 6 has weak NK plus
+  residual off-target evidence
+- the earlier 461-cell strict-expression core remains invalid for training
+  because its zero-CD3 criterion was circular and TRA/TRB constant-chain UMIs
+  were too frequent; the new review does not reinstate those labels
 - the missing historical integrated H5AD prevents recovery of the complete
   full-cell scANVI annotation column; the annotation UMAP therefore displays
   only recoverable, provenance-backed annotation evidence

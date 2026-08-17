@@ -1,0 +1,109 @@
+{
+  "protocol_version": "4.2-tnk-reintegration-v1",
+  "random_seed": 20260817,
+  "base_execution_config": "configs/models/gdtai/v4_2_integration_execution.json",
+  "first_pass": {
+    "staged_h5ad": "/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference/development_hvg_counts.h5ad",
+    "latent": "/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference/X_scVI.npy",
+    "partitions": "/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_nk_reference/cluster_partitions.npz",
+    "cluster_run": "global_r0.8_s29"
+  },
+  "tnk_gate": {
+    "t_lineage_genes": ["CD3D", "CD3E", "CD3G", "TRAC", "TRBC1", "TRBC2"],
+    "gd_lineage_genes": [
+      "TRDC", "TRGC1", "TRGC2", "TRDV1", "TRDV2", "TRDV3",
+      "TRAV14DV4", "TRAV23DV6", "TRAV29DV5", "TRAV36DV7", "TRAV38-2DV8"
+    ],
+    "nk_receptor_genes": ["KLRD1", "NCR1", "FCGR3A", "KLRC1", "KLRF1", "S1PR5"],
+    "nk_adaptor_genes": ["FCER1G", "TYROBP"],
+    "shared_cytotoxic_genes": ["NKG7", "GNLY", "PRF1", "GZMB", "XCL1", "XCL2"],
+    "myeloid_context_genes": ["LST1", "AIF1", "CTSS", "LILRB1", "LILRB2", "S100A8", "S100A9"],
+    "minimum_nk_receptor_hits": 1,
+    "minimum_shared_cytotoxic_hits_with_adaptor": 2,
+    "minimum_nk_adaptor_hits_with_cytotoxic": 1,
+    "minimum_myeloid_context_hits_for_conflict": 3,
+    "remove_flagged_doublets": true,
+    "protect_primary_nk_anchors": true,
+    "protect_productive_tcr_cells": true
+  },
+  "hvg": {
+    "n_top_genes": 4000,
+    "flavor": "seurat_v3",
+    "batch_key": "source_gse_id",
+    "sample_cap_per_source": 20000,
+    "exclude_tcr_vjd_mito_ribo_ig": true,
+    "forced_lineage_genes": [
+      "CD3D", "CD3E", "CD3G", "CD247", "TRAC", "TRBC1", "TRBC2",
+      "TRDC", "TRGC1", "TRGC2", "LCK", "TRAT1", "BCL11B", "THEMIS",
+      "KLRD1", "NCR1", "FCGR3A", "KLRC1", "KLRF1", "S1PR5",
+      "FCER1G", "TYROBP", "LST1", "AIF1", "CTSS", "LILRB1", "LILRB2"
+    ]
+  },
+  "staging": {
+    "row_chunk_size": 25000,
+    "matrix_dtype": "float32",
+    "compression": "lzf"
+  },
+  "scvi": {
+    "n_hidden": 128,
+    "n_layers": 2,
+    "n_latent": 30,
+    "gene_likelihood": "nb",
+    "max_epochs": 20,
+    "batch_size": 8192,
+    "early_stopping": true,
+    "early_stopping_patience": 5,
+    "accelerator": "gpu",
+    "devices": 1,
+    "minimum_gpu_memory_gib": 75,
+    "allow_cpu_fallback": false
+  },
+  "clustering": {
+    "backend": "rapids_singlecell",
+    "algorithm": "ivfflat",
+    "algorithm_kwds": {"n_lists": 8192, "n_probes": 80},
+    "n_neighbors": 30,
+    "resolutions": [0.4, 0.8, 1.2],
+    "seeds": [11, 29, 47],
+    "review_run": "leiden_r0.8_s29",
+    "umap_sample_cap_per_source": 20000,
+    "umap_sample_max_cells": 250000,
+    "umap_min_dist": 0.3,
+    "umap_spread": 1.0
+  },
+  "nk_boundary": {
+    "parent_review_run": "leiden_r0.8_s29",
+    "parent_clusters": [9, 18],
+    "n_neighbors": 30,
+    "resolutions": [0.2, 0.4, 0.8],
+    "seeds": [11, 29, 47],
+    "review_run": "boundary_r0.4_s29",
+    "umap_sample_cap_per_source": 12000,
+    "umap_sample_max_cells": 200000,
+    "umap_min_dist": 0.25,
+    "umap_spread": 1.0,
+    "review_annotations": {
+      "0": "core_NK_like",
+      "1": "source_dominated_NK_like_review",
+      "2": "cytotoxic_T_like",
+      "3": "core_NK_like",
+      "4": "mixed_T_NK",
+      "5": "core_NK_like",
+      "6": "off_target_or_low_quality"
+    }
+  },
+  "resources": {
+    "maximum_cpu_cores": 80,
+    "maximum_ram_gib": 400,
+    "minimum_ssd_free_gib_prepare": 300,
+    "minimum_ssd_free_gib_fit": 300,
+    "minimum_ssd_free_gib_cluster": 150,
+    "ssd_root": "/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_tnk_reintegration"
+  },
+  "outputs": {
+    "table_dir": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_tnk_reintegration",
+    "figure_dir": "Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_tnk_reintegration",
+    "log_dir": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_tnk_reintegration",
+    "static_dir": "gdT_prediction/gdtai_v4_2_tnk_reintegration"
+  }
+}

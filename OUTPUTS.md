@@ -72,6 +72,16 @@
 
 ## Current review packages
 
+- gdTAI V4.2 T/NK-restricted reintegration and NK-boundary review:
+  - `gdT_prediction/gdtai_v4_2_tnk_reintegration/index.html`
+  - `gdT_prediction/gdtai_v4_2_tnk_reintegration/gdtai_v4_2_tnk_reintegration_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_tnk_reintegration/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_tnk_reintegration/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_tnk_reintegration/`
+  - decision: `PASS_REVIEW_REQUIRED`; clusters 0, 3, and 5 are a
+    257,569-cell review-level NK core, not training labels, and no classifier or
+    model promotion occurred
+
 - gdTAI V4.2 NK/T-lineage, raw TCR, and unsupervised-cluster review:
   - `gdT_prediction/gdtai_v4_2_nk_cluster_review/index.html`
   - `gdT_prediction/gdtai_v4_2_nk_cluster_review/gdtai_v4_2_nk_cluster_review_report.pdf`

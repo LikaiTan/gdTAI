@@ -1,5 +1,21 @@
 # CHANGELOG.md
 
+## 2026-08-17 - Reintegrated the T/NK pool and resolved the NK-like boundary
+
+- Applied a high-recall T/NK gate to 4,023,462 development cells, retained
+  3,927,924 cells, all primary NK and repaired productive-T anchors, and removed
+  95,538 off-target or no-direct-evidence cells without mutating source H5ADs.
+- Recomputed 4,000 source-balanced HVGs after subsetting, excluded TCR V/J/D
+  genes from ranking, forced 27 lineage/context genes, and completed 20-epoch
+  A100 scVI plus nine global RAPIDS Leiden runs.
+- Localized 96.77% of primary NK anchors to refined clusters 9 and 18, then ran
+  nine second-pass Leiden partitions on their 475,953 cells.
+- Identified seven boundary subclusters; the resolution-0.4 partition has mean
+  seed ARI 0.962. Clusters 0, 3, and 5 form a 257,569-cell review-level NK core
+  with 82.57% primary-anchor recall and 1.46% productive-T controls.
+- Published and visually checked an 18-page HTML/PDF report. No classifier,
+  training label, model promotion, atlas inference, or GitHub push occurred.
+
 ## 2026-08-17 - Extended V4.2 NK review with exact CD3/TCR expression
 
 - Built T-lineage, NK-lineage, myeloid-context, and shared-cytotoxic feature

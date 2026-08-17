@@ -2,6 +2,17 @@
 
 ## Current approved decisions
 
+- retain the T/NK-restricted 3,927,924-cell scVI sidecar and its second-pass
+  boundary clustering as review evidence; it is not a canonical H5AD milestone
+- treat boundary clusters 0, 3, and 5 as the strongest review-level NK core,
+  not training truth; do not label refined parent clusters 9 or 18 wholesale
+- keep boundary cluster 1 as source-dominated review-only, cluster 4 as mixed
+  T/NK, cluster 2 as cytotoxic-T-like, and cluster 6 as off-target/low-quality
+- require source/library ambient, doublet, paired-TCR, and TCR-UMI audit of the
+  3,759 productive-T controls in the review core before any training preflight
+- do not define NK by `TRDC`, delta-V dropout, cytotoxicity, `FCER1G/TYROBP`,
+  or any single gene; require concordant unsupervised, receptor/adaptor,
+  T-lineage, myeloid-context, source-balance, and independent-anchor evidence
 - hold all 461 current dual-evidence cells in frozen Leiden cluster 19 as a
   provisional review core rather than V4.2 NK training truth; 75.92% have a
   detected TRA/TRB constant chain and 54.23% retain at least two aggregate UMIs
