@@ -895,8 +895,9 @@ Current result:
   and 0.0958% held-out productive-T FPR
 - 469 of 113,287 eligible development candidates passed both latent and strict
   lineage-expression evidence across four sources
-- all accepted rows are retained for possible low-weight training with an
-  effective 70% maximum-source cap
+- the 469-row repair manifest is retained unchanged for audit; the subsequent
+  cluster review determines which rows may enter strict low-weight training
+  under the same 70% maximum-source cap
 
 Gate semantics:
 
@@ -906,6 +907,71 @@ Gate semantics:
 - the output is a reference-label manifest, not a classifier, model release,
   promotion decision, or whole-atlas inference
 - no source H5AD is modified, and V4 remains excluded from GitHub publication
+
+## Post-Phase-4 gdTAI V4.2 NK/T-lineage cluster review
+
+Objective:
+
+- visualize T-lineage, NK-lineage, myeloid-context, and shared-cytotoxic marker
+  programs on the saved scVI UMAP
+- compare recoverable annotation evidence with a frozen unsupervised Leiden
+  partition before refining the NK training reference
+
+Phase or task:
+
+- gdTAI V4.2 read-only feature-plot and unsupervised-cluster review
+
+Exact `.py` script:
+
+- `workflows/gdtai/build_gdtai_v4_2_nk_cluster_review.py`
+
+Execution command:
+
+```bash
+MPLCONFIGDIR=/tmp/matplotlib-gdtai-v42-nk-review \
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/gdtai/build_gdtai_v4_2_nk_cluster_review.py
+```
+
+Key outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_nk_cluster_review/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_cluster_review/`
+- `gdT_prediction/gdtai_v4_2_nk_cluster_review/index.html`
+- `gdT_prediction/gdtai_v4_2_nk_cluster_review/gdtai_v4_2_nk_cluster_review_report.pdf`
+
+Current result:
+
+- `PASS_VISUAL_REVIEW_READY`; cluster 19 contains 96.12% of all primary NK
+  anchors and all but 8 current `NK_CONFIDENT` calls
+- retain the 461 dual-evidence cells in cluster 19 as the strict low-weight NK
+  reference; hold every current call outside that cluster from the strict set
+- retain cluster-19 single-evidence cells and cluster-9 NK-like cells as
+  review-only rescue tiers because source balance or anchor support is
+  insufficient for automatic label expansion
+- reject adaptor-rich cluster 1 as NK because its myeloid-context program
+  exceeds its NK-lineage program
+
+Standard behavior:
+
+- use `log1p(CP10K)` within the fixed 4,000 scVI integration features
+- calculate exact cluster cell and anchor counts on all 4,023,462 development
+  cells; use source/evidence-role sampling weights for expression summaries on
+  the deterministic 250,000-cell diagnostic sample
+- treat `FCER1G/TYROBP` and cytotoxic genes as insufficient by themselves;
+  myeloid genes are contamination context only and are not proposed as model
+  features
+- do not fabricate the missing historical full-cell scANVI annotation; plot
+  only annotation evidence recoverable from frozen manifests and repaired
+  anchors
+
+Gate semantics:
+
+- this task changes no H5AD, label manifest, model, threshold, or locked cohort
+- classifier fitting, model promotion, release fitting, and atlas inference do
+  not occur in this review
+- V4 remains excluded from GitHub publication
 
 ## Phase 1: Coarse T/NK extraction
 

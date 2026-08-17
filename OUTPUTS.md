@@ -72,6 +72,16 @@
 
 ## Current review packages
 
+- gdTAI V4.2 NK/T-lineage feature and unsupervised-cluster review:
+  - `gdT_prediction/gdtai_v4_2_nk_cluster_review/index.html`
+  - `gdT_prediction/gdtai_v4_2_nk_cluster_review/gdtai_v4_2_nk_cluster_review_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_cluster_review/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_nk_cluster_review/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/`
+  - decision: `PASS_VISUAL_REVIEW_READY`; use the 461 dual-evidence cluster-19
+    cells as the strict future NK reference, hold 8 current calls outside the
+    core, and do not automatically expand any review tier
+
 - gdTAI V4.2 conservative NK-definition repair:
   - `gdT_prediction/gdtai_v4_2_nk_definition_repair/index.html`
   - `gdT_prediction/gdtai_v4_2_nk_definition_repair/gdtai_v4_2_nk_definition_repair_report.pdf`

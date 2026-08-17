@@ -2,6 +2,18 @@
 
 ## Current approved decisions
 
+- use the 461 current dual-evidence cells in frozen Leiden cluster 19 as the
+  strict, low-weight V4.2 NK training reference; hold all 8 current confident
+  calls outside cluster 19 from that strict set
+- cluster-19 latent-only and expression-only cells and cluster-9 NK-like cells
+  are review-only rescue tiers, not NK ground truth; cluster-19 candidates also
+  remain too source-imbalanced for wholesale expansion
+- `FCER1G/TYROBP` expression is not sufficient to define NK cells because
+  myeloid-rich clusters express both adaptors; a defensible NK reference needs
+  coherent NK-receptor support, low T-lineage and myeloid-context support,
+  unsupervised-cluster localization, and acceptable source composition
+- myeloid-context genes are used only to recognize non-T/NK contamination in
+  this review and are not proposed as gdTAI classifier features
 - gdTAI V4.2 uses `NK_CONFIDENT` only for development cells that have no
   productive TCR or doublet flag and pass both independent evidence classes:
   exact latent nearest-anchor evidence and strict NK-lineage expression
@@ -12,8 +24,10 @@
 - approximate cuML/FAISS IVF nearest-neighbor output is rejected for this label
   definition after repeated runs changed the accepted count; exact A100
   brute-force neighbors with an internal bit-identical repeat are required
-- all accepted V4.2 pseudo-NK rows are retained for possible future training at
-  low effective weight; per-source effective contribution is capped at 70%
+- all 469 repaired V4.2 pseudo-NK rows remain preserved in the audit manifest,
+  but only the 461 cluster-19 core rows are eligible for strict future training
+  at low effective weight; per-source effective contribution remains capped at
+  70%
 - the 2026-08-17 NK-definition repair is a reference-label milestone, not a
   trained classifier, promotion decision, release artifact, or atlas inference
 - gdTAI V4.2 recovered development-data sparse staging and A100 scVI were

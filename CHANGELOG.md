@@ -1,5 +1,22 @@
 # CHANGELOG.md
 
+## 2026-08-17 - Reviewed V4.2 NK identity with markers and clusters
+
+- Built T-lineage, NK-lineage, myeloid-context, and shared-cytotoxic feature
+  UMAPs from the fixed 250,000-cell diagnostic sample and ranked the frozen
+  24-cluster Leiden partition using all 4,023,462 cells.
+- Found that cluster 19 contains 20,237/21,054 (`96.12%`) primary NK anchors and
+  461 cells passing both current latent and expression evidence.
+- Recommended those 461 cells as the strict low-weight NK reference and held
+  all 8 current confident calls outside cluster 19 from the strict set.
+- Kept 594 latent-only, 759 expression-only, and 257 secondary-cluster cells as
+  review tiers rather than automatically expanding NK labels.
+- Added myeloid-context plots after showing that `FCER1G/TYROBP` alone would
+  mis-rank cluster 1; its myeloid program exceeds its NK program and it contains
+  no primary NK anchor.
+- Published and visually checked the 12-page HTML/PDF report. No H5AD, label
+  manifest, classifier, or GitHub release was changed.
+
 ## 2026-08-17 - Repaired and validated the V4.2 NK reference definition
 
 - Restored 762,280 productive-TRA/TRB T anchors from the existing-atlas source

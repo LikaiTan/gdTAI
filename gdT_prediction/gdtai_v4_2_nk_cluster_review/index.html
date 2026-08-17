@@ -1,0 +1,283 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>gdTAI V4.2 NK and T lineage cluster review</title><style>
+:root{--ink:#17212b;--navy:#17324d;--teal:#197278;--amber:#b86e16;--line:#ccd6dc;--soft:#f3f6f7}
+*{box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);line-height:1.48;max-width:1160px;margin:0 auto;padding:30px 42px;background:white}h1{font-size:29px;color:var(--navy);border-bottom:4px solid var(--teal);padding-bottom:12px}h2{font-size:20px;color:var(--navy);margin-top:31px}p,li{font-size:14px}.status{border-left:6px solid var(--teal);background:#eef8f6;padding:14px 18px;margin:18px 0}.warning{border-left:6px solid var(--amber);background:#fff9ef;padding:13px 17px;margin:18px 0}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}.card{border:1px solid var(--line);padding:12px;background:var(--soft)}.card b{display:block;font-size:21px;color:var(--navy)}.card span{font-size:11px;color:#52636e}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}figure{margin:18px 0;break-inside:avoid}img{display:block;width:100%;height:auto;margin:0 auto}figcaption{font-size:11px;color:#52636e;text-align:center;margin-top:7px}.table-wrap{overflow-x:auto;margin:14px 0 24px}table{border-collapse:collapse;width:100%;font-size:9px}th{background:var(--navy);color:white;text-align:left}th,td{padding:5px 6px;border:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere}tr:nth-child(even){background:var(--soft)}code{background:#edf1f4;padding:1px 4px}
+@media(max-width:800px){body{padding:18px}.cards,.grid{grid-template-columns:1fr}}
+@media print{@page{size:A4 landscape;margin:8mm}body{max-width:none;padding:0}h1{font-size:22px}h2{font-size:16px;break-after:avoid}p,li{font-size:9.5px}.cards{grid-template-columns:repeat(4,1fr)}.card b{font-size:15px}.card span{font-size:7px}figure{break-inside:avoid}figure img{max-height:165mm;object-fit:contain}table{font-size:6.4px}tr{break-inside:avoid}.table-wrap{overflow:visible}}
+</style></head><body>
+<h1>gdTAI V4.2 NK and T lineage cluster review</h1>
+<p>This read-only review uses the completed development-only scVI representation. UMAP coordinates and marker plots use the deterministic 250,000-cell diagnostic sample; cluster cell and anchor counts use all 4,023,462 cells. No locked cohort was included.</p>
+<div class="status"><b>Result: PASS_VISUAL_REVIEW_READY.</b> The feature plots, recoverable annotation evidence, and independent Leiden clusters are ready for biological review before changing the NK label definition.</div>
+<div class="cards"><div class="card"><b>24</b><span>unsupervised clusters</span></div><div class="card"><b>21,054</b><span>primary NK anchors</span></div><div class="card"><b>967,149</b><span>restored productive-T anchors</span></div><div class="card"><b>469</b><span>current NK_CONFIDENT cells</span></div></div>
+
+<h2>1. Annotation evidence on the scVI UMAP</h2><p>The missing historical integrated H5AD prevents recovery of its complete full-cell scANVI annotation column. The plot therefore shows only traceable evidence: prior scANVI-NK cells retained in the frozen V4 manifest, dual scANVI-plus-author NK anchors, restored productive-TRA/TRB T anchors, and the 469 current two-evidence NK candidates.</p><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/umap_annotation_evidence.png" alt="Annotation evidence UMAP"><figcaption>These are provenance classes, not a new annotation model.</figcaption></figure>
+
+<h2>2. Unsupervised structure</h2><div class="grid"><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/umap_unsupervised_clusters.png" alt="Unsupervised cluster UMAP"><figcaption>Frozen global Leiden partition <code>global_r0.8_s29</code>.</figcaption></figure><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/cluster_lineage_score_scatter.png" alt="Cluster lineage score"><figcaption>Scores combine multiple genes; color shows myeloid contamination context and point size shows primary-NK fraction.</figcaption></figure></div>
+
+<h2>3. T-cell lineage feature plots</h2><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/feature_umap_t_lineage.png" alt="T lineage markers"><figcaption>Expression is log1p CP10K within the fixed 4,000 scVI integration features.</figcaption></figure>
+<h2>4. NK lineage feature plots</h2><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/feature_umap_nk_lineage.png" alt="NK lineage markers"><figcaption>NK evidence requires a multigene program; no single receptor is treated as definitive.</figcaption></figure>
+<h2>5. Non-T/NK contamination context</h2><p><code>FCER1G</code> and <code>TYROBP</code> are not sufficient for NK identity because myeloid cells also express them. The following panel is used only to recognize obvious non-T/NK clusters; these genes are not proposed as gdTAI classifier features.</p><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/feature_umap_myeloid_context.png" alt="Myeloid context markers"><figcaption>Clusters with broad LST1/AIF1/CTSS/LILRB/S100 support should not be called NK solely from adaptor expression.</figcaption></figure>
+<h2>6. Shared cytotoxic program</h2><div class="warning"><b>Do not use cytotoxicity as NK truth.</b> NKG7, GNLY, PRF1, GZMB, XCL1, and XCL2 can also be high in CD8 and gamma-delta T cells.</div><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/feature_umap_shared_cytotoxic.png" alt="Cytotoxic markers"><figcaption>These markers are shown as phenotype context only.</figcaption></figure>
+
+<h2>7. Multigene programs and cluster heatmap</h2><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/umap_lineage_programs.png" alt="Lineage programs"><figcaption>Each program is the mean of gene-wise robust-scaled expression. NK-specific margin subtracts the stronger of T-lineage or myeloid-context evidence.</figcaption></figure><figure><img src="../../Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/cluster_marker_detection_heatmap.png" alt="Cluster marker heatmap"><figcaption>Sampling-weighted marker detection estimates compensate for the diagnostic sample's source and evidence-role oversampling.</figcaption></figure>
+
+<h2>8. Clusters ranked for review</h2><p>The table ranks clusters by the continuous NK-specific margin: NK lineage minus the stronger of T-lineage or myeloid-context evidence. It does not impose a new hard NK cutoff. Exact anchor, candidate, and source-composition counts are included so expression, annotation provenance, and source bias can be considered together.</p><div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>cluster</th>
+      <th>nk_likeness_rank</th>
+      <th>n_cells</th>
+      <th>n_primary_nk</th>
+      <th>n_productive_t</th>
+      <th>n_eligible_candidates</th>
+      <th>n_confident_nk</th>
+      <th>weighted_t_program</th>
+      <th>weighted_nk_program</th>
+      <th>weighted_myeloid_program</th>
+      <th>weighted_cytotoxic_program</th>
+      <th>nk_minus_t_program</th>
+      <th>nk_specific_margin</th>
+      <th>dominant_candidate_source</th>
+      <th>dominant_candidate_source_fraction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>19</td>
+      <td>1</td>
+      <td>490300</td>
+      <td>20237</td>
+      <td>18316</td>
+      <td>9162</td>
+      <td>461</td>
+      <td>0.254</td>
+      <td>0.396</td>
+      <td>0.054</td>
+      <td>0.522</td>
+      <td>0.142</td>
+      <td>0.142</td>
+      <td>GSE292700</td>
+      <td>86.7%</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>2</td>
+      <td>41060</td>
+      <td>48</td>
+      <td>686</td>
+      <td>1139</td>
+      <td>1</td>
+      <td>0.157</td>
+      <td>0.227</td>
+      <td>0.037</td>
+      <td>0.309</td>
+      <td>0.070</td>
+      <td>0.070</td>
+      <td>GSE294273</td>
+      <td>49.3%</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td>3</td>
+      <td>39722</td>
+      <td>0</td>
+      <td>2829</td>
+      <td>14043</td>
+      <td>0</td>
+      <td>0.079</td>
+      <td>0.076</td>
+      <td>0.119</td>
+      <td>0.050</td>
+      <td>-0.003</td>
+      <td>-0.043</td>
+      <td>GSE292700</td>
+      <td>80.2%</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>4</td>
+      <td>9276</td>
+      <td>0</td>
+      <td>907</td>
+      <td>181</td>
+      <td>0</td>
+      <td>0.062</td>
+      <td>0.026</td>
+      <td>0.079</td>
+      <td>0.054</td>
+      <td>-0.036</td>
+      <td>-0.053</td>
+      <td>GSE292700</td>
+      <td>66.9%</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>5</td>
+      <td>42063</td>
+      <td>0</td>
+      <td>1554</td>
+      <td>16940</td>
+      <td>0</td>
+      <td>0.056</td>
+      <td>0.207</td>
+      <td>0.269</td>
+      <td>0.086</td>
+      <td>0.151</td>
+      <td>-0.062</td>
+      <td>GSE292700</td>
+      <td>96.9%</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td>6</td>
+      <td>112032</td>
+      <td>8</td>
+      <td>5570</td>
+      <td>5772</td>
+      <td>0</td>
+      <td>0.048</td>
+      <td>0.019</td>
+      <td>0.093</td>
+      <td>0.025</td>
+      <td>-0.029</td>
+      <td>-0.073</td>
+      <td>GSE294273</td>
+      <td>85.8%</td>
+    </tr>
+    <tr>
+      <td>20</td>
+      <td>7</td>
+      <td>7922</td>
+      <td>0</td>
+      <td>515</td>
+      <td>488</td>
+      <td>0</td>
+      <td>0.062</td>
+      <td>0.095</td>
+      <td>0.196</td>
+      <td>0.091</td>
+      <td>0.033</td>
+      <td>-0.100</td>
+      <td>GSE294273</td>
+      <td>88.3%</td>
+    </tr>
+    <tr>
+      <td>23</td>
+      <td>8</td>
+      <td>11226</td>
+      <td>26</td>
+      <td>4894</td>
+      <td>39</td>
+      <td>0</td>
+      <td>0.292</td>
+      <td>0.110</td>
+      <td>0.062</td>
+      <td>0.168</td>
+      <td>-0.183</td>
+      <td>-0.183</td>
+      <td>GSE292700</td>
+      <td>97.4%</td>
+    </tr>
+    <tr>
+      <td>18</td>
+      <td>9</td>
+      <td>236832</td>
+      <td>262</td>
+      <td>80173</td>
+      <td>668</td>
+      <td>0</td>
+      <td>0.343</td>
+      <td>0.134</td>
+      <td>0.056</td>
+      <td>0.425</td>
+      <td>-0.209</td>
+      <td>-0.209</td>
+      <td>GSE292700</td>
+      <td>40.1%</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td>10</td>
+      <td>73248</td>
+      <td>12</td>
+      <td>25437</td>
+      <td>388</td>
+      <td>0</td>
+      <td>0.389</td>
+      <td>0.174</td>
+      <td>0.067</td>
+      <td>0.334</td>
+      <td>-0.215</td>
+      <td>-0.215</td>
+      <td>GSE292700</td>
+      <td>45.1%</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2>9. Recommended decision</h2><div class="status"><b>Strict core recommendation: retain 461 cells.</b> These cells pass both independent cell-level evidences and fall in cluster 19, which contains 96.1% of all primary NK anchors. Hold the remaining 8 current calls outside cluster 19 rather than using them as strict training NK labels.</div><p>No automatic expansion is recommended yet. Cluster 19 contains plausible dropout-rescue tiers, but its eligible candidates are 86.7% from one source, above the 70% source cap. Cluster 9 is a biologically plausible secondary NK-like cluster with better source balance, but it has only 48 primary NK anchors and weak latent-anchor passage. Both require source-resolved review before use.</p><div class="table-wrap"><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>review_tier</th>
+      <th>n_cells</th>
+      <th>n_sources</th>
+      <th>dominant_source</th>
+      <th>maximum_source_fraction</th>
+      <th>recommended_use</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>A_core_both_cluster19</td>
+      <td>461</td>
+      <td>4</td>
+      <td>GSE292700</td>
+      <td>96.7%</td>
+      <td>strict low-weight NK training reference</td>
+    </tr>
+    <tr>
+      <td>B_cluster19_latent_only_dropout_review</td>
+      <td>594</td>
+      <td>5</td>
+      <td>GSE292700</td>
+      <td>91.1%</td>
+      <td>dropout-rescue review only</td>
+    </tr>
+    <tr>
+      <td>C_cluster19_expression_only_distance_review</td>
+      <td>759</td>
+      <td>3</td>
+      <td>GSE292700</td>
+      <td>91.7%</td>
+      <td>source/distance review only</td>
+    </tr>
+    <tr>
+      <td>D_cluster9_secondary_nk_review</td>
+      <td>257</td>
+      <td>3</td>
+      <td>GSE294273</td>
+      <td>57.6%</td>
+      <td>secondary-cluster review only</td>
+    </tr>
+    <tr>
+      <td>E_current_confident_outside_core_hold</td>
+      <td>7</td>
+      <td>1</td>
+      <td>GSE292700</td>
+      <td>100.0%</td>
+      <td>hold out of strict NK training</td>
+    </tr>
+    <tr>
+      <td>F_no_nk_assignment</td>
+      <td>111209</td>
+      <td>5</td>
+      <td>GSE292700</td>
+      <td>46.7%</td>
+      <td>do not assign NK</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2>Decision boundary</h2><p><b>No H5AD or frozen label manifest is changed by this report.</b> A defensible expansion should require coherent NK-lineage expression, low T-lineage and myeloid support, localization to reproducible unsupervised clusters, and acceptable source composition. Cytotoxicity alone, one receptor, or the historical scANVI label alone is insufficient.</p>
+<h2>Reproducibility</h2><ul><li>Latent SHA-256: <code>7030b28be885b85a4b24ce2223bb16f7c7288a29195f2512bf7bbba330791ccf</code></li><li>Partition SHA-256: <code>90e83ec83986358a015885e02e29d06eacf726d928e02b2e90428d5c09947a63</code></li><li>Cluster run: <code>global_r0.8_s29</code></li><li>Marker-expression cache SHA-256: <code>82ad58d59e336be57a25cabaa48f56e414f674acdb2657103003ff64c2714225</code></li><li>Script SHA-256: <code>d97058c2464cdc8e45b51d2fa46d9429f50aae25a2e59d41d8218e9cff7a8db6</code></li><li>H5AD mutation: <b>none</b>; classifier fitting: <b>none</b>; GitHub push: <b>none</b>.</li></ul>
+</body></html>

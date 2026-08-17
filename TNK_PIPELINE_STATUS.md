@@ -2,26 +2,33 @@
 
 ## Current milestone
 
-- gdTAI V4.2 NK-definition repair completed on 2026-08-17 with
-  `PASS_NK_REFERENCE_READY`
-- the repair restored 762,280 expression-independent productive-T anchors from
-  the existing-atlas source object, resolving the prior anchor/cohort
-  confounding while retaining all 21,054 dual-annotation primary NK anchors
-- an exact-GPU latent rule plus a strict T-lineage-negative/NK-lineage-positive
-  expression rule selected 469 `NK_CONFIDENT` cells from 113,287 eligible
-  no-productive-TCR development candidates; cytotoxic genes were audit-only
-- this milestone defines conservative, low-weight future-training NK negatives;
-  it is not a classifier result, model promotion, or atlas inference
+- gdTAI V4.2 NK/T-lineage feature and unsupervised-cluster review completed on
+  2026-08-17 with `PASS_VISUAL_REVIEW_READY`
+- feature UMAPs cover six T-lineage, eight NK-lineage, seven myeloid-context,
+  and six shared-cytotoxic markers on the fixed 250,000-cell diagnostic sample;
+  exact cluster counts use all 4,023,462 development cells
+- frozen Leiden cluster 19 contains 20,237/21,054 (`96.12%`) primary NK anchors
+  and 461 cells passing both current latent and expression evidence; these 461
+  are the recommended strict, low-weight future-training NK reference
+- all 8 current `NK_CONFIDENT` calls outside cluster 19 should be held out of
+  the strict NK reference; cluster-19 single-evidence cells and cluster-9
+  NK-like cells remain review tiers rather than NK truth
+- the visual review changed no labels or H5AD files and is not a classifier
+  result, model promotion, release artifact, or atlas inference
 
 ## Next action
 
-- freeze the repaired 469-cell label/weight manifest as a low-weight negative
-  input for the next reversible V4.2 nested classifier iteration
+- use the 461 dual-evidence cluster-19 cells as the strict low-weight NK
+  reference in the next reversible V4.2 classifier preflight; exclude all 8
+  current calls outside cluster 19 from that strict reference
+- keep 594 cluster-19 latent-only, 759 cluster-19 expression-only, and 257
+  cluster-9 union-evidence cells as review-only rescue tiers; do not expand the
+  NK training truth automatically
 - run label-leakage, source-balance, feature-coverage, and grouped-fold
   preflight before fitting; keep primary NK anchors and productive-T controls as
   the dominant training evidence
-- retain all 469 accepted rows while capping their effective per-source
-  contribution at 70%; do not relax the cap or redefine NK from cytotoxicity
+- cap the effective per-source contribution of the 461-cell strict reference at
+  70%; do not relax the cap or redefine NK from cytotoxicity or adaptor genes
 - compare any resulting model against V2/V3 on unchanged locked cohorts before
   considering promotion
 - keep all locked cohorts unchanged for nested comparison with V2 and V3;
@@ -44,6 +51,20 @@
 
 ## Current blockers or review items
 
+- cluster 19 is the only strongly supported NK core: it contains 490,300 cells,
+  20,237 primary NK anchors, 18,316 productive-T anchors, and a positive
+  sampling-weighted NK-specific margin of `0.1417`
+- cluster 19 cannot be expanded wholesale because 86.68% of its eligible
+  candidates are from GSE292700, above the frozen 70% source cap
+- cluster 9 is a plausible secondary NK-like cluster with a positive
+  NK-specific margin of `0.0701` and acceptable 49.34% dominant-source share,
+  but it contains only 48 primary NK anchors and one current confident call
+- cluster 1 is not an NK cluster despite high `FCER1G/TYROBP`: its weighted
+  myeloid-context program (`0.2686`) exceeds its NK program (`0.2068`), and it
+  contains no primary NK anchor
+- the missing historical integrated H5AD prevents recovery of the complete
+  full-cell scANVI annotation column; the annotation UMAP therefore displays
+  only recoverable, provenance-backed annotation evidence
 - the original `high_speed_temp/Integrated_dataset/integrated.h5ad` is absent,
   and no exact copy was found in the project or databank search; the previously
   recorded project-data execution approval is therefore invalid
@@ -88,9 +109,10 @@
   recalled `35.32%` of 7,770 author NK cells and passed `0.126%` of 54,925
   paired alpha-beta T cells; a cytotoxic-only rule passed `98.21%` and `30.40%`,
   respectively, confirming that cytotoxicity cannot define NK identity
-- the repaired label manifest contains 469 `NK_CONFIDENT` cells from four
-  sources; all are retained for possible low-weight training with total
-  effective weight `13.33` and maximum effective source contribution `70%`
+- the repaired audit manifest contains 469 `NK_CONFIDENT` cells from four
+  sources and remains preserved unchanged; the later cluster review recommends
+  only its 461 cluster-19 rows for strict low-weight training, still with a 70%
+  maximum effective source contribution
 - no source H5AD was mutated, no classifier was fitted, and no V4 artifact was
   pushed to GitHub in the NK-definition repair
 - changing the stage-specific resource contract invalidated the earlier
@@ -389,14 +411,24 @@ Additional current state:
 
 ## Current review artifacts
 
+- gdTAI V4.2 NK/T-lineage feature and unsupervised-cluster review:
+  - `gdT_prediction/gdtai_v4_2_nk_cluster_review/index.html`
+  - `gdT_prediction/gdtai_v4_2_nk_cluster_review/gdtai_v4_2_nk_cluster_review_report.pdf`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_cluster_review/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_nk_cluster_review/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_cluster_review/`
+  - decision: `PASS_VISUAL_REVIEW_READY`; 461 cluster-19 rows form the strict
+    future NK reference and the remaining candidate tiers stay review-only
+
 - gdTAI V4.2 conservative NK-definition repair:
   - `gdT_prediction/gdtai_v4_2_nk_definition_repair/index.html`
   - `gdT_prediction/gdtai_v4_2_nk_definition_repair/gdtai_v4_2_nk_definition_repair_report.pdf`
   - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_definition_repair/`
   - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_nk_definition_repair/`
   - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_nk_definition_repair/`
-  - decision: `PASS_NK_REFERENCE_READY`; 469 conservative NK reference cells
-    are ready for low-weight development use, but no classifier was fitted
+  - decision: `PASS_NK_REFERENCE_READY`; the preserved 469-row audit manifest
+    was refined to a 461-cell strict subset by the later cluster review; no
+    classifier was fitted
 
 - gdTAI V4.2 sidecar visualization and confounding diagnostics:
   - `gdT_prediction/gdtai_v4_2_nk_reference_diagnostics/index.html`
