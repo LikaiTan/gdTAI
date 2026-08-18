@@ -107,13 +107,33 @@
   chain fields were not propagated into `TNK_cleaned.h5ad`
 - no classifier, threshold, label manifest, model promotion, release artifact,
   atlas inference, source-H5AD mutation, or GitHub push occurred
+- full-atlas metadata harmonization v2 completed its read-only rule, sample
+  identity, and row-level overlay gates without modifying an H5AD
+- the complete 5,933,312-row overlay passed 18/18 checks and is checksum-bound
+  at `4da4eea32e9d275de790775e2a0f59d4f6553d72756e9c8c6935f35bb398984f`
+- unresolved tissue/specimen context fell from 3,849,174 blank current values to
+  39,920 fail-closed cells: 36,800 source-blank GSE206325 rows and 3,120 mixed
+  duodenum/PBMC GSE252762 rows
+- GSE125527 recovers 30 source-derived donor-by-tissue samples, GSE254249
+  recovers 92 source `Ident` samples, and GSE228597 retains 4,611 explicitly
+  unresolved biological samples with separate technical VDJ-library identity
+- no cell-type label is used as tissue/specimen evidence, and no TCR chain call
+  has been applied to the metadata overlay
 
 ## Next action
 
+- complete and validate the additive tissue/tumor/sample/library metadata
+  replacement before any TCR chain metadata is applied
+- keep biological `sample_id_harmonized_v2` separate from technical
+  `tcr_library_join_id_v2`; pooled VDJ libraries must never overwrite specimen
+  or donor identity
 - obtain explicit approval before the high-risk metadata-replacement gate;
-  propagation must consume the checksum-bound 14-source sidecar, create
-  backups, preserve legacy fields for provenance, and keep the 110 ambiguous
-  GSE235863 rows blank and ineligible for TCR truth
+  the first write must add and validate tissue, specimen, tumor, sample,
+  library, donor, and provenance fields while preserving all legacy columns
+- only after that metadata gate passes may TCR propagation consume the
+  checksum-bound 14-source sidecar, create a second rollback point, preserve
+  legacy TCR fields for provenance, and keep the 110 ambiguous GSE235863 rows
+  blank and ineligible for TCR truth
 - after approved propagation, validate exact source/cell overlap, null support
   semantics, chain flags, backup checksums, and unchanged expression matrices
 - preserve the frozen 5,933,312-cell membership and existing integration; do

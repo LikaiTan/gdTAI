@@ -59,10 +59,15 @@ many sources. Positional, barcode-only, and display-sample joins are forbidden.
 
 ## Stage 1: Frozen-Membership Overlay Manifest
 
+This stage is blocked until the additive tissue, tumor, sample, library, and
+donor metadata replacement has been applied and validated. The TCR transaction
+must consume that validated metadata object, not the current pre-correction
+atlas.
+
 1. Open the canonical atlas and all source H5AD files read-only.
 2. Verify every source file against the recorded size and nanosecond mtime.
 3. Verify the atlas and sidecar SHA-256 values and the 14-source manifest.
-4. Join the atlas only by `source_gse_id + original_cell_id` to sidecar
+4. Join the corrected-metadata atlas only by `source_gse_id + original_cell_id` to sidecar
    `source_gse_id + source_obs_name`.
 5. Require uniqueness and complete sidecar coverage for every atlas row from
    an affected source.
@@ -76,6 +81,10 @@ many sources. Positional, barcode-only, and display-sample joins are forbidden.
 The source H5AD files remain unchanged. The old atlas is retained as the
 complete legacy-metadata snapshot rather than duplicating dozens of legacy TCR
 columns across almost six million rows.
+
+`tcr_library_join_id_v2` is technical provenance and is not interchangeable
+with `sample_id_harmonized_v2`. This is essential for pooled sources such as
+GSE228597.
 
 ## Stage 2: Frozen-Membership Validation
 

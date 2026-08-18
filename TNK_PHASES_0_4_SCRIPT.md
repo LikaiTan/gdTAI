@@ -1253,6 +1253,10 @@ Current result:
 
 Standard behavior:
 
+- require the additive tissue/tumor/sample/library metadata gate to pass before
+  applying any TRA/TRB/TRG/TRD sidecar values
+- keep biological sample identity separate from technical VDJ-library join
+  identity, especially for pooled libraries
 - join only atlas `source_gse_id + original_cell_id` to sidecar
   `source_gse_id + source_obs_name`; positional, barcode-only, and display
   `sample_id` joins are forbidden
@@ -1262,6 +1266,50 @@ Standard behavior:
   fail closed; rebuild downstream TCR truth labels after replacement
 - require backup, temporary-file validation, and explicit approval before the
   high-risk metadata-only H5AD write and atomic canonical symlink switch
+
+## Pre-TCR full-atlas metadata and sample identity correction
+
+Objective:
+
+- harmonize tissue, specimen context, and tumor type while preserving original
+  labels
+- repair biological sample and technical library names before TCR metadata is
+  joined
+- prevent pooled VDJ-library identifiers from replacing biological specimens
+
+Exact `.py` scripts:
+
+- `workflows/metadata/audit_full_atlas_metadata_harmonization_v2.py`
+- `workflows/metadata/audit_full_atlas_sample_identity_v2.py`
+- `workflows/metadata/build_full_atlas_metadata_overlay_v2.py`
+
+Key inputs and outputs:
+
+- `configs/metadata/full_atlas_metadata_harmonization_v2.json`
+- `docs/FULL_ATLAS_METADATA_HARMONIZATION_V2_REVIEW.md`
+- `Integrated_dataset/tables/metadata_harmonization/full_atlas_v2/`
+
+Current result:
+
+- tissue/tumor rule review passed 11/11 read-only checks
+- sample identity preflight passed 13/13 read-only checks
+- GSE125527 recovers 30 source-derived donor-by-tissue samples and GSE254249
+  recovers 92 source `Ident` samples
+- GSE228597 retains 4,611 explicitly unresolved biological sample IDs while
+  recovering their separate technical TCR-library identities
+- the complete 5,933,312-row additive overlay passed 18/18 checks and reduced
+  unresolved tissue/context to 39,920 cells: 36,800 source-blank GSE206325
+  cells and 3,120 inseparable mixed-duodenum/PBMC GSE252762 cells
+- the overlay SHA-256 is
+  `4da4eea32e9d275de790775e2a0f59d4f6553d72756e9c8c6935f35bb398984f`
+- no TCR chain call or H5AD write occurred
+
+Gate behavior:
+
+- metadata application and canonical publication require backup, temporary
+  output validation, and explicit approval
+- TCR sidecar application is a later transaction and remains blocked until the
+  metadata object passes post-write validation
 
 ## Phase 1: Coarse T/NK extraction
 
