@@ -107,6 +107,15 @@
   - decision: `PASS_TCR_H5AD_CANDIDATE`; 2,155,409 atlas rows were corrected,
     all 17 checks passed, and canonical publication remains pending
 
+- post-repair TCR truth and NK-boundary audit:
+  - `gdT_prediction/gdtai_v4_2_post_tcr_audit/index.html`
+  - `gdT_prediction/gdtai_v4_2_post_tcr_audit/post_tcr_truth_nk_audit.pdf`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_post_tcr_audit/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_post_tcr_audit/`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_post_tcr_audit/`
+  - decision: `PASS_POST_TCR_TRUTH_NK_AUDIT`; 20,922 clean primary NK anchors
+    remain and prior unsafe-overlay boundary conflicts are largely resolved
+
 - gdTAI V4.2 T/NK-restricted reintegration and NK-boundary review:
   - `gdT_prediction/gdtai_v4_2_tnk_reintegration/index.html`
   - `gdT_prediction/gdtai_v4_2_tnk_reintegration/gdtai_v4_2_tnk_reintegration_report.pdf`

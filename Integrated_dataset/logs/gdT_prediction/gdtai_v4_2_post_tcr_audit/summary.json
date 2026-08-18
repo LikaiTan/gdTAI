@@ -1,0 +1,25 @@
+{
+  "candidate_sha256": "d32c9d2bdb955b12e1eafbed8322f8cb965cf3a225191e612b53f3d3783480d5",
+  "canonical_symlink_switched": false,
+  "integration_or_clustering_rerun": false,
+  "n_boundary_cells": 475953,
+  "n_boundary_corrected_any_ab": 14228,
+  "n_boundary_corrected_any_gd": 0,
+  "n_boundary_corrected_paired_ab": 10311,
+  "n_boundary_legacy_any_ab": 9248,
+  "n_boundary_prior_unsafe_overlay_any_ab": 373339,
+  "n_primary_nk_anchors": 21054,
+  "n_primary_nk_corrected_any_ab": 132,
+  "n_primary_nk_corrected_any_gd": 0,
+  "n_primary_nk_corrected_no_productive_tcr": 20922,
+  "n_primary_nk_legacy_any_ab": 0,
+  "n_primary_nk_prior_unsafe_overlay_any_ab": 11526,
+  "status": "PASS_POST_TCR_TRUTH_NK_AUDIT",
+  "truth": {
+    "abT_gold": 1926136,
+    "conflict": 0,
+    "dual_tcr": 14890,
+    "gdT_gold": 58822,
+    "strict_gdT_receptor": 33586
+  }
+}

@@ -146,11 +146,24 @@
 - the eight-page HTML/PDF application report passed visual review without
   clipped tables and is under
   `gdT_prediction/gdtai_v4_2_tcr_sidecar_application/`
+- the read-only post-repair truth/NK audit passed on the checksum-bound
+  candidate without rerunning integration or clustering
+- only 132/21,054 (`0.63%`) frozen dual-annotation primary NK anchors carry
+  corrected productive alpha-beta TCR, leaving 20,922 clean NK anchors; the
+  prior unsafe harmonized overlay had marked 11,526 as alpha-beta-positive
+- only 14,228/475,953 (`2.99%`) frozen boundary cells carry corrected
+  productive alpha-beta TCR, versus 373,339 under the prior unsafe overlay;
+  10,311 are paired TRA/TRB and none carries corrected gamma-delta TCR
+- corrected no-silver truth contains 58,822 gdT gold cells, 1,926,136 abT gold
+  cells, 33,586 strict paired-TRG/TRD/no-alpha-beta positives, 14,890 dual-TCR
+  cells, and zero rule conflicts
+- the five-page post-repair report passed visual review with its complete NK
+  table on one page and is under `gdT_prediction/gdtai_v4_2_post_tcr_audit/`
 
 ## Next action
 
-- regenerate TCR-derived truth/control labels and every boundary/NK audit from
-  the checksum-bound TCR-corrected candidate
+- review the corrected truth/NK report and decide whether to atomically publish
+  the checksum-bound TCR-corrected candidate as the canonical atlas
 - keep biological `sample_id_harmonized_v2` separate from technical
   `tcr_library_join_id_v2`; pooled VDJ libraries must never overwrite specimen
   or donor identity
@@ -199,9 +212,9 @@
 
 ## Current blockers or review items
 
-- the rebuilt TCR sidecar is present only in the validated isolated
-  TCR-corrected candidate; canonical publication remains pending post-repair
-  truth/control and boundary/NK review
+- the rebuilt TCR sidecar and corrected truth/NK audit are present only in the
+  validated isolated candidate; atomic canonical publication is the remaining
+  high-risk gate
 - the three source-level quarantine blockers are resolved: GSE125527 has
   75.82% exact author/raw CDR3 agreement with 22,928-fold enrichment over
   sample rotation; GSE228597 has 95.03% agreement and 7,951-fold enrichment;

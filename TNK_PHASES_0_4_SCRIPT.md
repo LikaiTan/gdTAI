@@ -1229,6 +1229,7 @@ Exact `.py` script:
 - `workflows/integration/audit_tcr_sidecar_overlay.py`
 - `workflows/integration/apply_tcr_sidecar_to_full_atlas.py`
 - `workflows/reporting/build_tcr_sidecar_application_report.py`
+- `workflows/gdtai/audit_post_tcr_truth_nk_boundary.py`
 
 Key outputs:
 
@@ -1241,6 +1242,10 @@ Key outputs:
 - `Integrated_dataset/figures/tcr_sidecar_application/`
 - `Integrated_dataset/logs/tcr_sidecar_application/`
 - `gdT_prediction/gdtai_v4_2_tcr_sidecar_application/`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_post_tcr_audit/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_post_tcr_audit/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_post_tcr_audit/`
+- `gdT_prediction/gdtai_v4_2_post_tcr_audit/`
 
 Current result:
 
@@ -1265,6 +1270,12 @@ Current result:
 - the application QC report is
   `gdT_prediction/gdtai_v4_2_tcr_sidecar_application/index.html` with an
   eight-page visually reviewed PDF; the canonical symlink remains unchanged
+- the post-repair truth/NK audit leaves 20,922/21,054 frozen primary NK anchors
+  free of corrected productive TCR and reduces boundary productive-alpha-beta
+  evidence from the prior unsafe-overlay count of 373,339 to 14,228/475,953
+- no-silver corrected truth contains 58,822 gdT gold and 1,926,136 abT gold
+  cells with zero rule conflicts; the five-page HTML/PDF report passed visual
+  review and no model fitting or canonical publication occurred
 
 Standard behavior:
 
