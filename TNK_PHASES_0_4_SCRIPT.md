@@ -2408,3 +2408,33 @@ Standard behavior:
   cross-dataset sensitivity analysis
 - treat results as descriptive markers of pre-existing expression-defined
   clusters, not causal effects of productive TCR status and not new NK truth
+
+### Conservative NK-like negative-feature triage
+
+Phase or task:
+
+- select candidate negative model features from robust boundary DEGs while
+  excluding genes shared with cytotoxic, activated, innate-like, or gamma-delta
+  T cells
+
+Exact `.py` script:
+
+- `workflows/gdtai/select_boundary_nk_negative_features.py`
+
+Key outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_boundary_pseudobulk_deg/candidate_nk_negative_features.csv`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_boundary_pseudobulk_deg/excluded_shared_nk_t_features.csv`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_boundary_pseudobulk_deg/nk_negative_feature_selection.md`
+
+Standard behavior:
+
+- require robust cross-dataset depletion, paired log2FC at most -0.5, negative
+  dataset-macro effect, and source sign consistency of at least 0.88
+- exclude `GZMK`, `KLRC1`, every KIR gene, generic cytotoxicity genes, and
+  genes commonly expressed by activated or gamma-delta T cells
+- treat Tier A (`NCR1`, `SIGLEC7`, `SH2D1B`) as direct innate/NK
+  receptor-adaptor candidates and Tier B (`LAT2`, `SYK`, `PLCG2`, `PILRB`,
+  `CD300C`) as broader non-T immune-receptor pathway candidates
+- use candidates only as regularized soft negative features evaluated inside
+  grouped cross-dataset folds; never use one gene as a hard NK veto or label

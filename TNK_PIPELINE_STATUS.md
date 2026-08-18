@@ -176,6 +176,14 @@
 - the report is under
   `gdT_prediction/gdtai_v4_2_boundary_pseudobulk_deg/`; these are descriptive
   differences between pre-existing clusters and do not define new NK truth
+- conservative boundary-DEG feature triage passed with eight candidate soft
+  negative features: Tier A `NCR1`, `SIGLEC7`, and `SH2D1B`; Tier B `LAT2`,
+  `SYK`, `PLCG2`, `PILRB`, and `CD300C`
+- `GZMK`, `KLRC1`, all KIR genes, `FCER1G`, `TYROBP`, generic cytotoxicity
+  genes, and other activated/innate-like T-cell genes were explicitly excluded
+- these candidates are not approved model features yet; each must demonstrate
+  incremental grouped-cohort performance without an unacceptable gdT recall
+  cost, and no individual gene may be used as a hard exclusion rule
 
 ## Next action
 
