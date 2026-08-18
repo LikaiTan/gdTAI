@@ -162,8 +162,9 @@ read-only validator is
 are under
 `Integrated_dataset/tables/metadata_harmonization/full_atlas_v2/`.
 
-No H5AD was changed. Applying the columns remains a separate metadata-write
-gate requiring backup, exact row-alignment checks, and explicit approval.
+The read-only review itself changed no H5AD. Its subsequently approved write
+gate is documented below and created only a separate validated candidate;
+the canonical atlas was not changed.
 
 ## Full Row-Level Dry Run
 
@@ -197,10 +198,18 @@ fail-closed in `tissue_harmonized_v2` and
 - 3,120 GSE252762 rows originate from a mixed duodenum/PBMC library whose
   per-cell specimen compartment cannot be recovered from deposited metadata.
 
-The next operation is a high-risk metadata-only candidate-H5AD write. It must
-retain the current atlas as rollback, write and validate a separate candidate,
-and must not apply any TRA/TRB/TRG/TRD values. TCR chain propagation remains a
-subsequent transaction after this metadata candidate passes.
+The approved metadata-only candidate-H5AD transaction has now passed all 19
+post-write checks. The validated candidate is
+`/ssd/tnk_phase3/Integrated_dataset/full_atlas/metadata_corrected/integrated_full_atlas.h5ad`
+with SHA-256
+`7f1c5e1cac1074a8e2863703bc1862e225defc5ba1a3adbaabd3f6e023d5871c`.
+It contains the exact 13 additive columns and preserves sparse X, embeddings,
+existing obs/var signatures, cell order, and every legacy TCR field. AnnData
+backed-open validation passed. The original canonical atlas remains the
+byte-identical rollback object and the canonical symlink was not changed.
+
+No TRA/TRB/TRG/TRD value was applied. The next operation is the separate TCR
+sidecar transaction, using this checksum-bound metadata candidate as input.
 
 The exact write boundary and rollback contract are frozen in
 `docs/FULL_ATLAS_METADATA_V2_WRITE_PLAN.md`.

@@ -119,18 +119,26 @@
   unresolved biological samples with separate technical VDJ-library identity
 - no cell-type label is used as tissue/specimen evidence, and no TCR chain call
   has been applied to the metadata overlay
+- the approved metadata-only H5AD transaction passed all 19 post-write checks;
+  the validated 5,933,312-cell candidate is
+  `/ssd/tnk_phase3/Integrated_dataset/full_atlas/metadata_corrected/integrated_full_atlas.h5ad`
+- the candidate SHA-256 is
+  `7f1c5e1cac1074a8e2863703bc1862e225defc5ba1a3adbaabd3f6e023d5871c`;
+  all 13 additive columns reproduce the keyed overlay's ordered hashes and
+  value counts exactly
+- sparse X, X_scVI, X_umap, existing obs/var signatures, cell order, and all
+  legacy TCR fields remain unchanged; AnnData backed-open validation passed
+- the canonical atlas still resolves to the original checksum-bound rollback
+  object, and no TCR chain call has been applied
 
 ## Next action
 
-- complete and validate the additive tissue/tumor/sample/library metadata
-  replacement before any TCR chain metadata is applied
+- use the validated metadata-corrected candidate as the sole input to the
+  separate TCR sidecar transaction
 - keep biological `sample_id_harmonized_v2` separate from technical
   `tcr_library_join_id_v2`; pooled VDJ libraries must never overwrite specimen
   or donor identity
-- obtain explicit approval before the high-risk metadata-replacement gate;
-  the first write must add and validate tissue, specimen, tumor, sample,
-  library, donor, and provenance fields while preserving all legacy columns
-- only after that metadata gate passes may TCR propagation consume the
+- the metadata-only replacement gate has passed; TCR propagation may now consume the
   checksum-bound 14-source sidecar, create a second rollback point, preserve
   legacy TCR fields for provenance, and keep the 110 ambiguous GSE235863 rows
   blank and ineligible for TCR truth
@@ -178,9 +186,9 @@
 
 ## Current blockers or review items
 
-- the rebuilt TCR sidecar is validated but intentionally not propagated: H5AD
-  metadata replacement remains a high-risk operation requiring explicit
-  approval and backup/rollback controls
+- the rebuilt TCR sidecar is validated but intentionally not propagated; the
+  prerequisite metadata-only candidate passed, and TCR application must occur
+  as a separate checksum-bound candidate transaction with rollback controls
 - the three source-level quarantine blockers are resolved: GSE125527 has
   75.82% exact author/raw CDR3 agreement with 22,928-fold enrichment over
   sample rotation; GSE228597 has 95.03% agreement and 7,951-fold enrichment;

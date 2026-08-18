@@ -1264,8 +1264,9 @@ Standard behavior:
   clusters, and UMAP unchanged during metadata repair
 - clear stale calls, preserve null UMI/read semantics, and keep ambiguous rows
   fail closed; rebuild downstream TCR truth labels after replacement
-- require backup, temporary-file validation, and explicit approval before the
-  high-risk metadata-only H5AD write and atomic canonical symlink switch
+- require temporary-file validation for every H5AD transaction; the approved
+  metadata-only candidate is complete, while any future canonical symlink
+  switch remains a separate high-risk action
 
 ## Pre-TCR full-atlas metadata and sample identity correction
 
@@ -1282,6 +1283,7 @@ Exact `.py` scripts:
 - `workflows/metadata/audit_full_atlas_metadata_harmonization_v2.py`
 - `workflows/metadata/audit_full_atlas_sample_identity_v2.py`
 - `workflows/metadata/build_full_atlas_metadata_overlay_v2.py`
+- `workflows/metadata/apply_full_atlas_metadata_overlay_v2.py`
 
 Key inputs and outputs:
 
@@ -1302,14 +1304,23 @@ Current result:
   cells and 3,120 inseparable mixed-duodenum/PBMC GSE252762 cells
 - the overlay SHA-256 is
   `4da4eea32e9d275de790775e2a0f59d4f6553d72756e9c8c6935f35bb398984f`
-- no TCR chain call or H5AD write occurred
+- the approved metadata-only candidate write passed all 19 post-write checks
+- the validated candidate is
+  `/ssd/tnk_phase3/Integrated_dataset/full_atlas/metadata_corrected/integrated_full_atlas.h5ad`
+  with SHA-256
+  `7f1c5e1cac1074a8e2863703bc1862e225defc5ba1a3adbaabd3f6e023d5871c`
+- all 13 additive columns reproduce keyed overlay hashes and value counts;
+  sparse X, embeddings, existing obs/var signatures, cell order, and legacy
+  TCR fields remain unchanged
+- the original canonical atlas remains the byte-identical rollback object;
+  no TCR chain call was applied
 
 Gate behavior:
 
-- metadata application and canonical publication require backup, temporary
-  output validation, and explicit approval
-- TCR sidecar application is a later transaction and remains blocked until the
-  metadata object passes post-write validation
+- canonical publication remains a separate transaction; the canonical symlink
+  was not changed
+- the TCR sidecar application is the next transaction and must use the
+  checksum-bound metadata candidate above as input
 
 ## Phase 1: Coarse T/NK extraction
 
