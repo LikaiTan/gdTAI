@@ -78,9 +78,9 @@
   - `Integrated_dataset/tables/tcr_join_rebuild/`
   - `Integrated_dataset/figures/tcr_join_rebuild/`
   - `Integrated_dataset/logs/tcr_join_rebuild/`
-  - decision: `PASS_SIDECAR_READY`; 11/14 sources contribute 2,479,137
-    checksum-bound replacement rows with per-chain UMI/read provenance, while
-    three sources remain quarantined and no H5AD propagation occurred
+  - decision: `PASS_SIDECAR_READY`; 14/14 sources contribute 3,041,871
+    checksum-bound replacement rows with per-chain UMI/read provenance, no
+    source remains quarantined, and no H5AD propagation occurred
 
 - gdTAI V4.2 T/NK-restricted reintegration and NK-boundary review:
   - `gdT_prediction/gdtai_v4_2_tnk_reintegration/index.html`

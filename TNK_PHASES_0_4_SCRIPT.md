@@ -1132,6 +1132,7 @@ Phase or task:
 
 Exact `.py` scripts:
 
+- `workflows/intake/recover_gse287541_tcr_from_sra.py`
 - `workflows/intake/rebuild_flagged_tcr_joins.py`
 - `workflows/reporting/build_tcr_join_rebuild_report.py`
 - `workflows/intake/validate_tcr_join_rebuild.py`
@@ -1139,6 +1140,21 @@ Exact `.py` scripts:
 Execution commands:
 
 ```bash
+# One-time official ENA run-manifest setup.
+mkdir -p data/datasets/GSE287541/raw/geo_sra
+curl -L \
+  'https://www.ebi.ac.uk/ena/portal/api/filereport?accession=PRJNA1213711&result=read_run&fields=run_accession,sample_accession,experiment_accession,sample_title,library_name,library_strategy,library_source,library_selection,instrument_platform,read_count,base_count,fastq_bytes,fastq_ftp&format=tsv&download=true' \
+  -o data/datasets/GSE287541/raw/geo_sra/ena_run_manifest.tsv
+# One-time official 10x VDJ reference setup (SHA-256 of archive:
+# a7ba0ae81f44e9ee61338417585cc955ed3c75d49577267be72e05735c654065)
+curl -L \
+  https://cf.10xgenomics.com/supp/cell-vdj/refdata-cellranger-vdj-GRCh38-alts-ensembl-5.0.0.tar.gz \
+  -o /tmp/refdata-cellranger-vdj-GRCh38-alts-ensembl-5.0.0.tar.gz
+tar -xzf /tmp/refdata-cellranger-vdj-GRCh38-alts-ensembl-5.0.0.tar.gz \
+  -C data/references
+/home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
+  workflows/intake/recover_gse287541_tcr_from_sra.py \
+  --workers 2 --cores-per-sample 30 --memory-gb-per-sample 80
 /home/tanlikai/miniconda3/envs/rapids_sc_py310/bin/python \
   workflows/intake/rebuild_flagged_tcr_joins.py --overwrite
 MPLCONFIGDIR=/tmp/matplotlib-tcr-report \
@@ -1150,6 +1166,7 @@ MPLCONFIGDIR=/tmp/matplotlib-tcr-report \
 
 Key outputs:
 
+- `data/datasets/GSE287541/interim/tcr_recovery/`
 - `Integrated_dataset/tables/tcr_join_rebuild/`
 - `Integrated_dataset/figures/tcr_join_rebuild/`
 - `Integrated_dataset/logs/tcr_join_rebuild/`
@@ -1158,18 +1175,23 @@ Key outputs:
 
 Current result:
 
-- 11/14 sources passed full or fail-closed partial rebuilding; GSE125527,
-  GSE228597, and GSE287541 are quarantined
-- 2,479,137 rows are staged for replacement, including 948,991 cells with
-  validated productive TCR and 1,553,032 chain calls with observed UMI support
+- all 14 sources passed full or fail-closed partial rebuilding; no source-level
+  quarantine remains
+- 3,041,871 rows are staged for replacement, including 1,121,858 cells with
+  validated productive TCR and 1,789,643 chain calls with observed UMI support
+- GSE125527 and GSE228597 passed exact-CDR3/sample-rotation controls, and all
+  46 public GSE287541 TCR runs were reconstructed and checksum-validated
 - GSE235863 retains 110 duplicate RNA join-key rows as blank,
   TCR-truth-ineligible replacement rows
-- independent validation passed 13/13 checks and all six focused parser tests
-  passed
+- independent validation passed 15/15 checks and all 12 focused tests passed;
+  the seven-page HTML/PDF report passed visual table-layout review
 - all recorded source H5AD size/mtime pairs remained unchanged
 
 Standard behavior:
 
+- recover all 46 public GSE287541 TCR runs sample by sample, validate the
+  10x read structure, run Cell Ranger VDJ with `--disable-ui`, retain compact
+  contig/metric/checksum outputs, and remove generated SRA/FASTQ/BAM scratch
 - require productive, cell-associated, high-confidence raw records with a
   nonempty CDR3 and join only by `sample_id + barcode_core`
 - select one call per chain by highest UMI, then reads, full-length status, and
@@ -1177,6 +1199,12 @@ Standard behavior:
   multiplicity
 - retain UMI/read availability flags and null values when quantitative support
   is absent; never reinterpret unavailable support as zero
+- use the published patient-remapping table plus tissue for GSE125527, pooled
+  library suffixes for GSE228597, and round plus participant visit for
+  GSE287541
+- require at least 50% raw-key recovery, or for filtered multi-assay objects an
+  exact-CDR3 fallback with at least 100 testable and 100 confirmed calls, at
+  least 50% agreement, and at least 20-fold enrichment over sample rotation
 - separate metadata-replacement eligibility from TCR-truth eligibility so
   ambiguous legacy calls can be cleared without becoming negative truth
 - bind any propagation to the staged sidecar SHA-256 and require explicit

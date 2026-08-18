@@ -88,6 +88,7 @@ RAW_COLUMNS = {
     "contig_id",
     "high_confidence",
     "chain",
+    "c_gene",
     "v_gene",
     "d_gene",
     "j_gene",
@@ -143,10 +144,7 @@ class RawBundle:
 
 
 SOURCE_SPECS: dict[str, SourceSpec] = {
-    "GSE125527": SourceSpec(
-        "quarantine",
-        source_reason="RNA metadata does not retain the raw library/patient identity required for a safe join",
-    ),
+    "GSE125527": SourceSpec("gse125527_tables"),
     "GSE171037": SourceSpec("direct_tar", r"_filtered_contig_annotations\.csv\.gz$"),
     "GSE178882": SourceSpec("direct_tar", r"_filtered_contig_annotations\.csv\.gz$"),
     "GSE188620": SourceSpec("direct_tar", r"_filtered_contig_annotations\.csv\.gz$"),
@@ -158,10 +156,7 @@ SOURCE_SPECS: dict[str, SourceSpec] = {
     "GSE243905": SourceSpec("nested_gse243905"),
     "GSE254176": SourceSpec("direct_tar", r"-TCR_filtered_contig_annotations\.csv\.gz$"),
     "GSE254249": SourceSpec("flat_gse254249"),
-    "GSE287541": SourceSpec(
-        "quarantine",
-        source_reason="No raw VDJ contig or receptor table is present in the project",
-    ),
+    "GSE287541": SourceSpec("gse287541_recovered"),
     "GSE311112": SourceSpec("direct_tar", r"_tcr_all_contig_annotations\.csv\.gz$"),
 }
 
@@ -230,13 +225,76 @@ def obs_barcode_series(obs: pd.DataFrame) -> pd.Series:
 
 def rna_sample_keys(gse_id: str, obs: pd.DataFrame) -> pd.Series:
     """Derive a documented canonical RNA sample key for one source."""
+    if gse_id == "GSE125527":
+        mapping_path = (
+            PROJECT_ROOT
+            / "data/datasets/GSE125527/raw/legacy_source/suppl/"
+            "GSE125527_oldPatientId-newPatientId.csv.gz"
+        )
+        patient_map = pd.read_csv(mapping_path, dtype=str)
+        new_to_old = dict(zip(patient_map["new_id"], patient_map["old_id"]))
+        patient = pd.Series(obs["patient_assignment"].astype(object), index=obs.index)
+        old_patient = patient.map(clean_text).map(new_to_old).fillna("")
+        tissue = pd.Series(obs["tissue_assignment"].astype(object), index=obs.index).map(
+            normalize_key
+        )
+        return (old_patient + "_" + tissue).map(normalize_key).where(old_patient.ne(""), "")
     if gse_id == "GSE254249":
         raw = obs_barcode_series(obs).map(clean_text)
         return raw.str.replace(r"^.*?[ACGTN]{14,}-\d+_", "", regex=True).map(normalize_key)
     if gse_id == "GSE235863":
         return obs["sample"].map(normalize_key)
     if gse_id == "GSE228597":
-        return obs["sample_id"].map(normalize_key)
+        names = pd.Series(obs.index.astype(str), index=obs.index)
+        suffixes = names.str.extract(r"-([0-9]+)-([0-9]+)$")
+        # The suffixes encode the author's concatenation order; pool identities
+        # were cross-checked against the GEO hashing manifest and raw VDJ names.
+        suffix_to_library = {
+            (0, 0): "M3_45A",
+            (1, 0): "M3_45B",
+            (2, 0): "M3_8A",
+            (3, 0): "M3_8B",
+            (4, 0): "M1_45A",
+            (5, 0): "M1_45B",
+            (6, 0): "M1_8A",
+            (7, 0): "M1_8B",
+            (8, 0): "M2_45A",
+            (9, 0): "M2_45B",
+            (10, 0): "M2_8A",
+            (11, 0): "M2_8B",
+            (12, 0): "M5_45A",
+            (13, 0): "M5_45B",
+            (14, 0): "M6_45A",
+            (15, 0): "M6_45B",
+            (16, 0): "M7_45A",
+            (17, 0): "M7_45B",
+            (18, 0): "M8_45A",
+            (19, 0): "M8_45B",
+            (0, 1): "C1_45A",
+            (1, 1): "C1_45B",
+            (2, 1): "C1_8A",
+            (3, 1): "C1_8B",
+            (8, 1): "C3_45A",
+            (9, 1): "C3_45B",
+            (10, 1): "C3_8A",
+            (11, 1): "C3_8B",
+        }
+        keys = pd.Series("", index=obs.index, dtype=object)
+        has_suffix = suffixes.notna().all(axis=1)
+        pairs = zip(
+            suffixes.loc[has_suffix, 0].astype(int),
+            suffixes.loc[has_suffix, 1].astype(int),
+        )
+        keys.loc[has_suffix] = [normalize_key(suffix_to_library.get(pair, "")) for pair in pairs]
+        controls = names.str.extract(r"^(irAE_controls_[^-]+_GEX)-[ACGTN]{14,}$", expand=False)
+        keys.loc[controls.notna()] = controls.loc[controls.notna()].map(normalize_key)
+        return keys
+    if gse_id == "GSE287541":
+        round_id = pd.Series(obs["round"].astype(object), index=obs.index).map(clean_text)
+        participant_visit = pd.Series(obs["PID_visit"].astype(object), index=obs.index).map(
+            clean_text
+        )
+        return (round_id + "_" + participant_visit).map(normalize_key)
 
     source_column = "sample"
     if source_column not in obs.columns:
@@ -306,7 +364,9 @@ def raw_sample_key_from_name(gse_id: str, filename: str) -> str:
     stem = re.sub(r"\.(csv|tsv)(\.gz)?$", "", stem, flags=re.I)
     stem = re.sub(r"\.tar(\.gz)?$", "", stem, flags=re.I)
     stem = re.sub(r"^GSM\d+_", "", stem, flags=re.I)
-    if gse_id == "GSE171037":
+    if gse_id == "GSE125527":
+        stem = re.sub(r"_full-length_productive_TCR_table$", "", stem, flags=re.I)
+    elif gse_id == "GSE171037":
         stem = re.sub(r"_filtered_contig_annotations$", "", stem, flags=re.I)
     elif gse_id in {"GSE178882", "GSE188620"}:
         stem = re.sub(r"_filtered_contig_annotations$", "", stem, flags=re.I)
@@ -457,6 +517,90 @@ def load_direct_tar(gse_id: str, spec: SourceSpec) -> RawBundle:
     )
 
 
+def load_gse125527_tables() -> RawBundle:
+    """Load the public full-length productive TCR tables.
+
+    These tables do not expose UMI or read support. Their ``batch_id`` values
+    are checked against the filename-derived library key before use.
+    """
+    root = (
+        PROJECT_ROOT
+        / "data/datasets/GSE125527/raw/legacy_source/suppl/extracted_analysis"
+    )
+    paths = sorted(root.glob("GSM*_full-length_productive_TCR_table.tsv.gz"))
+    frames: list[pd.DataFrame] = []
+    files: list[str] = []
+    n_input = 0
+    n_productive = 0
+    for path in paths:
+        sample_id = raw_sample_key_from_name("GSE125527", path.name)
+        df = pd.read_csv(path, sep="\t", low_memory=False)
+        observed_samples = set(df["batch_id"].map(normalize_key)) if "batch_id" in df else set()
+        if observed_samples and observed_samples != {sample_id}:
+            raise ValueError(
+                f"GSE125527 filename/table batch mismatch for {path.name}: {observed_samples}"
+            )
+        c_gene = df["c_gene"].map(clean_text).str.upper() if "c_gene" in df else pd.Series("", index=df.index)
+        v_gene = df["v_gene"].map(clean_text).str.upper() if "v_gene" in df else pd.Series("", index=df.index)
+        df["chain"] = c_gene.str.extract(r"^(TRA|TRB|TRG|TRD)", expand=False)
+        missing_chain = df["chain"].isna()
+        df.loc[missing_chain, "chain"] = v_gene.loc[missing_chain].str.extract(
+            r"^(TRA|TRB|TRG|TRD)", expand=False
+        )
+        df["full_length"] = True
+        df["productive"] = True
+        source_file = relative_label(path)
+        standardized, n_all, n_prod = standardize_contigs(
+            df,
+            sample_id=sample_id,
+            source_file=source_file,
+        )
+        frames.append(standardized)
+        files.append(source_file)
+        n_input += n_all
+        n_productive += n_prod
+    return RawBundle(
+        pd.concat(frames, ignore_index=True) if frames else empty_contig_frame(),
+        files,
+        n_input,
+        n_productive,
+    )
+
+
+def load_gse287541_recovered() -> RawBundle:
+    """Load Cell Ranger VDJ contigs reconstructed from the public SRA runs."""
+    root = PROJECT_ROOT / "data/datasets/GSE287541/interim/tcr_recovery/cellranger"
+    completion_path = root.parent / "recovery_completion.json"
+    if not completion_path.exists():
+        raise RuntimeError("GSE287541 TCR recovery is incomplete; no completion manifest exists.")
+    completion = json.loads(completion_path.read_text())
+    if not completion.get("complete") or completion.get("libraries_with_validated_output") != 46:
+        raise RuntimeError("GSE287541 TCR recovery has not validated all 46 libraries.")
+    paths = sorted(root.glob("*/filtered_contig_annotations.csv.gz"))
+    frames: list[pd.DataFrame] = []
+    files: list[str] = []
+    n_input = 0
+    n_productive = 0
+    for path in paths:
+        source_file = relative_label(path)
+        df = pd.read_csv(path, low_memory=False, usecols=lambda column: column in RAW_COLUMNS)
+        standardized, n_all, n_prod = standardize_contigs(
+            df,
+            sample_id=normalize_key(path.parent.name),
+            source_file=source_file,
+        )
+        frames.append(standardized)
+        files.append(source_file)
+        n_input += n_all
+        n_productive += n_prod
+    return RawBundle(
+        pd.concat(frames, ignore_index=True) if frames else empty_contig_frame(),
+        files,
+        n_input,
+        n_productive,
+    )
+
+
 def load_nested_gse243905() -> RawBundle:
     gse_id = "GSE243905"
     tar_path = PROJECT_ROOT / f"data/datasets/{gse_id}/raw/legacy_source/suppl/{gse_id}_RAW.tar"
@@ -552,6 +696,10 @@ def load_raw_bundle(gse_id: str, spec: SourceSpec) -> RawBundle:
         return load_flat_gse254249()
     if spec.loader == "wide_gse235863":
         return load_wide_gse235863()
+    if spec.loader == "gse125527_tables":
+        return load_gse125527_tables()
+    if spec.loader == "gse287541_recovered":
+        return load_gse287541_recovered()
     if spec.loader == "quarantine":
         return RawBundle(empty_contig_frame())
     raise ValueError(f"Unknown loader `{spec.loader}` for {gse_id}")
@@ -616,6 +764,36 @@ def source_h5ad_path(gse_id: str) -> Path:
     return PROJECT_ROOT / f"data/datasets/{gse_id}/processed/current.h5ad"
 
 
+def raw_to_rna_mapping_passes(stats: dict[str, int]) -> bool:
+    """Apply the source gate with an exact-sequence confirmation fallback.
+
+    Multi-assay author objects can retain substantially fewer RNA cells than
+    Cell Ranger called in VDJ. In that setting, exact author/raw CDR3 agreement
+    with a wrong-sample negative control is direct evidence that the
+    sample/barcode mapping is correct even when fewer than half of raw VDJ cell
+    keys remain in the RNA object.
+    """
+    eligible = stats["n_eligible_raw_cell_keys"]
+    if not eligible:
+        return False
+    match_fraction = stats["n_matched_raw_cell_keys"] / eligible
+    tested = stats.get("n_author_calls_tested_against_raw", 0)
+    confirmed = stats.get("n_author_calls_confirmed_in_raw", 0)
+    rotated = stats.get("n_author_calls_confirmed_after_sample_rotation", 0)
+    concordance = confirmed / tested if tested else 0.0
+    rotation_enrichment = confirmed / max(rotated, 1)
+    return bool(
+        match_fraction >= 0.5
+        or (
+            tested >= 100
+            and confirmed >= 100
+            and stats.get("n_author_sample_rotation_chains", 0) >= 1
+            and concordance >= 0.5
+            and rotation_enrichment >= 20
+        )
+    )
+
+
 def build_quarantine_sidecar(
     gse_id: str,
     obs: pd.DataFrame,
@@ -669,19 +847,99 @@ def build_sidecar(
     )
 
     raw = bundle.contigs.copy()
+    author_calls_tested = 0
+    author_calls_confirmed = 0
+    author_calls_confirmed_after_sample_rotation = 0
+    author_sample_rotation_chains = 0
+    author_calls_tested_by_sample: dict[str, int] = {}
+    author_calls_confirmed_by_sample: dict[str, int] = {}
+    for chain in CHAINS:
+        column = f"{chain}_cdr3"
+        if column not in obs.columns or raw.empty:
+            continue
+        author = rna[["sample_id", "barcode_core"]].copy()
+        author["cdr3"] = pd.Series(obs[column].astype(object), index=obs.index).map(clean_text)
+        author = author.loc[
+            author["sample_id"].ne("")
+            & author["barcode_core"].ne("")
+            & author["cdr3"].ne("")
+        ]
+        raw_chain = raw.loc[
+            raw["chain"].eq(chain), ["sample_id", "barcode_core", "cdr3"]
+        ].drop_duplicates()
+        if author.empty or raw_chain.empty:
+            continue
+        available_keys = raw_chain[["sample_id", "barcode_core"]].drop_duplicates()
+        tested = author.merge(available_keys, on=["sample_id", "barcode_core"], how="inner")
+        confirmed = tested.merge(
+            raw_chain,
+            on=["sample_id", "barcode_core", "cdr3"],
+            how="inner",
+        )
+        author_calls_tested += len(tested)
+        confirmed = confirmed.drop_duplicates()
+        author_calls_confirmed += len(confirmed)
+        for sample_id, count in tested.groupby("sample_id").size().items():
+            author_calls_tested_by_sample[sample_id] = (
+                author_calls_tested_by_sample.get(sample_id, 0) + int(count)
+            )
+        for sample_id, count in confirmed.groupby("sample_id").size().items():
+            author_calls_confirmed_by_sample[sample_id] = (
+                author_calls_confirmed_by_sample.get(sample_id, 0) + int(count)
+            )
+        samples = sorted(raw_chain["sample_id"].unique())
+        if len(samples) > 1:
+            author_sample_rotation_chains += 1
+            rotated_sample = dict(zip(samples, samples[1:] + samples[:1]))
+            rotated_raw = raw_chain.copy()
+            rotated_raw["sample_id"] = rotated_raw["sample_id"].map(rotated_sample)
+            rotated_confirmed = author.merge(
+                rotated_raw,
+                on=["sample_id", "barcode_core", "cdr3"],
+                how="inner",
+            )
+            author_calls_confirmed_after_sample_rotation += len(
+                rotated_confirmed.drop_duplicates()
+            )
     raw_files_per_sample = (
         raw.groupby("sample_id")["source_file"].nunique().rename("n_raw_files")
         if not raw.empty
         else pd.Series(dtype=int, name="n_raw_files")
     )
-    ambiguous_samples = set(raw_files_per_sample[raw_files_per_sample.gt(1)].index)
-    eligible_raw = raw.loc[~raw["sample_id"].isin(ambiguous_samples)].copy()
+    rna_samples = set(rna.loc[rna["sample_id"].ne(""), "sample_id"])
+    ambiguous_samples = set(raw_files_per_sample[raw_files_per_sample.gt(1)].index) & rna_samples
+    eligible_raw = raw.loc[
+        ~raw["sample_id"].isin(ambiguous_samples) & raw["sample_id"].isin(rna_samples)
+    ].copy()
     selected = select_best_contigs(eligible_raw)
     wide = pivot_chains(selected)
 
     raw_sample_counts = raw.groupby("sample_id").size().rename("n_productive_contigs") if not raw.empty else pd.Series(dtype=int)
+    raw_cell_counts = (
+        raw[["sample_id", "barcode_core"]]
+        .drop_duplicates()
+        .groupby("sample_id")
+        .size()
+        .rename("n_raw_productive_cell_keys")
+        if not raw.empty
+        else pd.Series(dtype=int, name="n_raw_productive_cell_keys")
+    )
+    eligible_raw_cell_counts = (
+        wide.groupby("sample_id").size().rename("n_eligible_raw_productive_cell_keys")
+        if not wide.empty
+        else pd.Series(dtype=int, name="n_eligible_raw_productive_cell_keys")
+    )
     rna_sample_counts = rna.groupby("sample_id").size().rename("n_rna_cells")
-    sample_audit = pd.concat([rna_sample_counts, raw_sample_counts, raw_files_per_sample], axis=1).fillna(0).reset_index()
+    sample_audit = pd.concat(
+        [
+            rna_sample_counts,
+            raw_sample_counts,
+            raw_cell_counts,
+            eligible_raw_cell_counts,
+            raw_files_per_sample,
+        ],
+        axis=1,
+    ).fillna(0).reset_index()
     sample_audit.insert(0, "source_gse_id", gse_id)
     sample_audit["sample_in_rna"] = sample_audit["n_rna_cells"].gt(0)
     sample_audit["sample_in_raw"] = sample_audit["n_productive_contigs"].gt(0)
@@ -693,6 +951,18 @@ def build_sidecar(
         ],
         ["quarantined_multiple_raw_libraries", "eligible", "raw_sample_not_in_rna"],
         default="rna_sample_without_raw_vdj",
+    )
+    sample_audit["n_author_calls_tested_against_raw"] = (
+        sample_audit["sample_id"].map(author_calls_tested_by_sample).fillna(0).astype(int)
+    )
+    sample_audit["n_author_calls_confirmed_in_raw"] = (
+        sample_audit["sample_id"].map(author_calls_confirmed_by_sample).fillna(0).astype(int)
+    )
+    sample_audit["author_call_raw_concordance"] = np.where(
+        sample_audit["n_author_calls_tested_against_raw"].gt(0),
+        sample_audit["n_author_calls_confirmed_in_raw"]
+        / sample_audit["n_author_calls_tested_against_raw"],
+        np.nan,
     )
 
     merged = rna.reset_index(drop=True).merge(wide, on=["sample_id", "barcode_core"], how="left", validate="many_to_one")
@@ -736,6 +1006,18 @@ def build_sidecar(
     )
 
     matched = merged["TCRseq_rebuilt"].eq("yes")
+    matched_per_sample = (
+        merged.loc[matched].groupby("join_sample_id").size().rename("n_matched_productive_cell_keys")
+    )
+    sample_audit["n_matched_productive_cell_keys"] = (
+        sample_audit["sample_id"].map(matched_per_sample).fillna(0).astype(int)
+    )
+    sample_audit["raw_to_rna_match_fraction"] = np.where(
+        sample_audit["n_eligible_raw_productive_cell_keys"].gt(0),
+        sample_audit["n_matched_productive_cell_keys"]
+        / sample_audit["n_eligible_raw_productive_cell_keys"],
+        np.nan,
+    )
     merged["join_status"] = np.select(
         [missing_key, ambiguous_rna, raw_sample_ambiguous, ~in_raw_sample, matched],
         [
@@ -770,6 +1052,12 @@ def build_sidecar(
         "n_missing_rna_keys": int(missing_key.sum()),
         "n_eligible_raw_cell_keys": int(len(wide)),
         "n_matched_raw_cell_keys": int(matched.sum()),
+        "n_author_calls_tested_against_raw": author_calls_tested,
+        "n_author_calls_confirmed_in_raw": author_calls_confirmed,
+        "n_author_calls_confirmed_after_sample_rotation": (
+            author_calls_confirmed_after_sample_rotation
+        ),
+        "n_author_sample_rotation_chains": author_sample_rotation_chains,
         "source_mapping_quarantined": 0,
     }
     return merged, sample_audit, stats
@@ -918,6 +1206,30 @@ def summarize_source(
         "n_missing_rna_keys": stats["n_missing_rna_keys"],
         "n_eligible_raw_cell_keys": stats["n_eligible_raw_cell_keys"],
         "n_matched_raw_cell_keys": stats["n_matched_raw_cell_keys"],
+        "n_author_calls_tested_against_raw": stats.get(
+            "n_author_calls_tested_against_raw", 0
+        ),
+        "n_author_calls_confirmed_in_raw": stats.get(
+            "n_author_calls_confirmed_in_raw", 0
+        ),
+        "n_author_calls_confirmed_after_sample_rotation": stats.get(
+            "n_author_calls_confirmed_after_sample_rotation", 0
+        ),
+        "n_author_sample_rotation_chains": stats.get(
+            "n_author_sample_rotation_chains", 0
+        ),
+        "author_call_raw_concordance": (
+            stats.get("n_author_calls_confirmed_in_raw", 0)
+            / stats.get("n_author_calls_tested_against_raw", 0)
+            if stats.get("n_author_calls_tested_against_raw", 0)
+            else np.nan
+        ),
+        "author_call_enrichment_over_sample_rotation": (
+            stats.get("n_author_calls_confirmed_in_raw", 0)
+            / max(stats.get("n_author_calls_confirmed_after_sample_rotation", 0), 1)
+            if stats.get("n_author_calls_tested_against_raw", 0)
+            else np.nan
+        ),
         "raw_to_rna_match_fraction": (
             stats["n_matched_raw_cell_keys"] / stats["n_eligible_raw_cell_keys"]
             if stats["n_eligible_raw_cell_keys"]
@@ -949,7 +1261,7 @@ def write_markdown(summary: pd.DataFrame, sample_audit: pd.DataFrame) -> None:
         "",
         "## Method",
         "",
-        "Productive, cell-associated, high-confidence raw contigs were reduced to one contig per chain by highest UMI, then reads, full-length status, and contig id. TRA, TRB, TRG, and TRD were joined only by canonical sample id plus barcode core. Missing UMI/read fields remain null. Multiple raw libraries collapsing to one sample key and duplicated RNA join keys fail closed.",
+        "Productive, cell-associated, high-confidence raw contigs were reduced to one contig per chain by highest UMI, then reads, full-length status, and contig id. TRA, TRB, TRG, and TRD were joined only by canonical sample id plus barcode core. Missing UMI/read fields remain null. The default source gate requires 50% raw-key recovery; filtered multi-assay objects may use the documented exact-CDR3 fallback only with at least 100 testable and 100 confirmed calls, at least 50% agreement, and at least 20-fold enrichment over sample rotation. Multiple raw libraries collapsing to one RNA-present sample key and duplicated RNA join keys fail closed.",
         "",
         "## Source summary",
         "",
@@ -962,6 +1274,9 @@ def write_markdown(summary: pd.DataFrame, sample_audit: pd.DataFrame) -> None:
                 "n_rebuilt_paired_ab",
                 "n_rebuilt_any_gd",
                 "n_rebuilt_chain_calls_with_umi",
+                "raw_to_rna_match_fraction",
+                "author_call_raw_concordance",
+                "author_call_enrichment_over_sample_rotation",
                 "n_ambiguous_raw_samples",
             ]
         ].to_markdown(index=False),
@@ -1090,21 +1405,25 @@ def process_source(gse_id: str, overwrite: bool) -> tuple[dict[str, object], pd.
             "n_missing_rna_keys": len(obs),
             "n_eligible_raw_cell_keys": 0,
             "n_matched_raw_cell_keys": 0,
+            "n_author_calls_tested_against_raw": 0,
+            "n_author_calls_confirmed_in_raw": 0,
+            "n_author_calls_confirmed_after_sample_rotation": 0,
+            "n_author_sample_rotation_chains": 0,
             "source_mapping_quarantined": 1,
         }
     else:
         sidecar, sample_audit, stats = build_sidecar(gse_id, obs, bundle)
-        match_fraction = (
-            stats["n_matched_raw_cell_keys"] / stats["n_eligible_raw_cell_keys"]
-            if stats["n_eligible_raw_cell_keys"]
-            else 0.0
+        low_overlap_without_sequence_confirmation = (
+            stats["n_eligible_raw_cell_keys"]
+            and not raw_to_rna_mapping_passes(stats)
         )
-        if stats["n_eligible_raw_cell_keys"] and match_fraction < 0.5:
+        if low_overlap_without_sequence_confirmation:
             stats["source_mapping_quarantined"] = 1
             sidecar["replacement_eligible"] = False
             sidecar["tcr_assignment_eligible"] = False
             sidecar["join_reason"] = (
-                "source quarantined because fewer than 50% of eligible raw VDJ cell keys map to RNA"
+                "source quarantined because fewer than 50% of eligible raw VDJ cell keys map to "
+                "RNA and exact author/raw CDR3 confirmation is insufficient"
             )
             for chain in CHAINS:
                 for field in CHAIN_FIELDS:

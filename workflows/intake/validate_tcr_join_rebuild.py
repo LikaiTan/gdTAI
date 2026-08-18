@@ -19,6 +19,10 @@ REPLACEMENT = TABLE_DIR / "validated_tcr_replacement_sidecar.parquet"
 REPLACEMENT_MANIFEST = TABLE_DIR / "validated_tcr_replacement_manifest.csv"
 RUN_MANIFEST = LOG_DIR / "run_manifest.json"
 REPORT_DIR = PROJECT_ROOT / "gdT_prediction/gdtai_v4_2_tcr_join_rebuild"
+GSE287541_COMPLETION = (
+    PROJECT_ROOT
+    / "data/datasets/GSE287541/interim/tcr_recovery/recovery_completion.json"
+)
 OUTPUT_JSON = LOG_DIR / "final_validation.json"
 OUTPUT_MD = LOG_DIR / "final_validation.md"
 CHAINS = ("TRA", "TRB", "TRG", "TRD")
@@ -45,8 +49,44 @@ def main() -> None:
     check(results, "fourteen_sources", len(summary) == 14, f"observed={len(summary)}")
     n_pass = int(summary["rebuild_status"].str.startswith("PASS").sum())
     n_quarantine = int(summary["rebuild_status"].str.startswith("QUARANTINED").sum())
-    check(results, "source_outcome_partition", n_pass == 11 and n_quarantine == 3, f"pass={n_pass}; quarantine={n_quarantine}")
+    check(
+        results,
+        "all_sources_rebuilt",
+        n_pass == 14 and n_quarantine == 0,
+        f"pass={n_pass}; quarantine={n_quarantine}",
+    )
     check(results, "recorded_h5ads_unchanged", summary["source_h5ad_unchanged"].all(), "all recorded size/mtime comparisons are true")
+    below_floor = summary.loc[
+        summary["rebuild_status"].str.startswith("PASS")
+        & summary["n_eligible_raw_cell_keys"].gt(0)
+        & summary["raw_to_rna_match_fraction"].lt(0.5)
+    ]
+    sequence_fallback_valid = (
+        below_floor["n_author_calls_tested_against_raw"].ge(100)
+        & below_floor["n_author_calls_confirmed_in_raw"].ge(100)
+        & below_floor["n_author_sample_rotation_chains"].ge(1)
+        & below_floor["author_call_raw_concordance"].ge(0.5)
+        & below_floor["author_call_enrichment_over_sample_rotation"].ge(20)
+    ).all()
+    check(
+        results,
+        "below_floor_sources_have_sequence_confirmation",
+        bool(sequence_fallback_valid),
+        ",".join(below_floor["source_gse_id"]) or "none",
+    )
+    recovery = (
+        json.loads(GSE287541_COMPLETION.read_text())
+        if GSE287541_COMPLETION.exists()
+        else {}
+    )
+    check(
+        results,
+        "gse287541_all_public_tcr_runs_recovered",
+        recovery.get("complete") is True
+        and recovery.get("libraries_with_validated_output") == 46
+        and recovery.get("cellranger_ui_disabled") is True,
+        json.dumps(recovery, sort_keys=True),
+    )
 
     sidecar_errors: list[str] = []
     current_stat_errors: list[str] = []

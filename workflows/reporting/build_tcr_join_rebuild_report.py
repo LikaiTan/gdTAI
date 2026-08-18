@@ -33,7 +33,7 @@ RUN_MANIFEST = PROJECT_ROOT / "Integrated_dataset/logs/tcr_join_rebuild/run_mani
 
 STATUS_LABEL = {
     "PASS_REBUILT": "Pass",
-    "PASS_PARTIAL_WITH_QUARANTINE": "Pass, 110 rows quarantined",
+    "PASS_PARTIAL_WITH_QUARANTINE": "Pass, partial quarantine",
     "QUARANTINED_NO_SAFE_RAW_JOIN": "Quarantined",
     "QUARANTINED_INSUFFICIENT_RAW_TO_RNA_MATCH": "Quarantined",
 }
@@ -164,6 +164,8 @@ def table_html(headers: list[str], rows: list[list[str]], classes: str = "") -> 
 
 def build_html(summary: pd.DataFrame, reuse: pd.DataFrame, replacement: pd.DataFrame, manifest: dict[str, object]) -> None:
     passing = summary["rebuild_status"].str.startswith("PASS")
+    quarantined_sources = summary.loc[~passing, "source_gse_id"].tolist()
+    unchanged_sources = int(summary["source_h5ad_unchanged"].sum())
     staged = manifest["staged_replacement"]
     total_chain_calls = int(summary.loc[passing, "n_rebuilt_chain_calls_with_umi"].sum())
     total_one = int(summary.loc[passing, "n_rebuilt_chain_calls_umi_eq_1"].sum())
@@ -178,6 +180,7 @@ def build_html(summary: pd.DataFrame, reuse: pd.DataFrame, replacement: pd.DataF
                 fmt_int(row.n_rebuilt_any_tcr),
                 fmt_int(row.n_rebuilt_paired_ab),
                 fmt_pct(row.raw_to_rna_match_fraction),
+                fmt_pct(row.author_call_raw_concordance),
                 fmt_int(row.n_rebuilt_chain_calls_with_umi),
             ]
         )
@@ -212,6 +215,28 @@ def build_html(summary: pd.DataFrame, reuse: pd.DataFrame, replacement: pd.DataF
         ]
         for row in replacement.itertuples(index=False)
     ]
+    repaired_rules = {
+        "GSE125527": "Published old-to-new participant map + tissue + barcode core",
+        "GSE228597": "Pooled-library suffix map + barcode core",
+        "GSE287541": "Round + participant visit + barcode core",
+    }
+    repair_rows: list[list[str]] = []
+    repaired = summary.loc[summary["source_gse_id"].isin(repaired_rules)]
+    for row in repaired.itertuples(index=False):
+        repair_rows.append(
+            [
+                html.escape(row.source_gse_id),
+                html.escape(repaired_rules[row.source_gse_id]),
+                fmt_int(row.n_raw_source_files),
+                fmt_int(row.n_matched_raw_cell_keys),
+                fmt_pct(row.raw_to_rna_match_fraction),
+                fmt_pct(row.author_call_raw_concordance),
+                f"{float(row.author_call_enrichment_over_sample_rotation):,.1f}x"
+                if pd.notna(row.author_call_enrichment_over_sample_rotation)
+                else "NA",
+                fmt_int(row.n_rebuilt_chain_calls_with_umi),
+            ]
+        )
 
     document = f"""<!doctype html>
 <html lang="en">
@@ -263,19 +288,27 @@ code {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 
 <h1>Sample-aware TCR join rebuild</h1>
 <p class="lede">Productive raw VDJ contigs were rebuilt against RNA metadata using only <code>sample_id + barcode_core</code>. Per-chain UMI and read support are preserved for TRA, TRB, TRG, and TRD; missing support remains null.</p>
 <div class="metrics">
-  <div class="metric"><b>{int(passing.sum())}/14</b><span>sources pass full or partial rebuild</span></div>
+  <div class="metric"><b>{int(passing.sum())}/{len(summary)}</b><span>sources pass full or partial rebuild</span></div>
   <div class="metric"><b>{fmt_int(staged['n_rows'])}</b><span>rows staged for metadata replacement</span></div>
   <div class="metric"><b>{fmt_int(summary.loc[passing, 'n_rebuilt_any_tcr'].sum())}</b><span>cells with validated productive TCR</span></div>
   <div class="metric"><b>{fmt_int(total_chain_calls)}</b><span>productive chain calls with observed UMI</span></div>
 </div>
-<div class="notice good"><b>QC gate:</b> the rebuild produced a checksum-bound sidecar and all 14 source H5AD size/mtime pairs remained unchanged.</div>
-<div class="notice"><b>Three sources remain quarantined.</b> GSE125527 lacks recoverable RNA library identity; GSE287541 has no raw VDJ file; GSE228597 maps only 1 eligible raw cell key to RNA (0.0005%), below the frozen 50% source floor.</div>
+<div class="notice good"><b>QC gate:</b> the rebuild produced a checksum-bound sidecar and {unchanged_sources}/{len(summary)} source H5AD size/mtime pairs remained unchanged.</div>
+<div class="notice {'good' if not quarantined_sources else ''}"><b>{'No source remains quarantined.' if not quarantined_sources else 'Sources still quarantined: ' + ', '.join(quarantined_sources) + '.'}</b> GSE125527 uses the published old-to-new patient map plus tissue; GSE228597 uses the pooled-library suffix map; GSE287541 uses Cell Ranger VDJ contigs reconstructed from all public TCR SRA runs with UMI/read support.</div>
+</section>
+
+<section class="page">
+<h2>Previously quarantined sources</h2>
+<p>All three repairs use an independently reconstructable sample key before barcode matching. Exact author/raw CDR3 agreement is reported as supporting evidence, not used to copy legacy calls into the rebuilt sidecar.</p>
+{table_html(['Source','RNA-to-VDJ sample rule','Raw files','Matched cells','Raw-key recovery','Exact CDR3','Fold over wrong-sample rotation','Chain calls with UMI'], repair_rows)}
+<div class="notice good"><b>GSE287541:</b> all 46 public TCR runs were reconstructed with Cell Ranger VDJ. The two N131V01 libraries remain distinct through their round identifiers.</div>
+<div class="notice"><b>GSE125527 quantitative support:</b> the public productive receptor tables do not contain UMI/read columns. The official raw archive contains 71 TCR runs totaling 150.6 GiB compressed; support is therefore retained as unavailable rather than imputed.</div>
 </section>
 
 <section class="page">
 <h2>Legacy assignments versus raw-VDJ rebuild</h2>
 <div class="figure full-figure"><img src="assets/old_vs_rebuilt_tcr_calls.png" alt="Legacy versus rebuilt productive TCR counts"></div>
-<div class="caption">Red bars are diagnostic counts from quarantined sources and are not eligible for replacement or model truth.</div>
+<div class="caption">Legacy and rebuilt counts refer to the same 14 source objects; differences reflect sample-aware raw-VDJ reconstruction, not classifier performance.</div>
 </section>
 
 <section class="page">
@@ -287,15 +320,15 @@ code {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 
   <div class="step"><b>4. Fail closed</b>Duplicate RNA keys, collapsed raw libraries, or poor source recovery cannot provide TCR truth.</div>
 </div>
 <div class="grid2">
-  <div><div class="figure"><img src="assets/raw_key_recovery.png" alt="Raw key recovery"></div><div class="caption">The 50% source floor only detects structural mapping failure; passing sources recover 93.2%-100.0% of eligible raw keys.</div></div>
-  <div><div class="figure"><img src="assets/umi_support_by_source.png" alt="UMI support"></div><div class="caption">GSE235863 is an author receptor table without UMI/read columns. These are null, not zero. Across UMI-auditable calls, {fmt_int(total_one)} selected chains have UMI=1.</div></div>
+  <div><div class="figure"><img src="assets/raw_key_recovery.png" alt="Raw key recovery"></div><div class="caption">The primary source floor is 50% raw-key recovery. RNA-filtered multi-assay objects may pass below that floor only with at least 100 testable and 100 confirmed author calls, at least 50% exact CDR3 agreement, and at least 20-fold exact-match enrichment over a deterministic wrong-sample rotation.</div></div>
+  <div><div class="figure"><img src="assets/umi_support_by_source.png" alt="UMI support"></div><div class="caption">GSE125527 and GSE235863 author receptor tables do not expose UMI/read columns, so their support remains null rather than zero. GSE125527 raw TCR recovery would require 71 SRA runs (150.6 GiB compressed) and is not needed to establish the deterministic patient+tissue join. Across UMI-auditable calls, {fmt_int(total_one)} selected chains have UMI=1.</div></div>
 </div>
 <p class="small">The four-chain sidecar contains CDR3 amino acid/nucleotide sequence, V/D/J calls, clone id, UMI, reads, support-availability flags, selected contig id, productive-contig multiplicity, and raw source-file provenance.</p>
 </section>
 
 <section class="page">
 <h2>Source-level outcome</h2>
-{table_html(['Source','Outcome','Legacy any TCR','Rebuilt any TCR','Rebuilt paired AB','Raw-key recovery','Chain calls with UMI'], source_rows)}
+{table_html(['Source','Outcome','Legacy any TCR','Rebuilt any TCR','Rebuilt paired AB','Raw-key recovery','Exact CDR3 confirmation','Chain calls with UMI'], source_rows)}
 <div class="notice good"><b>GSE311112 correction:</b> explicit support for relapse and BTK-clone sample names recovers 35,266 cells, compared with 9,663 under the incomplete historical parser.</div>
 <p class="small">GSE235863 has 110 duplicated RNA <code>sample_id + barcode_core</code> rows. Their rebuilt receptor fields are blank and they are excluded from receptor truth, but retained in the replacement table so stale assignments can be cleared.</p>
 </section>
@@ -314,7 +347,7 @@ code {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 
 
 <section class="page">
 <h2>Staged metadata replacement</h2>
-<p>The staged sidecar contains all rows from the 11 passing sources. Receptor-truth eligibility is separate from metadata-replacement eligibility, allowing unsafe legacy calls to be cleared without converting ambiguous rows into negative training truth.</p>
+<p>The staged sidecar contains all rows from the {int(passing.sum())} passing sources. Receptor-truth eligibility is separate from metadata-replacement eligibility, allowing unsafe legacy calls to be cleared without converting ambiguous rows into negative training truth.</p>
 {table_html(['Source','Replacement rows','TCR-truth eligible','Validated productive TCR'], replacement_rows)}
 <div class="notice good"><b>Artifact:</b> <code>{html.escape(str(staged['path']))}</code><br><b>SHA-256:</b> <code>{html.escape(str(staged['sha256']))}</code></div>
 <div class="notice"><b>No propagation was performed.</b> Writing these fields into source or milestone H5AD metadata remains a high-risk mutation gate. The replacement should be applied atomically with backups only after explicit approval, followed by harmonized-metadata and milestone overlap checks.</div>

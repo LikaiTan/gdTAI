@@ -25,6 +25,7 @@ analysis_26GSE_V4/
 # The organized data view is generated locally from configs/datasets/*.csv.
 data/datasets/*/
 data/shared/
+data/references/refdata-cellranger-*/
 data/compat/
 data/raw/geo/*/
 data/raw/local/*/

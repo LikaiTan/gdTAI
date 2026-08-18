@@ -6,12 +6,14 @@
   raw VDJ records using only `sample_id + barcode_core`.
 - Retained per-chain UMI/read support and availability, selected deterministic
   highest-support calls, and kept unavailable support null rather than zero.
-- Passed 11 sources fully or partially and quarantined GSE125527, GSE228597,
-  and GSE287541; blanked 110 duplicate-key GSE235863 rows from receptor truth.
-- Staged 2,479,137 replacement rows with 948,991 validated productive-TCR
-  cells; independent validation passed 13/13 checks and six focused tests.
-- Published a visually checked six-page HTML/PDF QC report. All source H5ADs
-  remained unchanged; propagation and V4.2 retraining remain gated.
+- Repaired GSE125527 and GSE228597 with study-specific sample maps and rebuilt
+  all 46 public GSE287541 TCR runs with Cell Ranger VDJ; all 14 sources now pass
+  fully or fail-closed partially.
+- Blanked 110 duplicate-key GSE235863 rows from receptor truth and staged
+  3,041,871 replacement rows with 1,121,858 validated productive-TCR cells.
+- Independent validation passed 15/15 checks and 12 focused tests; the
+  seven-page HTML/PDF QC report passed visual review. All source H5ADs remained
+  unchanged; propagation and V4.2 retraining remain gated.
 
 ## 2026-08-17 - Added productive-chain UMAPs and rejected the provisional NK core
 

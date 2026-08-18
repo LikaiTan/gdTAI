@@ -44,6 +44,12 @@ Start from the raw TCR source when possible:
 - `all_contig_annotations.csv`
 - equivalent VDJ contig exports
 
+If GEO supplies only SRA reads, reconstruct compact contig outputs with the
+matching assay workflow before joining. For 10x VDJ this means preserving the
+technical index reads, validating the read structure, running Cell Ranger VDJ,
+and retaining the filtered/all contig tables plus metrics and checksums. Run
+Cell Ranger with its UI disabled on shared servers.
+
 Use productive chains only unless there is a project-specific reason not to.
 
 Deduplicate within chain using a deterministic rule, for example:
@@ -92,6 +98,11 @@ Required behavior:
 - stop if sample identity remains ambiguous
 
 Do not silently fall back to barcode-only joins when sample identity is unclear.
+
+Indirect sample-key mappings are acceptable only when they are deterministic
+and audited. Examples include a published old-to-new participant table combined
+with tissue, a documented pooled-library suffix map, or round plus participant
+visit when the same participant was processed more than once.
 
 ## Step 3: Canonical barcode normalization
 
@@ -161,6 +172,20 @@ Minimum checks:
 - fraction with any TCR and paired-chain coverage
 - chain-family plausibility
 - review of suspicious near-100% paired coverage
+
+For source-level raw-to-RNA recovery, exclude raw libraries that are not present
+in the RNA object from the eligible denominator. The default source floor is
+50% recovery of eligible raw VDJ cell keys. A filtered multi-assay RNA object
+may pass below that floor only when at least 100 pre-existing author chain calls
+can be tested, at least 100 and at least 50% are confirmed by the exact CDR3,
+and exact matches are enriched at least 20-fold over a deterministic
+wrong-sample rotation. Report recovery, sequence confirmation, and the negative
+control; never silently lower the floor.
+
+When UMI/read columns are absent from an author receptor table, record support
+as unavailable (null), not zero. Raw-read reconstruction may be deferred when
+it is not necessary to resolve the join, but the number and compressed size of
+the public runs must be recorded.
 
 When expression data are available, add biological validation such as:
 

@@ -3,24 +3,29 @@
 ## Current milestone
 
 - sample-aware productive TCR join rebuild completed on 2026-08-18 with
-  `PASS_SIDECAR_READY`; independent validation passed 13/13 checks
-- 11/14 flagged sources passed a full or fail-closed partial rebuild, yielding
-  2,479,137 staged RNA rows, 948,991 cells with validated productive TCR, and
-  1,553,032 productive chain calls with observed UMI support
+  `PASS_SIDECAR_READY`; independent validation passed 15/15 checks
+- all 14 flagged sources passed a full or fail-closed partial rebuild, yielding
+  3,041,871 staged RNA rows, 1,121,858 cells with validated productive TCR,
+  and 1,789,643 productive chain calls with observed UMI support
 - TRA, TRB, TRG, and TRD were rebuilt from productive, cell-associated,
   high-confidence raw records using only `sample_id + barcode_core`; the
   highest-UMI contig per chain was selected, with reads and full-length status
   used as deterministic tie-breakers
 - per-chain UMI/read values and support-availability flags are retained;
   unavailable quantitative support remains null rather than zero
-- GSE125527, GSE228597, and GSE287541 remain source-level quarantines;
-  GSE235863 passed partially with 110 duplicated RNA join-key rows blanked and
-  excluded from TCR truth
-- the checksum-bound replacement sidecar has 2,479,137 rows from 11 sources
+- GSE125527 was repaired with the published patient remap plus tissue,
+  GSE228597 with pooled-library suffixes, and GSE287541 with all 46 public TCR
+  SRA runs reconstructed by Cell Ranger VDJ using round plus participant visit
+- GSE235863 passed partially with 110 duplicated RNA join-key rows blanked and
+  excluded from TCR truth; no source-level quarantine remains
+- the checksum-bound replacement sidecar has 3,041,871 rows from 14 sources
   and SHA-256
-  `6a7450b4edb0ad2e4796a98e3bb9f9a6fffc059f723c34bcdf2f260e65ddf253`
+  `3114e70719301d693ae1a2bc2c63bac6c8bd57e3e8ac73a88c24320eaabfc2f0`
 - all 14 recorded source H5AD size/mtime pairs remained unchanged; no TCR
   sidecar has yet been propagated into source or milestone H5AD metadata
+- the existing boundary-conflict, NK-anchor, and cluster summaries below were
+  computed before sidecar propagation and remain diagnostic historical
+  evidence; they must be regenerated after the approved metadata replacement
 - gdTAI V4.2 productive-TRA/TRB boundary conflict audit completed on
   2026-08-18 with `PASS_JOIN_REPAIR_REQUIRED`
 - 373,339/475,953 boundary cells (`78.44%`) have productive TRA or TRB, but
@@ -71,9 +76,9 @@
 ## Next action
 
 - obtain explicit approval before the high-risk metadata-replacement gate;
-  propagation must consume the checksum-bound 11-source sidecar, create
-  backups, preserve legacy fields for provenance, and exclude all quarantined
-  sources and rows
+  propagation must consume the checksum-bound 14-source sidecar, create
+  backups, preserve legacy fields for provenance, and keep the 110 ambiguous
+  GSE235863 rows blank and ineligible for TCR truth
 - after approved propagation, validate exact source/cell overlap, null support
   semantics, chain flags, backup checksums, and unchanged expression matrices
 - regenerate the T/NK subset, source-balanced HVGs, scVI latent space, and
@@ -118,9 +123,14 @@
 - the rebuilt TCR sidecar is validated but intentionally not propagated: H5AD
   metadata replacement remains a high-risk operation requiring explicit
   approval and backup/rollback controls
-- GSE125527 lacks recoverable RNA library identity, GSE228597 recovers only
-  1/183,360 eligible raw cell keys, and GSE287541 has no raw VDJ file; their
-  legacy productive-chain calls remain ineligible for V4.2 model truth
+- the three source-level quarantine blockers are resolved: GSE125527 has
+  75.82% exact author/raw CDR3 agreement with 22,928-fold enrichment over
+  sample rotation; GSE228597 has 95.03% agreement and 7,951-fold enrichment;
+  GSE287541 has 46/46 reconstructed TCR libraries, 99.72% agreement, and
+  67,913.5-fold enrichment
+- GSE125527's published productive-receptor tables do not contain UMI/read
+  columns, so quantitative support remains null; reconstructing its 71 public
+  TCR runs (150.6 GiB compressed) is not required for the deterministic join
 - GSE235863 has 110 duplicated RNA `sample_id + barcode_core` rows; these rows
   are replacement-eligible for clearing stale calls but ineligible for receptor
   truth
