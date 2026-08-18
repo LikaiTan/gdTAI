@@ -159,6 +159,23 @@
   cells, and zero rule conflicts
 - the five-page post-repair report passed visual review with its complete NK
   table on one page and is under `gdT_prediction/gdtai_v4_2_post_tcr_audit/`
+- the corrected NK-boundary pseudobulk DEG diagnostic passed on 2026-08-19
+  with `PASS_BOUNDARY_PSEUDOBULK_DEG` and changed no H5AD
+- corrected productive TRA/TRB evidence enriched frozen boundary clusters 2,
+  4, and 6 and depleted clusters 0, 1, 3, and 5; no cluster was literally
+  productive-alpha-beta-free
+- 416,451 cells formed 540 eligible within-sample pairs across 22 datasets;
+  18 datasets with at least five pairs contributed to the dataset-macro
+  reproducibility sensitivity analysis
+- after excluding 183 TRA/TRB/TRD/TRG receptor-locus genes and five proximal
+  TCR-complex genes, 2,358/14,185 tested genes met the paired criterion and
+  1,753 also met the cross-dataset robustness criterion
+- enriched clusters showed a more alpha-beta/T-like program including `CD5`,
+  `THEMIS`, `TOB1`, and `KLRG1`; depleted clusters showed an NK-like program
+  including `FCER1G`, `KLRC1`, `KIR2DL4`, `IL2RB`, and `IL12RB2`
+- the report is under
+  `gdT_prediction/gdtai_v4_2_boundary_pseudobulk_deg/`; these are descriptive
+  differences between pre-existing clusters and do not define new NK truth
 
 ## Next action
 

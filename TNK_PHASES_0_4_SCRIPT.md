@@ -2359,3 +2359,52 @@ Standard behavior:
 - report source-label display groups as author-label summaries, not scANVI or
   consensus annotations
 - verify the input H5AD size and nanosecond mtime are unchanged
+
+## Post-repair NK-boundary pseudobulk DEG diagnostic
+
+Objective:
+
+- compare frozen NK-boundary clusters enriched for corrected productive TRA or
+  TRB with boundary clusters depleted for that evidence
+- identify reproducible transcriptomic differences without allowing receptor
+  or proximal TCR-complex genes to drive the result
+
+Phase or task:
+
+- sample-paired raw-count pseudobulk DEG and cross-dataset sensitivity analysis
+
+Exact scripts:
+
+- `workflows/gdtai/analyze_boundary_pseudobulk_deg.py`
+- `workflows/gdtai/run_boundary_pseudobulk_deg.R`
+
+Key inputs:
+
+- `/ssd/tnk_phase3/Integrated_dataset/full_atlas/tcr_corrected/integrated_full_atlas.h5ad`
+- `/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_tnk_reintegration/tnk_refined_hvg_counts.h5ad`
+- `/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_tnk_reintegration/nk_boundary_partitions.npz`
+
+Key outputs:
+
+- `gdT_prediction/gdtai_v4_2_boundary_pseudobulk_deg/index.html`
+- `gdT_prediction/gdtai_v4_2_boundary_pseudobulk_deg/boundary_pseudobulk_deg_report.pdf`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_boundary_pseudobulk_deg/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v4_2_boundary_pseudobulk_deg/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_boundary_pseudobulk_deg/`
+
+Standard behavior:
+
+- use the frozen resolution-0.4 boundary partition and corrected
+  `has_any_ab_tcr` metadata without changing any H5AD
+- classify clusters by two-sided Fisher enrichment against the remaining
+  boundary cells with Benjamini-Hochberg correction; do not call any cluster
+  literally TCR-free
+- aggregate raw counts within biological sample and comparison group, retaining
+  pairs with at least 20 cells in each group
+- exclude TRA/TRB/TRD/TRG receptor-locus genes plus `CD3D`, `CD3E`, `CD3G`,
+  `CD247`, and `TRAT1` before normalization and testing
+- use TMM normalization and limma empirical Bayes on within-sample differences;
+  use dataset-mean effects from datasets with at least five pairs as a
+  cross-dataset sensitivity analysis
+- treat results as descriptive markers of pre-existing expression-defined
+  clusters, not causal effects of productive TCR status and not new NK truth
