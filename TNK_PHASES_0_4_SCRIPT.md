@@ -1353,6 +1353,72 @@ Core outputs:
 - updated `Integrated_dataset/integrated.h5ad`
 - Phase 4 tables, logs, and PNG QC figures
 
+## Extended full-atlas rebuild
+
+Objective:
+
+- reproducibly rebuild the missing historical five-million-cell atlas
+- add the eight approved T/NK-filtered extension cohorts and the
+  `BALF_BLOOD_COPD` cohort
+- produce a structurally integrated, scored atlas without mutating source H5ADs
+
+Phase or task:
+
+- full T/NK atlas sparse rebuild, A100 scVI integration, RAPIDS embedding, and
+  Phase 4 scoring
+
+Exact `.py` script and frozen config:
+
+- `workflows/integration/rebuild_full_atlas.py`
+- `configs/datasets/full_atlas_rebuild.json`
+
+Execution stages:
+
+- `preflight`
+- `prepare`
+- `fit`
+- `embed`
+- `assemble`
+- `score`
+- `report`
+
+Standard behavior:
+
+- reconstruct the exact 5,128,904-cell historical baseline from the preserved
+  cleaned core plus six frozen historical expansion cohorts
+- add 758,135 extension T/NK cells and 46,273 COPD BALF/BLOOD cells
+- preserve sparse raw counts in `X`, align to the 27,413-gene historical
+  universe, and prefix cell IDs with their physical input cohort
+- select 4,000 source-balanced HVGs after excluding TCR V/J/D, mitochondrial,
+  ribosomal, immunoglobulin, and common noncoding genes; retain the fixed T/NK
+  context panel
+- require A100 scVI and RAPIDS with no CPU fallback
+- append continuous Phase 4 scores without replacing raw-count `X`
+- preserve all source H5ADs read-only
+- do not consume the validated 14-source repaired-TCR sidecar before its
+  separate backup/replacement gate
+- preserve source metadata and block GSE169246 tissue/specimen interpretation
+  until its additive `_b` blood-library correction is applied
+
+Key outputs:
+
+- `Integrated_dataset/integrated_full_atlas.h5ad`
+- `/ssd/tnk_phase3/Integrated_dataset/full_atlas/integrated_full_atlas.h5ad`
+- `/ssd/tnk_phase3/Integrated_dataset/full_atlas/scvi_model/`
+- `Integrated_dataset/tables/full_atlas_rebuild/`
+- `Integrated_dataset/figures/full_atlas_rebuild/`
+- `Integrated_dataset/logs/full_atlas_rebuild/`
+- `full_atlas_rebuild/index.html`
+- `full_atlas_rebuild/full_atlas_rebuild_report.pdf`
+
+Validated completion state:
+
+- 5,933,312 cells x 27,413 genes
+- 16 physical input cohorts and 40 source accessions
+- 9,127,088,723 sparse nonzero counts
+- finite 30-dimensional scVI latent, finite UMAP, 33 Leiden clusters, and eight
+  finite Phase 4 score columns for every cell
+
 ## Post-Phase-4 milestone curation
 
 Objective:

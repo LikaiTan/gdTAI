@@ -947,9 +947,12 @@ def report_stage(config: dict[str, Any], paths: dict[str, Path], send_email: boo
     by_input = obs.groupby(["input_cohort_id", "atlas_input_role", "model_evaluation_role_frozen"], observed=True).size().rename("n_cells").reset_index().sort_values("n_cells", ascending=False)
     by_source = obs.groupby("source_gse_id", observed=True).size().rename("n_cells").reset_index().sort_values("n_cells", ascending=False)
     by_tissue = obs.groupby("tissue_harmonized", observed=True).size().rename("n_cells").reset_index().sort_values("n_cells", ascending=False)
+    by_batch = obs["integration_batch"].value_counts(dropna=False).rename_axis("integration_batch").reset_index(name="n_cells")
+    small_batches = by_batch.loc[by_batch["n_cells"] < 3]
     by_input.to_csv(paths["table_dir"] / "report_cells_by_input.csv", index=False)
     by_source.to_csv(paths["table_dir"] / "report_cells_by_source.csv", index=False)
     by_tissue.to_csv(paths["table_dir"] / "report_cells_by_tissue.csv", index=False)
+    by_batch.to_csv(paths["table_dir"] / "integration_batch_counts.csv", index=False)
     assemble = json.loads((paths["log_dir"] / "assemble_summary.json").read_text())
     fit = json.loads((paths["log_dir"] / "fit_summary.json").read_text())
     embed = json.loads((paths["log_dir"] / "embed_summary.json").read_text())
@@ -965,8 +968,10 @@ def report_stage(config: dict[str, Any], paths: dict[str, Path], send_email: boo
     <div class='metrics'><div class='metric'><b>{assemble['n_cells']:,}</b>cells</div><div class='metric'><b>{assemble['n_genes']:,}</b>genes</div><div class='metric'><b>{assemble['n_input_cohorts']}</b>input cohorts</div><div class='metric'><b>{assemble['n_source_accessions']}</b>source accessions</div></div>
     <h2>Scope and provenance</h2><p>The historical component contains {config['expected_historical_cells']:,} cells. The eight new extension cohorts add {config['expected_extension_cells']:,} cells, and COPD BALF/BLOOD adds {config['expected_copd_cells']:,} cells. Frozen model-validation roles are retained as metadata and were not used as biological labels during integration.</p>
     <div class='note'><b>TCR metadata boundary:</b> the separately validated 14-source repaired TCR sidecar was not propagated. This rebuild preserves the source H5AD TCR fields and records that limitation explicitly.</div>
+    <div class='note'><b>Sample-metadata boundary:</b> source metadata were preserved. The known GSE169246 <code>_b</code> blood-library compartment correction has not been written back, so tissue and specimen-context analyses involving that cohort remain blocked pending the separately reviewed additive correction.</div>
     <h2>Method</h2><p>All inputs were converted to sparse raw-count space, aligned to the historical 27,413-gene universe, and assigned deterministic cohort-prefixed cell IDs. The HRA005041 Seurat LogNormalize matrix was inverted using its per-cell count totals, matching the historical workflow. Four thousand source-balanced HVGs were selected after excluding TCR V/J/D, mitochondrial, ribosomal, immunoglobulin, and common noncoding features; a fixed T/NK context panel was retained. scVI used a 30-dimensional latent space on an A100 GPU, followed by RAPIDS 15-neighbor graph construction, Leiden clustering at resolution 1.0, and UMAP.</p>
     <p>scVI runtime: {fit['elapsed_seconds']/60:.1f} minutes. Embedding runtime: {embed['elapsed_seconds']/60:.1f} minutes. CPU fallback: {fit['cpu_fallback']}.</p>
+    <div class='note'><b>Small-batch disclosure:</b> {len(small_batches):,} of {len(by_batch):,} integration batches contained fewer than three cells ({int(small_batches['n_cells'].sum()):,} of {len(obs):,} atlas cells in total). These cells were retained, and the exact batches are listed in <code>integration_batch_counts.csv</code>.</div>
     <h2>Integrated structure</h2><figure><img src='{html.escape(image_source)}'><figcaption>UMAP colored by source accession; a stratified sample is rendered for legibility.</figcaption></figure>
     <figure><img src='{html.escape(image_cluster)}'><figcaption>UMAP colored by unsupervised Leiden cluster.</figcaption></figure>
     <h2 class='page-break'>Input composition</h2>{by_input.to_html(index=False, border=0)}
@@ -978,7 +983,7 @@ def report_stage(config: dict[str, Any], paths: dict[str, Path], send_email: boo
     index.write_text(report, encoding="utf-8")
     pdf = paths["report_dir"] / "full_atlas_rebuild_report.pdf"
     subprocess.run(["google-chrome", "--headless", "--no-sandbox", "--disable-gpu", f"--print-to-pdf={pdf}", str(index)], check=True)
-    summary = {"stage": "report", "status": "PASS", "html": str(index), "pdf": str(pdf), "pdf_size_bytes": pdf.stat().st_size, "email_sent": False}
+    summary = {"stage": "report", "status": "PASS", "html": str(index), "pdf": str(pdf), "pdf_size_bytes": pdf.stat().st_size, "n_integration_batches": int(len(by_batch)), "n_batches_lt3_cells": int(len(small_batches)), "n_cells_in_batches_lt3": int(small_batches["n_cells"].sum()), "email_sent": False}
     if send_email:
         sender = Path.home() / ".codex/skills/email-to-likai/scripts/send_email_to_likai.py"
         subprocess.run([sys.executable, str(sender), "--subject", "Full T/NK atlas rebuild completed", "--body", f"The full atlas rebuild passed QC with {assemble['n_cells']:,} cells. The historical atlas, eight extension cohorts, and COPD BALF/BLOOD are included. The repaired TCR sidecar remains unpropagated. Canonical H5AD: {target}", "--attachment", str(pdf)], check=True)

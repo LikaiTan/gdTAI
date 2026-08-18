@@ -19,6 +19,9 @@
 - `Integrated_dataset/TNK_candidates.h5ad`
 - `Integrated_dataset/TNK_cleaned.h5ad`
 - `Integrated_dataset/integrated.h5ad`
+- `Integrated_dataset/integrated_full_atlas.h5ad`
+  - rebuilt 5,933,312-cell atlas containing the historical atlas, eight new
+    T/NK-filtered cohorts, and `BALF_BLOOD_COPD`
 
 ## Approved milestone exception
 
@@ -71,6 +74,19 @@
 - reproducibility and rollback guides: `docs/`
 
 ## Current review packages
+
+- full T/NK atlas rebuild:
+  - `full_atlas_rebuild/index.html`
+  - `full_atlas_rebuild/full_atlas_rebuild_report.pdf`
+  - `Integrated_dataset/integrated_full_atlas.h5ad`
+  - `Integrated_dataset/tables/full_atlas_rebuild/`
+  - `Integrated_dataset/figures/full_atlas_rebuild/`
+  - `Integrated_dataset/logs/full_atlas_rebuild/`
+  - SSD model and intermediates:
+    `/ssd/tnk_phase3/Integrated_dataset/full_atlas/`
+  - decision: structural integration and Phase 4 score QC passed for 5,933,312
+    cells; repaired-TCR propagation and the GSE169246 additive compartment
+    correction remain separate gated tasks
 
 - sample-aware productive TCR join rebuild:
   - `gdT_prediction/gdtai_v4_2_tcr_join_rebuild/index.html`

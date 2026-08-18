@@ -2,6 +2,26 @@
 
 ## Current milestone
 
+- the full T/NK atlas rebuild completed on 2026-08-18 with all planned stages
+  passing: preflight, sparse preparation, A100 scVI, RAPIDS embedding, full-gene
+  assembly, Phase 4 scoring, and HTML/PDF reporting
+- the rebuilt atlas contains exactly 5,933,312 cells x 27,413 genes with
+  9,127,088,723 sparse nonzero counts: 5,128,904 historical-atlas cells,
+  758,135 cells from eight new T/NK-filtered cohorts, and 46,273
+  `BALF_BLOOD_COPD` cells
+- 16 physical input cohorts contribute 40 source accessions; A100 scVI produced
+  a finite 5,933,312 x 30 latent matrix and RAPIDS produced a finite UMAP plus
+  33 Leiden clusters
+- the canonical rebuilt H5AD is
+  `Integrated_dataset/integrated_full_atlas.h5ad`, linked to the 22.1-GB SSD
+  object under `/ssd/tnk_phase3/Integrated_dataset/full_atlas/`
+- the final scored H5AD SHA-256 is
+  `f5fc491a70f12adeeda5764cb116a59bb441460285905f297bbc2ff691559802`
+- all eight continuous Phase 4 score columns are finite for every cell; all 16
+  source H5AD size/mtime pairs remained unchanged
+- the rebuild intentionally did not propagate the validated 14-source TCR
+  repair sidecar; the report also blocks GSE169246 tissue/specimen analysis
+  pending its separately reviewed additive `_b` blood-library correction
 - sample-aware productive TCR join rebuild completed on 2026-08-18 with
   `PASS_SIDECAR_READY`; independent validation passed 15/15 checks
 - all 14 flagged sources passed a full or fail-closed partial rebuild, yielding
@@ -113,8 +133,9 @@
   reconciliation package
 - decide separately whether to approve additive corrected metadata fields for
   GSE169246 and the other GEO-resolved rows
-- keep every extension cohort separate until merge and integration receive
-  explicit approval
+- treat the completed full-atlas merge as a structural integration milestone;
+  do not use GSE169246 tissue/specimen fields for biological comparisons until
+  its additive blood-compartment correction is reviewed and applied
 - do not push any gdTAI V4 code, reports, or artifacts to GitHub until V4 is
   scientifically finished and reviewed; local commits remain permitted
 
@@ -346,7 +367,9 @@
 - the promoted V3 artifact checksum is valid, but its pickle, manifest,
   completed-run summary, and documented training composition do not describe
   one coherent build record
-- extension-cohort merge and integration are not approved
+- extension-cohort and COPD integration is structurally complete in
+  `integrated_full_atlas.h5ad`; repaired-TCR propagation and the GSE169246
+  additive compartment correction remain separate approval-gated writes
 - GSE169246 has a confirmed compartment-join error: all 239,418 retained `_b`
   cells are official blood libraries, while current local tissue/specimen fields
   include tumor sites or non-blood contexts; correction is not yet approved
@@ -359,7 +382,8 @@
   TCR-defined gdT recall
 - five extension cohorts have unmatched productive TCR-contig warnings that
   require review; all seven nevertheless passed structural QC
-- Phase 4 scoring outputs remain under user review
+- full-atlas Phase 4 score computation and finite-value QC passed; biological
+  prediction thresholds remain separate model-review decisions
 - disease-status correction remains export-only and has not been written back
   into `integrated.h5ad`
 - migration of the mirrored SSD-side `integrated.h5ad` back to NFS is not yet
@@ -380,11 +404,16 @@
   - `Integrated_dataset/TNK_candidates.h5ad`
 - canonical cleaned milestone:
   - `Integrated_dataset/TNK_cleaned.h5ad`
-- canonical current integrated milestone for downstream analysis:
+- canonical rebuilt full-atlas milestone for downstream structural analysis:
+  - `Integrated_dataset/integrated_full_atlas.h5ad`
+  - physical object:
+    `/ssd/tnk_phase3/Integrated_dataset/full_atlas/integrated_full_atlas.h5ad`
+  - status: complete and QC-passed; repaired TCR metadata is not propagated and
+    GSE169246 tissue/specimen analysis remains blocked
+- legacy current integrated path:
   - `high_speed_temp/Integrated_dataset/integrated.h5ad`
-  - status: the user reports that the former SSD object was relocated to HDD,
-    but it remains absent from the frozen project path; V4.2 staging and scVI
-    used the approved raw-count recovery from `TNK_cleaned.h5ad`
+  - status: absent from the frozen project path and superseded for the expanded
+    structural atlas by `integrated_full_atlas.h5ad`
 
 Additional current state:
 
@@ -496,6 +525,16 @@ Additional current state:
   checksums, and historical results were moved under `archive/`
 
 ## Current review artifacts
+
+- rebuilt full T/NK atlas with extension cohorts and COPD BALF/BLOOD:
+  - `full_atlas_rebuild/index.html`
+  - `full_atlas_rebuild/full_atlas_rebuild_report.pdf`
+  - `Integrated_dataset/integrated_full_atlas.h5ad`
+  - `Integrated_dataset/logs/full_atlas_rebuild/`
+  - `Integrated_dataset/tables/full_atlas_rebuild/`
+  - `Integrated_dataset/figures/full_atlas_rebuild/`
+  - decision: structural and computational QC passed; repaired-TCR propagation
+    and GSE169246 additive compartment correction remain separate gated tasks
 
 - gdTAI V4.2 productive-TRA/TRB boundary conflict audit:
   - `gdT_prediction/gdtai_v4_2_tcr_conflict_audit/index.html`

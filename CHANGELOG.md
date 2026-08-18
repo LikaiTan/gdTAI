@@ -1,5 +1,25 @@
 # CHANGELOG.md
 
+## 2026-08-18 - Rebuilt the full atlas with extension cohorts and COPD
+
+- Reconstructed the exact 5,128,904-cell historical atlas baseline from the
+  preserved cleaned core and frozen expansion cohorts, then added 758,135
+  cells from eight T/NK-filtered extension cohorts and 46,273
+  `BALF_BLOOD_COPD` cells.
+- Built a 5,933,312-cell x 27,413-gene sparse raw-count atlas containing
+  9,127,088,723 nonzero entries from 16 physical inputs and 40 source
+  accessions.
+- Selected 4,000 source-balanced HVGs, completed 30-epoch A100 scVI without
+  CPU fallback, and generated finite RAPIDS UMAP coordinates plus 33 Leiden
+  clusters.
+- Appended eight finite continuous Phase 4 score columns while preserving
+  raw-count `X`; all 16 source H5AD size/mtime pairs remained unchanged.
+- Published and visually checked the HTML and six-page PDF report and emailed
+  the corrected PDF to Likai.
+- Kept the validated repaired-TCR sidecar unpropagated and disclosed the
+  unresolved GSE169246 `_b` blood-compartment metadata correction as separate
+  approval-gated work.
+
 ## 2026-08-18 - Rebuilt flagged TCR joins with per-chain UMI provenance
 
 - Rebuilt productive TRA, TRB, TRG, and TRD calls for 14 flagged sources from

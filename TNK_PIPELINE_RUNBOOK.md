@@ -93,6 +93,9 @@ Canonical milestone H5AD files:
 1. `Integrated_dataset/TNK_candidates.h5ad`
 2. `Integrated_dataset/TNK_cleaned.h5ad`
 3. `Integrated_dataset/integrated.h5ad`
+4. `Integrated_dataset/integrated_full_atlas.h5ad`
+   - expanded rebuild containing the historical atlas, approved extension
+     cohorts, and `BALF_BLOOD_COPD`
 
 Allowed milestone exception class:
 
