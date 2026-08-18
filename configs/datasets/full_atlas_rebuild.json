@@ -1,0 +1,264 @@
+{
+  "protocol_version": "full-atlas-rebuild-1.0",
+  "created_on": "2026-08-18",
+  "random_seed": 20260818,
+  "expected_historical_cells": 5128904,
+  "expected_extension_cells": 758135,
+  "expected_copd_cells": 46273,
+  "expected_total_cells": 5933312,
+  "expected_genes": 27413,
+  "expected_input_cohorts": 16,
+  "source_policy": {
+    "preserve_source_h5ads": true,
+    "propagate_repaired_tcr_sidecar": false,
+    "tcr_sidecar_status": "validated_but_not_approved_for_h5ad_propagation",
+    "cell_id_format": "<input_cohort_id>::<source_obs_name>",
+    "validation_roles_are_metadata_only": true
+  },
+  "outputs": {
+    "ssd_root": "/ssd/tnk_phase3/Integrated_dataset/full_atlas",
+    "prepared_dir": "/ssd/tnk_phase3/Integrated_dataset/full_atlas/prepared_inputs",
+    "hvg_h5ad": "/ssd/tnk_phase3/Integrated_dataset/full_atlas/full_atlas_hvg_counts.h5ad",
+    "scvi_model": "/ssd/tnk_phase3/Integrated_dataset/full_atlas/scvi_model",
+    "latent_npy": "/ssd/tnk_phase3/Integrated_dataset/full_atlas/X_scVI.npy",
+    "umap_npy": "/ssd/tnk_phase3/Integrated_dataset/full_atlas/X_umap.npy",
+    "leiden_npy": "/ssd/tnk_phase3/Integrated_dataset/full_atlas/leiden.npy",
+    "final_h5ad": "/ssd/tnk_phase3/Integrated_dataset/full_atlas/integrated_full_atlas.h5ad",
+    "nfs_link": "Integrated_dataset/integrated_full_atlas.h5ad",
+    "table_dir": "Integrated_dataset/tables/full_atlas_rebuild",
+    "figure_dir": "Integrated_dataset/figures/full_atlas_rebuild",
+    "log_dir": "Integrated_dataset/logs/full_atlas_rebuild",
+    "report_dir": "full_atlas_rebuild"
+  },
+  "resources": {
+    "maximum_cpu_cores": 80,
+    "maximum_ram_gib": 800,
+    "minimum_ssd_free_gib": 300,
+    "gpu_required": true
+  },
+  "staging": {
+    "prepared_compression": "lzf",
+    "final_compression": "gzip"
+  },
+  "hvg": {
+    "n_top_genes": 4000,
+    "sample_cap_per_source": 20000,
+    "flavor": "seurat_v3",
+    "batch_key": "source_gse_id",
+    "forced_context_genes": [
+      "CD3D", "CD3E", "CD3G", "TRAC", "TRBC1", "TRBC2", "TRDC",
+      "TRGC1", "TRGC2", "CD4", "CD8A", "CD8B", "IL7R", "CCR7",
+      "FOXP3", "IL2RA", "CTLA4", "NKG7", "KLRD1", "NCR1", "KLRC1",
+      "GNLY", "TYROBP", "FCER1G", "FCGR3A", "TRAT1", "BCL11B"
+    ]
+  },
+  "scvi": {
+    "n_hidden": 128,
+    "n_layers": 2,
+    "n_latent": 30,
+    "gene_likelihood": "nb",
+    "max_epochs": 30,
+    "batch_size": 8192,
+    "early_stopping": true,
+    "early_stopping_patience": 5
+  },
+  "embedding": {
+    "n_neighbors": 15,
+    "metric": "euclidean",
+    "leiden_resolution": 1.0
+  },
+  "core_recovery": {
+    "row_exclusion_manifest": "Integrated_dataset/tables/phase3_input_sanitization.csv",
+    "row_exclusion_manifest_sha256": "dcc9d7865e0a1712e80b8eb621ab93e5bfc9296ec04b1563195f0aa352f1f097",
+    "expected_intersecting_exclusions": 78,
+    "metadata_sources": [
+      {
+        "path": "analysis_26GSE_V4/outputs/harmonized_metadata_v4.csv",
+        "sha256": "7fa54bb8ea2a147b84beddcae1f016c4bbb1af4faa9f66c1166e176831eaddac"
+      },
+      {
+        "path": "analysis_26GSE_V4/outputs/harmonized_metadata_supp.csv",
+        "sha256": "e968424576e5859b5d3ecfedf8ef4b772cba71bbdde249a5cc10800f85ea197b"
+      }
+    ],
+    "metadata_columns": ["donor_id", "sample_id", "library_id", "technology_simple"]
+  },
+  "inputs": [
+    {
+      "cohort_id": "historical_core_25",
+      "path": "Integrated_dataset/TNK_cleaned.h5ad",
+      "expected_cells_raw": 3705384,
+      "expected_cells_effective": 3705306,
+      "expected_sha256": "04033762f9b1380227f0dabbbdbcd7f0fbe4153e734390b30ef64824e3b181ad",
+      "matrix_mode": "X_counts",
+      "atlas_input_role": "historical_core",
+      "model_evaluation_role_frozen": "mixed_historical_roles",
+      "apply_core_recovery": true
+    },
+    {
+      "cohort_id": "GDT_2020AUG_woCOV",
+      "path": "data/datasets/GDT_2020AUG_woCOV/processed/current.h5ad",
+      "expected_cells_raw": 25904,
+      "expected_cells_effective": 25904,
+      "expected_sha256": "650f583b85f05ede45a735b43d1791ced3d4cc3accd5e1f8efa80c87fa9892d8",
+      "matrix_mode": "X_counts",
+      "atlas_input_role": "historical_expansion",
+      "model_evaluation_role_frozen": "gold_sorted_gdt",
+      "fallback_source_gse_id": "GDT_2020AUG_woCOV"
+    },
+    {
+      "cohort_id": "GDTlung2023july_7p",
+      "path": "data/datasets/GDTlung2023july_7p/processed/current.h5ad",
+      "expected_cells_raw": 15175,
+      "expected_cells_effective": 15175,
+      "expected_sha256": "d5915e6b50241ff8c4579b1c7bb042615a0d7b6e3f24d39f467b1cbd4f79b5dd",
+      "matrix_mode": "X_counts",
+      "atlas_input_role": "historical_expansion",
+      "model_evaluation_role_frozen": "gold_sorted_gdt_low_quality",
+      "fallback_source_gse_id": "GDTlung2023july_7p"
+    },
+    {
+      "cohort_id": "GSE144469",
+      "path": "newdata/GSE144469_tnk_subset.h5ad",
+      "expected_cells_raw": 107068,
+      "expected_cells_effective": 107068,
+      "expected_sha256": "456b2da064c9ad601294878d23102836bf01717e9c21493aeb651ecb7f537926",
+      "matrix_mode": "layer_counts",
+      "atlas_input_role": "historical_expansion",
+      "model_evaluation_role_frozen": "legacy_gold_and_negative_truth",
+      "fallback_source_gse_id": "GSE144469"
+    },
+    {
+      "cohort_id": "GSE206325",
+      "path": "data/datasets/GSE206325/processed/current.h5ad",
+      "expected_cells_raw": 501012,
+      "expected_cells_effective": 501012,
+      "expected_sha256": "a9ce2788bd75d1a8ca8ab506c84421be1791ade1f8e43883e38cff1dd1626831",
+      "matrix_mode": "layer_counts",
+      "atlas_input_role": "historical_expansion",
+      "model_evaluation_role_frozen": "historical_atlas_only",
+      "fallback_source_gse_id": "GSE206325"
+    },
+    {
+      "cohort_id": "HRA005041",
+      "path": "data/datasets/HRA005041/processed/current.h5ad",
+      "expected_cells_raw": 766639,
+      "expected_cells_effective": 766639,
+      "expected_sha256": "fc9ead68c3d85232a760eeab0f525db86ee077bb219bbe8575c3907dec503afe",
+      "matrix_mode": "seurat_lognormalize_inverse",
+      "atlas_input_role": "historical_expansion",
+      "model_evaluation_role_frozen": "legacy_gold_and_negative_truth",
+      "fallback_source_gse_id": "HRA005041"
+    },
+    {
+      "cohort_id": "MalteGDT",
+      "path": "data/datasets/MalteGDT/processed/current.h5ad",
+      "expected_cells_raw": 7800,
+      "expected_cells_effective": 7800,
+      "expected_sha256": "bbd460ef153ce6b233b4ab4a0da99266d1697c189f74a827628de3b5d56ab692",
+      "matrix_mode": "X_counts",
+      "atlas_input_role": "historical_expansion",
+      "model_evaluation_role_frozen": "gold_sorted_gdt",
+      "fallback_source_gse_id": "MalteGDT"
+    },
+    {
+      "cohort_id": "GSE114724",
+      "path": "data/interim/extension_intake/tnk_filtered_h5ads/GSE114724.h5ad",
+      "expected_cells_raw": 28652,
+      "expected_cells_effective": 28652,
+      "expected_sha256": "394425c7937432ac7fce4b904b35b46fa7519fc5107e4942aff27cf7d6e7a808",
+      "matrix_mode": "X_counts",
+      "atlas_input_role": "new_extension",
+      "model_evaluation_role_frozen": "development_extension",
+      "fallback_source_gse_id": "GSE114724"
+    },
+    {
+      "cohort_id": "GSE121636_GSE121637",
+      "path": "data/interim/extension_intake/tnk_filtered_h5ads/GSE121636_GSE121637.h5ad",
+      "expected_cells_raw": 18793,
+      "expected_cells_effective": 18793,
+      "expected_sha256": "b7182274cab834f10e0eb8de240c7d770c5f8890be0fe862d41712f7476e463d",
+      "matrix_mode": "X_counts",
+      "atlas_input_role": "new_extension",
+      "model_evaluation_role_frozen": "locked_mixed_stress_cohort",
+      "fallback_source_gse_id": "GSE121636"
+    },
+    {
+      "cohort_id": "GSE159251",
+      "path": "data/interim/extension_intake/tnk_filtered_h5ads/GSE159251.h5ad",
+      "expected_cells_raw": 68898,
+      "expected_cells_effective": 68898,
+      "expected_sha256": "abe6502b3a15a3ba458fc47b46e86277e8b9764665722616205201f8452ed569",
+      "matrix_mode": "X_counts",
+      "atlas_input_role": "new_extension",
+      "model_evaluation_role_frozen": "development_extension",
+      "fallback_source_gse_id": "GSE159251"
+    },
+    {
+      "cohort_id": "GSE169246",
+      "path": "data/interim/extension_intake/tnk_filtered_h5ads/GSE169246.h5ad",
+      "expected_cells_raw": 354373,
+      "expected_cells_effective": 354373,
+      "expected_sha256": "f251382c62109a486500a2ac472e2e5608d368625891db3de512956bd5ce6e6c",
+      "matrix_mode": "layer_counts",
+      "atlas_input_role": "new_extension",
+      "model_evaluation_role_frozen": "locked_validation_cohort",
+      "fallback_source_gse_id": "GSE169246"
+    },
+    {
+      "cohort_id": "GSE292700",
+      "path": "data/interim/extension_intake/tnk_filtered_h5ads/GSE292700.h5ad",
+      "expected_cells_raw": 78254,
+      "expected_cells_effective": 78254,
+      "expected_sha256": "78c9ada980a21592ba72a56c1beea12dcd0d256a630b2294be68b711d977dc8a",
+      "matrix_mode": "X_counts",
+      "atlas_input_role": "new_extension",
+      "model_evaluation_role_frozen": "development_extension",
+      "fallback_source_gse_id": "GSE292700"
+    },
+    {
+      "cohort_id": "GSE294273_GSE294274",
+      "path": "data/interim/extension_intake/tnk_filtered_h5ads/GSE294273_GSE294274.h5ad",
+      "expected_cells_raw": 55744,
+      "expected_cells_effective": 55744,
+      "expected_sha256": "6a20d61544c7cd33d33ceec756837308e7a88d992919e6496a29822eda9215cf",
+      "matrix_mode": "X_counts",
+      "atlas_input_role": "new_extension",
+      "model_evaluation_role_frozen": "development_extension",
+      "fallback_source_gse_id": "GSE294273"
+    },
+    {
+      "cohort_id": "GSE296954",
+      "path": "data/interim/extension_intake/tnk_filtered_h5ads/GSE296954.h5ad",
+      "expected_cells_raw": 86608,
+      "expected_cells_effective": 86608,
+      "expected_sha256": "f3484482e35b49d3c3f192ad1e6570d2c066f3fcf68db99b5bafa9312dc440b0",
+      "matrix_mode": "X_counts",
+      "atlas_input_role": "new_extension",
+      "model_evaluation_role_frozen": "development_extension",
+      "fallback_source_gse_id": "GSE296954"
+    },
+    {
+      "cohort_id": "GSE315928",
+      "path": "data/interim/extension_intake/tnk_filtered_h5ads/GSE315928.h5ad",
+      "expected_cells_raw": 66813,
+      "expected_cells_effective": 66813,
+      "expected_sha256": "2fe674761db67aa337c4d80932d69d4bfbb47e44d2a16c22cbf5ecd819c8d70d",
+      "matrix_mode": "X_counts",
+      "atlas_input_role": "new_extension",
+      "model_evaluation_role_frozen": "locked_validation_cohort",
+      "fallback_source_gse_id": "GSE315928"
+    },
+    {
+      "cohort_id": "BALF_BLOOD_COPD",
+      "path": "data/datasets/BALF_BLOOD_COPD/processed/current.h5ad",
+      "expected_cells_raw": 46273,
+      "expected_cells_effective": 46273,
+      "expected_sha256": "acf33fcc3851f77c3043614e5f57dba5fb371dbce699d518c8a36ecaa42f80b0",
+      "matrix_mode": "layer_counts",
+      "atlas_input_role": "new_extension",
+      "model_evaluation_role_frozen": "reused_cross_study_benchmark",
+      "fallback_source_gse_id": "BALF_BLOOD_COPD"
+    }
+  ]
+}
