@@ -105,6 +105,13 @@ def clean_text(values: np.ndarray) -> pd.Series:
     return pd.Series(values, dtype="string").fillna("").str.strip()
 
 
+def display_source_values(obs: dict[str, np.ndarray]) -> pd.Series:
+    legacy = clean_text(obs["source_gse_id"])
+    harmonized = clean_text(obs["source_accession_harmonized_v2"])
+    unresolved = harmonized.str.lower().isin({"", "na", "nan", "none", "unknown", "unresolved", "unassigned"})
+    return harmonized.mask(unresolved, legacy).replace("", "unresolved")
+
+
 def source_label_group(label: str) -> str:
     value = str(label).strip().lower().replace("γ", "gamma").replace("δ", "delta")
     if value in {"", "false", "unknown", "unannotated", "nsclc_scrna", "na", "nan", "none"}:
@@ -163,10 +170,11 @@ def safe_fraction(numerator: pd.Series, denominator: pd.Series) -> pd.Series:
 
 def exact_tables(handle: h5py.File, obs: dict[str, np.ndarray]) -> dict[str, pd.DataFrame]:
     n = len(obs["source_gse_id"])
-    source = clean_text(obs["source_gse_id"]).replace("", "unresolved")
+    legacy_source = clean_text(obs["source_gse_id"]).replace("", "unresolved")
+    source = display_source_values(obs)
     annotation = clean_text(obs["source_cell_type_level1"]).map(source_label_group)
     truth = pd.DataFrame({
-        "source_gse_id": source,
+        "dataset_name": source,
         "annotation_display_group": annotation,
         "has_TRA": np.asarray(obs["has_TRA"], dtype=bool),
         "has_TRB": np.asarray(obs["has_TRB"], dtype=bool),
@@ -178,8 +186,8 @@ def exact_tables(handle: h5py.File, obs: dict[str, np.ndarray]) -> dict[str, pd.
         "any_gd_tcr": np.asarray(obs["has_any_gd_tcr"], dtype=bool),
         "sidecar_covered": np.asarray(obs["tcr_sidecar_covered_v2"], dtype=bool),
     })
-    by_source = truth.groupby("source_gse_id", observed=True, sort=False).agg(
-        n_cells=("source_gse_id", "size"),
+    by_source = truth.groupby("dataset_name", observed=True, sort=False).agg(
+        n_cells=("dataset_name", "size"),
         n_sidecar_covered=("sidecar_covered", "sum"),
         n_has_TRA=("has_TRA", "sum"), n_has_TRB=("has_TRB", "sum"),
         n_any_ab_tcr=("any_ab_tcr", "sum"), n_paired_TRA_TRB=("paired_TRA_TRB", "sum"),
@@ -197,13 +205,22 @@ def exact_tables(handle: h5py.File, obs: dict[str, np.ndarray]) -> dict[str, pd.
     )
     annotation_counts = annotation_counts.sort_values("annotation_display_group").reset_index(drop=True)
 
-    cross = truth.groupby(["source_gse_id", "annotation_display_group"], observed=True).size().rename("n_cells").reset_index()
-    cross["source_total"] = cross.groupby("source_gse_id")["n_cells"].transform("sum")
+    cross = truth.groupby(["dataset_name", "annotation_display_group"], observed=True).size().rename("n_cells").reset_index()
+    cross["source_total"] = cross.groupby("dataset_name")["n_cells"].transform("sum")
     cross["fraction_within_source"] = cross["n_cells"] / cross["source_total"]
 
     dimensions = []
-    for key in ["input_cohort_id", "source_gse_id", "tissue_harmonized_v2", "specimen_context_harmonized_v2", "diagnosis", "technology_simple", "leiden"]:
-        values = clean_text(obs[key]).replace("", "unresolved")
+    display_map = dict(zip(legacy_source.astype(str), source.astype(str), strict=False))
+    dimension_values = {
+        "input_cohort_display": clean_text(obs["input_cohort_id"]).replace(display_map).replace("", "unresolved"),
+        "source_dataset_display": source,
+        "tissue_harmonized_v2": clean_text(obs["tissue_harmonized_v2"]).replace("", "unresolved"),
+        "specimen_context_harmonized_v2": clean_text(obs["specimen_context_harmonized_v2"]).replace("", "unresolved"),
+        "diagnosis": clean_text(obs["diagnosis"]).replace("", "unresolved"),
+        "technology_simple": clean_text(obs["technology_simple"]).replace("", "unresolved"),
+        "leiden": clean_text(obs["leiden"]).replace("", "unresolved"),
+    }
+    for key, values in dimension_values.items():
         counts = values.value_counts(dropna=False).rename_axis("value").reset_index(name="n_cells")
         counts.insert(0, "dimension", key)
         counts["fraction"] = counts["n_cells"] / n
@@ -211,8 +228,12 @@ def exact_tables(handle: h5py.File, obs: dict[str, np.ndarray]) -> dict[str, pd.
     dimension_counts = pd.concat(dimensions, ignore_index=True)
 
     missing_rows = []
-    for key in ["source_gse_id", "sample_id_harmonized_v2", "library_id_harmonized_v2", "donor_id_harmonized_v2", "tissue_harmonized_v2", "specimen_context_harmonized_v2", "diagnosis"]:
-        values = clean_text(obs[key]).str.lower()
+    missingness_values = {
+        "source_dataset_display": source,
+        **{key: clean_text(obs[key]) for key in ["sample_id_harmonized_v2", "library_id_harmonized_v2", "donor_id_harmonized_v2", "tissue_harmonized_v2", "specimen_context_harmonized_v2", "diagnosis"]},
+    }
+    for key, raw_values in missingness_values.items():
+        values = raw_values.str.lower()
         missing = values.isin({"", "na", "nan", "none", "unknown", "unresolved", "unassigned"})
         missing_rows.append({"field": key, "n_missing_or_unresolved": int(missing.sum()), "fraction": float(missing.mean())})
     metadata_missingness = pd.DataFrame(missing_rows)
@@ -230,10 +251,16 @@ def exact_tables(handle: h5py.File, obs: dict[str, np.ndarray]) -> dict[str, pd.
         "n_paired_TRG_TRD": int(truth["paired_TRG_TRD"].sum()),
         "n_sidecar_covered": int(truth["sidecar_covered"].sum()),
     }])
+    source_name_mapping = (
+        pd.DataFrame({"legacy_source_gse_id": legacy_source, "dataset_name": source})
+        .groupby(["legacy_source_gse_id", "dataset_name"], observed=True)
+        .size().rename("n_cells").reset_index().sort_values("n_cells", ascending=False)
+    )
     return {
         "overall": overall, "by_source": by_source, "annotation_counts": annotation_counts,
         "annotation_by_source": cross, "dimension_counts": dimension_counts,
-        "metadata_missingness": metadata_missingness, "truth": truth,
+        "metadata_missingness": metadata_missingness, "source_name_mapping": source_name_mapping,
+        "truth": truth,
     }
 
 
@@ -276,7 +303,7 @@ def plot_composition(by_source: pd.DataFrame, annotation: pd.DataFrame) -> list[
     outputs = []
     frame = by_source.sort_values("n_cells")
     fig, ax = plt.subplots(figsize=(10, 10), constrained_layout=True)
-    ax.barh(frame["source_gse_id"], frame["n_cells"], color="#356a7c")
+    ax.barh(frame["dataset_name"], frame["n_cells"], color="#356a7c")
     ax.set_xlabel("Cells")
     ax.set_title("Atlas cells by source accession")
     ax.xaxis.set_major_formatter(lambda x, _pos: f"{x/1e6:.1f}M" if x >= 1e6 else f"{x/1e3:.0f}k")
@@ -308,7 +335,7 @@ def plot_tcr_coverage(by_source: pd.DataFrame) -> Path:
     axes[1].barh(y - 0.18, frame["fraction_any_gd_tcr"], height=0.34, color="#9b3a47", label="Any TRG/TRD")
     axes[1].barh(y + 0.18, frame["fraction_paired_TRG_TRD"], height=0.34, color="#d7838c", label="Paired TRG/TRD")
     for ax, title in zip(axes, ["Alpha-beta TCR metadata", "Gamma-delta TCR metadata"]):
-        ax.set_yticks(y, frame["source_gse_id"])
+        ax.set_yticks(y, frame["dataset_name"])
         ax.set_xlim(0, 1)
         ax.set_xlabel("Fraction of all atlas cells in source")
         ax.set_title(title)
@@ -425,12 +452,12 @@ def qc_plot(
     matrix_detected_genes: np.ndarray,
 ) -> tuple[Path, pd.DataFrame]:
     frame = pd.DataFrame({
-        "source_gse_id": source[rows], "total_counts": matrix_total_counts,
+        "dataset_name": source[rows], "total_counts": matrix_total_counts,
         "n_genes_by_counts": matrix_detected_genes,
         "pct_counts_mt": np.asarray(obs["pct_counts_mt"])[rows], "pct_counts_ribo": np.asarray(obs["pct_counts_ribo"])[rows],
     })
-    summary = frame.groupby("source_gse_id", observed=True).agg(
-        sampled_cells=("source_gse_id", "size"), median_total_counts=("total_counts", "median"),
+    summary = frame.groupby("dataset_name", observed=True).agg(
+        sampled_cells=("dataset_name", "size"), median_total_counts=("total_counts", "median"),
         median_n_genes=("n_genes_by_counts", "median"), median_pct_mt=("pct_counts_mt", "median"),
         median_pct_ribo=("pct_counts_ribo", "median"),
     ).reset_index().sort_values("median_n_genes")
@@ -438,7 +465,7 @@ def qc_plot(
     y = np.arange(len(summary))
     for ax, column, title in zip(axes, ["median_total_counts", "median_n_genes", "median_pct_mt"], ["Median total counts", "Median detected genes", "Median mitochondrial %"]):
         ax.scatter(summary[column], y, s=22, color="#356a7c")
-        ax.set_yticks(y, summary["source_gse_id"])
+        ax.set_yticks(y, summary["dataset_name"])
         ax.set_xlabel(title); style_axes(ax)
     fig.suptitle("Source-level QC medians (source-balanced descriptive sample)")
     path = FIGURE_DIR / "qc_medians_by_source.png"
@@ -467,7 +494,11 @@ def render_report(h5ad: Path, tables: dict[str, pd.DataFrame], figure_paths: lis
         os.symlink(os.path.relpath(source, asset_dir), target)
     overall = tables["overall"].iloc[0]
     source_table = tables["by_source"].copy()
-    source_table = source_table[["source_gse_id", "n_cells", "n_any_ab_tcr", "n_paired_TRA_TRB", "n_any_gd_tcr", "n_paired_TRG_TRD", "fraction_any_ab_tcr", "fraction_any_gd_tcr"]]
+    source_table = source_table[["dataset_name", "n_cells", "n_any_ab_tcr", "n_paired_TRA_TRB", "n_any_gd_tcr", "n_paired_TRG_TRD", "fraction_any_ab_tcr", "fraction_any_gd_tcr"]]
+    changed_names = tables["source_name_mapping"].loc[
+        tables["source_name_mapping"]["legacy_source_gse_id"]
+        != tables["source_name_mapping"]["dataset_name"]
+    ]
     dimensions = tables["dimension_counts"]
     tissue = dimensions[dimensions["dimension"] == "tissue_harmonized_v2"]
     specimen = dimensions[dimensions["dimension"] == "specimen_context_harmonized_v2"]
@@ -478,7 +509,7 @@ def render_report(h5ad: Path, tables: dict[str, pd.DataFrame], figure_paths: lis
 @media print{{h2,h3{{break-after:avoid-page}}}}</style></head><body><main><header><h1>Full T/NK Atlas Overview</h1><p>A read-only overview of the rebuilt 5.9-million-cell atlas using the validated metadata- and TCR-corrected candidate. This report separates source-author annotations, unsupervised clusters, TCR metadata, and expression evidence.</p><div class='metrics'>
 <div class='metric'><b>{int(overall.n_cells):,}</b><span>cells</span></div><div class='metric'><b>{int(overall.n_source_accessions):,}</b><span>source accessions</span></div><div class='metric'><b>{int(overall.n_genes):,}</b><span>genes</span></div><div class='metric'><b>{int(overall.n_paired_TRA_TRB):,}</b><span>paired TRA/TRB</span></div><div class='metric'><b>{int(overall.n_paired_TRG_TRD):,}</b><span>paired TRG/TRD</span></div></div></header>
 <section><h2>Interpretation boundaries</h2><p class='note'><b>Annotation:</b> the atlas lacks a complete scANVI label column. “Annotation display groups” below are deterministic broad groupings of available source-author labels, not model-derived consensus labels. Leiden clusters and marker expression are shown independently.</p><p class='note'><b>TCR:</b> exact counts use the validated repaired sidecar. Absence of TRG/TRD is not evidence against gamma-delta identity in sources without gamma-delta V(D)J sequencing. Coverage percentages use all atlas cells in each source as denominator.</p><p class='note'><b>Expression:</b> X contains raw counts. Marker panels use log1p(10,000 × gene count / cell total counts) on a fixed, source-balanced sample of {EXPRESSION_SAMPLE_CAP:,} cells. These panels are descriptive and are not cell labels.</p></section>
-<section><h2>Dataset composition</h2><div class='grid'>{image_card('Cells by source', 'cells_by_source.png', 'Exact all-cell counts for all 40 source accessions.')}{image_card('Author-label display groups', 'annotation_group_counts.png', 'Exact all-cell counts after deterministic broad grouping of available source-author labels.')}</div><h3>Source-level exact counts</h3>{table_html(source_table, 45)}</section>
+<section><h2>Dataset composition</h2><p class='note'><b>Dataset names:</b> user-facing labels come from <code>source_accession_harmonized_v2</code>, with legacy <code>source_gse_id</code> retained only in the exported provenance mapping below.</p><h3>Corrected display names</h3>{table_html(changed_names, 20)}<div class='grid'>{image_card('Cells by source', 'cells_by_source.png', 'Exact all-cell counts for all 40 harmonized dataset names.')}{image_card('Author-label display groups', 'annotation_group_counts.png', 'Exact all-cell counts after deterministic broad grouping of available source-author labels.')}</div><h3>Source-level exact counts</h3>{table_html(source_table, 45)}</section>
 <section class='page-break'><h2>Integrated structure and annotation evidence</h2><div class='grid'>{image_card('Unsupervised clusters', 'umap_by_leiden.png', 'Source-balanced display sample colored by the 33 Leiden clusters from the rebuilt integration.')}{image_card('Source-author annotation groups', 'umap_by_annotation.png', 'The same manifold colored only by broad groupings of source-author labels; unannotated cells remain explicit.')}</div></section>
 <section><h2>TCR coverage</h2><div class='grid'>{image_card('TCR metadata on UMAP', 'tcr_coverage_umaps.png', 'Exact positive totals are stated in panel titles; alpha-beta positives are display-sampled when needed, while all gamma-delta positives are shown.')}{image_card('TCR coverage by source', 'tcr_coverage_by_source.png', 'Exact fractions of all retained atlas cells in each source carrying repaired productive-chain evidence.')}</div>{table_html(source_table, 45)}</section>
 <section class='page-break'><h2>Signature gene expression</h2>{image_card('Marker expression UMAPs', 'signature_gene_umaps.png', 'Source-balanced cells; expression is temporary library-size normalization of raw counts followed by log1p.')}{image_card('Signature dot plot by Leiden cluster', 'signature_dotplot_by_leiden.png', 'Dot color is mean expression and dot size is mean per-gene detection across each curated signature.')}</section>
@@ -498,13 +529,13 @@ def main() -> None:
     args = parse_args(); h5ad = args.h5ad.resolve()
     for directory in [FIGURE_DIR, TABLE_DIR, LOG_DIR, REPORT_DIR]: directory.mkdir(parents=True, exist_ok=True)
     before = {"size": h5ad.stat().st_size, "mtime_ns": h5ad.stat().st_mtime_ns}
-    needed = ["source_gse_id", "input_cohort_id", "source_cell_type_level1", "leiden", "tissue_harmonized_v2", "specimen_context_harmonized_v2", "diagnosis", "technology_simple", "sample_id_harmonized_v2", "library_id_harmonized_v2", "donor_id_harmonized_v2", "has_TRA", "has_TRB", "has_TRA_TRB_paired", "has_TRG", "has_TRD", "has_TRG_TRD_paired", "has_any_ab_tcr", "has_any_gd_tcr", "tcr_sidecar_covered_v2", "total_counts", "n_genes_by_counts", "pct_counts_mt", "pct_counts_ribo"]
+    needed = ["source_gse_id", "source_accession_harmonized_v2", "input_cohort_id", "source_cell_type_level1", "leiden", "tissue_harmonized_v2", "specimen_context_harmonized_v2", "diagnosis", "technology_simple", "sample_id_harmonized_v2", "library_id_harmonized_v2", "donor_id_harmonized_v2", "has_TRA", "has_TRB", "has_TRA_TRB_paired", "has_TRG", "has_TRD", "has_TRG_TRD_paired", "has_any_ab_tcr", "has_any_gd_tcr", "tcr_sidecar_covered_v2", "total_counts", "n_genes_by_counts", "pct_counts_mt", "pct_counts_ribo"]
     with h5py.File(h5ad, "r") as handle:
         missing = [key for key in needed if key not in handle["obs"]]
         if missing: raise KeyError(f"Missing required obs columns: {missing}")
         obs = {key: obs_values(handle, key) for key in needed}
         tables = exact_tables(handle, obs)
-        source = clean_text(obs["source_gse_id"]).replace("", "unresolved").to_numpy(dtype=object)
+        source = display_source_values(obs).to_numpy(dtype=object)
         leiden = clean_text(obs["leiden"]).to_numpy(dtype=object)
         annotation = clean_text(obs["source_cell_type_level1"]).map(source_label_group).to_numpy(dtype=object)
         plot_rows = source_balanced_sample(source, PLOT_SAMPLE_CAP, SEED)
@@ -516,8 +547,8 @@ def main() -> None:
 
     for name, frame in tables.items():
         if name != "truth": frame.to_csv(TABLE_DIR / f"{name}.csv", index=False)
-    pd.DataFrame({"row_index": plot_rows, "source_gse_id": source[plot_rows]}).to_csv(TABLE_DIR / "umap_display_sample.csv.gz", index=False, compression="gzip")
-    pd.DataFrame({"row_index": expression_rows, "source_gse_id": source[expression_rows]}).to_csv(TABLE_DIR / "expression_display_sample.csv.gz", index=False, compression="gzip")
+    pd.DataFrame({"row_index": plot_rows, "dataset_name": source[plot_rows]}).to_csv(TABLE_DIR / "umap_display_sample.csv.gz", index=False, compression="gzip")
+    pd.DataFrame({"row_index": expression_rows, "dataset_name": source[expression_rows]}).to_csv(TABLE_DIR / "expression_display_sample.csv.gz", index=False, compression="gzip")
 
     figures = plot_composition(tables["by_source"], tables["annotation_counts"])
     figures.append(plot_tcr_coverage(tables["by_source"]))

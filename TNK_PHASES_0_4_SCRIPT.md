@@ -2350,6 +2350,8 @@ Key outputs:
 Standard behavior:
 
 - use exact all-cell metadata and repaired productive-TCR counts
+- use `source_accession_harmonized_v2` for user-facing dataset names while
+  retaining `source_gse_id` only in the exported provenance mapping
 - use deterministic source-balanced samples only for UMAP rendering, marker
   expression, signature summaries, and QC summaries
 - compute temporary log1p library-size-normalized marker expression directly
