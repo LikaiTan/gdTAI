@@ -43,6 +43,21 @@
   `3114e70719301d693ae1a2bc2c63bac6c8bd57e3e8ac73a88c24320eaabfc2f0`
 - all 14 recorded source H5AD size/mtime pairs remained unchanged; no TCR
   sidecar has yet been propagated into source or milestone H5AD metadata
+- read-only sidecar overlay preflight passed `PASS_OVERLAY_READY`: all
+  2,155,409 atlas rows from the 14 affected sources match exactly by
+  `source_gse_id + original_cell_id`, and no affected atlas row lacks a sidecar
+- after repair, the retained atlas contains 1,100,981 productive-alpha-beta
+  cells and 933,890 paired-TRA/TRB cells from these sources
+- combining repaired and unaffected sources, the metadata-overlaid atlas is
+  estimated to contain 2,270,138 productive-alpha-beta cells and 1,938,158
+  paired-TRA/TRB cells
+- 20,875 sidecar-supported productive-alpha-beta cells outside the atlas,
+  including 14,495 paired cells, will not be rescued; they represent only
+  0.911% and 0.742% of the whole available productive and paired alpha-beta
+  pools, respectively, and none has productive gamma-delta TCR
+- the TCR repair will therefore preserve the exact 5,933,312-cell membership,
+  expression matrix, scVI latent space, Leiden clusters, and UMAP; only TCR
+  metadata and TCR-derived truth/control fields require replacement
 - the existing boundary-conflict, NK-anchor, and cluster summaries below were
   computed before sidecar propagation and remain diagnostic historical
   evidence; they must be regenerated after the approved metadata replacement
@@ -101,9 +116,11 @@
   GSE235863 rows blank and ineligible for TCR truth
 - after approved propagation, validate exact source/cell overlap, null support
   semantics, chain flags, backup checksums, and unchanged expression matrices
-- regenerate the T/NK subset, source-balanced HVGs, scVI latent space, and
-  boundary clustering only after repaired TCR metadata propagation passes its
-  post-write validation
+- preserve the frozen 5,933,312-cell membership and existing integration; do
+  not rerun T/NK selection, HVGs, scVI, Leiden, or UMAP merely to rescue the
+  intentionally omitted 20,875 alpha-beta controls
+- after propagation, regenerate TCR-derived truth/control labels and every
+  boundary/NK audit that consumed stale productive-chain metadata
 - withdraw clusters 0, 3, and 5 as an NK candidate core; no boundary subcluster
   is currently eligible as NK training truth
 - do not build model truth directly from the current harmonized productive-CDR3

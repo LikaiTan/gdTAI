@@ -1210,6 +1210,59 @@ Standard behavior:
 - bind any propagation to the staged sidecar SHA-256 and require explicit
   approval, backups, and post-write validation before changing H5AD metadata
 
+## Post-Phase-4 frozen-membership TCR sidecar overlay preflight
+
+Objective:
+
+- determine whether the validated 14-source TCR sidecar can safely replace
+  canonical TCR metadata in the rebuilt full atlas without changing atlas cell
+  membership or rerunning integration
+- quantify repaired productive-TCR cells outside the atlas before explicitly
+  accepting or rejecting their rescue
+
+Phase or task:
+
+- read-only TCR sidecar-to-atlas identity, coverage, and control-loss audit
+
+Exact `.py` script:
+
+- `workflows/integration/audit_tcr_sidecar_overlay.py`
+
+Key outputs:
+
+- `Integrated_dataset/tables/tcr_sidecar_overlay_preflight/overlay_join_by_source.csv`
+- `Integrated_dataset/tables/tcr_sidecar_overlay_preflight/sidecar_rows_missing_from_atlas.csv`
+- `Integrated_dataset/logs/tcr_sidecar_overlay_preflight/overlay_preflight_summary.json`
+- `Integrated_dataset/logs/tcr_sidecar_overlay_preflight/overlay_preflight_summary.md`
+- `docs/TCR_SIDECAR_OVERLAY_PLAN.md`
+
+Current result:
+
+- `PASS_OVERLAY_READY`; all 2,155,409 current atlas rows from affected sources
+  match exactly by `source_gse_id + original_cell_id`, with no unmatched atlas
+  row and no expression write
+- 1,100,981 retained atlas cells have repaired productive alpha-beta TCR and
+  933,890 have paired TRA/TRB
+- after combining unaffected sources, the frozen atlas is estimated to contain
+  2,270,138 productive-alpha-beta cells and 1,938,158 paired-TRA/TRB cells
+- 20,875 productive-alpha-beta cells outside the atlas, including 14,495 paired
+  cells, are intentionally not rescued; this omits 0.911% of the whole
+  productive-alpha-beta pool and 0.742% of the whole paired-alpha-beta pool
+- no sidecar-only cell has productive gamma-delta TCR, so frozen membership does
+  not discard a sidecar-supported gamma-delta positive
+
+Standard behavior:
+
+- join only atlas `source_gse_id + original_cell_id` to sidecar
+  `source_gse_id + source_obs_name`; positional, barcode-only, and display
+  `sample_id` joins are forbidden
+- keep the exact 5,933,312-cell atlas membership, expression, latent space,
+  clusters, and UMAP unchanged during metadata repair
+- clear stale calls, preserve null UMI/read semantics, and keep ambiguous rows
+  fail closed; rebuild downstream TCR truth labels after replacement
+- require backup, temporary-file validation, and explicit approval before the
+  high-risk metadata-only H5AD write and atomic canonical symlink switch
+
 ## Phase 1: Coarse T/NK extraction
 
 Objective:
