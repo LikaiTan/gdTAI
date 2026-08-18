@@ -130,20 +130,33 @@
   legacy TCR fields remain unchanged; AnnData backed-open validation passed
 - the canonical atlas still resolves to the original checksum-bound rollback
   object, and no TCR chain call has been applied
+- the separate TCR sidecar transaction completed with
+  `PASS_TCR_H5AD_CANDIDATE`; all 17 post-write checks passed on
+  `/ssd/tnk_phase3/Integrated_dataset/full_atlas/tcr_corrected/integrated_full_atlas.h5ad`
+- the TCR-corrected candidate SHA-256 is
+  `d32c9d2bdb955b12e1eafbed8322f8cb965cf3a225191e612b53f3d3783480d5`
+- all 2,155,409 affected rows from 14 sources match the validated sidecar, all
+  unaffected TCR values match their input hashes, and the 109 atlas-present
+  ambiguous GSE235863 rows are blank and fail closed
+- corrected whole-atlas totals are 2,270,138 productive-alpha-beta cells and
+  1,938,158 paired-TRA/TRB cells; 46 canonical fields were replaced and 27
+  explicit rebuilt-provenance fields were added
+- sparse X, scVI, UMAP, protected metadata, and the metadata-only input checksum
+  remain unchanged; the canonical symlink was not switched
+- the eight-page HTML/PDF application report passed visual review without
+  clipped tables and is under
+  `gdT_prediction/gdtai_v4_2_tcr_sidecar_application/`
 
 ## Next action
 
-- use the validated metadata-corrected candidate as the sole input to the
-  separate TCR sidecar transaction
+- regenerate TCR-derived truth/control labels and every boundary/NK audit from
+  the checksum-bound TCR-corrected candidate
 - keep biological `sample_id_harmonized_v2` separate from technical
   `tcr_library_join_id_v2`; pooled VDJ libraries must never overwrite specimen
   or donor identity
-- the metadata-only replacement gate has passed; TCR propagation may now consume the
-  checksum-bound 14-source sidecar, create a second rollback point, preserve
-  legacy TCR fields for provenance, and keep the 110 ambiguous GSE235863 rows
-  blank and ineligible for TCR truth
-- after approved propagation, validate exact source/cell overlap, null support
-  semantics, chain flags, backup checksums, and unchanged expression matrices
+- treat the original canonical atlas and metadata-only candidate as rollback
+  points; do not switch the canonical symlink until post-repair truth and
+  boundary reports are reviewed
 - preserve the frozen 5,933,312-cell membership and existing integration; do
   not rerun T/NK selection, HVGs, scVI, Leiden, or UMAP merely to rescue the
   intentionally omitted 20,875 alpha-beta controls
@@ -186,9 +199,9 @@
 
 ## Current blockers or review items
 
-- the rebuilt TCR sidecar is validated but intentionally not propagated; the
-  prerequisite metadata-only candidate passed, and TCR application must occur
-  as a separate checksum-bound candidate transaction with rollback controls
+- the rebuilt TCR sidecar is present only in the validated isolated
+  TCR-corrected candidate; canonical publication remains pending post-repair
+  truth/control and boundary/NK review
 - the three source-level quarantine blockers are resolved: GSE125527 has
   75.82% exact author/raw CDR3 agreement with 22,928-fold enrichment over
   sample rotation; GSE228597 has 95.03% agreement and 7,951-fold enrichment;

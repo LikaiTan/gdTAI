@@ -1227,6 +1227,8 @@ Phase or task:
 Exact `.py` script:
 
 - `workflows/integration/audit_tcr_sidecar_overlay.py`
+- `workflows/integration/apply_tcr_sidecar_to_full_atlas.py`
+- `workflows/reporting/build_tcr_sidecar_application_report.py`
 
 Key outputs:
 
@@ -1235,6 +1237,10 @@ Key outputs:
 - `Integrated_dataset/logs/tcr_sidecar_overlay_preflight/overlay_preflight_summary.json`
 - `Integrated_dataset/logs/tcr_sidecar_overlay_preflight/overlay_preflight_summary.md`
 - `docs/TCR_SIDECAR_OVERLAY_PLAN.md`
+- `Integrated_dataset/tables/tcr_sidecar_application/`
+- `Integrated_dataset/figures/tcr_sidecar_application/`
+- `Integrated_dataset/logs/tcr_sidecar_application/`
+- `gdT_prediction/gdtai_v4_2_tcr_sidecar_application/`
 
 Current result:
 
@@ -1250,6 +1256,15 @@ Current result:
   productive-alpha-beta pool and 0.742% of the whole paired-alpha-beta pool
 - no sidecar-only cell has productive gamma-delta TCR, so frozen membership does
   not discard a sidecar-supported gamma-delta positive
+- the separate TCR-corrected candidate passed all 17 post-write checks with
+  SHA-256
+  `d32c9d2bdb955b12e1eafbed8322f8cb965cf3a225191e612b53f3d3783480d5`
+- all affected and unaffected TCR-value checks passed, the 109 atlas-present
+  ambiguous rows are fail closed, and corrected whole-atlas totals are
+  2,270,138 productive-alpha-beta and 1,938,158 paired-TRA/TRB cells
+- the application QC report is
+  `gdT_prediction/gdtai_v4_2_tcr_sidecar_application/index.html` with an
+  eight-page visually reviewed PDF; the canonical symlink remains unchanged
 
 Standard behavior:
 

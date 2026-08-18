@@ -98,6 +98,15 @@
     checksum-bound replacement rows with per-chain UMI/read provenance, no
     source remains quarantined, and no H5AD propagation occurred
 
+- full-atlas TCR sidecar application:
+  - `gdT_prediction/gdtai_v4_2_tcr_sidecar_application/index.html`
+  - `gdT_prediction/gdtai_v4_2_tcr_sidecar_application/tcr_sidecar_application_report.pdf`
+  - `Integrated_dataset/tables/tcr_sidecar_application/`
+  - `Integrated_dataset/figures/tcr_sidecar_application/`
+  - `Integrated_dataset/logs/tcr_sidecar_application/`
+  - decision: `PASS_TCR_H5AD_CANDIDATE`; 2,155,409 atlas rows were corrected,
+    all 17 checks passed, and canonical publication remains pending
+
 - gdTAI V4.2 T/NK-restricted reintegration and NK-boundary review:
   - `gdT_prediction/gdtai_v4_2_tnk_reintegration/index.html`
   - `gdT_prediction/gdtai_v4_2_tnk_reintegration/gdtai_v4_2_tnk_reintegration_report.pdf`

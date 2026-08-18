@@ -59,9 +59,8 @@ many sources. Positional, barcode-only, and display-sample joins are forbidden.
 
 ## Stage 1: Frozen-Membership Overlay Manifest
 
-This stage is blocked until the additive tissue, tumor, sample, library, and
-donor metadata replacement has been applied and validated. The TCR transaction
-must consume that validated metadata object, not the current pre-correction
+This stage consumed the validated additive-metadata candidate and completed on
+2026-08-18. It did not consume or modify the current pre-correction canonical
 atlas.
 
 1. Open the canonical atlas and all source H5AD files read-only.
@@ -138,6 +137,24 @@ Write the corrected atlas to a `.partial` path. Validate it before promotion:
 Only after every check passes may the canonical symlink switch atomically to
 the corrected atlas. Rollback consists of restoring the recorded symlink target;
 the current atlas and all source H5ADs remain intact.
+
+## Executed Candidate Result
+
+- status: `PASS_TCR_H5AD_CANDIDATE` (17/17 checks)
+- candidate:
+  `/ssd/tnk_phase3/Integrated_dataset/full_atlas/tcr_corrected/integrated_full_atlas.h5ad`
+- SHA-256:
+  `d32c9d2bdb955b12e1eafbed8322f8cb965cf3a225191e612b53f3d3783480d5`
+- corrected rows: 2,155,409 across 14 sources
+- productive-alpha-beta cells in the whole atlas: 2,270,138
+- paired-TRA/TRB cells in the whole atlas: 1,938,158
+- atlas-present ambiguous rows cleared and ineligible: 109
+- canonical symlink switched: no
+
+The required HTML/PDF QC package is under
+`gdT_prediction/gdtai_v4_2_tcr_sidecar_application/`. The eight-page landscape
+PDF passed visual review without clipped tables. Canonical publication remains
+blocked until regenerated truth/control and boundary/NK reports are reviewed.
 
 ## Downstream Boundary
 

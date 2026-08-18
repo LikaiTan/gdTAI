@@ -1,0 +1,47 @@
+{
+  "candidate": "/ssd/tnk_phase3/Integrated_dataset/full_atlas/tcr_corrected/integrated_full_atlas.h5ad",
+  "candidate_sha256": "d32c9d2bdb955b12e1eafbed8322f8cb965cf3a225191e612b53f3d3783480d5",
+  "candidate_size_bytes": 22605519881,
+  "canonical_symlink_switched": false,
+  "checks": {
+    "affected_tcr_values_exact": true,
+    "anndata_backed_open": true,
+    "canonical_flag_consistency_affected": true,
+    "canonical_symlink_unchanged": true,
+    "ineligible_atlas_rows_exact": true,
+    "ineligible_rows_fail_closed": true,
+    "metadata_source_state_and_sha_unchanged": true,
+    "only_expected_provenance_columns_added": true,
+    "protected_structure_sampled_identity": true,
+    "scvi_shape": true,
+    "sidecar_coverage_exact": true,
+    "umap_shape": true,
+    "unaffected_tcr_values_exact": true,
+    "whole_any_ab_total": true,
+    "whole_paired_ab_total": true,
+    "x_nnz": true,
+    "x_shape": true
+  },
+  "elapsed_seconds": 448.775,
+  "n_added_provenance_columns": 27,
+  "n_affected_atlas_rows": 2155409,
+  "n_affected_sources": 14,
+  "n_assignment_ineligible_atlas_rows": 109,
+  "n_cells": 5933312,
+  "n_replaced_columns": 46,
+  "n_whole_atlas_any_ab_tcr": 2270138,
+  "n_whole_atlas_paired_tra_trb": 1938158,
+  "sidecar": {
+    "path": "/home/tanlikai/databank/publicdata/tools/output_geo_tcell_research/Integrated_dataset/tables/tcr_join_rebuild/validated_tcr_replacement_sidecar.parquet",
+    "rows": 3041871,
+    "sha256": "3114e70719301d693ae1a2bc2c63bac6c8bd57e3e8ac73a88c24320eaabfc2f0"
+  },
+  "source_metadata_candidate": {
+    "inode": 151650306,
+    "mtime_ns": 1787063029776860665,
+    "path": "/ssd/tnk_phase3/Integrated_dataset/full_atlas/metadata_corrected/integrated_full_atlas.h5ad",
+    "sha256": "7f1c5e1cac1074a8e2863703bc1862e225defc5ba1a3adbaabd3f6e023d5871c",
+    "size": 22278493536
+  },
+  "status": "PASS_TCR_H5AD_CANDIDATE"
+}
