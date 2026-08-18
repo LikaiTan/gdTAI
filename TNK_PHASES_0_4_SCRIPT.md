@@ -2321,3 +2321,39 @@ Standard behavior:
   near-cluster source composition, and same-source neighbor retention
 - treat the current sidecar as development-only and do not infer new-cohort NK
   identity when anchor class is confounded with cohort lane
+
+## Corrected full-atlas overview report
+
+Objective:
+
+- export a read-only overview of the rebuilt full T/NK atlas using the
+  validated metadata- and TCR-corrected candidate
+- separate source-author annotations, unsupervised clusters, productive-TCR
+  coverage, and transcriptomic marker evidence
+
+Phase or task:
+
+- corrected full-atlas composition, TCR, signature-expression, and QC report
+
+Exact `.py` script:
+
+- `workflows/reporting/build_full_atlas_overview.py`
+
+Key outputs:
+
+- `full_atlas_overview/index.html`
+- `full_atlas_overview/full_atlas_overview_report.pdf`
+- `Integrated_dataset/figures/full_atlas_overview/`
+- `Integrated_dataset/tables/full_atlas_overview/`
+- `Integrated_dataset/logs/full_atlas_overview/`
+
+Standard behavior:
+
+- use exact all-cell metadata and repaired productive-TCR counts
+- use deterministic source-balanced samples only for UMAP rendering, marker
+  expression, signature summaries, and QC summaries
+- compute temporary log1p library-size-normalized marker expression directly
+  from raw sparse counts without writing to the H5AD
+- report source-label display groups as author-label summaries, not scANVI or
+  consensus annotations
+- verify the input H5AD size and nanosecond mtime are unchanged
