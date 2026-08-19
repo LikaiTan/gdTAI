@@ -12,7 +12,8 @@
 - GSE243013 contains 759,436 LUAD/LUSC cells; V4.6 highest-F1 identified
   25,792 versus 37,112 for V2, with 22,942 shared calls, 2,850 V4.6-only, and
   14,170 V2-only calls; the eight-page HTML/PDF report is under
-  `gdT_prediction/gdtai_v4_6_whole_atlas/`
+  `gdT_prediction/gdtai_v4_6_whole_atlas/` and the PDF was emailed to Likai
+  on 2026-08-20
 - gdTAI V4.6 negative-diversity/receptor-ablation development and the single
   untouched BALF diagnostic completed on 2026-08-20; no model was promoted,
   atlas-applied, or pushed
