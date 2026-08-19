@@ -2,6 +2,35 @@
 
 ## Current milestone
 
+- gdTAI V4.4 dual-mode development completed on 2026-08-19 with one frozen
+  scorer and two validation-only operating points; no test cell fitted a model
+  or calibrator or selected a feature, model, or threshold
+- the grouped development split contains 1,251,735 fit cells, 301,861
+  calibration cells, and 307,743 threshold-validation cells; all 327,455
+  common-lockbox cells remained isolated until the model, Platt calibrators,
+  and thresholds were frozen together
+- the highest-F1 threshold is `0.9857032299`, selected by maximum F1 without a
+  hard FPR constraint; development-validation precision/recall/F1 were
+  94.53%/93.73%/94.13%
+- the high-purity threshold is `0.9963588715`, selected by maximum F0.5 without
+  a hard FPR constraint; development-validation precision/recall/F1 were
+  97.51%/89.76%/93.47%
+- V4.4 uses 200 effective Stage-2 features, adds symmetric receptor aggregates
+  and curated NK negatives, excludes shared NK/cytotoxic genes, does not pass
+  Stage-1 probability into Stage 2, and has no hard TRDV-expression cutoff
+- positive-source-held-out highest-F1 recall was 64.93% for HRA005041, 72.55%
+  for GSE144469, and 82.58% for MalteGDT, confirming residual source dependence
+- the previously consumed 335,479-cell V4.3 common lockbox was reused only as
+  an explicitly non-promotable diagnostic with no threshold retuning; V4.4
+  highest-F1 precision/recall/F1 were 98.94%/52.10%/68.26% and high-purity
+  precision/recall/F1 were 99.23%/41.25%/58.28%
+- V4.4 highest-F1 reduced paired-alpha-beta and author-NK FPR to 0.051% and
+  1.084%, but remained below V3 balanced recall/F1 of 75.18%/85.04%; V4.4 is
+  not promoted, V3 balanced remains the default, and V2 high-purity remains the
+  conservative fallback
+- the visually reviewed 15-page HTML/PDF report is under
+  `gdT_prediction/gdtai_v4_4_dual_mode/`; the PDF was emailed to Likai on
+  2026-08-19
 - gdTAI V4 development ended on 2026-08-19 with a checksum-bound common
   external lockbox failure and a final decision not to promote V4.3
 - the development-frozen V4.3 candidate used 36 Stage-1 genes, 158 Stage-2
@@ -267,6 +296,13 @@
 
 - retain V3 balanced as the current default and V2 high-purity as the
   conservative annotation-assisted fallback
+- do not retune V4.4 using the consumed common lockbox, promote it, push it to
+  GitHub, or apply it to the atlas; use
+  `gdT_prediction/gdtai_v4_4_dual_mode/index.html` for the current dual-mode
+  diagnostic decision
+- any promotable next iteration requires a precommitted redesign and a new
+  untouched final test; highest-F1 and high-purity thresholds must continue to
+  be determined only from development validation
 - do not retune, promote, release-fit, push, or apply V4.3 using the consumed
   lockbox; a future V4 attempt requires genuinely new independent positive and
   NK/alpha-beta cohorts or a new untouched final test

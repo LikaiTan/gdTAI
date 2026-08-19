@@ -224,6 +224,49 @@ Final semantics:
 - no diagnostic threshold may be promoted, released, or used to claim external
   performance
 
+## gdTAI V4.4 validation-only dual operating modes
+
+Objective:
+
+- correct the V4.3 threshold/deployment-score mismatch by freezing the deployed
+  scorer, Platt calibrators, and thresholds together
+- add symmetric receptor evidence and curated NK negatives without using shared
+  NK/cytotoxic genes or a hard TRDV-expression cutoff
+- publish highest-F1 and high-purity operating points selected only from a
+  group-disjoint development threshold-validation partition
+- compare the frozen modes on the already-consumed common lockbox as diagnostic
+  evidence only, without retuning or promotion
+
+Exact `.py` scripts:
+
+- `workflows/gdtai/train_gdtai_v4_4_dual_mode.py`
+- `workflows/gdtai/evaluate_gdtai_v4_4_reused_lockbox.py`
+- `workflows/gdtai/render_gdtai_v4_4_dual_mode_report.py`
+
+Configuration:
+
+- `configs/models/gdtai/v4_4_dual_mode_training.json`
+
+Core outputs:
+
+- `Integrated_dataset/models/gdT_prediction/gdtai_v4_4_dual_mode/model_contract.json`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_4_dual_mode/threshold_validation_metrics.csv`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_4_dual_mode/source_holdout_metrics.csv`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_4_reused_lockbox/overall_metrics.csv`
+- `gdT_prediction/gdtai_v4_4_dual_mode/index.html`
+- `gdT_prediction/gdtai_v4_4_dual_mode/gdtai_v4_4_dual_mode_report.pdf`
+
+Final semantics:
+
+- highest-F1 maximizes development-validation F1 and high-purity maximizes
+  development-validation F0.5; neither mode has a hard FPR constraint
+- test cells cannot fit models/calibrators or select features, model families,
+  or thresholds
+- V4.4 improves specificity over V4.3 but remains materially below V2/V3 in
+  reused-lockbox recall and F1
+- V4.4 is not promoted or applied to the atlas; a new untouched final test is
+  required for any future promotion claim
+
 ## Phase 0: Dataset audit and eligibility triage
 
 Objective:
