@@ -192,6 +192,38 @@ Final gate semantics:
 - V3 balanced remains the default; no V4 model may be released or applied to
   the atlas from this experiment
 
+## gdTAI V4.3 post-lockbox recall-failure investigation
+
+Objective:
+
+- audit why V4.3 loses external recall despite BALF being absent from all model
+  coefficient fits
+- separate continuous ranking, threshold calibration, receptor-expression
+  dropout, productive V-gene bias, QC, and source-specific paired-alpha-beta
+  false-positive behavior
+- preserve every post-lockbox threshold as diagnostic-only
+
+Exact `.py` script:
+
+- `workflows/gdtai/investigate_gdtai_v4_3_recall_failure.py`
+
+Core outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_3_recall_failure/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v4_3_recall_failure/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_3_recall_failure/summary.json`
+- `gdT_prediction/gdtai_v4_3_recall_failure/index.html`
+- `gdT_prediction/gdtai_v4_3_recall_failure/gdtai_v4_3_recall_failure_report.pdf`
+
+Final semantics:
+
+- V4.3 has strong BALF ranking but a non-transferable frozen cutoff and no
+  overall deployment advantage over V3
+- V4.3 improves author-NK FPR but has higher paired-alpha-beta FPR in seven of
+  eight extension datasets and substantially lower external gdT recall
+- no diagnostic threshold may be promoted, released, or used to claim external
+  performance
+
 ## Phase 0: Dataset audit and eligibility triage
 
 Objective:

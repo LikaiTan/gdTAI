@@ -1,0 +1,1060 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>gdTAI V4.3 recall failure investigation</title><style>
+    @page { size: A4 landscape; margin: 12mm; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #172033; background: #f5f7fa; font-family: Arial, Helvetica, sans-serif; font-size: 10pt; line-height: 1.42; }
+    main { max-width: 1240px; margin: 0 auto; background: white; }
+    header { padding: 28px 34px 24px; background: #172033; color: white; border-bottom: 7px solid #cc5a3d; }
+    h1 { margin: 0 0 8px; font-size: 28px; letter-spacing: 0; }
+    header p { margin: 0; color: #dbe3ee; max-width: 980px; }
+    section { padding: 24px 34px; border-bottom: 1px solid #dfe5ec; break-inside: avoid; }
+    h2 { margin: 0 0 12px; font-size: 19px; color: #172033; }
+    h3 { margin: 14px 0 7px; font-size: 13px; }
+    p { margin: 7px 0; }
+    .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 14px 0; }
+    .card { border: 1px solid #d7dee7; border-top: 4px solid #2878b5; padding: 11px; background: #fff; }
+    .card strong { display: block; font-size: 20px; margin: 3px 0; }
+    .callout { padding: 12px 14px; border-left: 5px solid #cc5a3d; background: #fff4ee; margin: 12px 0; }
+    .good { border-left-color: #2f8f6b; background: #effaf5; }
+    .warning { border-left-color: #d97706; background: #fff8e8; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+    img { display: block; width: 100%; height: auto; }
+    figure { margin: 8px 0; break-inside: avoid; }
+    figcaption { color: #526071; font-size: 8.8pt; margin-top: 5px; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 8.4pt; margin: 9px 0; table-layout: auto; break-inside: avoid; }
+    .data-table th { background: #e9eef4; text-align: left; padding: 5px 6px; border: 1px solid #cfd8e3; }
+    .data-table td { padding: 4px 6px; border: 1px solid #dbe2ea; vertical-align: top; }
+    code { font-family: Consolas, monospace; background: #eef2f6; padding: 1px 3px; }
+    ul { margin: 7px 0 7px 20px; padding: 0; }
+    li { margin: 4px 0; }
+    .small { font-size: 8.5pt; color: #526071; }
+    .page-break { break-before: page; }
+    @media (max-width: 800px) { .cards, .grid2 { grid-template-columns: 1fr; } section, header { padding-left: 18px; padding-right: 18px; } }
+    </style></head><body><main>
+    <header><h1>Why gdTAI V4.3 lost recall</h1><p>Frozen, read-only investigation of BALF_BLOOD_COPD and the common external lockbox. No model was fitted, no cutoff was replaced, and the consumed lockbox remains unavailable for future tuning.</p></header>
+    <section>
+      <h2>Conclusion</h2>
+      <div class="callout"><strong>The primary failure is threshold transfer, not inability to rank BALF gdT cells.</strong> V4.3 separates BALF receptor-gold positives from paired-alpha-beta controls extremely well, but its XGBoost probabilities are saturated and not calibrated across cohorts. The development safety constraints forced a cutoff of <code>0.994098</code>, just above the BALF positive median of <code>0.992373</code>.</div>
+      <div class="cards">
+        <div class="card"><span>BALF V4.3 recall</span><strong>46.7%</strong><span>at the frozen threshold</span></div>
+        <div class="card"><span>BALF Stage-2 ROC-AUC</span><strong>0.9972</strong><span>better ranking than V2/V3</span></div>
+        <div class="card"><span>V4 misses recovered by V2</span><strong>389</strong><span>of 454 V4 false negatives</span></div>
+        <div class="card"><span>New datasets with worse AB FPR</span><strong>7/8</strong><span>versus V3</span></div>
+      </div>
+      <p>V4.3 therefore failed as a deployable frozen classifier, even though its continuous BALF ranking is strong. A cutoff chosen after seeing BALF would recover performance but would be lockbox overfitting and is reported only as a diagnostic.</p>
+      <div class="callout warning"><strong>V4.3 has no overall deployment advantage.</strong> It lowers author-NK FPR, but paired-alpha-beta FPR is higher than V3 in seven of eight new datasets, while recall is substantially lower. The gain is specific to one negative endpoint, not general specificity.</div>
+    </section>
+    <section>
+      <h2>Was BALF used by V2 or V3?</h2>
+      <div class="callout good"><strong>Your correction is valid for coefficient fitting.</strong> BALF was not used to fit V2 coefficients, and V3 contains the exact same V2 scaler and logistic coefficients. However, BALF was repeatedly evaluated and used later in V3 Round-12-versus-Round-14 promotion selection, so V3's BALF estimate is not untouched.</div>
+      <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>model</th>
+      <th>coefficient_fit_sources</th>
+      <th>BALF_in_coefficient_fit</th>
+      <th>BALF_in_threshold_selection</th>
+      <th>BALF_in_promotion_selection</th>
+      <th>interpretation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>V2 base</td>
+      <td>HRA005041; MalteGDT; GDT_2020AUG_woCOV</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>BALF was fully unseen by V2 development.</td>
+    </tr>
+    <tr>
+      <td>V3 balanced</td>
+      <td>Exact V2 base coefficients</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>BALF influenced later Round 12/14 promotion, not fitted weights.</td>
+    </tr>
+    <tr>
+      <td>V4.3</td>
+      <td>GSE144469; HRA005041; MalteGDT (positive truth)</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>BALF was a once-opened V4 lockbox.</td>
+    </tr>
+  </tbody>
+</table>
+      <p>Numerical equality checks on the V2 and V3 base models found exact equality for scaler means, scaler scales, coefficients, and intercept. V3 differs through a conditional NK/TRDC gate and a threshold change from V2's <code>0.906359</code> to <code>0.936</code>. On BALF positives, that gate changed only 2 of 852 scores.</p>
+      <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>property</th>
+      <th>V2</th>
+      <th>V3</th>
+      <th>V4.3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Base algorithm</td>
+      <td>Standardized logistic</td>
+      <td>Exact V2 logistic + conditional gate</td>
+      <td>Two XGBoost stages</td>
+    </tr>
+    <tr>
+      <td>Stage-2 fitted genes</td>
+      <td>187</td>
+      <td>V2's 187 for base score</td>
+      <td>158</td>
+    </tr>
+    <tr>
+      <td>NK/cytotoxic genes in base score</td>
+      <td>No</td>
+      <td>No; only conditional gate uses NK score</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>NK cells in gdT-vs-ab Stage-2 fitting</td>
+      <td>No explicit NK class</td>
+      <td>Conditional post-gate</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Probability calibration</td>
+      <td>Implicit logistic</td>
+      <td>Implicit logistic</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td>Deployed model matches threshold-generating model</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No: OOF fold models vs final 800-tree refit</td>
+    </tr>
+  </tbody>
+</table>
+    </section>
+    <section class="page-break">
+      <h2>Failure localization</h2>
+      <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>model</th>
+      <th>tp</th>
+      <th>fn</th>
+      <th>fp</th>
+      <th>tn</th>
+      <th>recall</th>
+      <th>precision</th>
+      <th>f1</th>
+      <th>abt_fpr</th>
+      <th>nk_fpr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>V4.3 frozen</td>
+      <td>398</td>
+      <td>454</td>
+      <td>1</td>
+      <td>27,475</td>
+      <td>46.71%</td>
+      <td>99.75%</td>
+      <td>63.63%</td>
+      <td>0.00%</td>
+      <td>0.00%</td>
+    </tr>
+    <tr>
+      <td>V3 balanced</td>
+      <td>766</td>
+      <td>86</td>
+      <td>10</td>
+      <td>27,466</td>
+      <td>89.91%</td>
+      <td>98.71%</td>
+      <td>94.10%</td>
+      <td>0.03%</td>
+      <td>0.39%</td>
+    </tr>
+    <tr>
+      <td>V2 high-F1</td>
+      <td>780</td>
+      <td>72</td>
+      <td>26</td>
+      <td>27,450</td>
+      <td>91.55%</td>
+      <td>96.77%</td>
+      <td>94.09%</td>
+      <td>0.08%</td>
+      <td>1.57%</td>
+    </tr>
+    <tr>
+      <td>V2 high-purity</td>
+      <td>767</td>
+      <td>85</td>
+      <td>9</td>
+      <td>27,467</td>
+      <td>90.02%</td>
+      <td>98.84%</td>
+      <td>94.23%</td>
+      <td>0.03%</td>
+      <td>0.00%</td>
+    </tr>
+  </tbody>
+</table>
+      <div class="grid2">
+        <figure><img src="assets/balf_score_distributions.png"><figcaption>Scores are shown near the saturated upper tail. V4 positives sit close to, but often just below, the frozen cutoff.</figcaption></figure>
+        <figure><img src="assets/balf_v4_vs_v2_scores.png"><figcaption>Most V4 false negatives remain high-confidence V2 positives.</figcaption></figure>
+      </div>
+      <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>failure_group</th>
+      <th>n_cells</th>
+      <th>median_stage1_score</th>
+      <th>median_stage2_score</th>
+      <th>median_v2_score</th>
+      <th>median_n_genes</th>
+      <th>median_total_counts</th>
+      <th>median_TRD_umis</th>
+      <th>median_TRG_umis</th>
+      <th>fraction_of_balf_gold</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>V4_FN_V2_FN</td>
+      <td>65</td>
+      <td>0.4697</td>
+      <td>0.5593</td>
+      <td>0.6286</td>
+      <td>2878.0000</td>
+      <td>6256.0000</td>
+      <td>107.0000</td>
+      <td>199.0000</td>
+      <td>7.63%</td>
+    </tr>
+    <tr>
+      <td>V4_FN_V2_TP</td>
+      <td>389</td>
+      <td>0.4139</td>
+      <td>0.9744</td>
+      <td>0.9966</td>
+      <td>2520.0000</td>
+      <td>5296.0000</td>
+      <td>136.0000</td>
+      <td>93.0000</td>
+      <td>45.66%</td>
+    </tr>
+    <tr>
+      <td>V4_TP</td>
+      <td>398</td>
+      <td>0.2586</td>
+      <td>0.9981</td>
+      <td>0.9998</td>
+      <td>2457.0000</td>
+      <td>5029.0000</td>
+      <td>199.5000</td>
+      <td>134.0000</td>
+      <td>46.71%</td>
+    </tr>
+  </tbody>
+</table>
+      <ul>
+        <li>Stage 1 passes 98.24% of BALF gold cells.</li>
+        <li>CD4/Treg exclusions affect 1.41%.</li>
+        <li>Only 43.54% pass the frozen Stage-2 cutoff directly; receptor rescue raises final recall to 46.71%.</li>
+      </ul>
+      <h3>Specificity by independent dataset</h3>
+      <figure><img src="assets/per_source_ab_fpr_difference.png"><figcaption>Red indicates a higher V4.3 paired-alpha-beta false-positive rate; green indicates improvement. BALF is shown separately from the eight extension datasets.</figcaption></figure>
+      <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>source_gse_id</th>
+      <th>n_abt_gold</th>
+      <th>v4_3_abt_fpr</th>
+      <th>v3_abt_fpr</th>
+      <th>v4_minus_v3_fpr</th>
+      <th>v4_only_fp</th>
+      <th>v3_only_fp</th>
+      <th>mcnemar_fdr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BALF_BLOOD_COPD</td>
+      <td>27,222</td>
+      <td>0.00%</td>
+      <td>0.03%</td>
+      <td>-0.03%</td>
+      <td>1</td>
+      <td>9</td>
+      <td>0.0242</td>
+    </tr>
+    <tr>
+      <td>GSE114724</td>
+      <td>22,283</td>
+      <td>0.48%</td>
+      <td>0.06%</td>
+      <td>0.42%</td>
+      <td>102</td>
+      <td>9</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>GSE121636</td>
+      <td>5,954</td>
+      <td>0.32%</td>
+      <td>0.17%</td>
+      <td>0.15%</td>
+      <td>13</td>
+      <td>4</td>
+      <td>0.0490</td>
+    </tr>
+    <tr>
+      <td>GSE159251</td>
+      <td>32,420</td>
+      <td>0.20%</td>
+      <td>0.78%</td>
+      <td>-0.57%</td>
+      <td>19</td>
+      <td>205</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>GSE169246</td>
+      <td>54,925</td>
+      <td>0.33%</td>
+      <td>0.08%</td>
+      <td>0.24%</td>
+      <td>157</td>
+      <td>23</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>GSE292700</td>
+      <td>14,801</td>
+      <td>0.06%</td>
+      <td>0.01%</td>
+      <td>0.05%</td>
+      <td>9</td>
+      <td>1</td>
+      <td>0.0242</td>
+    </tr>
+    <tr>
+      <td>GSE294273</td>
+      <td>24,137</td>
+      <td>0.10%</td>
+      <td>0.03%</td>
+      <td>0.07%</td>
+      <td>23</td>
+      <td>5</td>
+      <td>0.0014</td>
+    </tr>
+    <tr>
+      <td>GSE296954</td>
+      <td>44,371</td>
+      <td>0.41%</td>
+      <td>0.10%</td>
+      <td>0.31%</td>
+      <td>155</td>
+      <td>18</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>GSE315928</td>
+      <td>59,411</td>
+      <td>0.16%</td>
+      <td>0.05%</td>
+      <td>0.10%</td>
+      <td>84</td>
+      <td>22</td>
+      <td>0.0000</td>
+    </tr>
+  </tbody>
+</table>
+      <p>Among the eight extension datasets, only <code>GSE159251</code> has lower paired-alpha-beta FPR under V4.3; 7 of the seven adverse differences remain significant after paired exact McNemar testing and BH correction. BALF also improves, but BALF is the cohort where V4.3 loses more than half of its gold positives at the frozen cutoff.</p>
+    </section>
+    <section>
+      <h2>Threshold transfer failure</h2>
+      <figure><img src="assets/threshold_transfer.png"><figcaption>The same threshold has materially different sensitivity and specificity behavior in development and BALF.</figcaption></figure>
+      <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>threshold_label</th>
+      <th>threshold</th>
+      <th>cohort</th>
+      <th>tp</th>
+      <th>fn</th>
+      <th>fp</th>
+      <th>tn</th>
+      <th>recall</th>
+      <th>precision</th>
+      <th>f1</th>
+      <th>abt_fpr</th>
+      <th>nk_fpr</th>
+      <th>tier2_macro_nk_fpr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BALF diagnostic best-F1</td>
+      <td>0.6096</td>
+      <td>BALF</td>
+      <td>786</td>
+      <td>66</td>
+      <td>39</td>
+      <td>27,437</td>
+      <td>92.25%</td>
+      <td>95.27%</td>
+      <td>93.74%</td>
+      <td>0.14%</td>
+      <td>0.39%</td>
+      <td>NA</td>
+    </tr>
+    <tr>
+      <td>BALF diagnostic best-F1</td>
+      <td>0.6096</td>
+      <td>Development OOF</td>
+      <td>15,045</td>
+      <td>758</td>
+      <td>3,859</td>
+      <td>580,652</td>
+      <td>95.20%</td>
+      <td>79.59%</td>
+      <td>86.70%</td>
+      <td>0.48%</td>
+      <td>1.53%</td>
+      <td>3.51%</td>
+    </tr>
+    <tr>
+      <td>0.8006 diagnostic</td>
+      <td>0.8006</td>
+      <td>BALF</td>
+      <td>749</td>
+      <td>103</td>
+      <td>17</td>
+      <td>27,459</td>
+      <td>87.91%</td>
+      <td>97.78%</td>
+      <td>92.58%</td>
+      <td>0.06%</td>
+      <td>0.39%</td>
+      <td>NA</td>
+    </tr>
+    <tr>
+      <td>0.8006 diagnostic</td>
+      <td>0.8006</td>
+      <td>Development OOF</td>
+      <td>14,805</td>
+      <td>998</td>
+      <td>2,730</td>
+      <td>581,781</td>
+      <td>93.68%</td>
+      <td>84.43%</td>
+      <td>88.82%</td>
+      <td>0.35%</td>
+      <td>1.02%</td>
+      <td>2.70%</td>
+    </tr>
+    <tr>
+      <td>Frozen 0.9941</td>
+      <td>0.9941</td>
+      <td>BALF</td>
+      <td>398</td>
+      <td>454</td>
+      <td>1</td>
+      <td>27,475</td>
+      <td>46.71%</td>
+      <td>99.75%</td>
+      <td>63.63%</td>
+      <td>0.00%</td>
+      <td>0.00%</td>
+      <td>NA</td>
+    </tr>
+    <tr>
+      <td>Frozen 0.9941</td>
+      <td>0.9941</td>
+      <td>Development OOF</td>
+      <td>13,422</td>
+      <td>2,381</td>
+      <td>1,621</td>
+      <td>582,890</td>
+      <td>84.93%</td>
+      <td>89.22%</td>
+      <td>87.03%</td>
+      <td>0.20%</td>
+      <td>0.66%</td>
+      <td>1.92%</td>
+    </tr>
+  </tbody>
+</table>
+      <div class="callout warning"><strong>Diagnostic only:</strong> the BALF best-F1 threshold is <code>0.609648</code>. It gives high BALF performance, but it was found after opening BALF and must never become the released threshold or be used as evidence of generalization.</div>
+      <h3>Why development selected 0.9941</h3>
+      <p>At a Stage-2 threshold near 0.8006, development alpha-beta FPR remained above its 0.2% limit and tier-2 NK macro-FPR remained above its 2% limit. The threshold rose to 0.9941 to suppress high-scoring negative tails from heterogeneous development sources. BALF negatives were easier, so this development-driven cutoff became unnecessarily strict there.</p>
+      <h3>OOF-to-final score mismatch</h3>
+      <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>truth_class</th>
+      <th>n_cells</th>
+      <th>oof_median</th>
+      <th>final_model_median</th>
+      <th>pearson_correlation</th>
+      <th>oof_above_frozen_threshold</th>
+      <th>final_model_above_frozen_threshold</th>
+      <th>final_model_tree_count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>gdT_gold</td>
+      <td>15,803</td>
+      <td>0.9904</td>
+      <td>0.9989</td>
+      <td>0.6938</td>
+      <td>42.97%</td>
+      <td>79.59%</td>
+      <td>800</td>
+    </tr>
+    <tr>
+      <td>abT_gold</td>
+      <td>483,048</td>
+      <td>0.0016</td>
+      <td>0.0026</td>
+      <td>0.9324</td>
+      <td>0.04%</td>
+      <td>0.03%</td>
+      <td>800</td>
+    </tr>
+    <tr>
+      <td>single_ab_support</td>
+      <td>116,952</td>
+      <td>0.0025</td>
+      <td>0.0043</td>
+      <td>0.9582</td>
+      <td>0.16%</td>
+      <td>0.16%</td>
+      <td>800</td>
+    </tr>
+    <tr>
+      <td>nk_tier1</td>
+      <td>20,922</td>
+      <td>0.0391</td>
+      <td>0.0776</td>
+      <td>0.7696</td>
+      <td>0.46%</td>
+      <td>0.54%</td>
+      <td>800</td>
+    </tr>
+    <tr>
+      <td>nk_tier2</td>
+      <td>80,541</td>
+      <td>0.0373</td>
+      <td>0.0609</td>
+      <td>0.8649</td>
+      <td>0.48%</td>
+      <td>0.51%</td>
+      <td>800</td>
+    </tr>
+  </tbody>
+</table>
+      <p>The OOF threshold was learned from fold models fitted with early stopping. The release candidate was then refitted as a single 800-tree model without early stopping, but no held-out probability calibration mapped that final model onto the OOF score scale. This is a model-construction defect even before considering biological source shift.</p>
+    </section>
+    <section class="page-break">
+      <h2>Receptor dropout and V-gene asymmetry</h2>
+      <div class="grid2">
+        <figure><img src="assets/balf_recall_by_receptor_state.png"><figcaption>V4 depends strongly on simultaneous transcriptomic TRDC and TRDV detection.</figcaption></figure>
+        <figure><img src="assets/balf_receptor_expression_boxes.png"><figcaption>Missed cells retain substantial receptor evidence but show weaker TRDC and different V-gene combinations.</figcaption></figure>
+      </div>
+      <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>TRDC_TRDV_state</th>
+      <th>model</th>
+      <th>n_cells</th>
+      <th>detected</th>
+      <th>recall</th>
+      <th>ci_low</th>
+      <th>ci_high</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>TRDC- TRDV+</td>
+      <td>V4.3 frozen</td>
+      <td>228</td>
+      <td>43</td>
+      <td>18.86%</td>
+      <td>14.31%</td>
+      <td>24.44%</td>
+    </tr>
+    <tr>
+      <td>TRDC- TRDV+</td>
+      <td>V3 balanced</td>
+      <td>228</td>
+      <td>203</td>
+      <td>89.04%</td>
+      <td>84.31%</td>
+      <td>92.46%</td>
+    </tr>
+    <tr>
+      <td>TRDC- TRDV+</td>
+      <td>V2 high-F1</td>
+      <td>228</td>
+      <td>206</td>
+      <td>90.35%</td>
+      <td>85.82%</td>
+      <td>93.54%</td>
+    </tr>
+    <tr>
+      <td>TRDC- TRDV-</td>
+      <td>V4.3 frozen</td>
+      <td>16</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>0.00%</td>
+      <td>19.36%</td>
+    </tr>
+    <tr>
+      <td>TRDC- TRDV-</td>
+      <td>V3 balanced</td>
+      <td>16</td>
+      <td>1</td>
+      <td>6.25%</td>
+      <td>1.11%</td>
+      <td>28.33%</td>
+    </tr>
+    <tr>
+      <td>TRDC- TRDV-</td>
+      <td>V2 high-F1</td>
+      <td>16</td>
+      <td>4</td>
+      <td>25.00%</td>
+      <td>10.18%</td>
+      <td>49.50%</td>
+    </tr>
+    <tr>
+      <td>TRDC+ TRDV+</td>
+      <td>V4.3 frozen</td>
+      <td>581</td>
+      <td>355</td>
+      <td>61.10%</td>
+      <td>57.08%</td>
+      <td>64.98%</td>
+    </tr>
+    <tr>
+      <td>TRDC+ TRDV+</td>
+      <td>V3 balanced</td>
+      <td>581</td>
+      <td>548</td>
+      <td>94.32%</td>
+      <td>92.13%</td>
+      <td>95.93%</td>
+    </tr>
+    <tr>
+      <td>TRDC+ TRDV+</td>
+      <td>V2 high-F1</td>
+      <td>581</td>
+      <td>554</td>
+      <td>95.35%</td>
+      <td>93.32%</td>
+      <td>96.79%</td>
+    </tr>
+    <tr>
+      <td>TRDC+ TRDV-</td>
+      <td>V4.3 frozen</td>
+      <td>27</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>0.00%</td>
+      <td>12.46%</td>
+    </tr>
+    <tr>
+      <td>TRDC+ TRDV-</td>
+      <td>V3 balanced</td>
+      <td>27</td>
+      <td>14</td>
+      <td>51.85%</td>
+      <td>33.99%</td>
+      <td>69.26%</td>
+    </tr>
+    <tr>
+      <td>TRDC+ TRDV-</td>
+      <td>V2 high-F1</td>
+      <td>27</td>
+      <td>16</td>
+      <td>59.26%</td>
+      <td>40.73%</td>
+      <td>75.49%</td>
+    </tr>
+  </tbody>
+</table>
+      <h3>Sequenced TRD V-gene calls</h3>
+      <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>TRD_v</th>
+      <th>model</th>
+      <th>n_cells</th>
+      <th>detected</th>
+      <th>recall</th>
+      <th>ci_low</th>
+      <th>ci_high</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>TRDV1</td>
+      <td>V4.3 frozen</td>
+      <td>173</td>
+      <td>99</td>
+      <td>57.23%</td>
+      <td>49.77%</td>
+      <td>64.36%</td>
+    </tr>
+    <tr>
+      <td>TRDV1</td>
+      <td>V2 high-F1</td>
+      <td>173</td>
+      <td>155</td>
+      <td>89.60%</td>
+      <td>84.15%</td>
+      <td>93.32%</td>
+    </tr>
+    <tr>
+      <td>TRDV2</td>
+      <td>V4.3 frozen</td>
+      <td>614</td>
+      <td>265</td>
+      <td>43.16%</td>
+      <td>39.30%</td>
+      <td>47.11%</td>
+    </tr>
+    <tr>
+      <td>TRDV2</td>
+      <td>V2 high-F1</td>
+      <td>614</td>
+      <td>569</td>
+      <td>92.67%</td>
+      <td>90.33%</td>
+      <td>94.48%</td>
+    </tr>
+    <tr>
+      <td>TRDV3</td>
+      <td>V4.3 frozen</td>
+      <td>52</td>
+      <td>34</td>
+      <td>65.38%</td>
+      <td>51.80%</td>
+      <td>76.85%</td>
+    </tr>
+    <tr>
+      <td>TRDV3</td>
+      <td>V2 high-F1</td>
+      <td>52</td>
+      <td>48</td>
+      <td>92.31%</td>
+      <td>81.83%</td>
+      <td>96.97%</td>
+    </tr>
+    <tr>
+      <td>TRAV29/DV5</td>
+      <td>V4.3 frozen</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>0.00%</td>
+      <td>56.15%</td>
+    </tr>
+    <tr>
+      <td>TRAV29/DV5</td>
+      <td>V2 high-F1</td>
+      <td>3</td>
+      <td>2</td>
+      <td>66.67%</td>
+      <td>20.77%</td>
+      <td>93.85%</td>
+    </tr>
+    <tr>
+      <td>TRAV38-2/DV8</td>
+      <td>V4.3 frozen</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>0.00%</td>
+      <td>35.43%</td>
+    </tr>
+    <tr>
+      <td>TRAV38-2/DV8</td>
+      <td>V2 high-F1</td>
+      <td>7</td>
+      <td>5</td>
+      <td>71.43%</td>
+      <td>35.89%</td>
+      <td>91.78%</td>
+    </tr>
+    <tr>
+      <td>TRAV23/DV6</td>
+      <td>V4.3 frozen</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>0.00%</td>
+      <td>79.35%</td>
+    </tr>
+    <tr>
+      <td>TRAV23/DV6</td>
+      <td>V2 high-F1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>0.00%</td>
+      <td>79.35%</td>
+    </tr>
+    <tr>
+      <td>TRAV26-2</td>
+      <td>V4.3 frozen</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>0.00%</td>
+      <td>79.35%</td>
+    </tr>
+    <tr>
+      <td>TRAV26-2</td>
+      <td>V2 high-F1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>100.00%</td>
+      <td>20.65%</td>
+      <td>100.00%</td>
+    </tr>
+    <tr>
+      <td>TRAV22</td>
+      <td>V4.3 frozen</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>0.00%</td>
+      <td>79.35%</td>
+    </tr>
+    <tr>
+      <td>TRAV22</td>
+      <td>V2 high-F1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.00%</td>
+      <td>0.00%</td>
+      <td>79.35%</td>
+    </tr>
+  </tbody>
+</table>
+      <p>TRDV2 is the dominant productive V call in BALF. V4 recovers only 43.2% of these cells, while the V2 linear model recovers 92.7%. SHAP analysis shows that absent TRDV1 contributes a strong negative term even when TRDV2 and TRGV9 are present. The trees learned source-specific conjunctions rather than treating alternate gdT receptor programs as interchangeable evidence.</p>
+      <figure><img src="assets/balf_shap_tp_fn_difference.png"><figcaption>Positive values support recovery in V4 TPs; negative values are stronger in V4 misses that V2 recovers.</figcaption></figure>
+    </section>
+    <section>
+      <h2>Are the false negatives low-quality or weak truth?</h2>
+      <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>v4_tp_n</th>
+      <th>v4_fn_n</th>
+      <th>v4_tp_median</th>
+      <th>v4_fn_median</th>
+      <th>rank_biserial_tp_minus_fn</th>
+      <th>mannwhitney_fdr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>n_genes_by_counts</td>
+      <td>398</td>
+      <td>454</td>
+      <td>2457.0000</td>
+      <td>2558.5000</td>
+      <td>-0.1135</td>
+      <td>0.0105</td>
+    </tr>
+    <tr>
+      <td>total_counts</td>
+      <td>398</td>
+      <td>454</td>
+      <td>5029.0000</td>
+      <td>5426.5000</td>
+      <td>-0.1359</td>
+      <td>0.0031</td>
+    </tr>
+    <tr>
+      <td>pct_counts_mt</td>
+      <td>398</td>
+      <td>454</td>
+      <td>1.2050</td>
+      <td>1.1706</td>
+      <td>0.0192</td>
+      <td>0.6276</td>
+    </tr>
+    <tr>
+      <td>TRD_umis</td>
+      <td>398</td>
+      <td>454</td>
+      <td>199.5000</td>
+      <td>129.0000</td>
+      <td>0.0961</td>
+      <td>0.0256</td>
+    </tr>
+    <tr>
+      <td>TRG_umis</td>
+      <td>398</td>
+      <td>454</td>
+      <td>134.0000</td>
+      <td>100.5000</td>
+      <td>0.0725</td>
+      <td>0.0845</td>
+    </tr>
+  </tbody>
+</table>
+      <p>No. V4 false negatives do not have fewer genes or fewer total counts; their mitochondrial fractions are similar. Cells missed by V4 but recovered by V2 have median productive TRD UMI support of 136.0, versus 199.5 among V4 TPs. These are not one-UMI ambient receptor calls. The main expression difference is partial receptor dropout/asymmetry, particularly lower TRDC and absent TRDV1 in genuine TRDV2 cells.</p>
+      <figure><img src="assets/balf_feature_detection_tp_fn.png"><figcaption>Detection-rate contrasts are tested with Fisher exact tests; expression contrasts use Mann-Whitney tests with BH correction.</figcaption></figure>
+      <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>gene</th>
+      <th>v4_tp_detected_fraction</th>
+      <th>v4_fn_detected_fraction</th>
+      <th>detected_fraction_difference_tp_minus_fn</th>
+      <th>v4_tp_median_expression</th>
+      <th>v4_fn_median_expression</th>
+      <th>fisher_fdr</th>
+      <th>mannwhitney_fdr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>TRDC</td>
+      <td>89.20%</td>
+      <td>55.73%</td>
+      <td>33.47%</td>
+      <td>1.6307</td>
+      <td>0.8961</td>
+      <td>0.0000</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>TRGC2</td>
+      <td>55.03%</td>
+      <td>40.53%</td>
+      <td>14.50%</td>
+      <td>0.9385</td>
+      <td>0.0000</td>
+      <td>0.0001</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>TRDV1</td>
+      <td>30.65%</td>
+      <td>16.52%</td>
+      <td>14.13%</td>
+      <td>0.0000</td>
+      <td>0.0000</td>
+      <td>0.0000</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>TRGV5</td>
+      <td>29.90%</td>
+      <td>16.52%</td>
+      <td>13.38%</td>
+      <td>0.0000</td>
+      <td>0.0000</td>
+      <td>0.0000</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <td>TRGV3</td>
+      <td>18.84%</td>
+      <td>10.35%</td>
+      <td>8.49%</td>
+      <td>0.0000</td>
+      <td>0.0000</td>
+      <td>0.0014</td>
+      <td>0.0003</td>
+    </tr>
+    <tr>
+      <td>TRBC1</td>
+      <td>79.15%</td>
+      <td>72.47%</td>
+      <td>6.68%</td>
+      <td>1.5331</td>
+      <td>1.1872</td>
+      <td>0.0542</td>
+      <td>0.0001</td>
+    </tr>
+    <tr>
+      <td>TRDV3</td>
+      <td>10.80%</td>
+      <td>4.19%</td>
+      <td>6.62%</td>
+      <td>0.0000</td>
+      <td>0.0000</td>
+      <td>0.0009</td>
+      <td>0.0002</td>
+    </tr>
+    <tr>
+      <td>TRGV4</td>
+      <td>13.57%</td>
+      <td>9.47%</td>
+      <td>4.10%</td>
+      <td>0.0000</td>
+      <td>0.0000</td>
+      <td>0.1243</td>
+      <td>0.0597</td>
+    </tr>
+    <tr>
+      <td>TRGC1</td>
+      <td>56.78%</td>
+      <td>53.30%</td>
+      <td>3.48%</td>
+      <td>0.9872</td>
+      <td>0.7238</td>
+      <td>0.4552</td>
+      <td>0.0759</td>
+    </tr>
+    <tr>
+      <td>CD3G</td>
+      <td>82.66%</td>
+      <td>79.52%</td>
+      <td>3.15%</td>
+      <td>1.5546</td>
+      <td>1.2943</td>
+      <td>0.3842</td>
+      <td>0.0012</td>
+    </tr>
+  </tbody>
+</table>
+    </section>
+    <section class="page-break">
+      <h2>Why V2 transfers better</h2>
+      <ol>
+        <li><strong>Smoother decision boundary.</strong> V2 is a standardized linear logistic model. It adds evidence across TRDV/TRGV genes and absence of many alpha/beta V genes. V4's shallow trees still form nonlinear receptor combinations and sharp magnitude splits.</li>
+        <li><strong>Broader positive source used by V2.</strong> V2 fitted HRA005041, MalteGDT, and GDT_2020AUG_woCOV positives. V4 used GSE144469, HRA005041, and MalteGDT; it deliberately locked GDT_2020 out. This likely reduced exposure to the Vdelta2-rich program that resembles BALF, although BALF itself remained unseen.</li>
+        <li><strong>Architectural mismatch.</strong> V4 Stage 2 was trained on gdT versus alpha-beta cells, not NK cells. NK limits were nevertheless imposed during threshold selection after Stage 1 allowed a substantial NK tail through. The cutoff, rather than the classifier, absorbed that conflict.</li>
+        <li><strong>Calibration mismatch.</strong> Fold-model OOF scores selected the cutoff, while a structurally different final 800-tree fit produced deployment scores. No source-held-out Platt/isotonic calibration or fold ensemble preserved the OOF scale.</li>
+      </ol>
+      <p>The 29 TCR genes present in V2 but absent from V4 are not the explanation. They account for only 2.41% of V2's absolute standardized coefficient mass. Setting all 29 to zero changed BALF V2 recall from 91.55% to 91.67%.</p>
+    </section>
+    <section>
+      <h2>Implications</h2>
+      <div class="callout"><strong>V4.3 remains non-promotable.</strong> Its BALF ranking suggests the receptor feature concept is viable, but the observed performance cannot be repaired by changing the threshold after lockbox review.</div>
+      <p>A scientifically valid next version needs a new untouched evaluation cohort and should precommit:</p>
+      <ul>
+        <li>a fold-model ensemble or a separate calibration split so the selected operating point applies to the deployed predictor;</li>
+        <li>source-held-out probability calibration and threshold stability as an explicit gate;</li>
+        <li>alternate receptor-program handling that treats TRDV1 and TRDV2 as valid substitutes and is robust to TRDC dropout;</li>
+        <li>NK negatives in Stage-2 training, or a stronger transcriptomic T-cell gate, instead of forcing Stage 2 to solve unseen NK tails through an extreme threshold;</li>
+        <li>validation of recall by productive TRD V call, receptor-dropout state, source, donor, and tissue.</li>
+      </ul>
+      <p class="small">Input checksums and exact output paths are recorded in <code>Integrated_dataset/logs/gdT_prediction/gdtai_v4_3_recall_failure/summary.json</code>. No H5AD was modified.</p>
+    </section>
+    </main></body></html>

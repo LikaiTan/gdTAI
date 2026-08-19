@@ -1,5 +1,23 @@
 # CHANGELOG.md
 
+## 2026-08-19 - Explained the gdTAI V4.3 recall and specificity failure
+
+- Confirmed that BALF was absent from V2, V3, and V4.3 coefficient fitting;
+  V3 uses the exact V2 base scaler and logistic coefficients, although BALF was
+  later reused for V3 promotion selection.
+- Showed that V4.3 has excellent BALF ranking (`ROC-AUC=0.9972`, `AP=0.9836`)
+  but loses recall because its development-derived `0.994098` XGBoost cutoff
+  does not transfer to BALF or to the separately refitted final model.
+- Localized the biological sensitivity loss to receptor Stage-2 behavior:
+  productive TRDV2 BALF recall is 43.16% for V4.3 versus 92.67% for V2, despite
+  strong TCR UMI support and no general low-quality-cell enrichment.
+- Found higher paired-alpha-beta FPR than V3 in seven of eight extension
+  datasets, with all seven adverse differences significant after paired exact
+  McNemar testing and BH correction; V4.3's lower author-NK FPR is a narrow
+  endpoint improvement rather than an overall advantage.
+- Published and visually checked the 15-page HTML/PDF diagnostic report. No
+  H5AD, model, release threshold, or promotion state changed.
+
 ## 2026-08-19 - Ended gdTAI V4 after the common external lockbox failure
 
 - Froze the KLRD1/cytotoxic-gene-free V4.3 model and thresholds from grouped

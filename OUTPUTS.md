@@ -75,6 +75,16 @@
 
 ## Current review packages
 
+- gdTAI V4.3 recall-failure investigation:
+  - `gdT_prediction/gdtai_v4_3_recall_failure/index.html`
+  - `gdT_prediction/gdtai_v4_3_recall_failure/gdtai_v4_3_recall_failure_report.pdf`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_3_recall_failure/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_3_recall_failure/`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_3_recall_failure/`
+  - decision: V4.3 has no overall deployment advantage; its BALF ranking is
+    strong, but threshold transfer fails and paired-alpha-beta FPR is higher
+    than V3 in seven of eight extension datasets
+
 - gdTAI V4 final common-lockbox evaluation:
   - `gdT_prediction/gdtai_v4_3_final_evaluation/index.html`
   - `gdT_prediction/gdtai_v4_3_final_evaluation/gdtai_v4_3_final_evaluation_report.pdf`

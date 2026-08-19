@@ -40,6 +40,26 @@
   `gdT_prediction/gdtai_v4_3_final_evaluation/`; V3 remains the current default,
   V4.3 remains diagnostic, and no V4 model was promoted, pushed, or applied to
   the atlas
+- the post-lockbox recall investigation passed read-only QC and confirmed that
+  BALF was absent from V2/V3 coefficient fitting; the V3 base scaler,
+  coefficients, and intercept are numerically identical to V2, although BALF
+  was later reused for V3 promotion selection
+- V4.3 ranks BALF gdT gold versus paired-alpha-beta controls well
+  (`ROC-AUC=0.9972`, `AP=0.9836`), but the frozen `0.994098` threshold is
+  non-transferable: the BALF positive median is `0.992373`, Stage 1 passes
+  98.24%, and final recall is only 46.71%
+- the OOF cutoff came from early-stopped fold models, while the deployment
+  candidate was a separate uncalibrated 800-tree refit; receptor Stage 2 also
+  learned asymmetric TRDV1/TRDV2 rules, recovering only 43.16% of productive
+  TRDV2 BALF cells versus 92.67% for V2 high-F1
+- V4.3 has higher paired-alpha-beta FPR than V3 in seven of eight extension
+  datasets, with all seven adverse differences significant by paired exact
+  McNemar testing after BH correction; only GSE159251 improves. Its lower
+  author-NK FPR is therefore a narrow endpoint gain, not an overall deployment
+  advantage
+- the 15-page recall-failure HTML/PDF report passed visual review under
+  `gdT_prediction/gdtai_v4_3_recall_failure/`; its BALF diagnostic threshold is
+  explicitly non-deployable and does not reopen V4 tuning
 - gdTAI V4.2 expression-independent ground truth, source-namespaced grouped
   folds, a 197-gene feature universe, and the checksum-bound normalized feature
   cache were frozen on 2026-08-19 against the isolated TCR-corrected atlas
@@ -251,8 +271,9 @@
   lockbox; a future V4 attempt requires genuinely new independent positive and
   NK/alpha-beta cohorts or a new untouched final test
 - preserve the final V4.3 model and lockbox outputs as diagnostic evidence and
-  use `gdT_prediction/gdtai_v4_3_final_evaluation/index.html` as the canonical
-  review package
+  use `gdT_prediction/gdtai_v4_3_final_evaluation/index.html` for the gate
+  decision and `gdT_prediction/gdtai_v4_3_recall_failure/index.html` for the
+  failure explanation
 - publish the gdTAI V4.2 development-gate failure report with frozen-label,
   source-transfer, exclusion-cost, and recovery diagnostics
 - do not run additional Malte-adaptive searches; any next classifier iteration
