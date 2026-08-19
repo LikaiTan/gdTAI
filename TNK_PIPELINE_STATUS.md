@@ -2,6 +2,26 @@
 
 ## Current milestone
 
+- gdTAI V4.2 expression-independent ground truth, source-namespaced grouped
+  folds, a 197-gene feature universe, and the checksum-bound normalized feature
+  cache were frozen on 2026-08-19 against the isolated TCR-corrected atlas
+- Step 0 passed with 2,188,794 labeled/audit cells, 58,822 gdT gold cells,
+  1,926,136 alpha-beta gold cells, and 101,463 curated NK negatives from seven
+  independent sources; UMI=1 paired calls are excluded where chain-level UMI
+  support exists, while truly UMI-unavailable sources remain eligible
+- the full 12-candidate two-stage A100 nested-development run completed in
+  1,180 seconds without scoring a lockbox or promoting a model
+- the V4.2 development gate failed: held-out HRA balanced recall was 95.19%
+  with 0.359% alpha-beta FPR, no profile was eligible when GSE144469 was held
+  out, and held-out Malte balanced recall was only 36.47%
+- failure decomposition localized the Malte collapse to Stage 2: Stage 1 passed
+  99.79% of Malte cells and frozen CD4/Treg exclusions removed 0.013%
+- two development-only logistic recovery probes did not clear the 70% held-out
+  source-recall floor; continuous receptor features reached 46.72% Malte recall
+  and detected/not-detected receptor features reached 41.18%
+- V4.2 remains non-promotable; all broad extension cohorts,
+  `BALF_BLOOD_COPD`, `GDT_2020AUG_woCOV`, and `GDTlung2023july_7p` remain
+  unscored lockboxes for this iteration
 - the full T/NK atlas rebuild completed on 2026-08-18 with all planned stages
   passing: preflight, sparse preparation, A100 scVI, RAPIDS embedding, full-gene
   assembly, Phase 4 scoring, and HTML/PDF reporting
@@ -187,6 +207,13 @@
 
 ## Next action
 
+- publish the gdTAI V4.2 development-gate failure report with frozen-label,
+  source-transfer, exclusion-cost, and recovery diagnostics
+- do not run additional Malte-adaptive searches; any next classifier iteration
+  must precommit a materially different source-invariance strategy before reuse
+  of the same development folds
+- do not score V4.2 on locked cohorts, fit a release artifact, switch the atlas
+  symlink, promote a model, or push V4 code to GitHub
 - review the corrected truth/NK report and decide whether to atomically publish
   the checksum-bound TCR-corrected candidate as the canonical atlas
 - keep biological `sample_id_harmonized_v2` separate from technical

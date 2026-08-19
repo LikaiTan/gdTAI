@@ -93,6 +93,35 @@ Gate semantics:
 - all extension cohorts, BALF_BLOOD_COPD, GDT_2020, and GDTlung remain locked
 - no classifier is fitted in this task
 
+## gdTAI V4.2 development-only nested training
+
+Objective:
+
+- evaluate a two-stage T/NK then gdT/alpha-beta classifier under source-held-out
+  nested development folds
+- enforce frozen balanced and high-purity operating-profile constraints
+- fail closed before lockbox access when source transfer is inadequate
+
+Exact `.py` scripts:
+
+- `workflows/gdtai/prepare_gdtai_v4_2_training.py`
+- `workflows/gdtai/train_gdtai_v4_2_nested.py`
+- `workflows/gdtai/train_gdtai_v4_2_recovery.py`
+
+Core outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_training/nested_stage1_candidates.csv`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_training/nested_stage2_candidates.csv`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_training/nested_outer_metrics.csv`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_recovery/nested_outer_metrics.csv`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_training/nested_summary.json`
+
+Current gate semantics:
+
+- nested development completed but failed cross-source transfer requirements
+- recovery probes remain diagnostic and do not replace the frozen primary run
+- lockboxes remain unscored and no model is eligible for promotion or release
+
 ## Phase 0: Dataset audit and eligibility triage
 
 Objective:
