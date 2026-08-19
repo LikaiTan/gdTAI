@@ -269,6 +269,10 @@
   - `Integrated_dataset/tables/gdT_prediction/gdtai_kimi/`
   - `Integrated_dataset/figures/gdT_prediction/gdtai_kimi/`
   - `Integrated_dataset/models/gdT_prediction_classifier/gdtai_kimi/` (experimental, unregistered)
+- gdTAI V4 underperformance causal analysis:
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_gap_analysis/gdtai_v4_gap_analysis.md`
+  - `gdT_prediction/gdtai_v4_gap_analysis/index.html`
+  - `gdT_prediction/gdtai_v4_gap_analysis/gdtai_v4_gap_analysis_report.pdf`
 - extension official-GEO metadata reconciliation:
   - `docs/EXTENSION_GEO_METADATA_RECONCILIATION.md`
   - `configs/metadata/extension_geo_metadata_reconciliation.csv`

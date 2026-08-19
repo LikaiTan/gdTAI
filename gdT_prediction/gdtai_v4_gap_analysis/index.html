@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>gdTAI V4 underperformance analysis</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="report_style.css" />
+</head>
+<body>
+<h1
+id="why-gdtai-v4-underperforms-v2v3-on-unexposed-test-sets-a-causal-decomposition">Why
+gdTAI V4 underperforms V2/V3 on unexposed test sets: a causal
+decomposition</h1>
+<p><strong>Date:</strong> 2026-08-19 · <strong>Status:</strong>
+independent analysis, read-only; no H5AD, model, or registry was
+modified.</p>
+<p><strong>The observation.</strong> On the frozen common lockbox
+(335,479 cells; 41,931 gdT gold from BALF_BLOOD_COPD, GDT_2020AUG_woCOV
+cord blood, and GDTlung2023july_7p; 285,524 abT gold; 8,024 author-NK
+negatives; manifest SHA-256 <code>f997e24b…</code>), the
+development-frozen V4.3 candidate scored recall / precision / F1 =
+<strong>45.6% / 96.3% / 61.9%</strong>, versus <strong>75.2% / 97.9% /
+85.0%</strong> for frozen V3 Round 14 on identical cells. The user has
+confirmed the lockbox cells were never used to <em>fit</em> V2/V3, and
+the project’s own post-lockbox audit verified BALF was absent from V2/V3
+coefficient fitting (V3’s base coefficients, scaler, and intercept are
+numerically identical to V2). So the gap is real, not a leakage
+artifact. The question is what produces it.</p>
+<p><strong>Verdict in one paragraph.</strong> The 23-F1-point gap
+decomposes into four causes, in rough order of size: <strong>(A) a
+threshold-transfer failure</strong> — V4.3’s operating point was
+estimated from early-stopped fold models and applied to a different,
+uncalibrated 800-tree refit whose scores saturate near 1, so a
+sub-percent score-scale shift on new data deletes half the positives;
+<strong>(B) positive training-set narrowing</strong> — the V4 protocol
+removed all sorted-γδT and silver cells from fitting, cutting positive
+diversity ~5×, which shows up as asymmetric Vδ1/Vδ2 recovery;
+<strong>(C) feature amputation</strong> — NK/cytotoxic context genes and
+the Stage-1 probability were removed to fight NK false positives, but
+those features carry recall signal because γδT cells <em>are</em>
+cytotoxic; and <strong>(D) an asymmetric comparison frame</strong> —
+V2/V3’s operating points are the survivors of many adaptive rounds on
+related data, while V4.3 had a single honest pass. A hard residual
+remains after all four: even with an oracle (post-hoc, lockbox-fitted)
+threshold, V4.3’s best achievable F1 is 0.8464 — still below V3’s frozen
+0.8504 — so not everything is procedural.</p>
+<hr />
+<h2 id="cause-a-threshold-transfer-failure-dominant">1. Cause A —
+threshold transfer failure (dominant)</h2>
+<p>V4.3’s ranking is nearly perfect; its operating point is broken:</p>
+<ul>
+<li>On BALF lockbox positives, V4.3 achieves <strong>ROC-AUC 0.9972 / AP
+0.9836</strong> — the model <em>orders</em> γδT above αβ almost
+flawlessly.</li>
+<li>But the frozen Stage-2 threshold is <strong>0.994098</strong>, and
+the BALF positive <strong>median score is 0.992373</strong> — half of
+all true positives sit <em>below</em> the operating point. Frozen recall
+on BALF: 46.7%.</li>
+<li>The threshold was derived from grouped-OOF predictions of
+<strong>early-stopped fold models</strong>, while the deployment
+candidate was a <strong>separate, uncalibrated 800-tree refit</strong>
+with a different score distribution. The cutoff was estimated on one
+object and applied to another.</li>
+<li>With 800 boosting trees and no calibration, scores pile up at ≈1.0;
+a threshold at 0.9941 sits deep in the saturated tail, where a tiny
+cross-dataset score shift moves enormous cell counts across the
+cutoff.</li>
+</ul>
+<p>This failure mode is not unique to V4.3 — it is a structural property
+of this modeling stack, measured independently in the gdTAI-kimi
+experiments: BALF positive medians of 0.963–0.969 against transferred
+thresholds of 0.95–0.99, and inner-calibrated FPR targets missing by up
+to 19× when transferred toward GSE144469
+(<code>gdtai_kimi_report.md</code> §8.2). XGBoost/HistGBM scores without
+deployment-matched calibration plus tail-quantile thresholds will keep
+producing exactly this failure.</p>
+<p><strong>Fixable?</strong> Yes, procedurally: derive OOF predictions
+from full-length fold refits of the <em>same</em> architecture as the
+deployment model, calibrate on those OOF scores (Platt/isotonic), and
+never transfer a threshold across model objects. This alone recovers
+most of the recall gap (V4.3’s own threshold sweep reaches recall ≈ V3’s
+at FPR 0.537% — too dirty to deploy, but it proves the scores carry the
+information).</p>
+<h2
+id="cause-b-positive-training-set-narrowing-real-model-content-gap">2.
+Cause B — positive training-set narrowing (real model-content gap)</h2>
+<ul>
+<li>The V4 protocol (v1.2) removed <strong>all sorted-γδT cells and all
+silver cells</strong> from both fitting stages. Sorted cohorts supplied
+48,879 of V3’s 57,776 gold positives (85%). V4.3’s positive class was
+therefore much smaller and much less diverse in V-gene usage, tissue,
+and chemistry.</li>
+<li>The measurable signature: V4.3 recovers only <strong>43.2% of
+productive-TRDV2 BALF cells</strong>, versus 92.7% for V2 high-F1 — it
+learned Vδ1-biased receptor rules from a narrowed positive set.</li>
+<li>389 of V4.3’s 454 BALF false negatives are V2 true positives with
+strong TCR-UMI support (median 136 UMIs vs 199.5 for V4.3 TPs) — these
+are real, high-quality γδT cells the narrowed model never learned, not
+dropout junk.</li>
+<li>Notably, the lockbox’s two sorted cohorts (cord blood, GDTlung) are
+<em>novel biology</em> to V4.3 (it never trained on sorted-style cells
+at all), while V3’s operating point was explicitly validated for
+cord-blood recovery during the Round 12-vs-14 decision. Source recall
+deficits: BALF −45%, GDTlung −37%, cord blood −28%.</li>
+</ul>
+<p><strong>Fixable?</strong> Partially, by protocol amendment: sorted
+cells can return to fitting at low weight (kimi round 1 used weight-0.25
+sorted positives without NK damage — it was TRD-only <em>silver</em>
+positives that imported NK contamination, and v1.2 was right to remove
+those). Whether this closes the Vδ2 gap can only be tested in a new
+precommitted run, not on the consumed lockbox.</p>
+<h2 id="cause-c-feature-amputation">3. Cause C — feature amputation</h2>
+<p>V4.3’s Stage 2 uses 153 TCR genes + CD3D/E/G + CD4 + FOXP3. To fight
+NK false positives, the NK/cytotoxic context genes (KLRD1, NKG7, GNLY,
+FCER1G, TYROBP) were excluded from both stages, and the Stage-1
+probability is not passed to Stage 2. But γδT cells are cytotoxic cells
+— these features carry <em>positive-class</em> signal, not just NK
+signal. The kimi rounds used the 197-gene space (including these genes)
+plus the Stage-1 OOF probability, and its HistGBM hit held-out recall
+0.83–0.90 on HRA005041/GSE144469 — with the NK problem controlled by
+<em>labels</em> (assayed-sublibrary NK negatives), not by feature
+removal. Removing features to fix a label problem threw away recall
+signal.</p>
+<h2
+id="cause-d-an-asymmetric-comparison-frame-even-with-unexposed-cells">4.
+Cause D — an asymmetric comparison frame (even with unexposed
+cells)</h2>
+<p>“Not used in fitting” is necessary but not sufficient for a level
+comparison:</p>
+<ul>
+<li>V3’s <em>promotion</em> was decided partly on cord-blood and BALF
+behavior (Round 12 vs 14 was selected on mean F1 across frames including
+these cohorts); V2/V3’s thresholds are the survivors of ~38 candidate
+rounds plus six candidate lanes of adaptive iteration on related data.
+V4.3 had exactly one honest pass.</li>
+<li>The lockbox’s positive sources are sorted/simulated-positivity
+cohorts on which V3’s threshold was, in effect, historically validated.
+V4.3’s threshold never saw them.</li>
+<li>The converse is also documented: V4.3’s apparent purity edge is
+illusory — it has <em>higher</em> paired-αβ FPR than V3 in 7 of 8
+extension datasets (all seven McNemar-significant after BH correction).
+Nothing about the frame was rigged in V4.3’s favor either.</li>
+</ul>
+<h2 id="the-residual-that-is-real">5. The residual that is real</h2>
+<p>Even granting V4.3 an oracle threshold fitted on the lockbox itself
+(diagnostic only, not deployable), its maximum F1 is <strong>0.8464 &lt;
+0.8504</strong> (V3 frozen). So after removing all procedural causes,
+the V4.3 model <em>content</em> is still marginally worse than V3 on
+this lockbox — consistent with causes B and C being genuine capability
+losses, not just calibration artifacts.</p>
+<h2
+id="what-was-excluded-as-a-cause-projects-own-audits-verified-here">6.
+What was excluded as a cause (project’s own audits, verified here)</h2>
+<ul>
+<li>Stage-1 gate: passes 98.2–99.5% of locked positives — not the
+bottleneck.</li>
+<li>CD4/Treg exclusions: ≤1.41% effect.</li>
+<li>Feature-matrix integrity: 59,924,265 values bit-exact against the
+frozen training cache.</li>
+<li>FN cell quality: FNs have strong TCR-UMI support (median 136).</li>
+<li>NK label quality: repaired in the V4.2 line (latent NK reference;
+469 confident NK, strict receptor/adaptor expression rule) — and,
+independently, kimi round 3 showed the historical NK-FPR inflation was
+mostly censoring-contaminated NK labels, fixed by assayed-sublibrary
+restriction.</li>
+</ul>
+<h2 id="implications">7. Implications</h2>
+<ol type="1">
+<li><strong>V3 Round 14 remains the correct default.</strong> The
+lockbox is consumed; no further model selection on these cohorts is
+legitimate.</li>
+<li><strong>If a V4.5 is ever precommitted</strong>, the three cheap
+fixes with expected large effect:
+<ol type="a">
+<li>thresholds from OOF predictions of full-length fold refits +
+calibrator fit on those OOF scores, applied to the identically-trained
+deployment object; (b) restore sorted-cell positives at low weight (keep
+silver out); (c) restore cytotoxic context features and control NK
+through labels (assayed-sublibrary NK negatives, latent NK reference)
+plus an abstain zone — not feature removal.</li>
+</ol></li>
+<li><strong>Interpretation guardrail for the program:</strong> the
+honest single-pass pipeline “costs” ~5–10 F1 points relative to the
+adaptively-developed incumbent. That delta is the measured price of
+V2/V3’s hidden adaptive iteration and leakage history — it should be the
+expected baseline gap when judging any future honestly-developed model,
+not read as V4 being uniquely broken.</li>
+</ol>
+<h2 id="appendix.-key-artifacts-relied-on">Appendix. Key artifacts
+relied on</h2>
+<ul>
+<li><code>Integrated_dataset/logs/gdT_prediction/gdtai_v4_3_common_lockbox/evaluation_summary.json</code>
+(lockbox metrics, promotion decision)</li>
+<li><code>Integrated_dataset/logs/gdT_prediction/gdtai_v4_3_recall_failure/summary.json</code>
+(AUC/AP, positive median vs threshold, TRDV2 asymmetry, FN UMI support,
+V2≡V3 base equality, extension FPR McNemar results)</li>
+<li><code>Integrated_dataset/logs/gdT_prediction/gdtai_v4_3_final_evaluation/gdtai_v4_final_conclusion.md</code>
+(post-hoc frontier 0.8464 &lt; 0.8504)</li>
+<li><code>Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_nk_definition_repair/summary.json</code></li>
+<li><code>Integrated_dataset/logs/gdT_prediction/gdtai_kimi/gdtai_kimi_report.md</code>
+(rounds 1–3: threshold-transfer replication, sorted/silver ablation, NK
+label repair)</li>
+</ul>
+</body>
+</html>
