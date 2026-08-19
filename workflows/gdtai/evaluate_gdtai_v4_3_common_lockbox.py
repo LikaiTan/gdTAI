@@ -32,7 +32,6 @@ from run_gdtai_v3_trdc_nk_guard_classifier import (  # noqa: E402
 )
 from train_gdtai_v4_2_nested import (  # noqa: E402
     exclusion_flags,
-    predict,
     receptor_rescue_flags,
     sha256_file,
 )
@@ -231,18 +230,26 @@ def v3_columns(spec: FeatureSpec, v3: dict) -> np.ndarray:
     return np.asarray(output, dtype=np.int64)
 
 
+def predict_xgb_cpu(model: xgb.XGBClassifier, matrix: np.ndarray, chunk: int = 100_000) -> np.ndarray:
+    output = []
+    model.set_params(device="cpu")
+    for start in range(0, len(matrix), chunk):
+        output.append(
+            model.predict_proba(np.asarray(matrix[start:start + chunk], dtype=np.float32))[:, 1]
+        )
+    return np.concatenate(output).astype(np.float32)
+
+
 def score_models(matrix: np.ndarray, genes: list[str], lockbox: pd.DataFrame, v4: dict, v2: dict, v3: dict) -> pd.DataFrame:
     lookup = {gene: index for index, gene in enumerate(genes)}
     stage1_columns = np.asarray([lookup[gene] for gene in v4["stage1_feature_names"]], dtype=np.int64)
     stage2_columns = np.asarray([lookup[gene] for gene in v4["stage2_feature_names"]], dtype=np.int64)
     stage1 = xgb.XGBClassifier()
     stage1.load_model(V4_DIR / "stage1_t_lineage_gate.ubj")
-    stage1.set_params(device="cuda")
     stage2 = xgb.XGBClassifier()
     stage2.load_model(V4_DIR / "stage2_receptor_classifier.ubj")
-    stage2.set_params(device="cuda")
-    stage1_score = predict(stage1, np.asarray(matrix[:, stage1_columns]))
-    stage2_score = predict(stage2, np.asarray(matrix[:, stage2_columns]))
+    stage1_score = predict_xgb_cpu(stage1, np.asarray(matrix[:, stage1_columns]))
+    stage2_score = predict_xgb_cpu(stage2, np.asarray(matrix[:, stage2_columns]))
     excluded = exclusion_flags(np.asarray(matrix), genes)[2]
     rescue = receptor_rescue_flags(np.asarray(matrix), genes, v4["receptor_rescue"])
     v4_call = (
