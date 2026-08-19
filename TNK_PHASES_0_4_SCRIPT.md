@@ -2766,3 +2766,39 @@ Standard behavior:
   `CD300C`) as broader non-T immune-receptor pathway candidates
 - use candidates only as regularized soft negative features evaluated inside
   grouped cross-dataset folds; never use one gene as a hard NK veto or label
+
+## Frozen V4.6 versus V2 whole-atlas application
+
+Objective:
+
+- apply the frozen V4.6 development model and frozen V2 model to the corrected
+  5,933,312-cell atlas without fitting, threshold tuning, or H5AD mutation
+- compare highest-F1 and high-purity operating modes cell for cell, by dataset,
+  and within the large GSE243013 LUAD/LUSC project
+- audit predicted cells for conservative NK-like evidence while keeping shared
+  cytotoxic markers insufficient by themselves for an NK assignment
+
+Exact `.py` script:
+
+- `workflows/gdtai/apply_gdtai_v4_6_and_v2_whole_atlas.py`
+
+Key configuration and outputs:
+
+- `configs/models/gdtai/v4_6_whole_atlas_inference.json`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_6_whole_atlas/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v4_6_whole_atlas/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_6_whole_atlas/`
+- `gdT_prediction/gdtai_v4_6_whole_atlas/`
+
+Standard behavior:
+
+- use the validated metadata- and TCR-corrected full-atlas candidate read-only
+- normalize raw sparse counts as `log1p(counts_per_10000)` within bounded chunks
+- use frozen V4.6 and V2 model artifacts and thresholds without any test- or
+  atlas-informed retuning
+- retain per-cell calls in compressed Parquet and exact aggregate CSV tables
+- define likely NK as an explicit source NK label or a conservative expression
+  rule requiring absent TRDV1/2/3, weak CD3, and multiple curated innate genes
+- classify cells with shared `NKG7/GNLY/KLRD1/TYROBP/FCER1G` expression alone
+  as cytotoxic-ambiguous rather than NK
+- verify the source H5AD byte size and nanosecond mtime are unchanged

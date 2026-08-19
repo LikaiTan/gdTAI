@@ -1,0 +1,37 @@
+{
+  "protocol_version": "4.6-whole-atlas-inference-1.0",
+  "input_h5ad": "/ssd/tnk_phase3/Integrated_dataset/full_atlas/tcr_corrected/integrated_full_atlas.h5ad",
+  "input_manifest": "Integrated_dataset/logs/tcr_sidecar_application/tcr_h5ad_candidate_manifest.json",
+  "expected_input_sha256": "d32c9d2bdb955b12e1eafbed8322f8cb965cf3a225191e612b53f3d3783480d5",
+  "expected_cells": 5933312,
+  "v4_6_model_dir": "Integrated_dataset/models/gdT_prediction/gdtai_v4_6_development",
+  "v4_6_contract_sha256": "aa17372b76040ea6b4b2e6d18954799d1ba0c495c2ee988bf6580aaaf45cb17f",
+  "v2_model": "Integrated_dataset/models/gdT_prediction_classifier/gdTAI_v2.0/gdTAI_v2_model.pkl",
+  "v2_model_sha256": "c7f6e7d1d1c0c8de9e7abbaa7c5b70c1070b43c964ccdb94e414bc5278e13c3e",
+  "normalization": "log1p(raw_counts_per_10000)",
+  "normalization_target_sum": 10000,
+  "chunk_size": 20000,
+  "large_luad_lusc_source": "GSE243013",
+  "output_table_dir": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_6_whole_atlas",
+  "output_figure_dir": "Integrated_dataset/figures/gdT_prediction/gdtai_v4_6_whole_atlas",
+  "output_log_dir": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_6_whole_atlas",
+  "output_report_dir": "gdT_prediction/gdtai_v4_6_whole_atlas",
+  "nk_audit": {
+    "tier_a_genes": ["NCR1", "SIGLEC7", "SH2D1B"],
+    "tier_b_genes": ["LAT2", "SYK", "PLCG2", "PILRB", "CD300C"],
+    "shared_cytotoxic_genes": ["NKG7", "GNLY", "KLRD1", "TYROBP", "FCER1G"],
+    "t_lineage_genes": ["CD3D", "CD3E", "CD3G"],
+    "dedicated_delta_genes": ["TRDV1", "TRDV2", "TRDV3"],
+    "conservative_rule": "no_dedicated_TRDV AND CD3_detected_count_le_1 AND tierA_detected_ge_1 AND tierA_plus_tierB_detected_ge_2",
+    "shared_cytotoxic_ambiguous_rule": "shared_cytotoxic_detected_ge_3 AND NOT likely_NK",
+    "source_annotation_columns": ["source_cell_type", "source_cell_type_level1"],
+    "source_annotation_excludes": ["NKT", "NK-LIKE", "NK_LIKE"]
+  },
+  "scientific_guardrails": {
+    "models_or_thresholds_retuned": false,
+    "h5ad_mutated": false,
+    "shared_cytotoxic_markers_sufficient_for_nk": false,
+    "whole_atlas_counts_are_performance_validation": false,
+    "v4_6_promoted_by_inference": false
+  }
+}

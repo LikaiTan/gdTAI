@@ -2,6 +2,14 @@
 
 ## Current milestone
 
+- frozen V4.6-versus-V2 whole-atlas inference preflight and 2,000-cell smoke
+  test passed on 2026-08-20; all 225 required genes and metadata fields are
+  present in the corrected 5,933,312-cell atlas, model hashes match, and full
+  chunked read-only inference is the next action
+- the atlas application will compare highest-F1 and high-purity modes for both
+  V4.6 and V2, report conservative NK-like audits without treating shared
+  cytotoxic genes alone as NK evidence, and separately summarize all 759,436
+  GSE243013 LUAD/LUSC cells
 - gdTAI V4.6 negative-diversity/receptor-ablation development and the single
   untouched BALF diagnostic completed on 2026-08-20; no model was promoted,
   atlas-applied, or pushed
