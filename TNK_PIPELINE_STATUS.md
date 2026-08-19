@@ -2,6 +2,22 @@
 
 ## Current milestone
 
+- frozen V4.5-versus-V2/V3 post-hoc scoring completed on the identical
+  335,479-cell consumed common benchmark with no retuning or model change;
+  GDT2020 and GDTlung are explicitly labeled training-exposed for V4.5
+- V4.5 highest-F1 pooled F1 was 0.8750, above V3 at 0.8504, but this comparison
+  is invalid for generalization because 41,079/41,931 benchmark positives were
+  used by V4.5 development
+- on V4.5-unexposed consumed cells, highest-F1 alpha-beta FPR was 0.923% versus
+  0.146% for V3 and 0.099% for V2 high-purity; high-purity reduced FPR to
+  0.189% but its F1 was 0.6629 versus 0.6649 for V3 and 0.7527 for V2
+  high-purity
+- BALF diagnostic F1 was 0.9491 for V4.5 highest-F1, but GSE159251 alpha-beta
+  FPR was 6.91% for highest-F1 and 1.27% for high-purity, versus 0.78% for V3
+  and 0.51% for V2 high-purity
+- V4.5 remains non-promotable; V3 balanced remains the default and V2
+  high-purity the conservative fallback; the visually reviewed 14-page report
+  is under `gdT_prediction/gdtai_v4_5_vs_v2_v3_consumed/`
 - gdTAI V4.5 development completed on 2026-08-19 with status
   `PASS_DEVELOPMENT_FROZEN_NOT_PROMOTABLE`; no new untouched test was scored
 - GDT_2020AUG_woCOV and GDTlung2023july_7p are formally reclassified from the

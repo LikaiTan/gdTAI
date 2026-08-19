@@ -309,6 +309,38 @@ Gate semantics:
 - GDTlung remains the limiting positive domain at 40.51% held-out recall; V3
   balanced remains the deployed default and V4.5 was not atlas-applied or pushed
 
+## gdTAI V4.5 versus V2/V3 consumed-benchmark diagnostic
+
+Objective:
+
+- score frozen V4.5 highest-F1 and high-purity modes beside frozen V3 balanced
+  and V2 modes on the identical consumed 335,479-cell common benchmark
+- separate V4.5 training-exposed sorted positives from V4.5-unexposed but
+  previously consumed BALF and extension controls
+- report per-source gdT recall, alpha-beta FPR, author-NK FPR, and prediction
+  overlap without changing any model, feature, calibrator, exclusion, or cutoff
+
+Exact `.py` scripts:
+
+- `workflows/gdtai/evaluate_gdtai_v4_5_vs_v2_v3_consumed.py`
+- `workflows/gdtai/render_gdtai_v4_5_vs_v2_v3_report.py`
+
+Key outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_5_vs_v2_v3_consumed/`
+- `Integrated_dataset/figures/gdT_prediction/gdtai_v4_5_vs_v2_v3_consumed/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_5_vs_v2_v3_consumed/`
+- `gdT_prediction/gdtai_v4_5_vs_v2_v3_consumed/index.html`
+- `gdT_prediction/gdtai_v4_5_vs_v2_v3_consumed/gdtai_v4_5_vs_v2_v3_consumed_report.pdf`
+
+Final semantics:
+
+- pooled V4.5 improvement is exposure-confounded and cannot support promotion
+- V4.5 highest-F1 has excessive unexposed alpha-beta FPR, dominated by
+  GSE159251; V4.5 high-purity does not reproducibly beat V3 or V2 high-purity
+- V3 balanced remains the default and V2 high-purity remains the conservative
+  fallback; this entire comparison is post-hoc consumed diagnostic evidence
+
 ## Phase 0: Dataset audit and eligibility triage
 
 Objective:
