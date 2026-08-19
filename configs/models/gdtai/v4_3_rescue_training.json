@@ -17,6 +17,12 @@
     "min_child_weight": [50, 200],
     "colsample_bytree": [0.7, 1.0]
   },
+  "final_candidate": {
+    "max_depth": 2,
+    "min_child_weight": 50,
+    "colsample_bytree": 0.7
+  },
+  "final_profile": "balanced",
   "fixed": {
     "learning_rate": 0.05,
     "n_estimators": 800,
@@ -51,5 +57,14 @@
   "receptor_rescue": {
     "balanced": {"TRDV1": 2.2, "TRDV2": 3.0, "TRDV3": 2.1},
     "high_purity": {"TRDV1": 2.5, "TRDV2": 3.8, "TRDV3": 2.6}
+  },
+  "common_lockbox_decision": {
+    "primary_older_comparator": "v3_balanced",
+    "secondary_older_comparators": ["v2_high_f1", "v2_high_purity"],
+    "maximum_v4_abt_fpr": 0.003,
+    "maximum_v4_author_nk_fpr": 0.01,
+    "maximum_source_recall_deficit_vs_best_older": 0.05,
+    "minimum_cluster_bootstrap_probability_f1_improvement_vs_v3": 0.95,
+    "no_lockbox_retuning": true
   }
 }
