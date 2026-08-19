@@ -62,6 +62,37 @@ For each major phase or task, this file should record:
 - exact `.py` script used
 - key outputs
 
+## gdTAI V4.2 Step 0 ground-truth freeze
+
+Objective:
+
+- construct expression-independent receptor truth with source-aware UMI rules
+- repair GSE144469 CD3-library receptor evidence from raw contigs
+- curate multi-dataset author-defined NK negatives
+- freeze development and broad lockbox roles before classifier fitting
+
+Exact `.py` script:
+
+- `workflows/gdtai/run_gdtai_v4_2_ground_truth.py`
+
+Core outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_ground_truth/v4_2_label_manifest.parquet`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_ground_truth/tcr_umi_status_by_source.csv`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_ground_truth/nk_author_curation_audit.csv`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_2_ground_truth/summary.json`
+- `gdT_prediction/gdtai_v4_2_ground_truth/index.html`
+- `gdT_prediction/gdtai_v4_2_ground_truth/gdtai_v4_2_ground_truth_report.pdf`
+
+Gate semantics:
+
+- the corrected atlas is read-only and checksum-bound
+- UMI=1 paired calls are excluded when quantitative support exists
+- genuinely UMI-unavailable published paired calls remain eligible
+- silver and dual-receptor cells have zero fitting and threshold-selection weight
+- all extension cohorts, BALF_BLOOD_COPD, GDT_2020, and GDTlung remain locked
+- no classifier is fitted in this task
+
 ## Phase 0: Dataset audit and eligibility triage
 
 Objective:

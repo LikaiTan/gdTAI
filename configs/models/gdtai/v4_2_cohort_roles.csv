@@ -1,10 +1,15 @@
-cohort_id,path_source,role,include_in_integration_fit,include_in_cluster_label_design,allow_pseudolabel_training,allow_model_tuning,allow_locked_evaluation,expected_cells,scientific_use
-current_atlas,current_atlas,development_reference,True,True,False,True,False,3705306,Existing atlas reference and expression-independent TCR anchors
-GSE114724,extension_manifest,development_cluster_expansion,True,True,True,True,False,28652,Cluster-consensus NK development candidates
-GSE159251,extension_manifest,development_cluster_expansion,True,True,True,True,False,68898,Cluster-consensus NK development candidates
-GSE292700,extension_manifest,development_cluster_expansion,True,True,True,True,False,78254,Cluster-consensus NK development candidates
-GSE294273_GSE294274,extension_manifest,development_cluster_expansion,True,True,True,True,False,55744,Cluster-consensus NK development candidates
-GSE296954,extension_manifest,development_cluster_expansion,True,True,True,True,False,86608,Cluster-consensus NK development candidates
-GSE169246,extension_manifest,locked_author_nk_stage1_specificity,False,False,False,False,True,354373,Author NK Stage-1 passage plus reduced-feature final-cascade sensitivity
-GSE315928,extension_manifest,locked_paired_abt_specificity,False,False,False,False,True,66813,Whole-dataset paired-alpha-beta false-positive evaluation
-GSE121636_GSE121637,extension_manifest,locked_mixed_t_nk_stress,False,False,False,False,True,18793,Whole-dataset mixed T-NK stress evaluation
+cohort_id,path_source,role,allow_fit,allow_tuning,allow_locked_evaluation,scientific_use
+HRA005041,current_atlas,development,True,True,False,UMI-supported paired gdT and alpha-beta receptor truth
+GSE144469,current_atlas,development,True,True,False,Exact CD3-library raw-contig repair with per-chain UMI support
+MalteGDT,current_atlas,development,True,True,False,Sorted gdT positive development cohort
+GDT_2020AUG_woCOV,current_atlas,locked_sorted_positive,False,False,True,Whole-dataset donor-safe sorted gdT validation
+GDTlung2023july_7p,current_atlas,locked_sorted_positive_stress,False,False,True,Sorted gdT validation with suboptimal library quality
+BALF_BLOOD_COPD,current_atlas,locked_external,False,False,True,Mandatory external paired-receptor validation
+GSE114724,extension_manifest,locked_extension,False,False,True,New-cohort lockbox
+GSE121636_GSE121637,extension_manifest,locked_extension,False,False,True,New-cohort mixed T/NK lockbox
+GSE159251,extension_manifest,locked_extension,False,False,True,New-cohort lockbox
+GSE169246,extension_manifest,locked_extension,False,False,True,New-cohort author-NK and alpha-beta specificity lockbox
+GSE292700,extension_manifest,locked_extension,False,False,True,New-cohort alpha-beta specificity lockbox
+GSE294273_GSE294274,extension_manifest,locked_extension,False,False,True,New-cohort lockbox
+GSE296954,extension_manifest,locked_extension,False,False,True,New-cohort lockbox
+GSE315928,extension_manifest,locked_extension,False,False,True,New-cohort paired-alpha-beta specificity lockbox

@@ -1,0 +1,8 @@
+source_gse_id,tier,source_h5ad,annotation_column,match_mode,match_values,doublet_columns,reliability_weight,notes
+GSE125527,tier1,__frozen_primary_anchor__,primary_nk_anchor,frozen_boolean,true,,1.0,Dual scVI and author annotation anchor; corrected productive-TCR conflicts removed
+GSE228597,tier1,__frozen_primary_anchor__,primary_nk_anchor,frozen_boolean,true,,1.0,Dual scVI and author annotation anchor; corrected productive-TCR conflicts removed
+GSE212217,tier2,data/datasets/GSE212217/processed/current.h5ad,finalIdent,exact,CD16 NK|CD56 NK,,0.5,Author-defined NK
+GSE234069,tier2,data/datasets/GSE234069/processed/current.h5ad,original_cell_annotation,exact,8 (NK),,0.5,Author-defined NK
+GSE235863,tier2,data/datasets/GSE235863/processed/current.h5ad,original_cell_annotation,prefix,NK_,doublet_info|predicted_doublets,0.5,Author-defined NK with explicit doublet exclusion
+GSE243013,tier2,data/datasets/GSE243013/processed/current.h5ad,sub_cell_type,exact,NK_CD16hi_FGFBP2|NK_CD16low_GZMK,,0.5,Excludes CD8T_NK-like cells
+GSE287541,tier2,data/datasets/GSE287541/processed/current.h5ad,original_cell_annotation,prefix,NK,doublet_info|predicted_doublets,0.5,Author-defined NK; absent doublet columns are recorded

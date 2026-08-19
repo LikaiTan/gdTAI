@@ -1,0 +1,28 @@
+{
+  "protocol_version": "4.2-step0-1.0",
+  "random_seed": 20260819,
+  "atlas_path": "/ssd/tnk_phase3/Integrated_dataset/full_atlas/tcr_corrected/integrated_full_atlas.h5ad",
+  "atlas_sha256": "d32c9d2bdb955b12e1eafbed8322f8cb965cf3a225191e612b53f3d3783480d5",
+  "staged_nk_path": "/ssd/tnk_phase3/Integrated_dataset/gdtai_v4_2_tnk_reintegration/tnk_refined_hvg_counts.h5ad",
+  "cohort_roles": "configs/models/gdtai/v4_2_cohort_roles.csv",
+  "nk_rules": "configs/models/gdtai/v4_2_nk_author_rules.csv",
+  "extension_manifest": "data/interim/extension_intake/tnk_filtered_h5ads_manifest.csv",
+  "development_positive_sources": ["HRA005041", "GSE144469", "MalteGDT"],
+  "locked_positive_sources": ["GDT_2020AUG_woCOV", "GDTlung2023july_7p", "BALF_BLOOD_COPD"],
+  "sorted_positive_sources": ["MalteGDT", "GDT_2020AUG_woCOV", "GDTlung2023july_7p"],
+  "extension_lockbox_sources": ["GSE114724", "GSE121636", "GSE159251", "GSE169246", "GSE292700", "GSE294273", "GSE296954", "GSE315928"],
+  "gse144469": {
+    "selected_inputs": "data/datasets/GSE144469/interim/scanpy_project/manifests/selected_inputs.csv",
+    "sra_run_table": "data/datasets/GSE144469/raw/legacy_source/SarRun.csv",
+    "ab_contigs": "data/datasets/GSE144469/raw/legacy_source/GSE144469_TCR_filtered_contig_annotations_all.csv.gz",
+    "gd_contig_tar": "data/datasets/GSE144469/raw/legacy_source/GSE144469_RAW.tar"
+  },
+  "umi_min_per_defining_chain": 2,
+  "single_ab_support_weight": 0.5,
+  "tier2_nk_weight": 0.5,
+  "minimum_nk_sources": 4,
+  "tier2_effective_weight_cap_relative_to_tier1": 1.0,
+  "fit_excludes_silver": true,
+  "fit_excludes_dual_receptor": true,
+  "fit_excludes_doublets": true
+}
