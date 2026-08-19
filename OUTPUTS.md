@@ -75,6 +75,15 @@
 
 ## Current review packages
 
+- gdTAI V4 final common-lockbox evaluation:
+  - `gdT_prediction/gdtai_v4_3_final_evaluation/index.html`
+  - `gdT_prediction/gdtai_v4_3_final_evaluation/gdtai_v4_3_final_evaluation_report.pdf`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_3_common_lockbox/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_3_final_evaluation/`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_3_final_evaluation/`
+  - decision: `FAIL_V4_NOT_SUPERIOR`; V4.3 remains diagnostic, the lockbox is
+    consumed, and V3 balanced remains the current default
+
 - full T/NK atlas rebuild:
   - `full_atlas_rebuild/index.html`
   - `full_atlas_rebuild/full_atlas_rebuild_report.pdf`

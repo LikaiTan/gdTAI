@@ -1,0 +1,478 @@
+<!doctype html><html><head><meta charset='utf-8'><title>gdTAI V4 Final Evaluation</title><style>
+    :root{--ink:#17212b;--muted:#5e6b76;--line:#d8dee5;--red:#b42318;--blue:#176b87;--pale:#f4f7f8}
+    *{box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);margin:0;background:#fff;line-height:1.42}
+    main{max-width:1180px;margin:0 auto;padding:28px 34px 60px}header{border-bottom:4px solid var(--red);padding-bottom:16px;margin-bottom:22px}
+    h1{font-size:30px;margin:0 0 6px;letter-spacing:0}h2{font-size:20px;margin:28px 0 10px;border-bottom:1px solid var(--line);padding-bottom:5px}h3{font-size:15px;margin:18px 0 7px}
+    p,li{font-size:13px}.subtitle{color:var(--muted);font-size:15px}.decision{border-left:6px solid var(--red);background:#fff3f1;padding:14px 17px;margin:18px 0;font-size:14px}
+    .method{border-left:5px solid var(--blue);background:#eff7fa;padding:12px 16px;margin:15px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:14px 0}
+    .metric{border:1px solid var(--line);padding:10px;background:var(--pale)}.metric b{font-size:20px;display:block}.metric span{font-size:11px;color:var(--muted)}
+    figure{margin:10px 0 18px;break-inside:avoid}figure img{width:100%;border:1px solid var(--line)}figcaption{font-size:10px;color:var(--muted);margin-top:4px}
+    .table-wrap{overflow-x:auto;margin:8px 0 18px}.data-table{width:100%;border-collapse:collapse;font-size:10px;table-layout:auto}.data-table th,.data-table td{border:1px solid var(--line);padding:4px 5px;vertical-align:top;overflow-wrap:anywhere}.data-table th{background:#e9eef1;text-align:left}
+    code{font-family:Consolas,monospace;font-size:11px;background:#eef1f3;padding:1px 4px}.note{font-size:11px;color:var(--muted)}.page-break{break-before:page}
+    @media print{@page{size:A4 landscape;margin:9mm}main{max-width:none;padding:0}h2{break-after:avoid}.grid{gap:10px}.data-table{font-size:8px}.metric-grid{grid-template-columns:repeat(4,1fr)}figure img{max-height:158mm;object-fit:contain}.page-break{break-before:page}}
+    </style></head><body><main>
+    <header><h1>gdTAI V4 Final Evaluation</h1><div class='subtitle'>Development-frozen training, common external lockbox comparison, and final no-promotion decision</div></header>
+    <div class='decision'><b>Decision: do not promote gdTAI V4.3.</b> V4.3 met its false-positive limits but failed external recall and did not outperform V3. The current V3 balanced model remains the default. No V4 artifact was released, pushed, or applied to the 5.9-million-cell atlas.</div>
+    <div class='metric-grid'><div class='metric'><b>45.62%</b><span>V4.3 external gdT recall</span></div><div class='metric'><b>0.24%</b><span>V4.3 paired-alpha-beta FPR</span></div><div class='metric'><b>0.76%</b><span>V4.3 author-NK FPR</span></div><div class='metric'><b>0.619</b><span>V4.3 external F1</span></div></div>
+    <h2>1. Evaluation Design</h2><p>The final V4.3 candidate, all thresholds, receptor-rescue rules, and the feature contract were frozen using development cells only. The external lockbox was checksum-bound before scoring and contained <b>335,479 cells</b>: 41,931 gdT gold, 285,524 paired-alpha-beta gold, and 8,024 independent author-NK negatives. V4.3, V3, and both V2 modes were recomputed from the same raw-count matrix and identical cells.</p>
+    <div class='method'><b>Ground truth.</b> gdT positives were sorted gdT cohorts or strict paired productive TRG/TRD cells without alpha-beta receptor evidence. Alpha-beta negatives had productive alpha/beta receptor evidence without gamma/delta evidence. Author-NK negatives had NK annotation and no productive TCR. Where chain UMI support existed, one-UMI calls were not accepted as gold; datasets without UMI fields retained published productive calls.</div>
+    <p><b>V4.3 architecture:</b> a 36-gene high-recall T-lineage support gate followed by a 158-gene receptor classifier. Stage 2 uses 153 individual TCR genes plus <code>CD3D/E/G</code>, <code>CD4</code>, and <code>FOXP3</code>. <code>KLRD1</code>, <code>NKG7</code>, <code>GNLY</code>, <code>FCER1G</code>, <code>TYROBP</code>, and the shared cytotoxic program are absent from both stages. Stage 1 probability is not supplied to Stage 2.</p>
+    <h3>Implementation integrity</h3><div class='table-wrap'><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>check</th>
+      <th>value</th>
+      <th>result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>lockbox cells matching original frozen cache</td>
+      <td>327455.000</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td>new author-NK cells requiring direct extraction</td>
+      <td>8024.000</td>
+      <td>EXPECTED</td>
+    </tr>
+    <tr>
+      <td>effective V4 genes compared</td>
+      <td>183.000</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td>feature values compared</td>
+      <td>59924265.000</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td>values differing by &gt;1e-6</td>
+      <td>0.000</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td>maximum absolute feature difference</td>
+      <td>0.000</td>
+      <td>PASS</td>
+    </tr>
+  </tbody>
+</table></div>
+    <h2>2. Headline Performance</h2><div class='table-wrap'><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>model</th>
+      <th>predicted_positive</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>abt_fpr</th>
+      <th>author_nk_fpr</th>
+      <th>precision_at_1pct_prevalence</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>V4.3 frozen</td>
+      <td>19872</td>
+      <td>96.25%</td>
+      <td>45.62%</td>
+      <td>61.90%</td>
+      <td>0.24%</td>
+      <td>0.76%</td>
+      <td>64.48%</td>
+    </tr>
+    <tr>
+      <td>V3 balanced</td>
+      <td>32210</td>
+      <td>97.87%</td>
+      <td>75.18%</td>
+      <td>85.04%</td>
+      <td>0.15%</td>
+      <td>3.35%</td>
+      <td>76.47%</td>
+    </tr>
+    <tr>
+      <td>V2 high-F1</td>
+      <td>34744</td>
+      <td>93.45%</td>
+      <td>77.44%</td>
+      <td>84.70%</td>
+      <td>0.20%</td>
+      <td>21.07%</td>
+      <td>50.24%</td>
+    </tr>
+    <tr>
+      <td>V2 high-purity</td>
+      <td>30501</td>
+      <td>98.63%</td>
+      <td>71.74%</td>
+      <td>83.06%</td>
+      <td>0.10%</td>
+      <td>1.68%</td>
+      <td>83.54%</td>
+    </tr>
+  </tbody>
+</table></div>
+    <figure><img src='assets/overall_performance.png'><figcaption>V4.3 gained NK specificity relative to V3 but lost too much gdT recall. Precision at 1% prevalence is included because the atlas is strongly imbalanced.</figcaption></figure>
+    <div class='grid'><figure><img src='assets/ranking_curves.png'><figcaption>V4.3 has lower ROC-AUC and average precision than V3 and V2; this is a ranking deficit, not only threshold calibration.</figcaption></figure><figure><img src='assets/bootstrap_deltas_vs_v3.png'><figcaption>Donor-cluster bootstrap. The V4.3-minus-V3 F1 and recall intervals remain entirely below zero.</figcaption></figure></div>
+    <h3>Ranking metrics</h3><div class='table-wrap'><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>model</th>
+      <th>roc_auc</th>
+      <th>average_precision</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>V4.3 frozen</td>
+      <td>0.975</td>
+      <td>0.910</td>
+    </tr>
+    <tr>
+      <td>V3 balanced</td>
+      <td>0.985</td>
+      <td>0.945</td>
+    </tr>
+    <tr>
+      <td>V2 high-F1</td>
+      <td>0.984</td>
+      <td>0.937</td>
+    </tr>
+  </tbody>
+</table></div>
+    <h3>Donor-cluster bootstrap</h3><div class='table-wrap'><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>older_model</th>
+      <th>delta_f1_median</th>
+      <th>delta_f1_ci_low</th>
+      <th>delta_f1_ci_high</th>
+      <th>probability_delta_f1_gt_0</th>
+      <th>delta_recall_median</th>
+      <th>delta_recall_ci_low</th>
+      <th>delta_recall_ci_high</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>V3 balanced</td>
+      <td>-0.232</td>
+      <td>-0.281</td>
+      <td>-0.195</td>
+      <td>0.000</td>
+      <td>-0.296</td>
+      <td>-0.332</td>
+      <td>-0.269</td>
+    </tr>
+    <tr>
+      <td>V2 high-F1</td>
+      <td>-0.228</td>
+      <td>-0.283</td>
+      <td>-0.187</td>
+      <td>0.000</td>
+      <td>-0.319</td>
+      <td>-0.356</td>
+      <td>-0.288</td>
+    </tr>
+    <tr>
+      <td>V2 high-purity</td>
+      <td>-0.212</td>
+      <td>-0.254</td>
+      <td>-0.180</td>
+      <td>0.000</td>
+      <td>-0.261</td>
+      <td>-0.297</td>
+      <td>-0.239</td>
+    </tr>
+  </tbody>
+</table></div>
+    <div class='page-break'></div><h2>3. Dataset-by-Dataset Results</h2><figure><img src='assets/positive_source_recall.png'><figcaption>V4.3 under-recovers every locked positive source. GDTlung is retained as a documented low-quality stress cohort, but BALF_BLOOD_COPD and GDT_2020 also show large deficits.</figcaption></figure>
+    <div class='table-wrap'><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>source_gse_id</th>
+      <th>V4.3 frozen</th>
+      <th>V3 balanced</th>
+      <th>V2 high-F1</th>
+      <th>V2 high-purity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BALF_BLOOD_COPD</td>
+      <td>46.71%</td>
+      <td>89.91%</td>
+      <td>91.55%</td>
+      <td>90.02%</td>
+    </tr>
+    <tr>
+      <td>GDT_2020AUG_woCOV</td>
+      <td>64.15%</td>
+      <td>91.40%</td>
+      <td>92.57%</td>
+      <td>89.74%</td>
+    </tr>
+    <tr>
+      <td>GDTlung2023july_7p</td>
+      <td>13.92%</td>
+      <td>46.66%</td>
+      <td>50.81%</td>
+      <td>40.00%</td>
+    </tr>
+  </tbody>
+</table></div>
+    <div class='grid'><figure><img src='assets/abt_fpr_by_source.png'><figcaption>Paired-alpha-beta false-positive rates vary by external source. V4.3 is not uniformly more specific than V3.</figcaption></figure><figure><img src='assets/nk_fpr_by_source.png'><figcaption>V4.3 reduces author-NK false positives relative to V3 and V2, but purity does not compensate for the recall collapse.</figcaption></figure></div>
+    <h3>Paired-alpha-beta false-positive rates</h3><div class='table-wrap'><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>source_gse_id</th>
+      <th>V4.3 frozen</th>
+      <th>V3 balanced</th>
+      <th>V2 high-F1</th>
+      <th>V2 high-purity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BALF_BLOOD_COPD</td>
+      <td>0.00%</td>
+      <td>0.03%</td>
+      <td>0.08%</td>
+      <td>0.03%</td>
+    </tr>
+    <tr>
+      <td>GSE114724</td>
+      <td>0.48%</td>
+      <td>0.06%</td>
+      <td>0.09%</td>
+      <td>0.04%</td>
+    </tr>
+    <tr>
+      <td>GSE121636</td>
+      <td>0.32%</td>
+      <td>0.17%</td>
+      <td>0.18%</td>
+      <td>0.15%</td>
+    </tr>
+    <tr>
+      <td>GSE159251</td>
+      <td>0.20%</td>
+      <td>0.78%</td>
+      <td>1.08%</td>
+      <td>0.51%</td>
+    </tr>
+    <tr>
+      <td>GSE169246</td>
+      <td>0.33%</td>
+      <td>0.08%</td>
+      <td>0.14%</td>
+      <td>0.07%</td>
+    </tr>
+    <tr>
+      <td>GSE292700</td>
+      <td>0.06%</td>
+      <td>0.01%</td>
+      <td>0.01%</td>
+      <td>0.00%</td>
+    </tr>
+    <tr>
+      <td>GSE294273</td>
+      <td>0.10%</td>
+      <td>0.03%</td>
+      <td>0.03%</td>
+      <td>0.02%</td>
+    </tr>
+    <tr>
+      <td>GSE296954</td>
+      <td>0.41%</td>
+      <td>0.10%</td>
+      <td>0.12%</td>
+      <td>0.07%</td>
+    </tr>
+    <tr>
+      <td>GSE315928</td>
+      <td>0.16%</td>
+      <td>0.05%</td>
+      <td>0.07%</td>
+      <td>0.04%</td>
+    </tr>
+  </tbody>
+</table></div><h3>Author-NK false-positive rates</h3><div class='table-wrap'><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>source_gse_id</th>
+      <th>V4.3 frozen</th>
+      <th>V3 balanced</th>
+      <th>V2 high-F1</th>
+      <th>V2 high-purity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BALF_BLOOD_COPD</td>
+      <td>0.00%</td>
+      <td>0.39%</td>
+      <td>1.57%</td>
+      <td>0.00%</td>
+    </tr>
+    <tr>
+      <td>GSE169246</td>
+      <td>0.79%</td>
+      <td>3.45%</td>
+      <td>21.71%</td>
+      <td>1.74%</td>
+    </tr>
+  </tbody>
+</table></div>
+    <div class='page-break'></div><h2>4. Why V4.3 Failed</h2><figure><img src='assets/stage_decomposition.png'><figcaption>Stage 1 passes 98-100% of locked gdT gold and CD4/Treg exclusions affect no more than 1.4%. Most false negatives arise from the Stage 2 receptor classifier.</figcaption></figure>
+    <div class='table-wrap'><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>source_gse_id</th>
+      <th>n_gdT_gold</th>
+      <th>stage1_pass</th>
+      <th>not_cd4_treg_excluded</th>
+      <th>raw_stage2_pass</th>
+      <th>receptor_rescue</th>
+      <th>final_recall</th>
+      <th>v3_recall</th>
+      <th>v3_recovered_v4_missed</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BALF_BLOOD_COPD</td>
+      <td>852</td>
+      <td>98.24%</td>
+      <td>98.59%</td>
+      <td>43.54%</td>
+      <td>14.55%</td>
+      <td>46.71%</td>
+      <td>89.91%</td>
+      <td>375</td>
+    </tr>
+    <tr>
+      <td>GDT_2020AUG_woCOV</td>
+      <td>25904</td>
+      <td>99.53%</td>
+      <td>99.07%</td>
+      <td>51.78%</td>
+      <td>47.56%</td>
+      <td>64.15%</td>
+      <td>91.40%</td>
+      <td>7332</td>
+    </tr>
+    <tr>
+      <td>GDTlung2023july_7p</td>
+      <td>15175</td>
+      <td>98.64%</td>
+      <td>99.76%</td>
+      <td>6.85%</td>
+      <td>10.95%</td>
+      <td>13.92%</td>
+      <td>46.66%</td>
+      <td>5023</td>
+    </tr>
+  </tbody>
+</table></div>
+    <div class='grid'><figure><img src='assets/stage2_feature_gain.png'><figcaption>TRDC and TRDV magnitude dominate the nonlinear Stage 2 model despite the broader individual-receptor panel.</figcaption></figure><figure><img src='assets/positive_feature_detection.png'><figcaption>Positive sources differ substantially in receptor detection. GDTlung has especially weak TRDC/CD3 support, while BALF and GDT_2020 also differ from development cohorts.</figcaption></figure></div>
+    <p>The final Stage 2 threshold was <code>0.994098</code>, selected from grouped development OOF predictions. Lowering it after seeing the lockbox would be leakage. A diagnostic-only threshold sweep nevertheless shows whether calibration alone could solve the problem.</p>
+    <figure><img src='assets/threshold_frontier.png'><figcaption>The best post-hoc V4.3 F1 is still below frozen V3. Matching V3 recall requires substantially more alpha-beta false positives, so threshold adjustment cannot establish superiority.</figcaption></figure>
+    <div class='table-wrap'><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>diagnostic</th>
+      <th>threshold</th>
+      <th>f1</th>
+      <th>recall</th>
+      <th>precision</th>
+      <th>abt_fpr</th>
+      <th>author_nk_fpr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>posthoc_maximum_f1</td>
+      <td>0.270</td>
+      <td>84.64%</td>
+      <td>79.60%</td>
+      <td>90.36%</td>
+      <td>0.94%</td>
+      <td>10.95%</td>
+    </tr>
+    <tr>
+      <td>minimum_70pct_recall</td>
+      <td>0.801</td>
+      <td>80.94%</td>
+      <td>70.00%</td>
+      <td>95.94%</td>
+      <td>0.38%</td>
+      <td>1.83%</td>
+    </tr>
+    <tr>
+      <td>match_v3_recall</td>
+      <td>0.562</td>
+      <td>83.77%</td>
+      <td>75.18%</td>
+      <td>94.58%</td>
+      <td>0.54%</td>
+      <td>3.38%</td>
+    </tr>
+    <tr>
+      <td>minimum_80pct_recall</td>
+      <td>0.246</td>
+      <td>84.62%</td>
+      <td>80.00%</td>
+      <td>89.81%</td>
+      <td>1.02%</td>
+      <td>11.28%</td>
+    </tr>
+    <tr>
+      <td>frozen_operating_point</td>
+      <td>0.994</td>
+      <td>61.90%</td>
+      <td>45.62%</td>
+      <td>96.25%</td>
+      <td>0.24%</td>
+      <td>0.76%</td>
+    </tr>
+  </tbody>
+</table></div>
+    <h2>5. Iteration Record</h2><div class='table-wrap'><table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>iteration</th>
+      <th>change</th>
+      <th>result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>V4.1 GPU</td>
+      <td>Two-stage T/NK architecture</td>
+      <td>Stopped at Gate C; Stage 2 never ran</td>
+    </tr>
+    <tr>
+      <td>V4.2</td>
+      <td>Repaired TCR joins, expression-independent truth, seven-source NK negatives</td>
+      <td>Failed development transfer; Malte recall 36.5%</td>
+    </tr>
+    <tr>
+      <td>V4.3 initial</td>
+      <td>Receptor-isolated Stage 2; removed Stage 1 probability</td>
+      <td>Passed development, but KLRD1 remained in Stage 1</td>
+    </tr>
+    <tr>
+      <td>V4.3 final</td>
+      <td>Removed KLRD1/shared cytotoxic genes from both stages</td>
+      <td>Passed development; failed locked external superiority</td>
+    </tr>
+  </tbody>
+</table></div>
+    <p>V4 development addressed the major known risks in sequence: weak NK labels, unsafe TCR joins, source leakage, shared cytotoxic genes, continuous Stage 1 leakage, and source-heldout evaluation. V4.3 is the first iteration to reach a clean common lockbox comparison, and it fails there.</p>
+    <h2>6. Final Scientific Conclusion</h2><div class='decision'><b>With the current datasets, no defensible V4 improvement over V3 was demonstrated.</b> Training another candidate after inspecting this lockbox would convert the external test into a tuning set. The ranking deficit also shows that a threshold-only revision is insufficient. Therefore V4 development should stop here rather than optimize against the consumed validation cohorts.</div>
+    <p>This conclusion is scoped to the available evidence, not a claim that gdT classification can never improve. A future V4 attempt requires genuinely new independent positive and NK/alpha-beta cohorts, or a prespecified domain-generalization design with a new untouched final test. Until then:</p><ul><li>retain V3 balanced as the current default;</li><li>retain V2 high-purity as a conservative annotation-assisted fallback;</li><li>keep all V4.3 artifacts diagnostic and unpromoted;</li><li>do not use lockbox-derived thresholds or feature changes in a release model.</li></ul>
+    <p class='note'>Core hashes: V4 contract <code>05cb3c9cd9a94577849610263141b4ce499b564acc2dff77f4a3b2d274a09abe</code>; lockbox <code>f997e24b7be6e98692ba770d163916cbb359009ba5a7c3dfa1d7db6b3824f151</code>. Model promotion status: false.</p>
+    </main></body></html>

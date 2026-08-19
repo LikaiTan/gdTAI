@@ -1,5 +1,23 @@
 # CHANGELOG.md
 
+## 2026-08-19 - Ended gdTAI V4 after the common external lockbox failure
+
+- Froze the KLRD1/cytotoxic-gene-free V4.3 model and thresholds from grouped
+  development OOF predictions without accessing the external lockbox.
+- Scored V4.3, V3 balanced, V2 high-F1, and V2 high-purity on the identical
+  335,479-cell checksum-bound lockbox containing gdT gold, paired-alpha-beta
+  gold, and independent author-NK negatives.
+- V4.3 achieved 45.62% recall, 96.25% precision, 61.90% F1, 0.240%
+  alpha-beta FPR, and 0.760% author-NK FPR; V3 achieved 75.18% recall and
+  85.04% F1 on the same cells.
+- Verified exact normalization and feature order across 59,924,265 cached
+  values; localized the external failure to receptor Stage 2 rather than the
+  T-lineage gate or CD4/Treg exclusions.
+- Showed that even a diagnostic post-hoc V4 threshold sweep peaks below frozen
+  V3 F1, so calibration alone cannot establish superiority.
+- Published and visually checked a nine-page HTML/PDF report, retained V3 as
+  the current default, and kept all V4 artifacts diagnostic and unpromoted.
+
 ## 2026-08-18 - Rebuilt the full atlas with extension cohorts and COPD
 
 - Reconstructed the exact 5,128,904-cell historical atlas baseline from the

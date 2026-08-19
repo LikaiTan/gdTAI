@@ -157,6 +157,41 @@ Gate semantics:
 - lockbox membership is checksum-bound and was frozen with `model_scored=false`
 - lockbox results must not alter features, thresholds, or rescue rules
 
+## gdTAI V4.3 final fit and common lockbox evaluation
+
+Objective:
+
+- freeze one final model and operating threshold using grouped development OOF
+  predictions only
+- recompute V4.3, V3 balanced, V2 high-F1, and V2 high-purity predictions from
+  the same raw-count matrix on identical frozen lockbox cells
+- quantify source-level recall, paired-alpha-beta FPR, author-NK FPR,
+  prevalence-aware precision, donor-cluster bootstrap uncertainty, and model
+  ranking before any promotion decision
+
+Exact `.py` scripts:
+
+- `workflows/gdtai/finalize_gdtai_v4_3_development.py`
+- `workflows/gdtai/evaluate_gdtai_v4_3_common_lockbox.py`
+- `workflows/gdtai/render_gdtai_v4_3_final_evaluation.py`
+
+Core outputs:
+
+- `Integrated_dataset/models/gdT_prediction/gdtai_v4_3_receptor_isolated/final_development/model_contract.json`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_3_common_lockbox/overall_metrics.csv`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_3_common_lockbox/per_source_metrics.csv`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_3_common_lockbox/cluster_bootstrap_summary.csv`
+- `gdT_prediction/gdtai_v4_3_final_evaluation/index.html`
+- `gdT_prediction/gdtai_v4_3_final_evaluation/gdtai_v4_3_final_evaluation_report.pdf`
+
+Final gate semantics:
+
+- V4.3 failed the common lockbox superiority gate and is not promotable
+- the lockbox is consumed and must not be reused for threshold or feature
+  selection
+- V3 balanced remains the default; no V4 model may be released or applied to
+  the atlas from this experiment
+
 ## Phase 0: Dataset audit and eligibility triage
 
 Objective:

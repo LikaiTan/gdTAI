@@ -2,26 +2,44 @@
 
 ## Current milestone
 
-- gdTAI V4.3 protocol `4.3-receptor-isolated-1.2` passed the fixed shallow
-  grouped development smoke test on 2026-08-19 without lockbox scoring
+- gdTAI V4 development ended on 2026-08-19 with a checksum-bound common
+  external lockbox failure and a final decision not to promote V4.3
+- the development-frozen V4.3 candidate used 36 Stage-1 genes, 158 Stage-2
+  genes, a grouped-OOF Stage-1 threshold of `0.019394`, and a grouped-OOF
+  Stage-2 threshold of `0.994098`; no lockbox cell fitted a model or selected a
+  threshold
 - shared cytotoxic/NK-associated genes, including `KLRD1`, `NKG7`, `GNLY`,
   `FCER1G`, and `TYROBP`, are excluded from both stages; Stage 1 is now a
   high-recall T-lineage support gate and Stage 2 uses 153 individual TCR genes
   plus `CD3D`, `CD3E`, `CD3G`, `CD4`, and `FOXP3`
 - the continuous Stage 1 probability is not supplied to Stage 2, and no single
   NK/cytotoxic gene is a hard exclusion rule
-- fixed-candidate balanced held-out recall was 83.37% for HRA005041, 95.37%
-  for GSE144469, and 84.88% for MalteGDT; corresponding HRA005041 and
-  GSE144469 alpha-beta FPRs were 0.210% and 0.246%
-- grouped inner-fold final-output NK FPRs were 0.458-0.543% for GSE125527 and
-  0.539-0.631% for GSE228597; Stage 1 itself intentionally passes more NK and
-  is not interpreted as an NK classifier
-- the external lockbox was frozen before model scoring with 335,479 cells:
+- final grouped-development OOF recall, precision, F1, and alpha-beta FPR were
+  84.93%, 89.22%, 87.03%, and 0.197%, respectively; the model therefore
+  qualified for one external evaluation
+- the external lockbox was frozen before scoring with 335,479 cells:
   41,931 gdT gold, 285,524 alpha-beta gold, and 8,024 independent author-NK
   negatives; manifest SHA-256 is
   `f997e24b7be6e98692ba770d163916cbb359009ba5a7c3dfa1d7db6b3824f151`
-- the lockbox remains unscored, no final V4.3 model is fitted, and no model is
-  promoted or pushed
+- on the identical lockbox, V4.3 recall/precision/F1 were
+  45.62%/96.25%/61.90%, versus 75.18%/97.87%/85.04% for V3 balanced;
+  donor-cluster bootstrap probability of a positive V4.3-minus-V3 F1 delta was
+  zero across 2,000 draws
+- V4.3 passed its alpha-beta and author-NK FPR limits at 0.240% and 0.760%, but
+  missed 22,804 gdT-gold cells and under-recovered all three positive lockbox
+  sources
+- the effective lockbox feature matrix was exact: 59,924,265 values across
+  327,455 receptor-lockbox cells and 183 effective V4 genes matched the frozen
+  training cache with maximum absolute difference zero
+- Stage 1 passed 98.24%-99.53% of locked positives and CD4/Treg exclusions
+  affected at most 1.41%; the recall collapse occurred in the receptor Stage 2
+- diagnostic-only threshold sweeping could not rescue the model: maximum
+  post-hoc V4.3 F1 was 84.64%, still below frozen V3, while matching V3 recall
+  required 0.537% alpha-beta FPR
+- the nine-page HTML/PDF report passed visual review under
+  `gdT_prediction/gdtai_v4_3_final_evaluation/`; V3 remains the current default,
+  V4.3 remains diagnostic, and no V4 model was promoted, pushed, or applied to
+  the atlas
 - gdTAI V4.2 expression-independent ground truth, source-namespaced grouped
   folds, a 197-gene feature universe, and the checksum-bound normalized feature
   cache were frozen on 2026-08-19 against the isolated TCR-corrected atlas
@@ -227,12 +245,14 @@
 
 ## Next action
 
-- freeze the fixed shallow V4.3 development model and its grouped out-of-fold
-  balanced threshold without consulting the external lockbox
-- score V4.3, V2, and V3 exactly once on the same frozen lockbox, reporting
-  gdT recall, paired-alpha-beta FPR, and author-NK FPR by source
-- bootstrap at donor/sample level and apply the predeclared superiority rules;
-  do not retune from lockbox results or promote without explicit user approval
+- retain V3 balanced as the current default and V2 high-purity as the
+  conservative annotation-assisted fallback
+- do not retune, promote, release-fit, push, or apply V4.3 using the consumed
+  lockbox; a future V4 attempt requires genuinely new independent positive and
+  NK/alpha-beta cohorts or a new untouched final test
+- preserve the final V4.3 model and lockbox outputs as diagnostic evidence and
+  use `gdT_prediction/gdtai_v4_3_final_evaluation/index.html` as the canonical
+  review package
 - publish the gdTAI V4.2 development-gate failure report with frozen-label,
   source-transfer, exclusion-cost, and recovery diagnostics
 - do not run additional Malte-adaptive searches; any next classifier iteration
