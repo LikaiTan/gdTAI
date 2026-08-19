@@ -341,6 +341,45 @@ Final semantics:
 - V3 balanced remains the default and V2 high-purity remains the conservative
   fallback; this entire comparison is post-hoc consumed diagnostic evidence
 
+## gdTAI V4.6 negative-diversity and receptor-ablation development
+
+Objective:
+
+- address the V4.5 GSE159251 false-positive failure by adding diverse
+  source-disjoint alpha-beta and curated author-NK negatives to development
+- compare full symmetric receptor evidence with delta-dominant and
+  delta-conditioned gamma architectures without imposing a hard TRDV cutoff
+- select the architecture using whole-source positive recall and negative FPR
+  at a precommitted 1% deployment prevalence
+
+Exact `.py` scripts:
+
+- `workflows/gdtai/audit_gdtai_v4_5_gse159251_failure.py`
+- `workflows/gdtai/train_gdtai_v4_6_development.py`
+
+Configuration:
+
+- `configs/models/gdtai/v4_6_negative_diversity_receptor_ablation.json`
+
+Key outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_5_failure_audit/`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_6_development/`
+- `Integrated_dataset/models/gdT_prediction/gdtai_v4_6_development/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_6_development/`
+
+Gate semantics:
+
+- silver positives remain excluded; consumed cohorts are development evidence,
+  not external validation
+- delta-dominant candidates cannot use standalone TRG genes or unconditioned
+  TRGV/TRGC aggregates; no architecture may exceed 300 effective features
+- BALF cannot fit a model or calibrator or select architecture or threshold
+- both highest-F1 and high-purity thresholds are selected only from disjoint
+  development validation; a new untouched test is required for promotion
+- V4.6 preflight passed, but model fitting and diagnostic evaluation remain
+  pending GPU availability
+
 ## Phase 0: Dataset audit and eligibility triage
 
 Objective:

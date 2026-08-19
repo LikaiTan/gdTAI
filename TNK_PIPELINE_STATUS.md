@@ -2,6 +2,19 @@
 
 ## Current milestone
 
+- gdTAI V4.6 negative-diversity/receptor-ablation preflight passed on
+  2026-08-20; no model has yet been fitted and no test cohort has been scored
+- the frozen development cache contains 2,196,564 rows x 197 genes, including
+  7,770 newly added GSE169246 author-NK negatives; 2,168,490 rows from 30
+  sources are development-eligible and 28,074 rows remain locked
+- three precommitted Stage-2 architectures passed exact feature-contract QC:
+  full symmetric (200 features), delta dominant (179), and conditional gamma
+  (182); the latter two contain no standalone TRG gene or TRGV/TRGC aggregate
+- candidate selection will use five whole-positive-source and ten
+  whole-negative-source holdouts, optimizing prevalence-adjusted F1 at 1%
+  gdT prevalence; BALF cannot select architecture, calibration, or threshold
+- V4.6 remains development-only and non-promotable; V3 balanced remains the
+  default and V2 high-purity the conservative fallback
 - frozen V4.5-versus-V2/V3 post-hoc scoring completed on the identical
   335,479-cell consumed common benchmark with no retuning or model change;
   GDT2020 and GDTlung are explicitly labeled training-exposed for V4.5
@@ -338,6 +351,9 @@
 
 ## Next action
 
+- launch the frozen V4.6 CUDA/XGBoost source-heldout run when the GPU is
+  available, freeze both development-validation operating modes, then score
+  BALF once as an untouched diagnostic without retuning
 - retain V3 balanced as the current default and V2 high-purity as the
   conservative annotation-assisted fallback
 - do not retune V4.4 using the consumed common lockbox, promote it, push it to

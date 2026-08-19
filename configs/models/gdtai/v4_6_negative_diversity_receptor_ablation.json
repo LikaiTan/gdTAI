@@ -1,0 +1,86 @@
+{
+  "protocol_version": "4.6-development-1.0",
+  "random_seed": 20260820,
+  "base_config": "configs/models/gdtai/v4_4_dual_mode_training.json",
+  "v4_5_config": "configs/models/gdtai/v4_5_positive_diversity_ablation.json",
+  "common_benchmark_predictions": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_3_common_lockbox/common_lockbox_predictions.parquet",
+  "common_benchmark_cache": "Integrated_dataset/cache/gdT_prediction/gdtai_v4_3_common_lockbox/lockbox_gene_features.npy",
+  "common_benchmark_feature_manifest": "Integrated_dataset/cache/gdT_prediction/gdtai_v4_3_common_lockbox/lockbox_feature_manifest.csv",
+  "augmented_cache_dir": "Integrated_dataset/cache/gdT_prediction/gdtai_v4_6_training",
+  "output_table_dir": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_6_development",
+  "output_model_dir": "Integrated_dataset/models/gdT_prediction/gdtai_v4_6_development",
+  "output_log_dir": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_6_development",
+  "promoted_sorted_positive_sources": {
+    "GDT_2020AUG_woCOV": {
+      "source_weight": 0.60,
+      "group_partitions": {
+        "GDT_2020AUG_woCOV::donor1": "threshold_validation",
+        "GDT_2020AUG_woCOV::donor2": "fit"
+      }
+    },
+    "GDTlung2023july_7p": {
+      "source_weight": 0.35,
+      "group_partitions": {
+        "GDTlung2023july_7p::p25": "fit",
+        "GDTlung2023july_7p::p27": "threshold_validation",
+        "GDTlung2023july_7p::p32": "threshold_validation",
+        "GDTlung2023july_7p::p45": "calibration",
+        "GDTlung2023july_7p::p71": "calibration",
+        "GDTlung2023july_7p::p73": "threshold_validation",
+        "GDTlung2023july_7p::p77": "fit"
+      }
+    }
+  },
+  "promoted_negative_sources": [
+    "GSE114724", "GSE121636", "GSE159251", "GSE169246",
+    "GSE292700", "GSE294273", "GSE296954", "GSE315928"
+  ],
+  "additional_author_nk_sources": ["GSE169246"],
+  "negative_group_partition_algorithm": "largest_first_lowest_target_load_ratio_60_20_20",
+  "truth_weight_multipliers": {
+    "gdT_gold": 1.0,
+    "abT_gold": 1.0,
+    "single_ab_support": 0.5,
+    "nk_tier1": 2.0,
+    "nk_tier2": 0.5
+  },
+  "feature_candidates": {
+    "full_symmetric": {"architecture": "full_symmetric"},
+    "delta_dominant": {"architecture": "delta_dominant"},
+    "conditional_gamma": {"architecture": "conditional_gamma"}
+  },
+  "candidate_selection": {
+    "positive_source_holdouts": [
+      "HRA005041", "GSE144469", "MalteGDT",
+      "GDT_2020AUG_woCOV", "GDTlung2023july_7p"
+    ],
+    "negative_source_holdouts": [
+      "GSE114724", "GSE121636", "GSE125527", "GSE159251", "GSE169246",
+      "GSE228597", "GSE292700", "GSE294273", "GSE296954", "GSE315928"
+    ],
+    "primary_mode": "highest_f1",
+    "target_prevalence": 0.01,
+    "objective": "source_holdout_f1_at_1pct_prevalence",
+    "tie_breakers": [
+      "high_purity_source_holdout_f1_at_1pct_prevalence",
+      "macro_positive_source_holdout_recall",
+      "lower_macro_negative_source_holdout_fpr"
+    ],
+    "balf_may_select_candidate_or_threshold": false
+  },
+  "uncertainty_policy": {
+    "negative": "score < highest_f1_threshold",
+    "uncertain_gdt": "highest_f1_threshold <= score < high_purity_threshold",
+    "high_confidence_gdt": "score >= high_purity_threshold"
+  },
+  "scientific_guardrails": {
+    "silver_positive_used_for_fit_calibration_threshold_or_selection": false,
+    "hard_trdv_expression_cutoff": false,
+    "hard_single_nk_gene_exclusion": false,
+    "cd4_treg_exclusions_retuned": false,
+    "maximum_effective_features": 300,
+    "consumed_sources_are_development_not_external_test": true,
+    "new_untouched_test_required_for_promotion": true,
+    "v4_code_may_be_pushed_before_review": false
+  }
+}
