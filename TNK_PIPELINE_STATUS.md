@@ -2,20 +2,32 @@
 
 ## Current milestone
 
-- gdTAI V4.5 development preflight passed on 2026-08-19; the next action is the
-  precommitted GPU feature ablation and exact-scorer freeze
+- gdTAI V4.5 development completed on 2026-08-19 with status
+  `PASS_DEVELOPMENT_FROZEN_NOT_PROMOTABLE`; no new untouched test was scored
 - GDT_2020AUG_woCOV and GDTlung2023july_7p are formally reclassified from the
   already-consumed lockbox into development-only sorted-positive sources; they
   can no longer support external validation or promotion claims
 - the V4.5 split has 1,277,990 fit, 305,057 calibration, 319,371
   threshold-validation, and 286,376 excluded rows; gdT-gold counts in the three
   development partitions are 47,460, 3,783, and 13,639, respectively
-- the frozen ablation compares receptor context against a bounded restored
-  cytotoxic-context panel by macro F1 over five whole-source holdouts; silver
-  positives, BALF, and extension alpha-beta cohorts cannot select the candidate
-  or thresholds
+- the frozen five-source ablation selected receptor context over restored
+  cytotoxic context: macro held-out F1 was 0.8431 versus 0.8414, macro recall
+  was 84.41% versus 84.02%, and minimum-source recall was 40.51% versus 39.02%
+- selected highest-F1 precision/recall/F1 were 93.62%/88.28%/90.87% at
+  threshold `0.8595057726`; high-purity precision/recall/F1 were
+  97.82%/80.72%/88.46% at threshold `0.9657050967`
+- receptor-context highest-F1 source-heldout recall was 98.31% for HRA005041,
+  97.37% for GSE144469, 99.09% for MalteGDT, 86.76% for GDT2020, and only
+  40.51% for suboptimal-quality GDTlung, which remains the dominant domain gap
+- the final model uses 200 effective features; shared cytotoxic features were
+  rejected by the precommitted ablation, silver positives remained excluded,
+  and no hard TRDV or single-NK-gene rule was introduced
 - V4.5 remains development-only and non-promotable until a genuinely new test
-  cohort exists; no V4 code or artifact may be pushed before scientific review
+  cohort exists; V3 balanced remains the default, no atlas inference occurred,
+  and no V4 code or artifact was pushed
+- the visually reviewed 12-page HTML/PDF report is under
+  `gdT_prediction/gdtai_v4_5_development/`; model contract SHA-256 is
+  `974d0687de4a93688b4e0d665b276458c90f6f5a772615dbeea9cbb2f66072b2`
 - gdTAI V4.4 dual-mode development completed on 2026-08-19 with one frozen
   scorer and two validation-only operating points; no test cell fitted a model
   or calibrator or selected a feature, model, or threshold

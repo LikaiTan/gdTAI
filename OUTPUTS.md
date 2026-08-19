@@ -75,6 +75,16 @@
 
 ## Current review packages
 
+- gdTAI V4.5 positive-diversity and cytotoxic-context ablation:
+  - `gdT_prediction/gdtai_v4_5_development/index.html`
+  - `gdT_prediction/gdtai_v4_5_development/gdtai_v4_5_development_report.pdf`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_5_development/`
+  - `Integrated_dataset/figures/gdT_prediction/gdtai_v4_5_development/`
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_5_development/`
+  - decision: receptor context won the frozen five-source ablation, but V4.5 is
+    development-only and non-promotable without a genuinely new untouched test;
+    V3 balanced remains the deployed default
+
 - gdTAI V4.3 recall-failure investigation:
   - `gdT_prediction/gdtai_v4_3_recall_failure/index.html`
   - `gdT_prediction/gdtai_v4_3_recall_failure/gdtai_v4_3_recall_failure_report.pdf`

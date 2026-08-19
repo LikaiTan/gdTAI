@@ -280,6 +280,7 @@ Objective:
 Exact `.py` script:
 
 - `workflows/gdtai/train_gdtai_v4_5_development.py`
+- `workflows/gdtai/render_gdtai_v4_5_development_report.py`
 
 Configuration:
 
@@ -291,6 +292,8 @@ Key outputs:
 - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_5_development/candidate_source_holdout_metrics.csv`
 - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_5_development/uncertainty_band_summary.csv`
 - `Integrated_dataset/models/gdT_prediction/gdtai_v4_5_development/model_contract.json`
+- `gdT_prediction/gdtai_v4_5_development/index.html`
+- `gdT_prediction/gdtai_v4_5_development/gdtai_v4_5_development_report.pdf`
 
 Gate semantics:
 
@@ -301,6 +304,10 @@ Gate semantics:
 - candidate selection uses macro F1 across five whole-source holdouts; final
   operating thresholds use only the disjoint development threshold partition
 - V4.5 is non-promotable until it passes a genuinely new untouched test
+- receptor context won the frozen ablation; restored shared cytotoxic genes did
+  not improve macro source-heldout F1 or weakest-source recall
+- GDTlung remains the limiting positive domain at 40.51% held-out recall; V3
+  balanced remains the deployed default and V4.5 was not atlas-applied or pushed
 
 ## Phase 0: Dataset audit and eligibility triage
 
