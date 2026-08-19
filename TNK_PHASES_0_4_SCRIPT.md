@@ -2781,6 +2781,7 @@ Objective:
 Exact `.py` script:
 
 - `workflows/gdtai/apply_gdtai_v4_6_and_v2_whole_atlas.py`
+- `workflows/gdtai/build_gdtai_v4_6_whole_atlas_report.py`
 
 Key configuration and outputs:
 

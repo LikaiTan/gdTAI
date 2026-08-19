@@ -330,7 +330,7 @@ def run(config_path: Path, config: dict, models: dict, preflight_result: dict) -
     table_dir.mkdir(parents=True, exist_ok=True)
     log_dir.mkdir(parents=True, exist_ok=True)
     prediction_path = table_dir / "whole_atlas_predictions.parquet"
-    temporary = table_dir / ".whole_atlas_predictions.tmp.parquet"
+    temporary = table_dir / f".whole_atlas_predictions.{os.getpid()}.tmp.parquet"
     temporary.unlink(missing_ok=True)
     union_genes = model_feature_union(models, config)
     source_parts: list[pd.DataFrame] = []
@@ -511,17 +511,66 @@ def run(config_path: Path, config: dict, models: dict, preflight_result: dict) -
     return summary
 
 
+def finalize_existing(config_path: Path, config: dict, preflight_result: dict) -> dict[str, Any]:
+    """Validate and summarize already completed outputs without rescoring cells."""
+    table_dir = resolve(config["output_table_dir"])
+    log_dir = resolve(config["output_log_dir"])
+    prediction_path = table_dir / "whole_atlas_predictions.parquet"
+    source_long = pd.read_csv(table_dir / "predictions_by_dataset.csv")
+    overall_long = pd.read_csv(table_dir / "whole_atlas_overall.csv")
+    lung_long = pd.read_csv(table_dir / "gse243013_luad_lusc_predictions.csv")
+    comparison = pd.read_csv(table_dir / "v4_6_vs_v2_by_dataset.csv")
+    parquet_rows = pq.ParquetFile(prediction_path).metadata.num_rows
+    expected = int(config["expected_cells"])
+    if parquet_rows != expected:
+        raise RuntimeError(f"Existing Parquet has {parquet_rows:,} rows, expected {expected:,}")
+    per_model_cells = source_long.groupby("model", observed=True).n_cells.sum()
+    if set(per_model_cells.index) != set(MODEL_KEYS) or not (per_model_cells == expected).all():
+        raise RuntimeError("Existing per-source tables do not reproduce the atlas for every model")
+    if source_long.source_gse_id.nunique() != 40 or len(comparison) != 80:
+        raise RuntimeError("Existing source/comparison tables have an unexpected dataset contract")
+    input_stat = resolve(config["input_h5ad"]).stat()
+    if (input_stat.st_size, input_stat.st_mtime_ns) != (
+        int(preflight_result["input_size_bytes"]), int(preflight_result["input_mtime_ns"]),
+    ):
+        raise RuntimeError("Input H5AD changed between preflight and output finalization")
+    summary = {
+        "status": "PASS_V4_6_V2_WHOLE_ATLAS_INFERENCE",
+        "protocol_version": config["protocol_version"],
+        "config_sha256": sha256_file(config_path),
+        "input_candidate_sha256": config["expected_input_sha256"],
+        "input_size_mtime_unchanged": True,
+        "n_cells": expected,
+        "n_sources": int(source_long.source_gse_id.nunique()),
+        "prediction_parquet": str(prediction_path),
+        "prediction_parquet_rows": parquet_rows,
+        "prediction_parquet_sha256": sha256_file(prediction_path),
+        "models_or_thresholds_retuned": False,
+        "h5ad_mutated": False,
+        "overall": overall_long.to_dict("records"),
+        "gse243013": lung_long.to_dict("records"),
+        "preflight": preflight_result,
+        "finalized_from_existing_complete_outputs": True,
+    }
+    log_dir.mkdir(parents=True, exist_ok=True)
+    (log_dir / "inference_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
+    return summary
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--preflight-only", action="store_true")
     parser.add_argument("--smoke-test", action="store_true")
+    parser.add_argument("--finalize-existing", action="store_true")
     args = parser.parse_args()
     config_path = resolve(args.config)
     config = json.loads(config_path.read_text())
     models = prepare_models(config)
     result = preflight(config_path, config, models)
-    if args.smoke_test:
+    if args.finalize_existing:
+        result = finalize_existing(config_path, config, result)
+    elif args.smoke_test:
         result = smoke_test(config, models)
     elif not args.preflight_only:
         result = run(config_path, config, models, result)
