@@ -1,0 +1,51 @@
+{
+  "protocol_version": "4.3-receptor-isolated-1.0",
+  "random_seed": 20260819,
+  "label_manifest": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_ground_truth/v4_2_label_manifest.parquet",
+  "feature_manifest": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_training/feature_manifest.csv",
+  "split_manifest": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_training/grouped_split_manifest.csv",
+  "cache_manifest": "Integrated_dataset/cache/gdT_prediction/gdtai_v4_2_training/feature_cache_manifest.json",
+  "cache_matrix": "Integrated_dataset/cache/gdT_prediction/gdtai_v4_2_training/gene_features.npy",
+  "output_table_dir": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_3_receptor_isolated",
+  "output_model_dir": "Integrated_dataset/models/gdT_prediction/gdtai_v4_3_receptor_isolated",
+  "output_log_dir": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_3_receptor_isolated",
+  "maximum_stage1_t_cells": 400000,
+  "maximum_stage2_negative_cells": 500000,
+  "maximum_audit_ab_cells": 600000,
+  "grid": {
+    "max_depth": [2, 3, 4],
+    "min_child_weight": [50, 200],
+    "colsample_bytree": [0.7, 1.0]
+  },
+  "fixed": {
+    "learning_rate": 0.05,
+    "n_estimators": 800,
+    "subsample": 0.8,
+    "reg_lambda": 10.0,
+    "early_stopping_rounds": 50,
+    "tree_method": "hist",
+    "device": "cuda",
+    "objective": "binary:logistic",
+    "eval_metric": "logloss",
+    "n_jobs": 16,
+    "verbosity": 0
+  },
+  "stage1": {
+    "minimum_gdt_recall_per_source": 0.99,
+    "minimum_abt_recall_per_source": 0.98,
+    "maximum_tier1_nk_passage_per_source": 0.20
+  },
+  "profiles": {
+    "balanced": {"objective_beta": 1.0, "minimum_macro_recall": 0.80, "minimum_per_source_recall": 0.70, "maximum_abt_fpr": 0.002, "maximum_tier1_nk_fpr": 0.01, "maximum_tier2_macro_nk_fpr": 0.02},
+    "high_purity": {"objective_beta": 0.5, "minimum_macro_recall": 0.70, "minimum_per_source_recall": 0.60, "maximum_abt_fpr": 0.001, "maximum_tier1_nk_fpr": 0.005, "maximum_tier2_macro_nk_fpr": 0.01}
+  },
+  "stage2_feature_policy": {
+    "feature_classes": ["TCR"],
+    "control_genes": ["CD3D", "CD3E", "CD3G", "CD4", "FOXP3"]
+  },
+  "stage2_include_stage1_probability": false,
+  "receptor_rescue": {
+    "balanced": {"TRDV1": 2.2, "TRDV2": 3.0, "TRDV3": 2.1},
+    "high_purity": {"TRDV1": 2.5, "TRDV2": 3.8, "TRDV3": 2.6}
+  }
+}

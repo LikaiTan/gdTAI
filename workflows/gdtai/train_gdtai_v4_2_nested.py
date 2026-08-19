@@ -117,6 +117,19 @@ def exclusion_flags(x: np.ndarray, names: list[str]) -> tuple[np.ndarray, np.nda
     return cd4, treg, cd4 | treg
 
 
+def receptor_rescue_flags(x: np.ndarray, names: list[str], thresholds: dict[str, float] | None) -> np.ndarray:
+    if not thresholds:
+        return np.zeros(len(x), dtype=bool)
+    lookup = {name: index for index, name in enumerate(names)}
+    missing = sorted(set(thresholds) - set(lookup))
+    if missing:
+        raise RuntimeError(f"Receptor-rescue genes are missing from the frozen feature cache: {missing}")
+    return np.logical_or.reduce([
+        np.asarray(x[:, lookup[gene]]) >= float(threshold)
+        for gene, threshold in thresholds.items()
+    ])
+
+
 def fbeta(tp: int, fp: int, fn: int, beta: float) -> float:
     b2 = beta * beta
     denominator = (1 + b2) * tp + b2 * fn + fp
@@ -210,6 +223,7 @@ def choose_profile_threshold(frame: pd.DataFrame, stage1_score: np.ndarray, stag
     positive_total = sum(truth_totals["gdT_gold"].values())
     negative_total = sum(sum(truth_totals[name].values()) for name in ("abT_gold", "nk_tier1", "nk_tier2"))
     best = None
+    near_miss = None
     for threshold in thresholds:
         recalls = rates_from_sorted(truth_arrays["gdT_gold"], truth_totals["gdT_gold"], threshold)
         ab = rates_from_sorted(truth_arrays["abT_gold"], truth_totals["abT_gold"], threshold)
@@ -233,10 +247,34 @@ def choose_profile_threshold(frame: pd.DataFrame, stage1_score: np.ndarray, stag
             and metrics["tier2_macro_nk_fpr"] <= spec["maximum_tier2_macro_nk_fpr"]
         )
         objective = metrics["f1"] if spec["objective_beta"] == 1 else metrics["f0_5"]
+        violations = {
+            "macro_recall_deficit": max(0.0, spec["minimum_macro_recall"] - metrics["macro_recall"]),
+            "minimum_source_recall_deficit": max(0.0, spec["minimum_per_source_recall"] - min(recalls.values(), default=1.0)),
+            "abt_fpr_excess": max(0.0, metrics["abt_fpr"] - spec["maximum_abt_fpr"]),
+            "tier1_nk_fpr_excess": max(0.0, max(tier1.values(), default=0.0) - spec["maximum_tier1_nk_fpr"]),
+            "tier2_macro_nk_fpr_excess": max(0.0, metrics["tier2_macro_nk_fpr"] - spec["maximum_tier2_macro_nk_fpr"]),
+        }
+        normalized_violation = (
+            violations["macro_recall_deficit"] / max(spec["minimum_macro_recall"], 1e-12)
+            + violations["minimum_source_recall_deficit"] / max(spec["minimum_per_source_recall"], 1e-12)
+            + violations["abt_fpr_excess"] / max(spec["maximum_abt_fpr"], 1e-12)
+            + violations["tier1_nk_fpr_excess"] / max(spec["maximum_tier1_nk_fpr"], 1e-12)
+            + violations["tier2_macro_nk_fpr_excess"] / max(spec["maximum_tier2_macro_nk_fpr"], 1e-12)
+        )
+        if near_miss is None or (normalized_violation, -objective) < (near_miss[0], -near_miss[1]):
+            near_miss = (normalized_violation, objective, float(threshold), metrics, violations)
         if eligible and (best is None or objective > best[2]):
             best = (float(threshold), metrics, objective)
     if best is None:
-        return math.nan, {"eligible": False}
+        payload = {"eligible": False}
+        if near_miss is not None:
+            payload.update({
+                "near_miss_threshold": near_miss[2],
+                "near_miss_metrics": near_miss[3],
+                "near_miss_violations": near_miss[4],
+                "near_miss_normalized_violation": near_miss[0],
+            })
+        return math.nan, payload
     threshold = best[0]
     calls = base & (stage2_score >= threshold)
     metrics = profile_metrics(frame, calls, stage1_score * stage2_score)
@@ -261,6 +299,14 @@ def candidate_id(params: dict) -> str:
     return "__".join(f"{key}-{params[key]}" for key in sorted(params))
 
 
+def compose_stage2_features(x: np.ndarray, rows: np.ndarray, columns: np.ndarray,
+                            stage1_score: np.ndarray, include_stage1_probability: bool) -> np.ndarray:
+    values = np.asarray(x[rows][:, columns], dtype=np.float32)
+    if include_stage1_probability:
+        values = np.column_stack([values, stage1_score]).astype(np.float32)
+    return values
+
+
 def selected_profile_candidate(stage2_table: pd.DataFrame, profile: str, beta: float) -> tuple[pd.Series, dict] | None:
     choices = []
     for _, row in stage2_table.iterrows():
@@ -276,6 +322,7 @@ def selected_profile_candidate(stage2_table: pd.DataFrame, profile: str, beta: f
 
 
 def run_outer(labels: pd.DataFrame, x: np.ndarray, feature_names: list[str], stage1_columns: np.ndarray,
+              stage2_columns: np.ndarray, include_stage1_probability: bool,
               heldout: str, config: dict, candidates: list[dict], smoke: bool, model_dir: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     development = labels.allow_fit.to_numpy()
     outer_test = development & labels.source_gse_id.eq(heldout).to_numpy()
@@ -333,19 +380,37 @@ def run_outer(labels: pd.DataFrame, x: np.ndarray, feature_names: list[str], sta
             neg_selected = sampled_rows(train_frame.reset_index(drop=True), neg_local, config["maximum_stage2_negative_cells"], stable_seed(heldout, model_id, fold, "neg"))
             chosen_local = np.concatenate([pos_local, neg_selected])
             train_rows = audit[train_local[chosen_local]]
-            z = np.column_stack([np.asarray(x[train_rows]), s1_oof[train_local[chosen_local]]]).astype(np.float32)
+            z = compose_stage2_features(
+                x, train_rows, stage2_columns, s1_oof[train_local[chosen_local]],
+                include_stage1_probability,
+            )
             y = labels.iloc[train_rows].truth_class.eq("gdT_gold").to_numpy(np.int8)
             w = source_balanced_weights(labels, train_rows, 2)
             validation = np.flatnonzero(inner == fold)
             validation_t = validation[audit_frame.iloc[validation].truth_class.isin(["gdT_gold", "abT_gold", "single_ab_support"]).to_numpy()]
-            zv_t = np.column_stack([np.asarray(x[audit[validation_t]]), s1_oof[validation_t]]).astype(np.float32)
+            zv_t = compose_stage2_features(
+                x, audit[validation_t], stage2_columns, s1_oof[validation_t],
+                include_stage1_probability,
+            )
             model = fit_xgb(z, y, w, params, config["fixed"], stable_seed(heldout, model_id, fold, 2), (zv_t, audit_frame.iloc[validation_t].truth_class.eq("gdT_gold").to_numpy(np.int8)))
-            zv = np.column_stack([np.asarray(x[audit[validation]]), s1_oof[validation]]).astype(np.float32)
+            zv = compose_stage2_features(
+                x, audit[validation], stage2_columns, s1_oof[validation],
+                include_stage1_probability,
+            )
             oof[validation] = predict(model, zv)
         valid = np.isfinite(oof)
         profiles = {}
         for name, spec in config["profiles"].items():
-            threshold, metrics = choose_profile_threshold(audit_frame[valid].reset_index(drop=True), s1_oof[valid], s1_threshold, oof[valid], excluded_audit[valid], spec)
+            profile_score = oof[valid].copy()
+            rescue = receptor_rescue_flags(
+                np.asarray(x[audit[valid]]), feature_names,
+                config.get("receptor_rescue", {}).get(name),
+            )
+            profile_score[rescue] = np.finfo(np.float32).max
+            threshold, metrics = choose_profile_threshold(
+                audit_frame[valid].reset_index(drop=True), s1_oof[valid], s1_threshold,
+                profile_score, excluded_audit[valid], spec,
+            )
             profiles[name] = {"threshold": threshold, "metrics": metrics}
         stage2_rows.append({"heldout_source": heldout, "candidate_id": model_id, "complete_oof": bool(valid.all()), "profiles_json": json.dumps(profiles, sort_keys=True)})
     stage2_table = pd.DataFrame(stage2_rows)
@@ -387,17 +452,32 @@ def run_outer(labels: pd.DataFrame, x: np.ndarray, feature_names: list[str], sta
             neg_selected = sampled_rows(train_frame.reset_index(drop=True), neg_local, config["maximum_stage2_negative_cells"], stable_seed(heldout, selected_id, "final_neg"))
             chosen = train_local[np.concatenate([pos_local, neg_selected])]
             train_rows = audit[chosen]
-            z = np.column_stack([np.asarray(x[train_rows]), s1_oof[chosen]]).astype(np.float32)
+            z = compose_stage2_features(
+                x, train_rows, stage2_columns, s1_oof[chosen],
+                include_stage1_probability,
+            )
             trained_stage2[selected_id] = fit_xgb(
                 z, labels.iloc[train_rows].truth_class.eq("gdT_gold").to_numpy(np.int8),
                 source_balanced_weights(labels, train_rows, 2), params, config["fixed"],
                 stable_seed(heldout, selected_id, "final_s2"), None,
             )
             trained_stage2[selected_id].save_model(outer_model_dir / f"stage2_{selected_id}.ubj")
-        outer_s2 = predict(trained_stage2[selected_id], np.column_stack([np.asarray(x[outer_test_rows]), outer_s1]).astype(np.float32))
+        outer_s2 = predict(
+            trained_stage2[selected_id],
+            compose_stage2_features(
+                x, outer_test_rows, stage2_columns, outer_s1,
+                include_stage1_probability,
+            ),
+        )
         threshold = float(payload["threshold"])
-        calls = (outer_s1 >= s1_threshold) & (outer_s2 >= threshold) & ~outer_excluded
-        metrics = profile_metrics(outer_test_frame, calls, outer_s1 * outer_s2)
+        outer_rescue = receptor_rescue_flags(
+            np.asarray(x[outer_test_rows]), feature_names,
+            config.get("receptor_rescue", {}).get(profile),
+        )
+        calls = (outer_s1 >= s1_threshold) & ((outer_s2 >= threshold) | outer_rescue) & ~outer_excluded
+        evaluation_score = outer_s1 * outer_s2
+        evaluation_score[outer_rescue & (outer_s1 >= s1_threshold) & ~outer_excluded] = 1.0
+        metrics = profile_metrics(outer_test_frame, calls, evaluation_score)
         outer_results.append({
             "heldout_source": heldout, "profile": profile, "eligible_inner": True,
             "stage1_candidate_id": selected_stage1.candidate_id, "stage1_threshold": s1_threshold,
@@ -411,11 +491,14 @@ def run_outer(labels: pd.DataFrame, x: np.ndarray, feature_names: list[str], sta
             "stage2_candidate_id": selected_id,
             "stage2_threshold": threshold,
             "eligible_inner": True,
+            "receptor_rescue": config.get("receptor_rescue", {}).get(profile, {}),
         }
     contract = {
         "heldout_source": heldout, "stage1_candidate_id": selected_stage1.candidate_id,
         "stage1_threshold": s1_threshold, "feature_names": feature_names,
         "stage1_feature_names": [feature_names[i] for i in stage1_columns],
+        "stage2_feature_names": [feature_names[i] for i in stage2_columns],
+        "stage2_includes_stage1_probability": include_stage1_probability,
         "profiles": profile_contracts,
         "diagnostic_only": True,
         "lockbox_scored": False,
@@ -447,6 +530,18 @@ def main() -> None:
     features = pd.read_csv(features_path).sort_values("feature_index")
     names = features.gene.astype(str).tolist()
     stage1_columns = np.flatnonzero(features.stage1.to_numpy(bool))
+    stage2_policy = config.get("stage2_feature_policy", {})
+    if stage2_policy:
+        controls = set(stage2_policy.get("control_genes", []))
+        stage2_columns = np.flatnonzero(
+            features.feature_class.eq("TCR").to_numpy()
+            | features.gene.astype(str).isin(controls).to_numpy()
+        )
+    else:
+        stage2_columns = np.flatnonzero(features.stage2.to_numpy(bool))
+    include_stage1_probability = bool(config.get("stage2_include_stage1_probability", True))
+    if len(stage2_columns) == 0:
+        raise RuntimeError("Stage-2 feature policy selected zero genes")
     x = np.load(matrix_path, mmap_mode="r")
     candidates = grid(config)
     if args.smoke: candidates = candidates[:1]
@@ -454,7 +549,11 @@ def main() -> None:
     started = time.monotonic()
     all_stage1, all_stage2, all_outer = [], [], []
     for heldout in heldouts:
-        s1, s2, outer = run_outer(labels, x, names, stage1_columns, heldout, config, candidates, args.smoke, model_dir)
+        s1, s2, outer = run_outer(
+            labels, x, names, stage1_columns, stage2_columns,
+            include_stage1_probability, heldout, config, candidates,
+            args.smoke, model_dir,
+        )
         all_stage1.append(s1); all_stage2.append(s2); all_outer.append(outer)
         pd.concat(all_stage1).to_csv(table_dir / ("smoke_stage1_candidates.csv" if args.smoke else "nested_stage1_candidates.csv"), index=False)
         pd.concat(all_stage2).to_csv(table_dir / ("smoke_stage2_candidates.csv" if args.smoke else "nested_stage2_candidates.csv"), index=False)
