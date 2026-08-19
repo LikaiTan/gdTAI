@@ -17,7 +17,8 @@
   and 0.51% for V2 high-purity
 - V4.5 remains non-promotable; V3 balanced remains the default and V2
   high-purity the conservative fallback; the visually reviewed 14-page report
-  is under `gdT_prediction/gdtai_v4_5_vs_v2_v3_consumed/`
+  is under `gdT_prediction/gdtai_v4_5_vs_v2_v3_consumed/` and was emailed to
+  Likai on 2026-08-19
 - gdTAI V4.5 development completed on 2026-08-19 with status
   `PASS_DEVELOPMENT_FROZEN_NOT_PROMOTABLE`; no new untouched test was scored
 - GDT_2020AUG_woCOV and GDTlung2023july_7p are formally reclassified from the
