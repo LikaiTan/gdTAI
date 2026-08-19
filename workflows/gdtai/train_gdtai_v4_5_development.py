@@ -97,6 +97,43 @@ def install_weight_policy(labels: pd.DataFrame, protocol: dict) -> None:
     v44.source_balanced_weights = weighted
 
 
+def fast_stage1_threshold(
+    frame: pd.DataFrame, score: np.ndarray, spec: dict
+) -> tuple[float, dict]:
+    """Exactly reproduce the V4.4 grid search without repeated full-row scans."""
+    score = np.asarray(score)
+    thresholds = np.unique(np.quantile(score, np.linspace(0, 1, 4001)))
+    eligible = np.ones(len(thresholds), dtype=bool)
+
+    def rates_across_thresholds(truth: str) -> dict[str, np.ndarray]:
+        truth_mask = frame.truth_class.eq(truth).to_numpy()
+        output: dict[str, np.ndarray] = {}
+        for source in sorted(frame.loc[truth_mask, "source_gse_id"].unique()):
+            values = np.sort(score[truth_mask & frame.source_gse_id.eq(source).to_numpy()])
+            output[str(source)] = (len(values) - np.searchsorted(values, thresholds, side="left")) / len(values)
+        return output
+
+    gd = rates_across_thresholds("gdT_gold")
+    ab = rates_across_thresholds("abT_gold")
+    for values in gd.values():
+        eligible &= values >= float(spec["minimum_gdt_recall_per_source"])
+    for values in ab.values():
+        eligible &= values >= float(spec["minimum_abt_recall_per_source"])
+    indexes = np.flatnonzero(eligible)
+    if not len(indexes):
+        raise RuntimeError("No Stage-1 validation threshold satisfies the frozen T-cell recall rules")
+    selected_index = int(indexes[-1])
+    threshold = float(thresholds[selected_index])
+    calls = score >= threshold
+    return threshold, {
+        "eligible": True,
+        "gdt_recall_by_source": v44.source_rates(frame, calls, "gdT_gold"),
+        "abt_recall_by_source": v44.source_rates(frame, calls, "abT_gold"),
+        "tier1_nk_passage_by_source": v44.source_rates(frame, calls, "nk_tier1"),
+        "implementation": "exact_vectorized_v4_4_grid",
+    }
+
+
 def feature_columns(
     features: pd.DataFrame, base: dict, context_genes: list[str]
 ) -> tuple[np.ndarray, np.ndarray]:
@@ -334,6 +371,7 @@ def main() -> None:
     labels, features, matrix, cache_manifest = v44.load_inputs(base)
     labels, partition = prepare_labels_and_partitions(labels, base, protocol)
     install_weight_policy(labels, protocol)
+    v44.choose_stage1_threshold = fast_stage1_threshold
     table_dir = resolve(protocol["output_table_dir"])
     table_dir.mkdir(parents=True, exist_ok=True)
     preview = labels[["source_gse_id", "truth_class"]].copy()
