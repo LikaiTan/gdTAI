@@ -27,7 +27,8 @@
   and no V4 code or artifact was pushed
 - the visually reviewed 12-page HTML/PDF report is under
   `gdT_prediction/gdtai_v4_5_development/`; model contract SHA-256 is
-  `974d0687de4a93688b4e0d665b276458c90f6f5a772615dbeea9cbb2f66072b2`
+  `974d0687de4a93688b4e0d665b276458c90f6f5a772615dbeea9cbb2f66072b2`,
+  and the PDF was emailed to Likai on 2026-08-19
 - gdTAI V4.4 dual-mode development completed on 2026-08-19 with one frozen
   scorer and two validation-only operating points; no test cell fitted a model
   or calibrator or selected a feature, model, or threshold
