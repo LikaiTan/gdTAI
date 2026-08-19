@@ -1,0 +1,76 @@
+{
+  "protocol_version": "4.5-development-1.0",
+  "random_seed": 20260819,
+  "base_config": "configs/models/gdtai/v4_4_dual_mode_training.json",
+  "output_table_dir": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_5_development",
+  "output_model_dir": "Integrated_dataset/models/gdT_prediction/gdtai_v4_5_development",
+  "output_log_dir": "Integrated_dataset/logs/gdT_prediction/gdtai_v4_5_development",
+  "promoted_sorted_positive_sources": {
+    "GDT_2020AUG_woCOV": {
+      "source_weight": 0.60,
+      "group_partitions": {
+        "GDT_2020AUG_woCOV::donor1": "threshold_validation",
+        "GDT_2020AUG_woCOV::donor2": "fit"
+      }
+    },
+    "GDTlung2023july_7p": {
+      "source_weight": 0.35,
+      "quality_note": "sorted gdT source with known suboptimal library quality",
+      "group_partitions": {
+        "GDTlung2023july_7p::p25": "fit",
+        "GDTlung2023july_7p::p27": "threshold_validation",
+        "GDTlung2023july_7p::p32": "threshold_validation",
+        "GDTlung2023july_7p::p45": "calibration",
+        "GDTlung2023july_7p::p71": "calibration",
+        "GDTlung2023july_7p::p73": "threshold_validation",
+        "GDTlung2023july_7p::p77": "fit"
+      }
+    }
+  },
+  "truth_weight_multipliers": {
+    "gdT_gold": 1.0,
+    "abT_gold": 1.0,
+    "single_ab_support": 0.5,
+    "nk_tier1": 2.0,
+    "nk_tier2": 0.5
+  },
+  "candidate_selection": {
+    "positive_source_holdouts": [
+      "HRA005041",
+      "GSE144469",
+      "MalteGDT",
+      "GDT_2020AUG_woCOV",
+      "GDTlung2023july_7p"
+    ],
+    "primary_mode": "highest_f1",
+    "objective": "macro_source_holdout_f1",
+    "tie_breakers": ["macro_source_holdout_recall", "lower_macro_source_holdout_abt_fpr"],
+    "consumed_common_lockbox_metrics_may_select_candidate": false
+  },
+  "feature_candidates": {
+    "receptor_context_baseline": {
+      "stage2_context_genes": ["CD3D", "CD3E", "CD3G", "CD4", "FOXP3"]
+    },
+    "restored_cytotoxic_context": {
+      "stage2_context_genes": [
+        "CD3D", "CD3E", "CD3G", "CD4", "FOXP3",
+        "CCL5", "CTSW", "EOMES", "FCER1G", "FCGR3A", "GNLY", "GZMB",
+        "KLRC1", "KLRD1", "KLRF1", "NKG7", "PRF1", "TBX21", "TYROBP"
+      ]
+    }
+  },
+  "uncertainty_policy": {
+    "negative": "score < highest_f1_threshold",
+    "uncertain_gdt": "highest_f1_threshold <= score < high_purity_threshold",
+    "high_confidence_gdt": "score >= high_purity_threshold"
+  },
+  "scientific_guardrails": {
+    "silver_positive_used_for_fit_calibration_threshold_or_selection": false,
+    "hard_trdv_expression_cutoff": false,
+    "hard_single_nk_gene_exclusion": false,
+    "cd4_treg_exclusions_retuned": false,
+    "maximum_effective_features": 300,
+    "new_untouched_test_required_for_promotion": true,
+    "v4_code_may_be_pushed_before_review": false
+  }
+}

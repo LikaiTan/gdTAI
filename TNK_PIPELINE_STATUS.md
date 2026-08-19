@@ -2,6 +2,20 @@
 
 ## Current milestone
 
+- gdTAI V4.5 development preflight passed on 2026-08-19; the next action is the
+  precommitted GPU feature ablation and exact-scorer freeze
+- GDT_2020AUG_woCOV and GDTlung2023july_7p are formally reclassified from the
+  already-consumed lockbox into development-only sorted-positive sources; they
+  can no longer support external validation or promotion claims
+- the V4.5 split has 1,277,990 fit, 305,057 calibration, 319,371
+  threshold-validation, and 286,376 excluded rows; gdT-gold counts in the three
+  development partitions are 47,460, 3,783, and 13,639, respectively
+- the frozen ablation compares receptor context against a bounded restored
+  cytotoxic-context panel by macro F1 over five whole-source holdouts; silver
+  positives, BALF, and extension alpha-beta cohorts cannot select the candidate
+  or thresholds
+- V4.5 remains development-only and non-promotable until a genuinely new test
+  cohort exists; no V4 code or artifact may be pushed before scientific review
 - gdTAI V4.4 dual-mode development completed on 2026-08-19 with one frozen
   scorer and two validation-only operating points; no test cell fitted a model
   or calibrator or selected a feature, model, or threshold

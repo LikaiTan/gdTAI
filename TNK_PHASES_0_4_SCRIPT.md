@@ -267,6 +267,41 @@ Final semantics:
 - V4.4 is not promoted or applied to the atlas; a new untouched final test is
   required for any future promotion claim
 
+## gdTAI V4.5 positive-diversity and cytotoxic-context ablation
+
+Objective:
+
+- restore sorted-positive source diversity after the V4.3/V4.4 recall failure
+- compare receptor context against a bounded restored cytotoxic-context panel
+  under five whole-source development holdouts
+- freeze the exact deployed scorer, calibrators, highest-F1/high-purity
+  thresholds, and the interval between those thresholds as an uncertainty band
+
+Exact `.py` script:
+
+- `workflows/gdtai/train_gdtai_v4_5_development.py`
+
+Configuration:
+
+- `configs/models/gdtai/v4_5_positive_diversity_ablation.json`
+
+Key outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_5_development/candidate_selection_summary.csv`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_5_development/candidate_source_holdout_metrics.csv`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_5_development/uncertainty_band_summary.csv`
+- `Integrated_dataset/models/gdT_prediction/gdtai_v4_5_development/model_contract.json`
+
+Gate semantics:
+
+- GDT_2020AUG_woCOV and GDTlung2023july_7p are consumed sorted cohorts
+  reclassified as development and can never provide a new external test
+- silver positives, BALF, and extension alpha-beta cohorts do not fit models or
+  calibrators and cannot select the feature candidate or operating thresholds
+- candidate selection uses macro F1 across five whole-source holdouts; final
+  operating thresholds use only the disjoint development threshold partition
+- V4.5 is non-promotable until it passes a genuinely new untouched test
+
 ## Phase 0: Dataset audit and eligibility triage
 
 Objective:
