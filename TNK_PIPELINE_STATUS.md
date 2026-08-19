@@ -2,6 +2,26 @@
 
 ## Current milestone
 
+- gdTAI V4.3 protocol `4.3-receptor-isolated-1.2` passed the fixed shallow
+  grouped development smoke test on 2026-08-19 without lockbox scoring
+- shared cytotoxic/NK-associated genes, including `KLRD1`, `NKG7`, `GNLY`,
+  `FCER1G`, and `TYROBP`, are excluded from both stages; Stage 1 is now a
+  high-recall T-lineage support gate and Stage 2 uses 153 individual TCR genes
+  plus `CD3D`, `CD3E`, `CD3G`, `CD4`, and `FOXP3`
+- the continuous Stage 1 probability is not supplied to Stage 2, and no single
+  NK/cytotoxic gene is a hard exclusion rule
+- fixed-candidate balanced held-out recall was 83.37% for HRA005041, 95.37%
+  for GSE144469, and 84.88% for MalteGDT; corresponding HRA005041 and
+  GSE144469 alpha-beta FPRs were 0.210% and 0.246%
+- grouped inner-fold final-output NK FPRs were 0.458-0.543% for GSE125527 and
+  0.539-0.631% for GSE228597; Stage 1 itself intentionally passes more NK and
+  is not interpreted as an NK classifier
+- the external lockbox was frozen before model scoring with 335,479 cells:
+  41,931 gdT gold, 285,524 alpha-beta gold, and 8,024 independent author-NK
+  negatives; manifest SHA-256 is
+  `f997e24b7be6e98692ba770d163916cbb359009ba5a7c3dfa1d7db6b3824f151`
+- the lockbox remains unscored, no final V4.3 model is fitted, and no model is
+  promoted or pushed
 - gdTAI V4.2 expression-independent ground truth, source-namespaced grouped
   folds, a 197-gene feature universe, and the checksum-bound normalized feature
   cache were frozen on 2026-08-19 against the isolated TCR-corrected atlas
@@ -207,6 +227,12 @@
 
 ## Next action
 
+- freeze the fixed shallow V4.3 development model and its grouped out-of-fold
+  balanced threshold without consulting the external lockbox
+- score V4.3, V2, and V3 exactly once on the same frozen lockbox, reporting
+  gdT recall, paired-alpha-beta FPR, and author-NK FPR by source
+- bootstrap at donor/sample level and apply the predeclared superiority rules;
+  do not retune from lockbox results or promote without explicit user approval
 - publish the gdTAI V4.2 development-gate failure report with frozen-label,
   source-transfer, exclusion-cost, and recovery diagnostics
 - do not run additional Malte-adaptive searches; any next classifier iteration

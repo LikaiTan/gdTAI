@@ -1,5 +1,5 @@
 {
-  "protocol_version": "4.3-receptor-isolated-1.0",
+  "protocol_version": "4.3-receptor-isolated-1.2",
   "random_seed": 20260819,
   "label_manifest": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_ground_truth/v4_2_label_manifest.parquet",
   "feature_manifest": "Integrated_dataset/tables/gdT_prediction/gdtai_v4_2_training/feature_manifest.csv",
@@ -33,8 +33,12 @@
   "stage1": {
     "minimum_gdt_recall_per_source": 0.99,
     "minimum_abt_recall_per_source": 0.98,
-    "maximum_tier1_nk_passage_per_source": 0.20
+    "maximum_tier1_nk_passage_per_source": 1.00
   },
+  "stage1_exclude_genes": [
+    "CCL5", "CTSW", "EOMES", "FCER1G", "FCGR3A", "GNLY", "GZMB",
+    "KLRC1", "KLRD1", "KLRF1", "NKG7", "PRF1", "TBX21", "TYROBP"
+  ],
   "profiles": {
     "balanced": {"objective_beta": 1.0, "minimum_macro_recall": 0.80, "minimum_per_source_recall": 0.70, "maximum_abt_fpr": 0.002, "maximum_tier1_nk_fpr": 0.01, "maximum_tier2_macro_nk_fpr": 0.02},
     "high_purity": {"objective_beta": 0.5, "minimum_macro_recall": 0.70, "minimum_per_source_recall": 0.60, "maximum_abt_fpr": 0.001, "maximum_tier1_nk_fpr": 0.005, "maximum_tier2_macro_nk_fpr": 0.01}

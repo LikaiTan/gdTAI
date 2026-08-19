@@ -122,6 +122,41 @@ Current gate semantics:
 - recovery probes remain diagnostic and do not replace the frozen primary run
 - lockboxes remain unscored and no model is eligible for promotion or release
 
+## gdTAI V4.3 receptor-isolated development and lockbox freeze
+
+Objective:
+
+- prevent shared cytotoxic/NK expression from acting as direct or indirect
+  gdT evidence
+- evaluate a high-recall T-lineage support gate followed by an individual-TCR
+  receptor classifier under grouped source-heldout development folds
+- freeze independent receptor-gold and author-NK lockbox membership before any
+  final model scoring
+
+Exact `.py` scripts:
+
+- `workflows/gdtai/train_gdtai_v4_2_nested.py`
+- `workflows/gdtai/freeze_gdtai_v4_3_lockbox.py`
+
+Configuration:
+
+- `configs/models/gdtai/v4_3_rescue_training.json`
+
+Core outputs:
+
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_3_receptor_isolated/effective_feature_contract.csv`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_3_receptor_isolated/smoke_outer_metrics.csv`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_3_lockbox/lockbox_manifest.parquet`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_3_lockbox/freeze_summary.json`
+
+Gate semantics:
+
+- `KLRD1`, generic cytotoxic genes, and NK-associated adaptor/receptor genes
+  are excluded from both model stages
+- Stage 2 receives no continuous Stage 1 probability
+- lockbox membership is checksum-bound and was frozen with `model_scored=false`
+- lockbox results must not alter features, thresholds, or rescue rules
+
 ## Phase 0: Dataset audit and eligibility triage
 
 Objective:

@@ -512,6 +512,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--smoke", action="store_true")
+    parser.add_argument("--feature-contract-only", action="store_true")
     parser.add_argument("--heldout-source", action="append", default=[])
     args = parser.parse_args()
     config = json.loads(resolve(args.config).read_text())
@@ -529,7 +530,11 @@ def main() -> None:
         raise RuntimeError("Frozen inner-fold assignment is incomplete")
     features = pd.read_csv(features_path).sort_values("feature_index")
     names = features.gene.astype(str).tolist()
-    stage1_columns = np.flatnonzero(features.stage1.to_numpy(bool))
+    stage1_excluded = set(config.get("stage1_exclude_genes", []))
+    stage1_columns = np.flatnonzero(
+        features.stage1.to_numpy(bool)
+        & ~features.gene.astype(str).isin(stage1_excluded).to_numpy()
+    )
     stage2_policy = config.get("stage2_feature_policy", {})
     if stage2_policy:
         controls = set(stage2_policy.get("control_genes", []))
@@ -542,6 +547,33 @@ def main() -> None:
     include_stage1_probability = bool(config.get("stage2_include_stage1_probability", True))
     if len(stage2_columns) == 0:
         raise RuntimeError("Stage-2 feature policy selected zero genes")
+    effective_features = features[["feature_index", "gene", "feature_class"]].copy()
+    effective_features["used_by_stage1_t_nk_gate"] = False
+    effective_features["used_by_stage2_gdt_classifier"] = False
+    effective_features.loc[stage1_columns, "used_by_stage1_t_nk_gate"] = True
+    effective_features.loc[stage2_columns, "used_by_stage2_gdt_classifier"] = True
+    effective_features["stage2_role"] = np.where(
+        effective_features.used_by_stage2_gdt_classifier,
+        np.where(effective_features.feature_class.eq("TCR"), "individual_TCR_gene", "lineage_control"),
+        "excluded",
+    )
+    effective_features.to_csv(table_dir / "effective_feature_contract.csv", index=False)
+    feature_contract = {
+        "protocol_version": config.get("protocol_version", "unknown"),
+        "n_cached_genes": int(len(effective_features)),
+        "n_stage1_genes": int(len(stage1_columns)),
+        "n_stage2_genes": int(len(stage2_columns)),
+        "stage1_excluded_genes": sorted(stage1_excluded),
+        "stage2_includes_stage1_probability": include_stage1_probability,
+        "stage2_feature_policy": stage2_policy,
+        "cytotoxic_or_nk_context_genes_are_stage2_evidence": False,
+    }
+    (log_dir / "effective_feature_contract.json").write_text(
+        json.dumps(feature_contract, indent=2, sort_keys=True) + "\n"
+    )
+    if args.feature_contract_only:
+        print(json.dumps(feature_contract, indent=2, sort_keys=True))
+        return
     x = np.load(matrix_path, mmap_mode="r")
     candidates = grid(config)
     if args.smoke: candidates = candidates[:1]
