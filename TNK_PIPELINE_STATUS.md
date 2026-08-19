@@ -2,19 +2,39 @@
 
 ## Current milestone
 
-- gdTAI V4.6 negative-diversity/receptor-ablation preflight passed on
-  2026-08-20; no model has yet been fitted and no test cohort has been scored
+- gdTAI V4.6 negative-diversity/receptor-ablation development and the single
+  untouched BALF diagnostic completed on 2026-08-20; no model was promoted,
+  atlas-applied, or pushed
 - the frozen development cache contains 2,196,564 rows x 197 genes, including
   7,770 newly added GSE169246 author-NK negatives; 2,168,490 rows from 30
   sources are development-eligible and 28,074 rows remain locked
 - three precommitted Stage-2 architectures passed exact feature-contract QC:
   full symmetric (200 features), delta dominant (179), and conditional gamma
   (182); the latter two contain no standalone TRG gene or TRGV/TRGC aggregate
-- candidate selection will use five whole-positive-source and ten
-  whole-negative-source holdouts, optimizing prevalence-adjusted F1 at 1%
-  gdT prevalence; BALF cannot select architecture, calibration, or threshold
-- V4.6 remains development-only and non-promotable; V3 balanced remains the
-  default and V2 high-purity the conservative fallback
+- conditional gamma won the precommitted 15-source holdout selection with
+  highest-F1 F1 `0.7557` at 1% prevalence, versus `0.7323` for delta dominant
+  and `0.5873` for full symmetric; its macro negative FPR was `0.3697%`
+- the frozen highest-F1 threshold is `0.8943540454` with development-validation
+  precision/recall/F1 `93.80%/84.79%/89.07%`; the high-purity threshold is
+  `0.9718304873` with `97.49%/79.84%/87.79%`
+- conditional gamma reduced honest whole-source GSE159251 highest-F1 FPR from
+  V4.5's `6.91%` to `0.92%`, but GSE228597 remained at `1.05%`; GDTlung
+  remained the limiting positive source at only `36.61%` recall
+- on 28,328 BALF cells untouched by V4.6 development, highest-F1 recovered
+  785/852 gdT-gold cells with 8/27,476 negative false positives and 0/254
+  author-NK false positives: precision/recall/F1 `98.99%/92.14%/95.44%`
+- V4.6 highest-F1 exceeded historical V3 and V2 highest-F1 BALF F1 by median
+  `0.0136` and `0.0138` in 5,000 truth-stratified donor/group bootstraps; both
+  95% intervals excluded zero, but V4.6 had lower BALF ROC-AUC/PR-AUC
+- V4.6 high-purity achieved `99.73%` precision and 2 false positives but only
+  `86.97%` recall/F1 `0.9292`, below historical V2 high-purity F1 `0.9423`
+- V4.6 remains development-only and non-promotable because BALF is now
+  consumed and no untouched confirmatory cohort remains; V3 balanced remains
+  the default and V2 high-purity the conservative fallback
+- the visually reviewed nine-page HTML/PDF report is under
+  `gdT_prediction/gdtai_v4_6_development/`; frozen model-contract SHA-256 is
+  `aa17372b76040ea6b4b2e6d18954799d1ba0c495c2ee988bf6580aaaf45cb17f`,
+  and the PDF was emailed to Likai on 2026-08-20
 - frozen V4.5-versus-V2/V3 post-hoc scoring completed on the identical
   335,479-cell consumed common benchmark with no retuning or model change;
   GDT2020 and GDTlung are explicitly labeled training-exposed for V4.5
@@ -351,9 +371,9 @@
 
 ## Next action
 
-- launch the frozen V4.6 CUDA/XGBoost source-heldout run when the GPU is
-  available, freeze both development-validation operating modes, then score
-  BALF once as an untouched diagnostic without retuning
+- freeze V4.6 unchanged and do not reuse BALF, GSE159251, or other consumed
+  cohorts for adaptive model/threshold tuning; a promotion decision requires a
+  genuinely new receptor-confirmed gdT, alpha-beta, and independent-NK cohort
 - retain V3 balanced as the current default and V2 high-purity as the
   conservative annotation-assisted fallback
 - do not retune V4.4 using the consumed common lockbox, promote it, push it to

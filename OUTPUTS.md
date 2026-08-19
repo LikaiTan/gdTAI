@@ -75,6 +75,12 @@
 
 ## Current review packages
 
+- gdTAI V4.6 development and BALF diagnostic:
+  - `gdT_prediction/gdtai_v4_6_development/index.html`
+  - `gdT_prediction/gdtai_v4_6_development/gdtai_v4_6_development_report.pdf`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_6_development/`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_6_balf/`
+  - `Integrated_dataset/models/gdT_prediction/gdtai_v4_6_development/`
 - gdTAI V4.5 versus V2/V3 consumed-benchmark diagnostic:
   - `gdT_prediction/gdtai_v4_5_vs_v2_v3_consumed/index.html`
   - `gdT_prediction/gdtai_v4_5_vs_v2_v3_consumed/gdtai_v4_5_vs_v2_v3_consumed_report.pdf`

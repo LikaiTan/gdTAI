@@ -356,6 +356,8 @@ Exact `.py` scripts:
 
 - `workflows/gdtai/audit_gdtai_v4_5_gse159251_failure.py`
 - `workflows/gdtai/train_gdtai_v4_6_development.py`
+- `workflows/gdtai/evaluate_gdtai_v4_6_balf.py`
+- `workflows/gdtai/render_gdtai_v4_6_report.py`
 
 Configuration:
 
@@ -367,6 +369,10 @@ Key outputs:
 - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_6_development/`
 - `Integrated_dataset/models/gdT_prediction/gdtai_v4_6_development/`
 - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_6_development/`
+- `Integrated_dataset/tables/gdT_prediction/gdtai_v4_6_balf/`
+- `Integrated_dataset/logs/gdT_prediction/gdtai_v4_6_balf/`
+- `gdT_prediction/gdtai_v4_6_development/index.html`
+- `gdT_prediction/gdtai_v4_6_development/gdtai_v4_6_development_report.pdf`
 
 Gate semantics:
 
@@ -377,8 +383,12 @@ Gate semantics:
 - BALF cannot fit a model or calibrator or select architecture or threshold
 - both highest-F1 and high-purity thresholds are selected only from disjoint
   development validation; a new untouched test is required for promotion
-- V4.6 preflight passed, but model fitting and diagnostic evaluation remain
-  pending GPU availability
+- conditional gamma won source-heldout development and both deployment
+  thresholds were frozen before BALF was scored
+- the single untouched BALF diagnostic supports V4.6 highest-F1 improvement
+  over historical V2/V3, but high-purity does not beat V2 high-purity and
+  ranking AUC is lower
+- BALF is now consumed; V4.6 remains non-promotable and V3 remains the default
 
 ## Phase 0: Dataset audit and eligibility triage
 

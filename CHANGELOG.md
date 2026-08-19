@@ -1,5 +1,24 @@
 # CHANGELOG.md
 
+## 2026-08-20 - Completed gdTAI V4.6 development and BALF diagnostic
+
+- Expanded development negatives across source-disjoint alpha-beta cohorts and
+  added 7,770 GSE169246 author-NK controls without using silver positives.
+- Compared full-symmetric, delta-dominant, and conditional-gamma receptor
+  architectures under five whole-positive-source and ten whole-negative-source
+  exclusions; conditional gamma won at a precommitted 1% gdT prevalence.
+- Froze highest-F1 and high-purity thresholds from disjoint development
+  validation before scoring BALF; no test cell selected a feature, model,
+  calibrator, or threshold.
+- Reduced GSE159251 source-heldout highest-F1 FPR from V4.5's 6.91% to 0.92%,
+  while documenting residual GSE228597 FPR and weak GDTlung recall.
+- On 28,328 BALF cells untouched by V4.6 development, highest-F1 achieved
+  98.99% precision, 92.14% recall, and 95.44% F1 with zero author-NK false
+  positives; donor/group bootstrap F1 differences versus historical V2/V3 had
+  95% intervals above zero.
+- Visually validated the nine-page HTML/PDF report. V4.6 remains unpromoted,
+  V3 remains default, and no H5AD or GitHub publication state changed.
+
 ## 2026-08-19 - Explained the gdTAI V4.3 recall and specificity failure
 
 - Confirmed that BALF was absent from V2, V3, and V4.3 coefficient fitting;
