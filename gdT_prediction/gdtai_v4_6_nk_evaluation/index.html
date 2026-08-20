@@ -205,7 +205,104 @@ model can resolve it, and its call rate should be read as “uncertainty
 budget,” not error</strong>. This is the stratum the abstain-zone policy
 exists for: V4.6’s contract already defines an
 <code>uncertain_gdt</code> band between the two thresholds.</p>
-<h2 id="verdict">6. Verdict</h2>
+<h2 id="stage-1-vs-stage-2-division-of-labor-added-2026-08-20">6.
+Stage-1 vs Stage-2 division of labor (added 2026-08-20)</h2>
+<p>Stage-1 rejections are encoded in the cache as a sentinel score of
+−1, so the two stages’ contributions can be measured exactly:</p>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr>
+<th>stratum</th>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">Stage-1 rejects</th>
+<th style="text-align: right;">Stage-2 calls among passers</th>
+<th style="text-align: right;">net called</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>author-NK</td>
+<td style="text-align: right;">168,483</td>
+<td style="text-align: right;">62.2%</td>
+<td style="text-align: right;">9.1%</td>
+<td style="text-align: right;">3.4%</td>
+</tr>
+<tr>
+<td>strict expression NK</td>
+<td style="text-align: right;">313,360</td>
+<td style="text-align: right;">68.8%</td>
+<td style="text-align: right;">0.10%</td>
+<td style="text-align: right;">0.03%</td>
+</tr>
+<tr>
+<td>NK union</td>
+<td style="text-align: right;">406,189</td>
+<td style="text-align: right;"><strong>64.1%</strong></td>
+<td style="text-align: right;"><strong>4.1%</strong></td>
+<td style="text-align: right;"><strong>1.5%</strong></td>
+</tr>
+<tr>
+<td>TRDC⁺TRDV⁻</td>
+<td style="text-align: right;">358,695</td>
+<td style="text-align: right;">58.9%</td>
+<td style="text-align: right;">4.1%</td>
+<td style="text-align: right;">1.7%</td>
+</tr>
+<tr>
+<td>shared cytotoxic ambiguous</td>
+<td style="text-align: right;">979,723</td>
+<td style="text-align: right;">19.4%</td>
+<td style="text-align: right;">13.7%</td>
+<td style="text-align: right;">11.1%</td>
+</tr>
+<tr>
+<td>γδ-TCR⁺ (positives)</td>
+<td style="text-align: right;">68,811</td>
+<td style="text-align: right;">3.3%</td>
+<td style="text-align: right;">73.9% called</td>
+<td style="text-align: right;">71.4%</td>
+</tr>
+<tr>
+<td>paired-αβ-TCR⁺</td>
+<td style="text-align: right;">1,938,158</td>
+<td style="text-align: right;">23.8%</td>
+<td style="text-align: right;">0.39%</td>
+<td style="text-align: right;">0.30%</td>
+</tr>
+</tbody>
+</table>
+<p>So the user’s inference is correct: <strong>Stage 1 does the majority
+of NK removal (~two-thirds of NK-union cells), while Stage 2 removes
+most of what remains</strong> — and it does so while rejecting only 3.3%
+of γδ-TCR⁺ cells (the gate’s high-recall design works). Note that the
+Stage-1 gate is one-sided: it asks “does this look like a T cell” from
+36 T-lineage genes and contains no NK markers, so NK cells fail it by
+<em>absence</em> of the T program; TRDC⁺ NK cells can pass it
+(TRDC/TRGC1/TRGC2 are gate genes) and are then handled by Stage 2, which
+is exactly the stratum where Stage 2 earns its keep (TRDC⁺TRDV⁻: 58.9%
+gated, 4.1% of passers called).</p>
+<p><strong>Stage-1 gene panel (36):</strong> core TCR complex —
+<code>CD3D</code>, <code>CD3E</code>, <code>CD3G</code>,
+<code>CD247</code>, <code>TRAC</code>, <code>TRBC1</code>,
+<code>TRBC2</code>, <code>TRDC</code>, <code>TRGC1</code>,
+<code>TRGC2</code>, <code>TRAT1</code>; T-lineage identity —
+<code>BCL11B</code>, <code>LCK</code>, <code>LAT</code>,
+<code>CD2</code>, <code>CD5</code>, <code>CD6</code>, <code>TCF7</code>,
+<code>LEF1</code>, <code>THEMIS</code>; co-receptors — <code>CD4</code>,
+<code>CD8A</code>, <code>CD8B</code>; naive/helper program —
+<code>IL7R</code>, <code>CCR7</code>, <code>SELL</code>,
+<code>LTB</code>, <code>MAL</code>; Treg program — <code>FOXP3</code>,
+<code>IL2RA</code>, <code>CTLA4</code>, <code>TIGIT</code>,
+<code>IKZF2</code>; tissue/effector state — <code>KLRB1</code>,
+<code>ZNF683</code>, <code>RUNX3</code>.</p>
+<h2 id="verdict">7. Verdict</h2>
 <ol type="1">
 <li><strong>The NK exclusion is real</strong>: ~0.4–0.5% call rate on
 independent author/expression NK with comfortable score margins, 0/254
