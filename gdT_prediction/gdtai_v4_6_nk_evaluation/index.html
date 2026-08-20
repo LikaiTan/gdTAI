@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>gdTAI V4.6 NK-exclusion evaluation</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="report_style.css" />
+</head>
+<body>
+<h1
+id="gdtai-v4.6-nk-exclusion-evaluation-how-it-rules-out-nk-and-how-confident-we-can-be">gdTAI
+V4.6 NK-exclusion evaluation: how it rules out NK, and how confident we
+can be</h1>
+<p><strong>Date:</strong> 2026-08-20 · <strong>Status:</strong>
+independent read-only evaluation of the frozen V4.6 development model
+using the frozen whole-atlas per-cell cache (5,933,312 cells, 40
+sources). No H5AD, model, threshold, or registry entry was modified.</p>
+<p><strong>Question.</strong> The whole-atlas report shows V4.6
+predictions with ~0% “strict likely-NK” (232 of 259,154 calls), versus
+24.1% for V2 high-F1. Is that real, and how confident is it?</p>
+<p><strong>Short answer.</strong> The NK exclusion is real and strong —
+but “0%” is only literally true on the <em>strictest</em> NK
+definitions. On fully independent (never-developed) sources: strict
+expression-rule NK call rate is <strong>0.004%</strong>,
+author-annotated NK <strong>0.53%</strong>, NK-union
+<strong>0.44%</strong> — 60–70× lower than V2 on identical cells. On the
+hardest biologically ambiguous stratum (shared cytotoxic program), V4.6
+still calls <strong>11.9%</strong> — not zero, and that is where the
+honest uncertainty lives. The NK-annotated cells V4.6 <em>does</em> call
+are enriched for γδ-TCR evidence and TRDC expression, i.e., they are
+plausibly true γδT mislabeled as NK rather than model errors.
+Confidence: high for definitionally-clean NK, bounded and unresolvable
+for the cytotoxic-ambiguous zone without new gdTCR data.</p>
+<hr />
+<h2 id="how-v4.6-rules-out-nk-the-mechanism">1. How V4.6 rules out NK —
+the mechanism</h2>
+<p>V4.6 has <strong>no NK-marker features and no hard NK veto</strong>
+(<code>hard_single_nk_gene_exclusion: false</code>). Stage-2 features
+(182) are purely <strong>receptor architecture</strong>: 145 individual
+TCR/CD3/CD4/FOXP3 genes plus 37 engineered receptor aggregates (TRDV
+counts/max, TRDC×TRDV joint, δ-minus-αβ receptor sums, conditional-γ
+terms). NK exclusion emerges from three structural facts:</p>
+<ol type="1">
+<li><strong>Receptor-grammar features</strong>: most NK cells have no
+coherent TRDV/TRDC receptor signal — they simply have nothing for the
+classifier to fire on. The 0.09% atlas figure is mostly this: absence of
+the <em>positive</em> pattern, not detection of the <em>negative</em>
+one.</li>
+<li><strong>Stage-1 T-lineage gate</strong> (36 T-lineage genes, very
+low threshold 0.0095 — a high-recall gate): NK cells lacking a
+CD3/T-lineage program are filtered before Stage 2.</li>
+<li><strong>Tiered NK negatives in training</strong> (nk_tier1 28,692 +
+nk_tier2 80,541 across 30 development sources, including GSE169246
+author-NK): the model was explicitly taught the NK boundary — which is
+also why the development-cohort NK audits are partly circular.</li>
+</ol>
+<h2 id="is-the-0-circular-development-exposure-split">2. Is the 0%
+circular? — development-exposure split</h2>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr>
+<th>NK stratum</th>
+<th style="text-align: right;">never-developed (independent)</th>
+<th style="text-align: right;">development-negative (circular)</th>
+<th style="text-align: right;">development-other
+(training-adjacent)</th>
+<th style="text-align: right;">V2 high-F1 (all)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>strict expression NK (n=313k)</td>
+<td style="text-align: right;"><strong>0.004%</strong> (84k cells)</td>
+<td style="text-align: right;">0.031%</td>
+<td style="text-align: right;">0.044%</td>
+<td style="text-align: right;">28.8%</td>
+</tr>
+<tr>
+<td>author-annotated NK (n=168k)</td>
+<td style="text-align: right;"><strong>0.53%</strong> (106k cells)</td>
+<td style="text-align: right;">~0%</td>
+<td style="text-align: right;">8.4%</td>
+<td style="text-align: right;">30.0%</td>
+</tr>
+<tr>
+<td>NK union (n=406k)</td>
+<td style="text-align: right;"><strong>0.44%</strong> (126k cells)</td>
+<td style="text-align: right;">0.03%</td>
+<td style="text-align: right;">2.2%</td>
+<td style="text-align: right;">28.6%</td>
+</tr>
+<tr>
+<td>TRDC⁺TRDV⁻ (n=359k)</td>
+<td style="text-align: right;"><strong>1.14%</strong> (80k cells)</td>
+<td style="text-align: right;">0.84%</td>
+<td style="text-align: right;">2.0%</td>
+<td style="text-align: right;">51.1%</td>
+</tr>
+<tr>
+<td>shared cytotoxic ambiguous (n=980k)</td>
+<td style="text-align: right;"><strong>11.9%</strong> (160k cells)</td>
+<td style="text-align: right;">7.7%</td>
+<td style="text-align: right;">11.5%</td>
+<td style="text-align: right;">19.2%</td>
+</tr>
+</tbody>
+</table>
+<p>Read-out:</p>
+<ul>
+<li>The near-zero rates in the 8 development-negative extension cohorts
+are <strong>circular by construction</strong> (the model was trained to
+avoid exactly those NK cells); they are a consistency check, not
+evidence.</li>
+<li>The <strong>never-developed</strong> column is the honest
+measurement: 9 atlas sources V4.6 never saw in any role.
+Strict-expression NK 0.004%, author-NK 0.53% (driven by GSE206325 at
+0.52%; most sources 0.00%), NK-union 0.44%. The untouched-BALF result
+(0/254 author-NK; 2/1,078 NK-union in the atlas cache) agrees.</li>
+<li>The whole-atlas headline “232 strict NK (0.09%)” is therefore
+<em>directionally</em> honest but defined narrowly; the defensible claim
+is <strong>≤0.5% on clean NK definitions</strong>, not zero.</li>
+</ul>
+<h2 id="score-margins-how-fragile-is-the-exclusion">3. Score margins —
+how fragile is the exclusion?</h2>
+<table>
+<thead>
+<tr>
+<th>NK-union (never-developed)</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>score p50 / p90 / p99</td>
+<td>0.00 / 0.46 / 0.78</td>
+</tr>
+<tr>
+<td>cells scoring ≥ 0.8 (near-miss vs threshold 0.894)</td>
+<td>0.76%</td>
+</tr>
+<tr>
+<td>cells ≥ threshold (called)</td>
+<td>0.44%</td>
+</tr>
+</tbody>
+</table>
+<p>In independent sources, 99% of NK-union cells score ≤0.78 — a ~0.11
+margin below the operating threshold, and only 0.76% sit in the
+near-miss band. This is a <em>confident</em> exclusion, not a knife-edge
+one; it is far healthier than the V4.3 pattern (positive median below
+threshold). The tail exists (a handful of NK-annotated cells score
+≈1.0), and those are analyzed next.</p>
+<h2
+id="the-cells-v4.6-calls-among-nk-annotated-populations-look-like-real-γδt">4.
+The cells V4.6 calls among NK-annotated populations look like real
+γδT</h2>
+<ul>
+<li>Of the 200 highest-scoring NK-union cells atlas-wide: <strong>152
+have γδ-TCR evidence, 186 are TRDC⁺</strong>, and V2 calls 190 of them
+too. These are not random NK leakage; they are exactly the cells the
+label system cannot adjudicate (NK-annotated but TCR/TRDC-positive —
+consistent with the kimi round-3 finding that author-NK labels in
+non-gdTCR-assayed sublibraries are contaminated with true γδT).</li>
+<li>On cells that are <em>both</em> author-NK and γδ-TCR-positive
+(n=4,983), V4.6 calls 57.0% — <em>more</em> than V2 (52.4%). When TCR
+evidence exists, V4.6 overrides the NK annotation rather than obeying
+it. That is the correct behavior given what we know about NK label
+noise.</li>
+</ul>
+<h2 id="the-honest-ceiling-the-shared-cytotoxic-stratum">5. The honest
+ceiling: the shared-cytotoxic stratum</h2>
+<p>On cells expressing the NK/γδT-shared cytotoxic program without other
+adjudicating evidence (980k cells), V4.6 calls 11.9% (never-developed) —
+better than V2 (19.2%) but far from zero. This stratum mixes true γδT
+(cytotoxic by nature), true NK, and NK-like γδT; <strong>no RNA-only
+model can resolve it, and its call rate should be read as “uncertainty
+budget,” not error</strong>. This is the stratum the abstain-zone policy
+exists for: V4.6’s contract already defines an
+<code>uncertain_gdt</code> band between the two thresholds.</p>
+<h2 id="verdict">6. Verdict</h2>
+<ol type="1">
+<li><strong>The NK exclusion is real</strong>: ~0.4–0.5% call rate on
+independent author/expression NK with comfortable score margins, 0/254
+on the one untouched cohort, 60–70× better than V2, and the called
+NK-annotated cells are TCR/TRDC-enriched (likely mislabeled γδT, not
+leakage).</li>
+<li><strong>“0%” is marketing of a narrow stratum</strong>: quote it as
+“≤0.5% on clean NK definitions, 0.004% on strict expression NK” — and
+never pool the development-negative cohorts into the claim
+(circular).</li>
+<li><strong>The unresolvable remainder is the cytotoxic-ambiguous zone
+(~12% called)</strong>: bound it, abstain on it, and do not iterate
+further against it without new gdTCR data.</li>
+<li>Confidence grade: <strong>high</strong> for clean-NK exclusion,
+<strong>moderate</strong> for TRDC⁺TRDV⁻ (1.1%), <strong>inherently
+bounded</strong> for cytotoxic-ambiguous cells.</li>
+</ol>
+<h2 id="appendix-artifacts">Appendix: artifacts</h2>
+<ul>
+<li>Script: <code>workflows/gdtai/run_v4_6_nk_evaluation.py</code></li>
+<li>Tables:
+<code>Integrated_dataset/tables/gdT_prediction/gdtai_v4_6_nk_evaluation/</code>
+(<code>nk_strata_evaluation.csv</code>,
+<code>nk_union_by_source.csv</code>,
+<code>nk_union_top_scoring_cells.csv</code>)</li>
+<li>Inputs (read-only): frozen whole-atlas prediction cache, V4.6
+development partition manifest, V4.6 model contract.</li>
+</ul>
+</body>
+</html>

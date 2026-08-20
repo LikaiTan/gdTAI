@@ -298,6 +298,11 @@
   - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_gap_analysis/gdtai_v4_gap_analysis.md`
   - `gdT_prediction/gdtai_v4_gap_analysis/index.html`
   - `gdT_prediction/gdtai_v4_gap_analysis/gdtai_v4_gap_analysis_report.pdf`
+- gdTAI V4.6 NK-exclusion independent evaluation:
+  - `Integrated_dataset/logs/gdT_prediction/gdtai_v4_6_nk_evaluation/gdtai_v4_6_nk_evaluation.md`
+  - `gdT_prediction/gdtai_v4_6_nk_evaluation/index.html`
+  - `gdT_prediction/gdtai_v4_6_nk_evaluation/gdtai_v4_6_nk_evaluation_report.pdf`
+  - `Integrated_dataset/tables/gdT_prediction/gdtai_v4_6_nk_evaluation/`
 - extension official-GEO metadata reconciliation:
   - `docs/EXTENSION_GEO_METADATA_RECONCILIATION.md`
   - `configs/metadata/extension_geo_metadata_reconciliation.csv`
